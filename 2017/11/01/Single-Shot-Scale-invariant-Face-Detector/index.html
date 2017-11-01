@@ -6,15 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://wulimengmeng.top">
-  <title>tags | Mowayao&#39;s Blog</title>
+  <title>Single Shot Scale-invariant Face Detector | Mowayao&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="tags">
-<meta property="og:url" content="http://wulimengmeng.top/tags/index.html">
+  <meta name="description" content="The authors propose to tile anchors on a wide range of layers to ensure that all scales of faces have enough features for detection. Besides, they try to improve the recall rate of small faces by a sc">
+<meta name="keywords" content="paper notes, face detection">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Single Shot Scale-invariant Face Detector">
+<meta property="og:url" content="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/index.html">
 <meta property="og:site_name" content="Mowayao&#39;s Blog">
-<meta property="og:updated_time" content="2017-10-20T03:15:02.000Z">
+<meta property="og:description" content="The authors propose to tile anchors on a wide range of layers to ensure that all scales of faces have enough features for detection. Besides, they try to improve the recall rate of small faces by a sc">
+<meta property="og:image" content="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-01%20%E4%B8%8B%E5%8D%887.46.53.png">
+<meta property="og:updated_time" content="2017-11-01T11:48:38.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tags">
+<meta name="twitter:title" content="Single Shot Scale-invariant Face Detector">
+<meta name="twitter:description" content="The authors propose to tile anchors on a wide range of layers to ensure that all scales of faces have enough features for detection. Besides, they try to improve the recall rate of small faces by a sc">
+<meta name="twitter:image" content="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-01%20%E4%B8%8B%E5%8D%887.46.53.png">
   
     <link rel="alternative" href="/atom.xml" title="Mowayao&#39;s Blog" type="application/atom+xml">
   
@@ -142,27 +148,41 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="page-" class="article article-type-page " itemscope itemprop="blogPost">
+            <article id="post-Single-Shot-Scale-invariant-Face-Detector" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      tags
+      Single Shot Scale-invariant Face Detector
     </h1>
   
 
         
-        <a href="/tags/index.html" class="archive-article-date">
-  	<time datetime="2017-10-20T03:11:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-20</time>
+        <a href="/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" class="archive-article-date">
+  	<time datetime="2017-11-01T11:16:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-01</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>The authors propose to tile anchors on a wide range of layers to ensure that all scales of faces have enough features for detection. Besides, they try to improve the recall rate of small faces by a scale compensation anchor matching strategy. Max-out background label is used to reduce the false positive rate of small faces.</p>
+<p>Key points:</p>
+<ul>
+<li>VGG net (throgh Pool5 layer) and some extra convolutional layers</li>
+<li>Anchor  is 1:1 aspect ratio (face annotation)</li>
+<li>two stages to improve the anchor matching strategy<ul>
+<li>stage one: decrese the jaccord overlap threshold from 0.5 to 0.35</li>
+<li>stage two: decrese the threshold to 0.1 and sort to select the top-N</li>
+</ul>
+</li>
+<li>max-out operation is performed on the background label scores</li>
+</ul>
+<p>model architecture:</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-01%20%E4%B8%8B%E5%8D%887.46.53.png" alt=""></p>
+
       
 
       
@@ -191,6 +211,17 @@
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">paper notes, face detection</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -241,7 +272,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://wulimengmeng.top/tags/" alt="微信分享二维码">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -253,6 +284,16 @@
 </article>
 
   
+<nav id="article-nav">
+  
+  
+    <a href="/2017/10/20/A-List-of-Saliency-Detection-Papers/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">A List of Saliency Detection Papers</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -278,8 +319,8 @@
   <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
 <script>
   var cloudTieConfig = {
-    url: "http://wulimengmeng.top/tags/index.html", 
-    sourceId: "",
+    url: "http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/", 
+    sourceId: "Single-Shot-Scale-invariant-Face-Detector",
     productKey: "true",
     target: "cloud-tie-wrapper"
   };
@@ -314,7 +355,7 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

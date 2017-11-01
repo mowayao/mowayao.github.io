@@ -143,6 +143,93 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-Single-Shot-Scale-invariant-Face-Detector" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/">Single Shot Scale-invariant Face Detector</a>
+    </h1>
+  
+
+        
+        <a href="/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" class="archive-article-date">
+  	<time datetime="2017-11-01T11:16:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-11-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>The authors propose to tile anchors on a wide range of layers to ensure that all scales of faces have enough features for detection. Besides, they try to improve the recall rate of small faces by a scale compensation anchor matching strategy. Max-out background label is used to reduce the false positive rate of small faces.</p>
+<p>Key points:</p>
+<ul>
+<li>VGG net (throgh Pool5 layer) and some extra convolutional layers</li>
+<li>Anchor  is 1:1 aspect ratio (face annotation)</li>
+<li>two stages to improve the anchor matching strategy<ul>
+<li>stage one: decrese the jaccord overlap threshold from 0.5 to 0.35</li>
+<li>stage two: decrese the threshold to 0.1 and sort to select the top-N</li>
+</ul>
+</li>
+<li>max-out operation is performed on the background label scores</li>
+</ul>
+<p>model architecture:</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-01%20%E4%B8%8B%E5%8D%887.46.53.png" alt=""></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">paper notes, face detection</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-A-List-of-Saliency-Detection-Papers" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -325,6 +412,10 @@ getOwnMetadataKeys:function(t){return o(i(t),arguments.length<2?void 0:u(argumen
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">paper</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">paper notes, face detection</a>
               </li>
             
             <div class="clearfix"></div>
