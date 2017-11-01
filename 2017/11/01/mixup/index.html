@@ -1,19 +1,22 @@
 
-
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   
-  <title>tags | Mowayao&#39;s Blog</title>
+  <title>mixup-Beyond Empirical Risk Minimization | Mowayao&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="tags">
-<meta property="og:url" content="http://wulimengmeng.top/tags/index.html">
+  <meta name="description" content="Gist: The authors propose a new training strategy  dubbed mixup that trains a neural network on convex combinations of pairs of examples and their labels and improves the generalization of state-of-th">
+<meta name="keywords" content="paper notes,deep learning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mixup-Beyond Empirical Risk Minimization">
+<meta property="og:url" content="http://wulimengmeng.top/2017/11/01/mixup/index.html">
 <meta property="og:site_name" content="Mowayao&#39;s Blog">
-<meta property="og:updated_time" content="2017-10-20T03:15:02.000Z">
+<meta property="og:description" content="Gist: The authors propose a new training strategy  dubbed mixup that trains a neural network on convex combinations of pairs of examples and their labels and improves the generalization of state-of-th">
+<meta property="og:updated_time" content="2017-11-01T14:17:15.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="tags">
+<meta name="twitter:title" content="mixup-Beyond Empirical Risk Minimization">
+<meta name="twitter:description" content="Gist: The authors propose a new training strategy  dubbed mixup that trains a neural network on convex combinations of pairs of examples and their labels and improves the generalization of state-of-th">
   
     <link rel="alternative" href="/atom.xml" title="Mowayao&#39;s Blog" type="application/atom+xml">
   
@@ -69,10 +72,10 @@
   </div>
 </header>
     <div class="outer">
-      <section id="main"><article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+      <section id="main"><article id="post-mixup" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/tags/index.html" class="article-date">
-  <time datetime="2017-10-20T03:11:18.000Z" itemprop="datePublished">2017-10-20</time>
+    <a href="/2017/11/01/mixup/" class="article-date">
+  <time datetime="2017-11-01T13:40:57.000Z" itemprop="datePublished">2017-11-01</time>
 </a>
     
   </div>
@@ -83,7 +86,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      tags
+      mixup-Beyond Empirical Risk Minimization
     </h1>
   
 
@@ -91,29 +94,51 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p><strong>Gist</strong>: The authors propose a new training strategy  dubbed <strong>mixup</strong> that trains a neural network on convex combinations of pairs of examples and their labels and improves the generalization of state-of-the-art neural network architectures.    </p>
+<p>​    </p>
+<p><strong>Pytorch Code</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (x1, y1), (x2, y2) <span class="keyword">in</span> zip(loader1, loader2): </div><div class="line">  	lam = numpy.random.beta(alpha, alpha)</div><div class="line">	x = Variable(lam * x1 + (<span class="number">1.</span> - lam) * x2)</div><div class="line">	y = Variable(lam * y1 + (<span class="number">1.</span> - lam) * y2) optimizer.zero_grad()</div><div class="line">    loss(net(x), y).backward()</div><div class="line">    optimizer.step()</div></pre></td></tr></table></figure>
+<p>EMPIRICAL RISK MINIMIZATION**</p>
+<p>We need to minimize the <strong>expected risk</strong>, that is the average of the loss function $l$ over the data distribution $P$<br>$$<br>R(f ) = \int l(f (x), y)dP (x, y).<br>$$<br>$l$ is the loss function, $P(x,y)$ is a joint data distribution, $f\in F$ is a function that describes the relationship between a random vector X and a random target vector Y .</p>
+<p>Unsually, the distribution of P is unknown. In most pracitical situation, we may approximate $P$ by the <strong><em>empirical distribution</em></strong>, though it is easy to compute, it ofen leads to the undesirable behaviour of $f$ outside the training data.</p>
+<p>​<br>​<br>​     </p>
+<p>​<br>​<br>​    . </p>
+<p>## </p>
+
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://wulimengmeng.top/tags/index.html" data-id="cj9h4k6d00008pa0ndojmqeja" class="article-share-link" data-share="baidu" data-title="tags">分享到</a>
+        <a data-url="http://wulimengmeng.top/2017/11/01/mixup/" data-id="cj9h4m7i00000qo0nf3it23d0" class="article-share-link" data-share="baidu" data-title="mixup-Beyond Empirical Risk Minimization">分享到</a>
       
 
       
-        <a href="http://wulimengmeng.top/tags/index.html#ds-thread" class="article-comment-link">评论</a>
+        <a href="http://wulimengmeng.top/2017/11/01/mixup/#ds-thread" class="article-comment-link">评论</a>
       
 
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/deep-learning/">deep learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/paper-notes/">paper notes</a></li></ul>
+
     </footer>
   </div>
   
     
+<nav id="article-nav">
+  
+  
+    <a href="/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">Single Shot Scale-invariant Face Detector</div>
+    </a>
+  
+</nav>
+
   
 </article>
 
 
   <section id="comments">
-    <div id="ds-thread" class="ds-thread" data-thread-key="tags/index.html" data-title="tags" data-url="http://wulimengmeng.top/tags/index.html"></div>
+    <div id="ds-thread" class="ds-thread" data-thread-key="2017/11/01/mixup/" data-title="mixup-Beyond Empirical Risk Minimization" data-url="http://wulimengmeng.top/2017/11/01/mixup/"></div>
   </section>
 </section>
       
@@ -253,4 +278,3 @@ var duoshuoQuery = {short_name:"reqianduan"};
 </div>
 </body>
 </html>
-
