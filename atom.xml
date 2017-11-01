@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Mowayao&#39;s Blog</title>
+  <icon>https://www.gravatar.com/avatar/16886497103686372c55fdd8ac89f177</icon>
+  <subtitle>一往无前虎山行</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://wulimengmeng.top/"/>
+  <updated>2017-11-01T12:01:06.000Z</updated>
+  <id>http://wulimengmeng.top/</id>
+  
+  <author>
+    <name>Mowayao</name>
+    <email>zpyao1992@gmail.com</email>
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Single Shot Scale-invariant Face Detector</title>
+    <link href="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/"/>
+    <id>http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/</id>
+    <published>2017-11-01T11:16:56.000Z</published>
+    <updated>2017-11-01T12:01:06.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>The authors propose to tile anchors on a wide range of layers to ensure that all scales of faces have enough features for detection. Besides, they try to improve the recall rate of small faces by a scale compensation anchor matching strategy. Max-out background label is used to reduce the false positive rate of small faces.</p><p>Key points:</p><ul><li>VGG net (throgh Pool5 layer) and some extra convolutional layers</li><li>Anchor  is 1:1 aspect ratio (face annotation)</li><li>two stages to improve the anchor matching strategy<ul><li>stage one: decrese the jaccord overlap threshold from 0.5 to 0.35</li><li>stage two: decrese the threshold to 0.1 and sort to select the top-N</li></ul></li><li>max-out operation is performed on the background label scores</li></ul><p>model architecture:</p><p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-01%20%E4%B8%8B%E5%8D%887.46.53.png" alt=""></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;The authors propose to tile anchors on a wide range of layers to ensure that all scales of faces have enough features for detection. Besi
+      
+    
+    </summary>
+    
+    
+      <category term="paper notes" scheme="http://wulimengmeng.top/tags/paper-notes/"/>
+    
+      <category term="face detection" scheme="http://wulimengmeng.top/tags/face-detection/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>A List of Saliency Detection Papers</title>
+    <link href="http://wulimengmeng.top/2017/10/20/A-List-of-Saliency-Detection-Papers/"/>
+    <id>http://wulimengmeng.top/2017/10/20/A-List-of-Saliency-Detection-Papers/</id>
+    <published>2017-10-20T03:29:37.000Z</published>
+    <updated>2017-10-20T03:49:59.000Z</updated>
+    
+    <content type="html"><![CDATA[<ol><li><a href="http://7xkgro.com1.z0.glb.clouddn.com/A%20Deep%20Spatial%20Contextual%20Long-term%20Recurrent%20Convolutional%20Network%20for%20Saliency%20Detection.pdf" target="_blank" rel="external">A Deep Spatial Contextual Long-term Recurrent Convolutional Network for Saliency Detection</a></li><li><a href="http://7xkgro.com1.z0.glb.clouddn.com/A%20Fast%20and%20Compact%20Saliency%20Score%20Regression%20Network%20Based%20on%20Fully%20Convolutional%20Network.pdf" target="_blank" rel="external">A Fast and Compact Saliency Score Regression Network Based on Fully Convolutional Network</a></li><li><a href="http://7xkgro.com1.z0.glb.clouddn.com/Amulet.pdf" target="_blank" rel="external">Amulet</a></li><li><a href="http://7xkgro.com1.z0.glb.clouddn.com/DHSNet:%20Deep%20Hierarchical%20Saliency%20Network%20for%20Salient%20Object%20Detection%20.pdf" target="_blank" rel="external">DHSNet: Deep Hierarchical Saliency Network for Salient Object Detection</a></li><li><a href="http://7xkgro.com1.z0.glb.clouddn.com/Group-wise%20Deep%20Co-saliency%20Detection.pdf" target="_blank" rel="external">Group-wise Deep Co-saliency Detection</a></li><li><a href="http://7xkgro.com1.z0.glb.clouddn.com/Large-Scale%20Optimization%20of%20Hierarchical%20Features%20for%20Saliency%20Prediction%20in%20Natural%20Images.pdf" target="_blank" rel="external">Large-Scale Optimization of Hierarchical Features for Saliency Prediction in Natural Images</a></li><li><a href="http://7xkgro.com1.z0.glb.clouddn.com/Learning%20Uncertain%20Convolutional%20Features%20for%20Accurate%20Saliency%20Detection.pdf" target="_blank" rel="external">Learning Uncertain Convolutional Features for Accurate Saliency Detection</a></li><li><a href="http://7xkgro.com1.z0.glb.clouddn.com/PiCANet.pdf" target="_blank" rel="external">PiCANet</a></li><li><a href="http://7xkgro.com1.z0.glb.clouddn.com/Recurrent%20Attentional%20Networks%20for%20Saliency%20Detection.pdf" target="_blank" rel="external">Recurrent Attentional Networks for Saliency Detection</a></li><li><a href="http://7xkgro.com1.z0.glb.clouddn.com/SalGAN:%20Visual%20Saliency%20Prediction%20with%20Generative%20Adversarial%20Networks.pdf" target="_blank" rel="external">SalGAN: Visual Saliency Prediction with Generative Adversarial Networks</a></li><li><a href="http://7xkgro.com1.z0.glb.clouddn.com/Saliency%20Detection%20by%20Forward%20and%20Backward%20Cues%20in%20Deep-CNNs.pdf" target="_blank" rel="external">Saliency Detection by Forward and Backward Cues in Deep-CNNs</a></li><li><a href="http://7xkgro.com1.z0.glb.clouddn.com/Saliency%20Detection%20by%20Multi-Context%20Deep%20Learning.pdf" target="_blank" rel="external">Saliency Detection by Multi-Context Deep Learning.pdf</a></li><li><a href="http://7xkgro.com1.z0.glb.clouddn.com/Shallow%20and%20Deep%20Convolutional%20Networks%20for%20Saliency%20Prediction.pdf" target="_blank" rel="external">Shallow and Deep Convolutional Networks for Saliency Prediction</a></li><li><a href="http://7xkgro.com1.z0.glb.clouddn.com/Supervised%20Adversarial%20Networks%20for%20Image%20Saliency%20Detection.pdf" target="_blank" rel="external">Supervised Adversarial Networks for Image Saliency Detection</a></li><li><a href="http://7xkgro.com1.z0.glb.clouddn.com/Two-Stream%20Convolutional%20Networks%20for%20Dynamic%20Saliency%20Prediction.pdf" target="_blank" rel="external">Two-Stream Convolutional Networks for Dynamic Saliency Prediction</a></li><li><a href="http://7xkgro.com1.z0.glb.clouddn.com/Visual%20Saliency%20Detection%20Based%20on%20Multiscale%20Deep%20CNN%20Features.pdf" target="_blank" rel="external">Visual Saliency Detection Based on Multiscale Deep CNN Features</a></li><li><a href="http://7xkgro.com1.z0.glb.clouddn.com/Visual%20Saliency%20Prediction%20Using%20a%20Mixture%20of%20Deep%20Neural%20Networks.pdf" target="_blank" rel="external">Visual Saliency Prediction Using a Mixture of Deep Neural Networks</a></li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;ol&gt;
+&lt;li&gt;&lt;a href=&quot;http://7xkgro.com1.z0.glb.clouddn.com/A%20Deep%20Spatial%20Contextual%20Long-term%20Recurrent%20Convolutional%20Network%20
+      
+    
+    </summary>
+    
+    
+      <category term="paper" scheme="http://wulimengmeng.top/tags/paper/"/>
+    
+  </entry>
+  
+</feed>
