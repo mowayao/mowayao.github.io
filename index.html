@@ -97,11 +97,11 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (x1, y1), (x2, y2) <span class="keyword">in</span> zip(loader1, loader2): </div><div class="line">  	lam = numpy.random.beta(alpha, alpha)</div><div class="line">	x = Variable(lam * x1 + (<span class="number">1.</span> - lam) * x2)</div><div class="line">	y = Variable(lam * y1 + (<span class="number">1.</span> - lam) * y2) optimizer.zero_grad()</div><div class="line">    loss(net(x), y).backward()</div><div class="line">    optimizer.step()</div></pre></td></tr></table></figure>
 <p><strong>EMPIRICAL RISK MINIMIZATION</strong></p>
 <p>We need to minimize the <strong>expected risk</strong>, that is the average of the loss function $l$ over the data distribution $P$</p>
-<p>$$R(f ) = \int l(f (x), y)dP (x, y).$$</p>
+<p>$$R(f ) = \int l(f (x), y)dP (x, y)$$</p>
 <p>$l$ is the loss function, $P(x,y)$ is a joint data distribution, $f\in F$ is a function that describes the relationship between a random vector X and a random target vector Y .</p>
 <p>Unsually, the distribution of P is unknown. In most pracitical situation, we may approximate $P$ by the <strong><em>empirical distribution</em></strong>, though it is easy to compute, it ofen leads to the undesirable behaviour of $f$ outside the training data.</p>
 <p><strong>Vicinal Risk Minimization</strong></p>
-<p>$$P<em>v(\widetilde{x}, \widetilde{y})=\frac{1}{n}\sum</em>{i=1}^nv(\widetilde{x}, \widetilde{y}|x_i,y_i)$$</p>
+<p>$$P<em>v (\widetilde{x}, \widetilde{y})=\frac{1}{n}\sum</em>{i=1}^nv(\widetilde{x}, \widetilde{y}|x_i,y_i)$$</p>
 <p>This paper propose a generic vicinal distribution, <strong><em>mixup</em></strong>:</p>
 <p>$$\mu(\widetilde{x}, \widetilde{y}|x_i,y_i)=\frac{1}{n}\sum<em>j^n\mathbb{E}</em>\lambda[\sigma(\widetilde{x}=\lambda \cdot x_i+(1-\lambda)\cdot x_j,\widetilde{y} =\lambda \cdot y_i + (1-\lambda) \cdot y_j)]$$<br>where $\lambda \sim Beta(\alpha, \alpha)$, for $\alpha \in (0, \infty)$Sampling from the mixup vicinal distribution:</p>
 <p>$$\widetilde{x} = \lambda \cdot x_i + (1 − \lambda)\cdot x_j$$</p>
@@ -111,11 +111,11 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://wulimengmeng.top/2017/11/01/mixup/" data-id="cj9hw3q9y0003bv0ne5zy68pm" class="article-share-link" data-share="baidu" data-title="mixup-Beyond Empirical Risk Minimization">Share</a>
+        <a data-url="http://wulimengmeng.top/2017/11/01/mixup/" data-id="cj9hw3q9y0003bv0ne5zy68pm" class="article-share-link" data-share="baidu" data-title="mixup-Beyond Empirical Risk Minimization">分享到</a>
       
 
       
-        <a href="http://wulimengmeng.top/2017/11/01/mixup/#ds-thread" class="article-comment-link">Comments</a>
+        <a href="http://wulimengmeng.top/2017/11/01/mixup/#ds-thread" class="article-comment-link">评论</a>
       
 
       
@@ -169,11 +169,11 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" data-id="cj9hw3q9s0001bv0ncsbsemzw" class="article-share-link" data-share="baidu" data-title="Single Shot Scale-invariant Face Detector">Share</a>
+        <a data-url="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" data-id="cj9hw3q9s0001bv0ncsbsemzw" class="article-share-link" data-share="baidu" data-title="Single Shot Scale-invariant Face Detector">分享到</a>
       
 
       
-        <a href="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/#ds-thread" class="article-comment-link">Comments</a>
+        <a href="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/#ds-thread" class="article-comment-link">评论</a>
       
 
       
@@ -232,11 +232,11 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://wulimengmeng.top/2017/10/20/A-List-of-Saliency-Detection-Papers/" data-id="cj9hw3q9m0000bv0ni1io3u3t" class="article-share-link" data-share="baidu" data-title="A List of Saliency Detection Papers">Share</a>
+        <a data-url="http://wulimengmeng.top/2017/10/20/A-List-of-Saliency-Detection-Papers/" data-id="cj9hw3q9m0000bv0ni1io3u3t" class="article-share-link" data-share="baidu" data-title="A List of Saliency Detection Papers">分享到</a>
       
 
       
-        <a href="http://wulimengmeng.top/2017/10/20/A-List-of-Saliency-Detection-Papers/#ds-thread" class="article-comment-link">Comments</a>
+        <a href="http://wulimengmeng.top/2017/10/20/A-List-of-Saliency-Detection-Papers/#ds-thread" class="article-comment-link">评论</a>
       
 
       
@@ -258,7 +258,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
+    <h3 class="widget-title">标签</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/deep-learning/">deep learning</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/face-detection/">face detection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paper/">paper</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paper-notes/">paper notes</a><span class="tag-list-count">2</span></li></ul>
     </div>
@@ -267,7 +267,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
+    <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
       <a href="/tags/deep-learning/" style="font-size: 10px;">deep learning</a> <a href="/tags/face-detection/" style="font-size: 10px;">face detection</a> <a href="/tags/paper/" style="font-size: 10px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 20px;">paper notes</a>
     </div>
@@ -276,7 +276,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">归档</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a><span class="archive-list-count">1</span></li></ul>
     </div>
@@ -285,7 +285,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">近期文章</h3>
     <div class="widget">
       <ul>
         
@@ -330,7 +330,7 @@
 </nav>
   <!-- totop start -->
 <div id="totop">
-<a title="totop"><img src="/img/scrollup.png"/></a>
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 </div>
 
 <!-- totop end -->
