@@ -13,7 +13,7 @@
 <meta property="og:url" content="http://wulimengmeng.top/2017/11/01/mixup/index.html">
 <meta property="og:site_name" content="Mowayao&#39;s Blog">
 <meta property="og:description" content="Gist: The authors propose a new training strategy  dubbed mixup that trains a neural network on convex combinations of pairs of examples and their labels and improves the generalization of state-of-th">
-<meta property="og:updated_time" content="2017-11-02T03:42:30.000Z">
+<meta property="og:updated_time" content="2017-11-02T03:43:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mixup-Beyond Empirical Risk Minimization">
 <meta name="twitter:description" content="Gist: The authors propose a new training strategy  dubbed mixup that trains a neural network on convex combinations of pairs of examples and their labels and improves the generalization of state-of-th">
@@ -98,7 +98,7 @@
 <p>​    </p>
 <p><strong>Pytorch Code</strong></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (x1, y1), (x2, y2) <span class="keyword">in</span> zip(loader1, loader2): </div><div class="line">  	lam = numpy.random.beta(alpha, alpha)</div><div class="line">	x = Variable(lam * x1 + (<span class="number">1.</span> - lam) * x2)</div><div class="line">	y = Variable(lam * y1 + (<span class="number">1.</span> - lam) * y2) optimizer.zero_grad()</div><div class="line">    loss(net(x), y).backward()</div><div class="line">    optimizer.step()</div></pre></td></tr></table></figure>
-<p><strong>EMPIRICAL RISK MINIMIZATION</strong></p>
+<p><strong>Empirical Risk Minimization</strong></p>
 <p>We need to minimize the <strong>expected risk</strong>, that is the average of the loss function $l$ over the data distribution $P$</p>
 <script type="math/tex; mode=display">R(f ) = \int l(f (x), y)dP (x, y)</script><p>$l$ is the loss function, $P(x,y)$ is a joint data distribution, $f\in F$ is a function that describes the relationship between a random vector X and a random target vector Y .</p>
 <p>Unsually, the distribution of P is unknown. In most pracitical situation, we may approximate $P$ by the <strong><em>empirical distribution</em></strong>, though it is easy to compute, it ofen leads to the undesirable behaviour of $f$ outside the training data.</p>
@@ -110,11 +110,11 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://wulimengmeng.top/2017/11/01/mixup/" data-id="cj9hw3q9y0003bv0ne5zy68pm" class="article-share-link" data-share="baidu" data-title="mixup-Beyond Empirical Risk Minimization">分享到</a>
+        <a data-url="http://wulimengmeng.top/2017/11/01/mixup/" data-id="cj9hw3q9y0003bv0ne5zy68pm" class="article-share-link" data-share="baidu" data-title="mixup-Beyond Empirical Risk Minimization">Share</a>
       
 
       
-        <a href="http://wulimengmeng.top/2017/11/01/mixup/#ds-thread" class="article-comment-link">評論</a>
+        <a href="http://wulimengmeng.top/2017/11/01/mixup/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
@@ -128,7 +128,7 @@
   
   
     <a href="/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
+      <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">Single Shot Scale-invariant Face Detector</div>
     </a>
   
@@ -149,7 +149,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">標簽</h3>
+    <h3 class="widget-title">Tags</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/deep-learning/">deep learning</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/face-detection/">face detection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paper/">paper</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paper-notes/">paper notes</a><span class="tag-list-count">2</span></li></ul>
     </div>
@@ -158,7 +158,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">標簽雲</h3>
+    <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
       <a href="/tags/deep-learning/" style="font-size: 10px;">deep learning</a> <a href="/tags/face-detection/" style="font-size: 10px;">face detection</a> <a href="/tags/paper/" style="font-size: 10px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 20px;">paper notes</a>
     </div>
@@ -167,7 +167,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">歸檔</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a><span class="archive-list-count">1</span></li></ul>
     </div>
@@ -176,7 +176,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">近期文章</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
@@ -221,7 +221,7 @@
 </nav>
   <!-- totop start -->
 <div id="totop">
-<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+<a title="totop"><img src="/img/scrollup.png"/></a>
 </div>
 
 <!-- totop end -->
