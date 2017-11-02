@@ -100,8 +100,12 @@
 <p>$$R(f ) = \int l(f (x), y)dP (x, y).$$</p>
 <p>$l$ is the loss function, $P(x,y)$ is a joint data distribution, $f\in F$ is a function that describes the relationship between a random vector X and a random target vector Y .</p>
 <p>Unsually, the distribution of P is unknown. In most pracitical situation, we may approximate $P$ by the <strong><em>empirical distribution</em></strong>, though it is easy to compute, it ofen leads to the undesirable behaviour of $f$ outside the training data.</p>
-<p><strong>Vicinal Risk Minimization</strong><br>$$<br>P<em>v(\widetilde{x}, \widetilde{y})=\frac{1}{n}\sum</em>{i=1}^nv(\widetilde{x}, \widetilde{y}|x_i,y_i)<br>$$<br>This paper propose a generic vicinal distribution, <strong><em>mixup</em></strong>:<br>$$<br>\mu(\widetilde{x}, \widetilde{y}|x_i,y_i)=\frac{1}{n}\sum<em>j^n\mathbb{E}</em>\lambda[\sigma(\widetilde{x}=\lambda \cdot x_i+(1-\lambda)\cdot x_j,\widetilde{y} =\lambda \cdot y_i + (1-\lambda) \cdot y_j)]<br>$$<br>where $\lambda \sim Beta(\alpha, \alpha)$, for $\alpha \in (0, \infty)$Sampling from the mixup vicinal distribution:<br>$$<br>\widetilde{x} = \lambda \cdot x_i + (1 − \lambda)\cdot x_j<br>$$</p>
-<p>$$<br>\widetilde{y} = \lambda \cdot y_i + (1 − \lambda)\cdot y_j<br>$$</p>
+<p><strong>Vicinal Risk Minimization</strong></p>
+<p>$$P<em>v(\widetilde{x}, \widetilde{y})=\frac{1}{n}\sum</em>{i=1}^nv(\widetilde{x}, \widetilde{y}|x_i,y_i)$$</p>
+<p>This paper propose a generic vicinal distribution, <strong><em>mixup</em></strong>:</p>
+<p>$$\mu(\widetilde{x}, \widetilde{y}|x_i,y_i)=\frac{1}{n}\sum<em>j^n\mathbb{E}</em>\lambda[\sigma(\widetilde{x}=\lambda \cdot x_i+(1-\lambda)\cdot x_j,\widetilde{y} =\lambda \cdot y_i + (1-\lambda) \cdot y_j)]$$<br>where $\lambda \sim Beta(\alpha, \alpha)$, for $\alpha \in (0, \infty)$Sampling from the mixup vicinal distribution:</p>
+<p>$$\widetilde{x} = \lambda \cdot x_i + (1 − \lambda)\cdot x_j$$</p>
+<p>$$\widetilde{y} = \lambda \cdot y_i + (1 − \lambda)\cdot y_j$$</p>
 
       
     </div>
