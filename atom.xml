@@ -42,24 +42,6 @@
   </entry>
   
   <entry>
-    <title>Dynamic_Routing_Between_Capsules</title>
-    <link href="http://wulimengmeng.top/2017/11/03/Dynamic-Routing-Between-Capsules/"/>
-    <id>http://wulimengmeng.top/2017/11/03/Dynamic-Routing-Between-Capsules/</id>
-    <published>2017-11-02T23:31:13.000Z</published>
-    <updated>2017-11-02T23:31:32.000Z</updated>
-    
-    <summary type="html">
-    
-    </summary>
-    
-    
-      <category term="deep learning" scheme="http://wulimengmeng.top/tags/deep-learning/"/>
-    
-      <category term="paper notes" scheme="http://wulimengmeng.top/tags/paper-notes/"/>
-    
-  </entry>
-  
-  <entry>
     <title>mixup-Beyond Empirical Risk Minimization</title>
     <link href="http://wulimengmeng.top/2017/11/01/mixup/"/>
     <id>http://wulimengmeng.top/2017/11/01/mixup/</id>
@@ -78,9 +60,9 @@
     </summary>
     
     
-      <category term="deep learning" scheme="http://wulimengmeng.top/tags/deep-learning/"/>
-    
       <category term="paper notes" scheme="http://wulimengmeng.top/tags/paper-notes/"/>
+    
+      <category term="deep learning" scheme="http://wulimengmeng.top/tags/deep-learning/"/>
     
   </entry>
   
