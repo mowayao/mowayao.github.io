@@ -99,7 +99,7 @@
 <p><img src="http://ovshqtujw.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-14%20%E4%B8%8B%E5%8D%886.25.45.png" alt="Architecture comparison of different networks"></p>
 <p>The DPN balance ResNet and DenseNet in a tricky way, and can be formulated as:</p>
 <script type="math/tex; mode=display">
-x^k = \sum_{t=1}^{k-1} f_t^k (h^t),\\ y^k = \sum_{t=1}^{k-1} v_t(h^t) = y^{k-1} +\phi^{k-1}(y^{k-1}),\\r^k=x^k+y^k,\\h^k=g^k(r^k)</script><p>where $x_k$ and $y_k$ denote the extracted information at k-th step from individual path, $v_t(\cdot)$is a feature learning function as $f_k^t(\cdot)$, $\phi_k(\cdot) = f_k(g_k(\cdot))$.  The dual path means the left side is DenseNet, the right side is ResNet. The block parameters are shared between DenseNet and ResNet. The outputs of DenseNet and ResNet will be concated as next block’s input.</p>
+x^k = \sum_{t=1}^{k-1} f_t^k (h^t),\\ y^k = \sum_{t=1}^{k-1} v_t(h^t) = y^{k-1} +\phi^{k-1}(y^{k-1}),\\r^k=x^k+y^k,\\h^k=g^k(r^k)</script><p>where $x_k$ and $y_k$ denote the extracted information at k-th step from individual path, $v_t(\cdot)$is a feature learning function as $f_k^t(\cdot)$, $\phi_k(\cdot) = f_k(g_k(\cdot))$.  The dual path means the left side is DenseNet, the right side is ResNet. The block parameters are shared between DenseNet and ResNet. The outputs of two sides will be concated as next block’s input.</p>
 <p>This is the implementation of dual path block</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">DualPathBlock</span><span class="params">(nn.Module)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, in_chs, num_1x1_a, num_3x3_b, num_1x1_c, inc, G, _type=<span class="string">'normal'</span>)</span>:</span></div><div class="line">        super(DualPathBlock, self).__init__()</div><div class="line">        self.num_1x1_c = num_1x1_c</div><div class="line"></div><div class="line">        <span class="keyword">if</span> _type <span class="keyword">is</span> <span class="string">'proj'</span>:</div><div class="line">            key_stride = <span class="number">1</span></div><div class="line">            self.has_proj = <span class="keyword">True</span></div><div class="line">        <span class="keyword">if</span> _type <span class="keyword">is</span> <span class="string">'down'</span>:</div><div class="line">            key_stride = <span class="number">2</span></div><div class="line">            self.has_proj = <span class="keyword">True</span></div><div class="line">        <span class="keyword">if</span> _type <span class="keyword">is</span> <span class="string">'normal'</span>:</div><div class="line">            key_stride = <span class="number">1</span></div><div class="line">            self.has_proj = <span class="keyword">False</span></div><div class="line"></div><div class="line">        <span class="keyword">if</span> self.has_proj:</div><div class="line">            self.c1x1_w = self.BN_ReLU_Conv(in_chs=in_chs, out_chs=num_1x1_c+<span class="number">2</span>*inc, kernel_size=<span class="number">1</span>, stride=key_stride)</div><div class="line"></div><div class="line">        self.layers = nn.Sequential(OrderedDict([</div><div class="line">            (<span class="string">'c1x1_a'</span>, self.BN_ReLU_Conv(in_chs=in_chs, out_chs=num_1x1_a, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>)),</div><div class="line">            (<span class="string">'c3x3_b'</span>, self.BN_ReLU_Conv(in_chs=num_1x1_a, out_chs=num_3x3_b, kernel_size=<span class="number">3</span>, stride=key_stride, padding=<span class="number">1</span>, groups=G)),</div><div class="line">            (<span class="string">'c1x1_c'</span>, self.BN_ReLU_Conv(in_chs=num_3x3_b, out_chs=num_1x1_c+inc, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>)),</div><div class="line">        ]))</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">BN_ReLU_Conv</span><span class="params">(self, in_chs, out_chs, kernel_size, stride, padding=<span class="number">0</span>, groups=<span class="number">1</span>)</span>:</span></div><div class="line">        <span class="keyword">return</span> nn.Sequential(OrderedDict([</div><div class="line">            (<span class="string">'norm'</span>, nn.BatchNorm2d(in_chs)),</div><div class="line">            (<span class="string">'relu'</span>, nn.ReLU(inplace=<span class="keyword">True</span>)),</div><div class="line">            (<span class="string">'conv'</span>, nn.Conv2d(in_chs, out_chs, kernel_size, stride, padding, groups=groups, bias=<span class="keyword">False</span>)),</div><div class="line">        ]))</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></div><div class="line">        data_in = torch.cat(x, dim=<span class="number">1</span>) <span class="keyword">if</span> isinstance(x, list) <span class="keyword">else</span> x</div><div class="line">        <span class="keyword">if</span> self.has_proj:</div><div class="line">            data_o = self.c1x1_w(data_in)</div><div class="line">            data_o1 = data_o[:,:self.num_1x1_c,:,:]</div><div class="line">            data_o2 = data_o[:,self.num_1x1_c:,:,:]</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            data_o1 = x[<span class="number">0</span>]</div><div class="line">            data_o2 = x[<span class="number">1</span>]</div><div class="line"></div><div class="line">        out = self.layers(data_in)</div><div class="line"></div><div class="line">        summ = data_o1 + out[:,:self.num_1x1_c,:,:]</div><div class="line">        dense = torch.cat([data_o2, out[:,self.num_1x1_c:,:,:]], dim=<span class="number">1</span>)</div><div class="line">        <span class="keyword">return</span> [summ, dense]</div></pre></td></tr></table></figure>
 
@@ -107,11 +107,11 @@ x^k = \sum_{t=1}^{k-1} f_t^k (h^t),\\ y^k = \sum_{t=1}^{k-1} v_t(h^t) = y^{k-1} 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://wulimengmeng.top/2017/11/14/Networks/" data-id="cj9zldy5m0004jd0nlkyh62da" class="article-share-link" data-share="baidu" data-title="Dual Path Networks">分享到</a>
+        <a data-url="http://wulimengmeng.top/2017/11/14/Networks/" data-id="cj9zlf4ac0004k80nvzf1jshw" class="article-share-link" data-share="baidu" data-title="Dual Path Networks">Share</a>
       
 
       
-        <a href="http://wulimengmeng.top/2017/11/14/Networks/#ds-thread" class="article-comment-link">評論</a>
+        <a href="http://wulimengmeng.top/2017/11/14/Networks/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
@@ -187,11 +187,11 @@ x^k = \sum_{t=1}^{k-1} f_t^k (h^t),\\ y^k = \sum_{t=1}^{k-1} v_t(h^t) = y^{k-1} 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/" data-id="cj9zldy5r0006jd0n31zk6v1k" class="article-share-link" data-share="baidu" data-title="Meet in the middle的一些实例">分享到</a>
+        <a data-url="http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/" data-id="cj9zlf4ai0006k80nuh23vb3r" class="article-share-link" data-share="baidu" data-title="Meet in the middle的一些实例">Share</a>
       
 
       
-        <a href="http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/#ds-thread" class="article-comment-link">評論</a>
+        <a href="http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
@@ -251,11 +251,11 @@ z^o=\tanh(W^0x^t+W^oh^{t-1})\\</script><p><img src="http://ovshqtujw.bkt.clouddn
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://wulimengmeng.top/2017/11/12/GatedRNN/" data-id="cj9zldy5f0002jd0nuoc426ax" class="article-share-link" data-share="baidu" data-title="GatedRNN">分享到</a>
+        <a data-url="http://wulimengmeng.top/2017/11/12/GatedRNN/" data-id="cj9zlf4a50002k80nkm6otezv" class="article-share-link" data-share="baidu" data-title="GatedRNN">Share</a>
       
 
       
-        <a href="http://wulimengmeng.top/2017/11/12/GatedRNN/#ds-thread" class="article-comment-link">評論</a>
+        <a href="http://wulimengmeng.top/2017/11/12/GatedRNN/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
@@ -308,11 +308,11 @@ z^o=\tanh(W^0x^t+W^oh^{t-1})\\</script><p><img src="http://ovshqtujw.bkt.clouddn
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://wulimengmeng.top/2017/11/01/mixup/" data-id="cj9zldy5t0009jd0n9i3s0ys6" class="article-share-link" data-share="baidu" data-title="mixup-Beyond Empirical Risk Minimization">分享到</a>
+        <a data-url="http://wulimengmeng.top/2017/11/01/mixup/" data-id="cj9zlf4ak0009k80nd0mm6flf" class="article-share-link" data-share="baidu" data-title="mixup-Beyond Empirical Risk Minimization">Share</a>
       
 
       
-        <a href="http://wulimengmeng.top/2017/11/01/mixup/#ds-thread" class="article-comment-link">評論</a>
+        <a href="http://wulimengmeng.top/2017/11/01/mixup/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
@@ -366,11 +366,11 @@ z^o=\tanh(W^0x^t+W^oh^{t-1})\\</script><p><img src="http://ovshqtujw.bkt.clouddn
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" data-id="cj9zldy5p0005jd0ngxbw3hj5" class="article-share-link" data-share="baidu" data-title="Single Shot Scale-invariant Face Detector">分享到</a>
+        <a data-url="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" data-id="cj9zlf4ah0005k80nv9mj7sup" class="article-share-link" data-share="baidu" data-title="Single Shot Scale-invariant Face Detector">Share</a>
       
 
       
-        <a href="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/#ds-thread" class="article-comment-link">評論</a>
+        <a href="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
@@ -429,11 +429,11 @@ z^o=\tanh(W^0x^t+W^oh^{t-1})\\</script><p><img src="http://ovshqtujw.bkt.clouddn
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://wulimengmeng.top/2017/10/20/A-List-of-Saliency-Detection-Papers/" data-id="cj9zldy580000jd0nnkotrk1j" class="article-share-link" data-share="baidu" data-title="A List of Saliency Detection Papers">分享到</a>
+        <a data-url="http://wulimengmeng.top/2017/10/20/A-List-of-Saliency-Detection-Papers/" data-id="cj9zlf49y0000k80n9d728x1r" class="article-share-link" data-share="baidu" data-title="A List of Saliency Detection Papers">Share</a>
       
 
       
-        <a href="http://wulimengmeng.top/2017/10/20/A-List-of-Saliency-Detection-Papers/#ds-thread" class="article-comment-link">評論</a>
+        <a href="http://wulimengmeng.top/2017/10/20/A-List-of-Saliency-Detection-Papers/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
@@ -455,7 +455,7 @@ z^o=\tanh(W^0x^t+W^oh^{t-1})\\</script><p><img src="http://ovshqtujw.bkt.clouddn
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">標簽</h3>
+    <h3 class="widget-title">Tags</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Deep-Learning/">Deep Learning</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RNN/">RNN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithms/">algorithms</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deep-learning/">deep learning</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/face-detection/">face detection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paper/">paper</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paper-notes/">paper notes</a><span class="tag-list-count">3</span></li></ul>
     </div>
@@ -464,7 +464,7 @@ z^o=\tanh(W^0x^t+W^oh^{t-1})\\</script><p><img src="http://ovshqtujw.bkt.clouddn
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">標簽雲</h3>
+    <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
       <a href="/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/tags/RNN/" style="font-size: 10px;">RNN</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/deep-learning/" style="font-size: 15px;">deep learning</a> <a href="/tags/face-detection/" style="font-size: 10px;">face detection</a> <a href="/tags/paper/" style="font-size: 10px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 20px;">paper notes</a>
     </div>
@@ -473,7 +473,7 @@ z^o=\tanh(W^0x^t+W^oh^{t-1})\\</script><p><img src="http://ovshqtujw.bkt.clouddn
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">歸檔</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a><span class="archive-list-count">1</span></li></ul>
     </div>
@@ -482,7 +482,7 @@ z^o=\tanh(W^0x^t+W^oh^{t-1})\\</script><p><img src="http://ovshqtujw.bkt.clouddn
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">近期文章</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
@@ -535,7 +535,7 @@ z^o=\tanh(W^0x^t+W^oh^{t-1})\\</script><p><img src="http://ovshqtujw.bkt.clouddn
 </nav>
   <!-- totop start -->
 <div id="totop">
-<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+<a title="totop"><img src="/img/scrollup.png"/></a>
 </div>
 
 <!-- totop end -->
