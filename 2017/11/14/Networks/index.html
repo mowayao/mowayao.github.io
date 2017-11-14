@@ -4,19 +4,21 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>mixup-Beyond Empirical Risk Minimization | Mowayao&#39;s Blog</title>
+  <title>Dual Path Networks | Mowayao&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Gist: The authors propose a new training strategy  dubbed mixup that trains a neural network on convex combinations of pairs of examples and their labels and improves the generalization of state-of-th">
+  <meta name="description" content="Gist: This paper propose a novel deep CNN architecture called Dual Path Networks(DPN). This idea is  based on the fact that the ResNet enables feature re-usage while DenseNet enable new features explo">
 <meta name="keywords" content="paper notes,deep learning">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mixup-Beyond Empirical Risk Minimization">
-<meta property="og:url" content="http://wulimengmeng.top/2017/11/01/mixup/index.html">
+<meta property="og:title" content="Dual Path Networks">
+<meta property="og:url" content="http://wulimengmeng.top/2017/11/14/Networks/index.html">
 <meta property="og:site_name" content="Mowayao&#39;s Blog">
-<meta property="og:description" content="Gist: The authors propose a new training strategy  dubbed mixup that trains a neural network on convex combinations of pairs of examples and their labels and improves the generalization of state-of-th">
-<meta property="og:updated_time" content="2017-11-02T23:28:32.000Z">
+<meta property="og:description" content="Gist: This paper propose a novel deep CNN architecture called Dual Path Networks(DPN). This idea is  based on the fact that the ResNet enables feature re-usage while DenseNet enable new features explo">
+<meta property="og:image" content="http://ovshqtujw.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-14%20%E4%B8%8B%E5%8D%886.25.45.png">
+<meta property="og:updated_time" content="2017-11-14T10:33:32.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mixup-Beyond Empirical Risk Minimization">
-<meta name="twitter:description" content="Gist: The authors propose a new training strategy  dubbed mixup that trains a neural network on convex combinations of pairs of examples and their labels and improves the generalization of state-of-th">
+<meta name="twitter:title" content="Dual Path Networks">
+<meta name="twitter:description" content="Gist: This paper propose a novel deep CNN architecture called Dual Path Networks(DPN). This idea is  based on the fact that the ResNet enables feature re-usage while DenseNet enable new features explo">
+<meta name="twitter:image" content="http://ovshqtujw.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-14%20%E4%B8%8B%E5%8D%886.25.45.png">
   
     <link rel="alternative" href="/atom.xml" title="Mowayao&#39;s Blog" type="application/atom+xml">
   
@@ -72,10 +74,10 @@
   </div>
 </header>
     <div class="outer">
-      <section id="main"><article id="post-mixup" class="article article-type-post" itemscope itemprop="blogPost">
+      <section id="main"><article id="blog-Networks" class="article article-type-blog" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/11/01/mixup/" class="article-date">
-  <time datetime="2017-11-01T13:40:57.000Z" itemprop="datePublished">2017-11-01</time>
+    <a href="/2017/11/14/Networks/" class="article-date">
+  <time datetime="2017-11-14T10:05:50.000Z" itemprop="datePublished">2017-11-14</time>
 </a>
     
   </div>
@@ -86,7 +88,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      mixup-Beyond Empirical Risk Minimization
+      Dual Path Networks
     </h1>
   
 
@@ -94,29 +96,20 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>Gist</strong>: The authors propose a new training strategy  dubbed <strong>mixup</strong> that trains a neural network on convex combinations of pairs of examples and their labels and improves the generalization of state-of-the-art neural network architectures.    </p>
-<p>​    </p>
-<p><strong>Pytorch Code</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (x1, y1), (x2, y2) <span class="keyword">in</span> zip(loader1, loader2): </div><div class="line">  	lam = numpy.random.beta(alpha, alpha)</div><div class="line">	x = Variable(lam * x1 + (<span class="number">1.</span> - lam) * x2)</div><div class="line">	y = Variable(lam * y1 + (<span class="number">1.</span> - lam) * y2) optimizer.zero_grad()</div><div class="line">    loss(net(x), y).backward()</div><div class="line">    optimizer.step()</div></pre></td></tr></table></figure>
-<p><strong>Empirical Risk Minimization</strong></p>
-<p>We need to minimize the <strong>expected risk</strong>, that is the average of the loss function $l$ over the data distribution $P$</p>
-<script type="math/tex; mode=display">R(f ) = \int l(f (x), y)dP (x, y)</script><p>$l$ is the loss function, $P(x,y)$ is a joint data distribution, $f\in F$ is a function that describes the relationship between a random vector X and a random target vector Y .</p>
-<p>Unsually, the distribution of P is unknown. In most pracitical situation, we may approximate $P$ by the <strong><em>empirical distribution</em></strong>, though it is easy to compute, it ofen leads to the undesirable behaviour of $f$ outside the training data.</p>
-<script type="math/tex; mode=display">P_\sigma(x,y)=\frac{1}{n}\sum_{i=1}^{n}\sigma(x=x_i, y=y_i)</script><p>where $\sigma(x = x_i, y = y_i)$ is a Dirac mass centered at $(x_i, y_i)$</p>
-<script type="math/tex; mode=display">R_\sigma(f) = \frac{1}{n}\sum_{i=1}^nl(f(x_i), y_i)</script><p><strong>Vicinal Risk Minimization</strong></p>
-<script type="math/tex; mode=display">P_v (\widetilde{x}, \widetilde{y})=\frac{1}{n}\sum_{i=1}^nv(\widetilde{x}, \widetilde{y}|x_i,y_i)</script><p>where $v(\widetilde{x}, \widetilde{y}|x_i,y_i)$ is  a vicinity distribution that measures the probability of finding the virtual feature-target pair $(\widetilde{x}, \widetilde{y})$ in the vicinity of the training feature-target pair $(x_i,y_i)$</p>
-<p>This paper propose a generic vicinal distribution, <strong><em>mixup</em></strong>:</p>
-<script type="math/tex; mode=display">\mu(\widetilde{x}, \widetilde{y}|x_i,y_i)=\frac{1}{n}\sum_j^n\mathbb{E}_\lambda[\sigma(\widetilde{x}=\lambda \cdot x_i+(1-\lambda)\cdot x_j,\widetilde{y} =\lambda \cdot y_i + (1-\lambda) \cdot y_j)]</script><p>where $\lambda \sim Beta(\alpha, \alpha)$ , for $\alpha \in (0, \infty)$Sampling from the mixup vicinal distribution:</p>
-<script type="math/tex; mode=display">\widetilde{x} = \lambda \cdot x_i + (1 − \lambda)\cdot x_j</script><script type="math/tex; mode=display">\widetilde{y} = \lambda \cdot y_i + (1 − \lambda)\cdot y_j</script>
+        <h2 id="Gist"><a href="#Gist" class="headerlink" title="Gist:"></a>Gist:</h2><p><img src="http://ovshqtujw.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-14%20%E4%B8%8B%E5%8D%886.25.45.png" alt="Architecture comparison of different networks"></p>
+<p>This paper propose a novel deep CNN architecture called <strong>Dual Path Networks(DPN)</strong>. This idea is  based on the fact that the ResNet enables feature re-usage while DenseNet enable new features exploration which are both important for learning good feature representation.  The DPN can be formulated as:</p>
+<script type="math/tex; mode=display">
+x^k = \sum_{t=1}^{k-1} f_t^k (h^t),\\ y^k = \sum_{t=1}^{k-1} v_t(h^t) = y^{k-1} +\phi^{k-1}(y^{k-1}),\\r^k=x^k+y^k,\\h^k=g^k(r^k)</script><p>where $x_k$ and $y_k$ denote the extracted information at k-th step from individual path, $v_t(\cdot)$is a feature learning function as $f_k^t(\cdot)$, $\phi_k(\cdot) = f_k(g_k(\cdot))$.</p>
+
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://wulimengmeng.top/2017/11/01/mixup/" data-id="cj9zhcwl80005hd0n7cqq0214" class="article-share-link" data-share="baidu" data-title="mixup-Beyond Empirical Risk Minimization">Share</a>
+        <a data-url="http://wulimengmeng.top/2017/11/14/Networks/" data-id="cj9zhcwl20003hd0n1dlxy71b" class="article-share-link" data-share="baidu" data-title="Dual Path Networks">Share</a>
       
 
       
-        <a href="http://wulimengmeng.top/2017/11/01/mixup/#ds-thread" class="article-comment-link">Comments</a>
+        <a href="http://wulimengmeng.top/2017/11/14/Networks/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
@@ -128,19 +121,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2017/11/12/GatedRNN/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          GatedRNN
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2017/11/12/meet-in-the-middle的一些实例/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Single Shot Scale-invariant Face Detector</div>
+      <div class="article-nav-title">Meet in the middle的一些实例</div>
     </a>
   
 </nav>
@@ -150,7 +134,7 @@
 
 
   <section id="comments">
-    <div id="ds-thread" class="ds-thread" data-thread-key="2017/11/01/mixup/" data-title="mixup-Beyond Empirical Risk Minimization" data-url="http://wulimengmeng.top/2017/11/01/mixup/"></div>
+    <div id="ds-thread" class="ds-thread" data-thread-key="2017/11/14/Networks/" data-title="Dual Path Networks" data-url="http://wulimengmeng.top/2017/11/14/Networks/"></div>
   </section>
 </section>
       
