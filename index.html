@@ -69,6 +69,117 @@
     <div class="outer">
       <section id="main">
   
+    <article id="blog-FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM" class="article article-type-blog" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/" class="article-date">
+  <time datetime="2017-11-21T11:05:33.000Z" itemprop="datePublished">2017-11-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/">Fixing  Weight Decay Regularization in Adam</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://arxiv.org/pdf/1711.05101.pdf" target="_blank" rel="external">文章的链接</a></p>
+<p>首先，文章理清了l2正则和weight decay的区别，它们并不是对等的。 weight decay可以表示成:</p>
+<script type="math/tex; mode=display">
+x_{t+1} = (1-w_t)x_{t} - \alpha_t\nabla f_t(x_t)</script><p>而l2正则的表示是：</p>
+<script type="math/tex; mode=display">
+f_{t,reg(x_t)} = f_t(x_t)+ \frac{w_t}{2} \|x_t\|_2^2</script><p>所以：</p>
+<script type="math/tex; mode=display">
+\nabla f_{t,reg(x_t)} = \nabla f_t(x_t)+w_tx_t</script><p>注意到weight decay的系数只有$w_t$，那么，在大部分框架中，例如tensorflow, keras, pytorch等把weight decay和l2正则等价了，</p>
+<p>我们切换到SGD Mometum中来：因求完梯度以后，需要累加mometum，在$x_t$前面就存在了三个参数：$\alpha$学习率,$w_t$,$\eta_t$平滑系数。那么就和weight decay不对等了，当然可以把这三者乘积看成一个系数，但是这样还是削弱了原本的weight decay（系数变小了）。</p>
+<p>因此，作者把传统的SGD with momentum做了以下修改：</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.17.09.png" alt=""></p>
+<p>简单总结一下： 就是除了在梯度计算中加入weight decay，在mometum也加入了weight decay。这样就增强了weight decay的作用。</p>
+<p>除了对SGD with Mometum有影响，作者还对Adam进行了修改：</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.26.39.png" alt=""></p>
+<p>看一下Adam的公式：</p>
+<script type="math/tex; mode=display">
+x_t = x_{t-1} - \eta_t\alpha \frac{\beta_1m_{t-1}+(1-\beta_1)g_t}{\sqrt{\beta_2v_{t-1}+(1-\beta_2)g_t^2+\epsilon}}</script><p>with $g<em>t=\nabla f_t(x</em>{t-1})+w<em>tx</em>{t-1}$</p>
+<p>这里可以看到$g_t$被归一化了，同时$w_t$也带着被归一化了，这样$w_t$就被减弱了。</p>
+<p>实验结果：</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.38.45.png" alt=""></p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.38.53.png" alt=""></p>
+<p>横纵坐标分别是不同的weight decay和learning rate的组合, 可以看到learning rate和weight decay的相关性很大，固定weight decay，去调整learning rate，那么效果会变化较大，从图中看到，明显作者提出的算法，最有区域较大，更利于找出最优的参数组合。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://wulimengmeng.top/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/" data-id="cja9k2qoq0000ht0nsxb1eh6m" class="article-share-link" data-share="baidu" data-title="Fixing  Weight Decay Regularization in Adam">Share</a>
+      
+
+      
+        <a href="http://wulimengmeng.top/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/deep-learning/">deep learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/paper-notes/">paper notes</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="blog-effective-receptive-field" class="article article-type-blog" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/16/effective-receptive-field/" class="article-date">
+  <time datetime="2017-11-16T03:33:31.000Z" itemprop="datePublished">2017-11-16</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/11/16/effective-receptive-field/">effective_receptive_field</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>通常来说，我们可以通过stack更多的卷积层，降采样（stride, pooling）和dilated convolutions来增加receptive field。但是，理论上来讲，receptive field和深度并不是线性正相关，在<a href="https://arxiv.org/abs/1701.04128" target="_blank" rel="external">Luo, Wenjie et al</a>中，提到一个概念，就是effective receptive field，ERF。文章提到了一个概念就是并不是所有所有在receptive filed的像素对最终的响应图贡献都是一样的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://wulimengmeng.top/2017/11/16/effective-receptive-field/" data-id="cja9k2qpf0008ht0n85av9y4h" class="article-share-link" data-share="baidu" data-title="effective_receptive_field">Share</a>
+      
+
+      
+        <a href="http://wulimengmeng.top/2017/11/16/effective-receptive-field/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/computer-vision/">computer vision</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/deep-learning/">deep learning</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="blog-Networks" class="article article-type-blog" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/11/14/Networks/" class="article-date">
@@ -107,11 +218,11 @@ x^k = \sum_{t=1}^{k-1} f_t^k (h^t),\\ y^k = \sum_{t=1}^{k-1} v_t(h^t) = y^{k-1} 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://wulimengmeng.top/2017/11/14/Networks/" data-id="cj9zlg5yh0003ku0ng8mey210" class="article-share-link" data-share="baidu" data-title="Dual Path Networks">分享到</a>
+        <a data-url="http://wulimengmeng.top/2017/11/14/Networks/" data-id="cja9k2qpi000bht0n6mwhe4iu" class="article-share-link" data-share="baidu" data-title="Dual Path Networks">Share</a>
       
 
       
-        <a href="http://wulimengmeng.top/2017/11/14/Networks/#ds-thread" class="article-comment-link">评论</a>
+        <a href="http://wulimengmeng.top/2017/11/14/Networks/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
@@ -187,11 +298,11 @@ x^k = \sum_{t=1}^{k-1} f_t^k (h^t),\\ y^k = \sum_{t=1}^{k-1} v_t(h^t) = y^{k-1} 
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/" data-id="cj9zlg5yn0005ku0nqw234mos" class="article-share-link" data-share="baidu" data-title="Meet in the middle的一些实例">分享到</a>
+        <a data-url="http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/" data-id="cja9k2qp40004ht0nph75v8z7" class="article-share-link" data-share="baidu" data-title="Meet in the middle的一些实例">Share</a>
       
 
       
-        <a href="http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/#ds-thread" class="article-comment-link">评论</a>
+        <a href="http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
@@ -251,11 +362,11 @@ z^o=\tanh(W^0x^t+W^oh^{t-1})\\</script><p><img src="http://ovshqtujw.bkt.clouddn
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://wulimengmeng.top/2017/11/12/GatedRNN/" data-id="cj9zlg5yc0001ku0nieqfohty" class="article-share-link" data-share="baidu" data-title="GatedRNN">分享到</a>
+        <a data-url="http://wulimengmeng.top/2017/11/12/GatedRNN/" data-id="cja9k2qp90005ht0nor2jsr6j" class="article-share-link" data-share="baidu" data-title="GatedRNN">Share</a>
       
 
       
-        <a href="http://wulimengmeng.top/2017/11/12/GatedRNN/#ds-thread" class="article-comment-link">评论</a>
+        <a href="http://wulimengmeng.top/2017/11/12/GatedRNN/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
@@ -308,11 +419,11 @@ z^o=\tanh(W^0x^t+W^oh^{t-1})\\</script><p><img src="http://ovshqtujw.bkt.clouddn
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://wulimengmeng.top/2017/11/01/mixup/" data-id="cj9zlg5ys0008ku0n9lfu06sn" class="article-share-link" data-share="baidu" data-title="mixup-Beyond Empirical Risk Minimization">分享到</a>
+        <a data-url="http://wulimengmeng.top/2017/11/01/mixup/" data-id="cja9k2qpd0007ht0nktjwnnkg" class="article-share-link" data-share="baidu" data-title="mixup-Beyond Empirical Risk Minimization">Share</a>
       
 
       
-        <a href="http://wulimengmeng.top/2017/11/01/mixup/#ds-thread" class="article-comment-link">评论</a>
+        <a href="http://wulimengmeng.top/2017/11/01/mixup/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
@@ -366,11 +477,11 @@ z^o=\tanh(W^0x^t+W^oh^{t-1})\\</script><p><img src="http://ovshqtujw.bkt.clouddn
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" data-id="cj9zlg5yj0004ku0ntqahw7b9" class="article-share-link" data-share="baidu" data-title="Single Shot Scale-invariant Face Detector">分享到</a>
+        <a data-url="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" data-id="cja9k2qp20003ht0nzsxw4q93" class="article-share-link" data-share="baidu" data-title="Single Shot Scale-invariant Face Detector">Share</a>
       
 
       
-        <a href="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/#ds-thread" class="article-comment-link">评论</a>
+        <a href="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
@@ -429,11 +540,11 @@ z^o=\tanh(W^0x^t+W^oh^{t-1})\\</script><p><img src="http://ovshqtujw.bkt.clouddn
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://wulimengmeng.top/2017/10/20/A-List-of-Saliency-Detection-Papers/" data-id="cj9zlg5y60000ku0nycr8mniw" class="article-share-link" data-share="baidu" data-title="A List of Saliency Detection Papers">分享到</a>
+        <a data-url="http://wulimengmeng.top/2017/10/20/A-List-of-Saliency-Detection-Papers/" data-id="cja9k2qow0001ht0n7ucuobcn" class="article-share-link" data-share="baidu" data-title="A List of Saliency Detection Papers">Share</a>
       
 
       
-        <a href="http://wulimengmeng.top/2017/10/20/A-List-of-Saliency-Detection-Papers/#ds-thread" class="article-comment-link">评论</a>
+        <a href="http://wulimengmeng.top/2017/10/20/A-List-of-Saliency-Detection-Papers/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
@@ -455,36 +566,44 @@ z^o=\tanh(W^0x^t+W^oh^{t-1})\\</script><p><img src="http://ovshqtujw.bkt.clouddn
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">标签</h3>
+    <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Deep-Learning/">Deep Learning</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RNN/">RNN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithms/">algorithms</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deep-learning/">deep learning</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/face-detection/">face detection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paper/">paper</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paper-notes/">paper notes</a><span class="tag-list-count">3</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Deep-Learning/">Deep Learning</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RNN/">RNN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithms/">algorithms</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer-vision/">computer vision</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deep-learning/">deep learning</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/face-detection/">face detection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paper/">paper</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paper-notes/">paper notes</a><span class="tag-list-count">4</span></li></ul>
     </div>
   </div>
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">标签云</h3>
+    <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/tags/RNN/" style="font-size: 10px;">RNN</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/deep-learning/" style="font-size: 15px;">deep learning</a> <a href="/tags/face-detection/" style="font-size: 10px;">face detection</a> <a href="/tags/paper/" style="font-size: 10px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 20px;">paper notes</a>
+      <a href="/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/tags/RNN/" style="font-size: 10px;">RNN</a> <a href="/tags/algorithms/" style="font-size: 10px;">algorithms</a> <a href="/tags/computer-vision/" style="font-size: 10px;">computer vision</a> <a href="/tags/deep-learning/" style="font-size: 20px;">deep learning</a> <a href="/tags/face-detection/" style="font-size: 10px;">face detection</a> <a href="/tags/paper/" style="font-size: 10px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 20px;">paper notes</a>
     </div>
   </div>
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">归档</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">近期文章</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/">Fixing  Weight Decay Regularization in Adam</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/16/effective-receptive-field/">effective_receptive_field</a>
+          </li>
         
           <li>
             <a href="/2017/11/14/Networks/">Dual Path Networks</a>
@@ -496,14 +615,6 @@ z^o=\tanh(W^0x^t+W^oh^{t-1})\\</script><p><img src="http://ovshqtujw.bkt.clouddn
         
           <li>
             <a href="/2017/11/12/GatedRNN/">GatedRNN</a>
-          </li>
-        
-          <li>
-            <a href="/2017/11/01/mixup/">mixup-Beyond Empirical Risk Minimization</a>
-          </li>
-        
-          <li>
-            <a href="/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/">Single Shot Scale-invariant Face Detector</a>
           </li>
         
       </ul>
@@ -535,7 +646,7 @@ z^o=\tanh(W^0x^t+W^oh^{t-1})\\</script><p><img src="http://ovshqtujw.bkt.clouddn
 </nav>
   <!-- totop start -->
 <div id="totop">
-<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+<a title="totop"><img src="/img/scrollup.png"/></a>
 </div>
 
 <!-- totop end -->

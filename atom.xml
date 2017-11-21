@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wulimengmeng.top/"/>
-  <updated>2017-11-14T12:28:18.000Z</updated>
+  <updated>2017-11-21T11:47:30.340Z</updated>
   <id>http://wulimengmeng.top/</id>
   
   <author>
@@ -15,6 +15,57 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Fixing  Weight Decay Regularization in Adam</title>
+    <link href="http://wulimengmeng.top/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/"/>
+    <id>http://wulimengmeng.top/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/</id>
+    <published>2017-11-21T11:05:33.000Z</published>
+    <updated>2017-11-21T11:47:30.340Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="https://arxiv.org/pdf/1711.05101.pdf" target="_blank" rel="external">文章的链接</a></p><p>首先，文章理清了l2正则和weight decay的区别，它们并不是对等的。 weight decay可以表示成:</p><script type="math/tex; mode=display">x_{t+1} = (1-w_t)x_{t} - \alpha_t\nabla f_t(x_t)</script><p>而l2正则的表示是：</p><script type="math/tex; mode=display">f_{t,reg(x_t)} = f_t(x_t)+ \frac{w_t}{2} \|x_t\|_2^2</script><p>所以：</p><script type="math/tex; mode=display">\nabla f_{t,reg(x_t)} = \nabla f_t(x_t)+w_tx_t</script><p>注意到weight decay的系数只有$w_t$，那么，在大部分框架中，例如tensorflow, keras, pytorch等把weight decay和l2正则等价了，</p><p>我们切换到SGD Mometum中来：因求完梯度以后，需要累加mometum，在$x_t$前面就存在了三个参数：$\alpha$学习率,$w_t$,$\eta_t$平滑系数。那么就和weight decay不对等了，当然可以把这三者乘积看成一个系数，但是这样还是削弱了原本的weight decay（系数变小了）。</p><p>因此，作者把传统的SGD with momentum做了以下修改：</p><p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.17.09.png" alt=""></p><p>简单总结一下： 就是除了在梯度计算中加入weight decay，在mometum也加入了weight decay。这样就增强了weight decay的作用。</p><p>除了对SGD with Mometum有影响，作者还对Adam进行了修改：</p><p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.26.39.png" alt=""></p><p>看一下Adam的公式：</p><script type="math/tex; mode=display">x_t = x_{t-1} - \eta_t\alpha \frac{\beta_1m_{t-1}+(1-\beta_1)g_t}{\sqrt{\beta_2v_{t-1}+(1-\beta_2)g_t^2+\epsilon}}</script><p>with $g<em>t=\nabla f_t(x</em>{t-1})+w<em>tx</em>{t-1}$</p><p>这里可以看到$g_t$被归一化了，同时$w_t$也带着被归一化了，这样$w_t$就被减弱了。</p><p>实验结果：</p><p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.38.45.png" alt=""></p><p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.38.53.png" alt=""></p><p>横纵坐标分别是不同的weight decay和learning rate的组合, 可以看到learning rate和weight decay的相关性很大，固定weight decay，去调整learning rate，那么效果会变化较大，从图中看到，明显作者提出的算法，最有区域较大，更利于找出最优的参数组合。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;a href=&quot;https://arxiv.org/pdf/1711.05101.pdf&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;文章的链接&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;首先，文章理清了l2正则和weight decay的区别，它们并不是对等的。 wei
+      
+    
+    </summary>
+    
+    
+      <category term="paper notes" scheme="http://wulimengmeng.top/tags/paper-notes/"/>
+    
+      <category term="deep learning" scheme="http://wulimengmeng.top/tags/deep-learning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>effective_receptive_field</title>
+    <link href="http://wulimengmeng.top/2017/11/16/effective-receptive-field/"/>
+    <id>http://wulimengmeng.top/2017/11/16/effective-receptive-field/</id>
+    <published>2017-11-16T03:33:31.000Z</published>
+    <updated>2017-11-16T03:53:52.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>通常来说，我们可以通过stack更多的卷积层，降采样（stride, pooling）和dilated convolutions来增加receptive field。但是，理论上来讲，receptive field和深度并不是线性正相关，在<a href="https://arxiv.org/abs/1701.04128" target="_blank" rel="external">Luo, Wenjie et al</a>中，提到一个概念，就是effective receptive field，ERF。文章提到了一个概念就是并不是所有所有在receptive filed的像素对最终的响应图贡献都是一样的。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;通常来说，我们可以通过stack更多的卷积层，降采样（stride, pooling）和dilated convolutions来增加receptive field。但是，理论上来讲，receptive field和深度并不是线性正相关，在&lt;a href=&quot;https://
+      
+    
+    </summary>
+    
+    
+      <category term="deep learning" scheme="http://wulimengmeng.top/tags/deep-learning/"/>
+    
+      <category term="computer vision" scheme="http://wulimengmeng.top/tags/computer-vision/"/>
+    
+  </entry>
   
   <entry>
     <title>Dual Path Networks</title>

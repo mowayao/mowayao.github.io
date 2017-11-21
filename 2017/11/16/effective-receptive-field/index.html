@@ -4,14 +4,19 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>Tag: face detection | Mowayao&#39;s Blog</title>
+  <title>effective_receptive_field | Mowayao&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Mowayao&#39;s Blog">
-<meta property="og:url" content="http://wulimengmeng.top/tags/face-detection/index.html">
+  <meta name="description" content="通常来说，我们可以通过stack更多的卷积层，降采样（stride, pooling）和dilated convolutions来增加receptive field。但是，理论上来讲，receptive field和深度并不是线性正相关，在Luo, Wenjie et al中，提到一个概念，就是effective receptive field，ERF。文章提到了一个概念就是并不是所有所有在rec">
+<meta name="keywords" content="deep learning,computer vision">
+<meta property="og:type" content="article">
+<meta property="og:title" content="effective_receptive_field">
+<meta property="og:url" content="http://wulimengmeng.top/2017/11/16/effective-receptive-field/index.html">
 <meta property="og:site_name" content="Mowayao&#39;s Blog">
+<meta property="og:description" content="通常来说，我们可以通过stack更多的卷积层，降采样（stride, pooling）和dilated convolutions来增加receptive field。但是，理论上来讲，receptive field和深度并不是线性正相关，在Luo, Wenjie et al中，提到一个概念，就是effective receptive field，ERF。文章提到了一个概念就是并不是所有所有在rec">
+<meta property="og:updated_time" content="2017-11-16T03:53:52.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mowayao&#39;s Blog">
+<meta name="twitter:title" content="effective_receptive_field">
+<meta name="twitter:description" content="通常来说，我们可以通过stack更多的卷积层，降采样（stride, pooling）和dilated convolutions来增加receptive field。但是，理论上来讲，receptive field和深度并不是线性正相关，在Luo, Wenjie et al中，提到一个概念，就是effective receptive field，ERF。文章提到了一个概念就是并不是所有所有在rec">
   
     <link rel="alternative" href="/atom.xml" title="Mowayao&#39;s Blog" type="application/atom+xml">
   
@@ -67,40 +72,74 @@
   </div>
 </header>
     <div class="outer">
-      <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" class="archive-article-date">
-  <time datetime="2017-11-01T11:16:56.000Z" itemprop="datePublished">Nov 1</time>
+      <section id="main"><article id="blog-effective-receptive-field" class="article article-type-blog" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/16/effective-receptive-field/" class="article-date">
+  <time datetime="2017-11-16T03:33:31.000Z" itemprop="datePublished">2017-11-16</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/">Single Shot Scale-invariant Face Detector</a>
+    <h1 class="article-title" itemprop="name">
+      effective_receptive_field
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>通常来说，我们可以通过stack更多的卷积层，降采样（stride, pooling）和dilated convolutions来增加receptive field。但是，理论上来讲，receptive field和深度并不是线性正相关，在<a href="https://arxiv.org/abs/1701.04128" target="_blank" rel="external">Luo, Wenjie et al</a>中，提到一个概念，就是effective receptive field，ERF。文章提到了一个概念就是并不是所有所有在receptive filed的像素对最终的响应图贡献都是一样的。</p>
 
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://wulimengmeng.top/2017/11/16/effective-receptive-field/" data-id="cja9k2qpf0008ht0n85av9y4h" class="article-share-link" data-share="baidu" data-title="effective_receptive_field">Share</a>
+      
+
+      
+        <a href="http://wulimengmeng.top/2017/11/16/effective-receptive-field/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/computer-vision/">computer vision</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/deep-learning/">deep learning</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Fixing  Weight Decay Regularization in Adam
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/11/14/Networks/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Dual Path Networks</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+  <section id="comments">
+    <div id="ds-thread" class="ds-thread" data-thread-key="2017/11/16/effective-receptive-field/" data-title="effective_receptive_field" data-url="http://wulimengmeng.top/2017/11/16/effective-receptive-field/"></div>
+  </section>
 </section>
       
       <aside id="sidebar">
