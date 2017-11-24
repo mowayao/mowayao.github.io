@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wulimengmeng.top/"/>
-  <updated>2017-11-21T11:47:30.340Z</updated>
+  <updated>2017-11-24T07:57:43.383Z</updated>
   <id>http://wulimengmeng.top/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Introduction to Capsule Network</title>
+    <link href="http://wulimengmeng.top/2017/11/24/capsule/"/>
+    <id>http://wulimengmeng.top/2017/11/24/capsule/</id>
+    <published>2017-11-24T06:19:55.000Z</published>
+    <updated>2017-11-24T07:57:43.383Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="https://arxiv.org/abs/1710.09829" target="_blank" rel="external">Dynamic Routing Between Capsules</a></p><p>这是Hinton发表在NIPS2017的一篇文章，提出了capsule的概念。</p><p>其实可以把capsule看成是neuron的一个特殊形式，neuron的输出是一个scalar，而capsule则会输出vector。除此之外，neuron可以detect到一个特定的pattern，但是这又存在很大的局限性，会有pattern冗余，例如：</p><p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.11.12.png" alt=""></p><p>所以capsule输出vector就可以避免这样的情况，输出特征v的每个维度表示的是对应pattern的特性，以上图为例，可能某个表示鸟嘴方向的维度，分别对应1和-1。</p><p>再以人脸为例，传统的CNN可能可以detect到眼睛的pattern, 嘴巴的pattern等，只能表示它的存在，但是无法表示五官的属性，例如相对位置，大小，相对角度等等。而向量的大小表示的是整个pattern的概率，或者可以叫做confidence, 例如下图：</p><p><img src="https://jhui.github.io/assets/capsule/face4.jpg" alt=""><img src="https://jhui.github.io/assets/capsule/face5.jpg" alt=""></p><p>具体的计算过程见下图：</p><p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.15.27.png" alt=""></p><script type="math/tex; mode=display">u^1=W^1V^1, u^2=W^2v^2\\s=c_1u^1\\v=Squash(s) , v = \frac{\|s\|}{1+\|s\|^2}\frac{s}{\|s\|}</script><p>接下来就是核心，dynamic routing:</p><p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.51.30.png" alt=""></p><p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.24.52.png" alt=""></p><p>和传统CNN简单粗暴的max pooling不同的是它动态地调整routing的系数，系数是在testing的时候online地决定的，调整的方法就是通过T次迭代，根据aggrement，其实就是提高越相关的v的系数。 上图中，如果$a^r$和$u^i$相关性较强的话，就可以得到更大的$b_i$。</p><p>也可以将dynamic routing的过程看成是一个不断排除outlier的一个过程，例如现在$u^1$,$u^2$很接近，而$u^3$与他们差距很大，他们两个队最终的$a^r$贡献很大，那么随着不断迭代，$u^3$就被消除了。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1710.09829&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Dynamic Routing Between Capsules&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;这是Hinton发表在NIPS2017
+      
+    
+    </summary>
+    
+    
+      <category term="deep learning" scheme="http://wulimengmeng.top/tags/deep-learning/"/>
+    
+      <category term="notes" scheme="http://wulimengmeng.top/tags/notes/"/>
+    
+  </entry>
   
   <entry>
     <title>Fixing  Weight Decay Regularization in Adam</title>

@@ -4,21 +4,14 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>Single Shot Scale-invariant Face Detector | Mowayao&#39;s Blog</title>
+  <title>Tag: notes | Mowayao&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="The authors propose to tile anchors on a wide range of layers to ensure that all scales of faces have enough features for detection. Besides, they try to improve the recall rate of small faces by a sc">
-<meta name="keywords" content="paper notes,face detection">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Single Shot Scale-invariant Face Detector">
-<meta property="og:url" content="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Mowayao&#39;s Blog">
+<meta property="og:url" content="http://wulimengmeng.top/tags/notes/index.html">
 <meta property="og:site_name" content="Mowayao&#39;s Blog">
-<meta property="og:description" content="The authors propose to tile anchors on a wide range of layers to ensure that all scales of faces have enough features for detection. Besides, they try to improve the recall rate of small faces by a sc">
-<meta property="og:image" content="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-01%20%E4%B8%8B%E5%8D%887.46.53.png">
-<meta property="og:updated_time" content="2017-11-01T12:01:06.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Single Shot Scale-invariant Face Detector">
-<meta name="twitter:description" content="The authors propose to tile anchors on a wide range of layers to ensure that all scales of faces have enough features for detection. Besides, they try to improve the recall rate of small faces by a sc">
-<meta name="twitter:image" content="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-01%20%E4%B8%8B%E5%8D%887.46.53.png">
+<meta name="twitter:title" content="Mowayao&#39;s Blog">
   
     <link rel="alternative" href="/atom.xml" title="Mowayao&#39;s Blog" type="application/atom+xml">
   
@@ -74,87 +67,40 @@
   </div>
 </header>
     <div class="outer">
-      <section id="main"><article id="post-Single-Shot-Scale-invariant-Face-Detector" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" class="article-date">
-  <time datetime="2017-11-01T11:16:56.000Z" itemprop="datePublished">2017-11-01</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+      <section id="main">
   
-    <h1 class="article-title" itemprop="name">
-      Single Shot Scale-invariant Face Detector
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2017" class="archive-year">2017</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-blog">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/2017/11/24/capsule/" class="archive-article-date">
+  <time datetime="2017-11-24T06:19:55.000Z" itemprop="datePublished">Nov 24</time>
+</a>
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2017/11/24/capsule/">Introduction to Capsule Network</a>
     </h1>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>The authors propose to tile anchors on a wide range of layers to ensure that all scales of faces have enough features for detection. Besides, they try to improve the recall rate of small faces by a scale compensation anchor matching strategy. Max-out background label is used to reduce the false positive rate of small faces.</p>
-<p>Key points:</p>
-<ul>
-<li>VGG net (throgh Pool5 layer) and some extra convolutional layers</li>
-<li>Anchor  is 1:1 aspect ratio (face annotation)</li>
-<li>two stages to improve the anchor matching strategy<ul>
-<li>stage one: decrese the jaccord overlap threshold from 0.5 to 0.35</li>
-<li>stage two: decrese the threshold to 0.1 and sort to select the top-N</li>
-</ul>
-</li>
-<li>max-out operation is performed on the background label scores</li>
-</ul>
-<p>model architecture:</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-01%20%E4%B8%8B%E5%8D%887.46.53.png" alt=""></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" data-id="cjadm77ld0005vr0n20aqffay" class="article-share-link" data-share="baidu" data-title="Single Shot Scale-invariant Face Detector">Share</a>
-      
-
-      
-        <a href="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/#ds-thread" class="article-comment-link">Comments</a>
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/face-detection/">face detection</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/paper-notes/">paper notes</a></li></ul>
-
-    </footer>
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2017/11/01/mixup/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          mixup-Beyond Empirical Risk Minimization
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2017/10/20/A-List-of-Saliency-Detection-Papers/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">A List of Saliency Detection Papers</div>
-    </a>
-  
-</nav>
-
-  
 </article>
+  
+  
+    </div></section>
+  
 
-
-  <section id="comments">
-    <div id="ds-thread" class="ds-thread" data-thread-key="2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" data-title="Single Shot Scale-invariant Face Detector" data-url="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/"></div>
-  </section>
 </section>
       
       <aside id="sidebar">

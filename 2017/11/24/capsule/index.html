@@ -4,21 +4,26 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>Single Shot Scale-invariant Face Detector | Mowayao&#39;s Blog</title>
+  <title>Introduction to Capsule Network | Mowayao&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="The authors propose to tile anchors on a wide range of layers to ensure that all scales of faces have enough features for detection. Besides, they try to improve the recall rate of small faces by a sc">
-<meta name="keywords" content="paper notes,face detection">
+  <meta name="description" content="Dynamic Routing Between Capsules 这是Hinton发表在NIPS2017的一篇文章，提出了capsule的概念。 其实可以把capsule看成是neuron的一个特殊形式，neuron的输出是一个scalar，而capsule则会输出vector。除此之外，neuron可以detect到一个特定的pattern，但是这又存在很大的局限性，会有pattern冗余，例如">
+<meta name="keywords" content="deep learning,notes">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Single Shot Scale-invariant Face Detector">
-<meta property="og:url" content="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/index.html">
+<meta property="og:title" content="Introduction to Capsule Network">
+<meta property="og:url" content="http://wulimengmeng.top/2017/11/24/capsule/index.html">
 <meta property="og:site_name" content="Mowayao&#39;s Blog">
-<meta property="og:description" content="The authors propose to tile anchors on a wide range of layers to ensure that all scales of faces have enough features for detection. Besides, they try to improve the recall rate of small faces by a sc">
-<meta property="og:image" content="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-01%20%E4%B8%8B%E5%8D%887.46.53.png">
-<meta property="og:updated_time" content="2017-11-01T12:01:06.000Z">
+<meta property="og:description" content="Dynamic Routing Between Capsules 这是Hinton发表在NIPS2017的一篇文章，提出了capsule的概念。 其实可以把capsule看成是neuron的一个特殊形式，neuron的输出是一个scalar，而capsule则会输出vector。除此之外，neuron可以detect到一个特定的pattern，但是这又存在很大的局限性，会有pattern冗余，例如">
+<meta property="og:image" content="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.11.12.png">
+<meta property="og:image" content="https://jhui.github.io/assets/capsule/face4.jpg">
+<meta property="og:image" content="https://jhui.github.io/assets/capsule/face5.jpg">
+<meta property="og:image" content="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.15.27.png">
+<meta property="og:image" content="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.51.30.png">
+<meta property="og:image" content="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.24.52.png">
+<meta property="og:updated_time" content="2017-11-24T07:57:43.383Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Single Shot Scale-invariant Face Detector">
-<meta name="twitter:description" content="The authors propose to tile anchors on a wide range of layers to ensure that all scales of faces have enough features for detection. Besides, they try to improve the recall rate of small faces by a sc">
-<meta name="twitter:image" content="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-01%20%E4%B8%8B%E5%8D%887.46.53.png">
+<meta name="twitter:title" content="Introduction to Capsule Network">
+<meta name="twitter:description" content="Dynamic Routing Between Capsules 这是Hinton发表在NIPS2017的一篇文章，提出了capsule的概念。 其实可以把capsule看成是neuron的一个特殊形式，neuron的输出是一个scalar，而capsule则会输出vector。除此之外，neuron可以detect到一个特定的pattern，但是这又存在很大的局限性，会有pattern冗余，例如">
+<meta name="twitter:image" content="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.11.12.png">
   
     <link rel="alternative" href="/atom.xml" title="Mowayao&#39;s Blog" type="application/atom+xml">
   
@@ -74,10 +79,10 @@
   </div>
 </header>
     <div class="outer">
-      <section id="main"><article id="post-Single-Shot-Scale-invariant-Face-Detector" class="article article-type-post" itemscope itemprop="blogPost">
+      <section id="main"><article id="blog-capsule" class="article article-type-blog" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" class="article-date">
-  <time datetime="2017-11-01T11:16:56.000Z" itemprop="datePublished">2017-11-01</time>
+    <a href="/2017/11/24/capsule/" class="article-date">
+  <time datetime="2017-11-24T06:19:55.000Z" itemprop="datePublished">2017-11-24</time>
 </a>
     
   </div>
@@ -88,7 +93,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Single Shot Scale-invariant Face Detector
+      Introduction to Capsule Network
     </h1>
   
 
@@ -96,34 +101,35 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>The authors propose to tile anchors on a wide range of layers to ensure that all scales of faces have enough features for detection. Besides, they try to improve the recall rate of small faces by a scale compensation anchor matching strategy. Max-out background label is used to reduce the false positive rate of small faces.</p>
-<p>Key points:</p>
-<ul>
-<li>VGG net (throgh Pool5 layer) and some extra convolutional layers</li>
-<li>Anchor  is 1:1 aspect ratio (face annotation)</li>
-<li>two stages to improve the anchor matching strategy<ul>
-<li>stage one: decrese the jaccord overlap threshold from 0.5 to 0.35</li>
-<li>stage two: decrese the threshold to 0.1 and sort to select the top-N</li>
-</ul>
-</li>
-<li>max-out operation is performed on the background label scores</li>
-</ul>
-<p>model architecture:</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-01%20%E4%B8%8B%E5%8D%887.46.53.png" alt=""></p>
+        <p><a href="https://arxiv.org/abs/1710.09829" target="_blank" rel="external">Dynamic Routing Between Capsules</a></p>
+<p>这是Hinton发表在NIPS2017的一篇文章，提出了capsule的概念。</p>
+<p>其实可以把capsule看成是neuron的一个特殊形式，neuron的输出是一个scalar，而capsule则会输出vector。除此之外，neuron可以detect到一个特定的pattern，但是这又存在很大的局限性，会有pattern冗余，例如：</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.11.12.png" alt=""></p>
+<p>所以capsule输出vector就可以避免这样的情况，输出特征v的每个维度表示的是对应pattern的特性，以上图为例，可能某个表示鸟嘴方向的维度，分别对应1和-1。</p>
+<p>再以人脸为例，传统的CNN可能可以detect到眼睛的pattern, 嘴巴的pattern等，只能表示它的存在，但是无法表示五官的属性，例如相对位置，大小，相对角度等等。而向量的大小表示的是整个pattern的概率，或者可以叫做confidence, 例如下图：</p>
+<p><img src="https://jhui.github.io/assets/capsule/face4.jpg" alt=""><img src="https://jhui.github.io/assets/capsule/face5.jpg" alt=""></p>
+<p>具体的计算过程见下图：</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.15.27.png" alt=""></p>
+<script type="math/tex; mode=display">
+u^1=W^1V^1, u^2=W^2v^2\\s=c_1u^1\\v=Squash(s) , v = \frac{\|s\|}{1+\|s\|^2}\frac{s}{\|s\|}</script><p>接下来就是核心，dynamic routing:</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.51.30.png" alt=""></p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.24.52.png" alt=""></p>
+<p>和传统CNN简单粗暴的max pooling不同的是它动态地调整routing的系数，系数是在testing的时候online地决定的，调整的方法就是通过T次迭代，根据aggrement，其实就是提高越相关的v的系数。 上图中，如果$a^r$和$u^i$相关性较强的话，就可以得到更大的$b_i$。</p>
+<p>也可以将dynamic routing的过程看成是一个不断排除outlier的一个过程，例如现在$u^1$,$u^2$很接近，而$u^3$与他们差距很大，他们两个队最终的$a^r$贡献很大，那么随着不断迭代，$u^3$就被消除了。</p>
 
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" data-id="cjadm77ld0005vr0n20aqffay" class="article-share-link" data-share="baidu" data-title="Single Shot Scale-invariant Face Detector">Share</a>
+        <a data-url="http://wulimengmeng.top/2017/11/24/capsule/" data-id="cjadm77lh0008vr0nykteuoqh" class="article-share-link" data-share="baidu" data-title="Introduction to Capsule Network">Share</a>
       
 
       
-        <a href="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/#ds-thread" class="article-comment-link">Comments</a>
+        <a href="http://wulimengmeng.top/2017/11/24/capsule/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/face-detection/">face detection</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/paper-notes/">paper notes</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/deep-learning/">deep learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/notes/">notes</a></li></ul>
 
     </footer>
   </div>
@@ -131,19 +137,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2017/11/01/mixup/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          mixup-Beyond Empirical Risk Minimization
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/10/20/A-List-of-Saliency-Detection-Papers/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">A List of Saliency Detection Papers</div>
+      <div class="article-nav-title">Fixing  Weight Decay Regularization in Adam</div>
     </a>
   
 </nav>
@@ -153,7 +150,7 @@
 
 
   <section id="comments">
-    <div id="ds-thread" class="ds-thread" data-thread-key="2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" data-title="Single Shot Scale-invariant Face Detector" data-url="http://wulimengmeng.top/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/"></div>
+    <div id="ds-thread" class="ds-thread" data-thread-key="2017/11/24/capsule/" data-title="Introduction to Capsule Network" data-url="http://wulimengmeng.top/2017/11/24/capsule/"></div>
   </section>
 </section>
       
