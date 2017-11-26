@@ -1,34 +1,573 @@
-include mixins
+<!DOCTYPE html>
+<html>
+<head>
+    
 
-extends partial/layout
+    
 
-block site_title
-    != page.title + " · " + config.title
+    
 
-block description
-    - var desc = page.desc || strip_html(page.content).replace(/^\s*/, '').replace(/\s*$/, '').substring(0, 150);
-    meta(name="description", content=desc)
 
-block content
-  .autopagerize_page_element: .content: .post-page
-    include mixins
-    +make_post(page, true)
-    .share
-      .evernote
-        a.fa.fa-bookmark(href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title);}})();", ref="nofollow", target="_blank")
-      .weibo
-        a.fa.fa-weibo(href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&title=',e(d.title),'&appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));")
-      .twitter
-        a.fa.fa-twitter(href=url_for("http://twitter.com/home?status="+","+config.url+"/"+page.path+","+config.title+","+page.title+",;"))
-    - var prev = page.prev ? page.prev.path : false;
-    - var next = page.next ? page.next.path : false;
-    .pagination
-      ul.clearfix
-        if prev
-          li.pre.pagbuttons
-            a.btn(role="navigation",href=url_for(prev), title=page.prev.title)!= __('prev_post')
-        if next
-          li.next.pagbuttons
-            a.btn(role="navigation",href=url_for(next), title=page.next.title)!= __('next_post')
-    if page.comments
-        include partial/comments
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    
+    
+    
+    <title>Meet in the middle的一些实例 | Mowayao&#39;s Blog | 一往无前虎山行</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="algorithms">
+    <meta name="description" content="Meet in the Middle是在搜索问题经常会用到的一个技巧，其核心思想就是解决一个A&amp;lt;-&amp;gt;B的问题，分别从A端和B端出发，向对方进发，当他们在中点相遇的时候，就找到了A&amp;lt;-&amp;gt;B的一个解。 先看一道简单题：CF888E Maximum Subsequence You are given an array a consisting of n integers, and">
+<meta name="keywords" content="algorithms">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Meet in the middle的一些实例">
+<meta property="og:url" content="http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/index.html">
+<meta property="og:site_name" content="Mowayao&#39;s Blog">
+<meta property="og:description" content="Meet in the Middle是在搜索问题经常会用到的一个技巧，其核心思想就是解决一个A&amp;lt;-&amp;gt;B的问题，分别从A端和B端出发，向对方进发，当他们在中点相遇的时候，就找到了A&amp;lt;-&amp;gt;B的一个解。 先看一道简单题：CF888E Maximum Subsequence You are given an array a consisting of n integers, and">
+<meta property="og:image" content="http://codeforces.com/predownloaded/db/28/db283c0794aac433c817bad7534d99cc6287207c.png">
+<meta property="og:image" content="http://codeforces.com/predownloaded/db/28/db283c0794aac433c817bad7534d99cc6287207c.png">
+<meta property="og:image" content="http://codeforces.com/predownloaded/db/28/db283c0794aac433c817bad7534d99cc6287207c.png">
+<meta property="og:image" content="http://ovshqtujw.bkt.clouddn.com/WechatIMG11.jpeg">
+<meta property="og:updated_time" content="2017-11-12T08:15:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Meet in the middle的一些实例">
+<meta name="twitter:description" content="Meet in the Middle是在搜索问题经常会用到的一个技巧，其核心思想就是解决一个A&amp;lt;-&amp;gt;B的问题，分别从A端和B端出发，向对方进发，当他们在中点相遇的时候，就找到了A&amp;lt;-&amp;gt;B的一个解。 先看一道简单题：CF888E Maximum Subsequence You are given an array a consisting of n integers, and">
+<meta name="twitter:image" content="http://codeforces.com/predownloaded/db/28/db283c0794aac433c817bad7534d99cc6287207c.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="Mowayao&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+    
+
+</head>
+
+<body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Mowayao</h5>
+          <a href="mailto:634206017@qq.com" title="634206017@qq.com" class="mail">634206017@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/yscoder" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://www.weibo.com/ysweb" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/custom"  >
+                <i class="icon icon-lg icon-link"></i>
+                测试
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Meet in the middle的一些实例</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Meet in the middle的一些实例</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-11-12T08:13:10.000Z" itemprop="datePublished" class="page-time">
+  2017-11-12
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#先看一道简单题："><span class="post-toc-number">1.</span> <span class="post-toc-text">先看一道简单题：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#进阶一点"><span class="post-toc-number">2.</span> <span class="post-toc-text">进阶一点</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#密码学中的应用"><span class="post-toc-number">3.</span> <span class="post-toc-text">密码学中的应用</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#DES"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">DES</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="blog-meet-in-the-middle的一些实例"
+  class="post-article article-type-blog fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Meet in the middle的一些实例</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-11-12 16:13:10" datetime="2017-11-12T08:13:10.000Z"  itemprop="datePublished">2017-11-12</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>Meet in the Middle是在搜索问题经常会用到的一个技巧，其核心思想就是解决一个A&lt;-&gt;B的问题，分别从A端和B端出发，向对方进发，当他们在中点相遇的时候，就找到了A&lt;-&gt;B的一个解。</p>
+<h3 id="先看一道简单题："><a href="#先看一道简单题：" class="headerlink" title="先看一道简单题："></a>先看一道简单题：</h3><p><a href="http://codeforces.com/contest/888/problem/E" target="_blank" rel="external">CF888E Maximum Subsequence</a></p>
+<p>You are given an array <em>a</em> consisting of <em>n</em> integers, and additionally an integer <em>m</em>. You have to choose some sequence of indices $b_1, b_2, …, b_k (1 \le b_1 \lt b_2 \lt … \lt b_k\le n)$ in such a way that the value of <figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://codeforces.com/predownloaded/db/28/db283c0794aac433c817bad7534d99cc6287207c.png" alt="img" title="">
+                </div>
+                <div class="image-caption">img</div>
+            </figure> is maximized. Chosen sequence can be empty.</p>
+<p>Print the maximum possible value of <figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://codeforces.com/predownloaded/db/28/db283c0794aac433c817bad7534d99cc6287207c.png" alt="img" title="">
+                </div>
+                <div class="image-caption">img</div>
+            </figure>.</p>
+<p><strong>Input</strong></p>
+<p>The first line contains two integers <em>n</em> and <em>m</em> ($1 \le n\le 35$, $1 \le m \le 10^9$).</p>
+<p>The second line contains <em>n</em> integers $a_1, a_2, …, a_n$ ($1 \le a_i \le10^9$).</p>
+<p><strong>Output</strong></p>
+<p>Print the maximum possible value of <figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://codeforces.com/predownloaded/db/28/db283c0794aac433c817bad7534d99cc6287207c.png" alt="img" title="">
+                </div>
+                <div class="image-caption">img</div>
+            </figure>.</p>
+<p>题目意思很简单，就是从一个大小为n的数组中挑选k个，使他们的和对m求余最大。</p>
+<p>如果直接枚举a的所有子集，大小为$2^{35}$， 明显会超时。</p>
+<p>如果利用meet in the middle的思路： 先枚举左边17，右边17，再让他们meet in the middle，然后利用求余的性质，左边和右边的和都小于m，进行排序，二分即可： $L_i+R_i \lt m$   or  $ m \lt L_i + R_i \lt 2*m$</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">40</span>;</div><div class="line"></div><div class="line"><span class="keyword">int</span> a[maxn];</div><div class="line"></div><div class="line"><span class="keyword">int</span> L[<span class="number">1</span>&lt;&lt;<span class="number">18</span>], R[<span class="number">1</span>&lt;&lt;<span class="number">18</span>];</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="comment">//freopen("in", "r", stdin);</span></div><div class="line">	<span class="keyword">int</span> n, m;</div><div class="line">	<span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;</div><div class="line"></div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">		<span class="built_in">cin</span> &gt;&gt; a[i];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">int</span> ans = <span class="number">0</span>;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> mask = <span class="number">0</span>; mask &lt; (<span class="number">1</span>&lt;&lt;<span class="number">18</span>); mask++) &#123;</div><div class="line">		<span class="keyword">int</span> res = <span class="number">0</span>;</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">18</span>; j++) &#123;</div><div class="line">			<span class="keyword">if</span> ((mask &gt;&gt; j) &amp; <span class="number">1</span>) &#123;</div><div class="line">				res = (res+a[j]) % m;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		L[mask] = res;</div><div class="line">		ans = max(ans, res);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (n &lt;= <span class="number">18</span>) &#123;</div><div class="line">		<span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">		<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> mask = <span class="number">0</span>; mask &lt; (<span class="number">1</span>&lt;&lt;(n<span class="number">-18</span>)); mask++) &#123;</div><div class="line">		<span class="keyword">int</span> res = <span class="number">0</span>;</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">18</span>; j &lt; n; j++) &#123;</div><div class="line">			<span class="keyword">if</span> ((mask &gt;&gt; (j<span class="number">-18</span>)) &amp; <span class="number">1</span>) &#123;</div><div class="line">				res = (res+a[j]) % m;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		R[mask] = res;</div><div class="line">		ans = max(ans, res);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">int</span> Lsz = (<span class="number">1</span>&lt;&lt;<span class="number">18</span>);</div><div class="line">	<span class="keyword">int</span> Rsz = (<span class="number">1</span>&lt;&lt;(n<span class="number">-18</span>));</div><div class="line">	sort(R, R+Rsz);</div><div class="line"></div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; Lsz; i++) &#123;</div><div class="line">		<span class="keyword">int</span> res = L[i];</div><div class="line">		<span class="keyword">int</span> *t1 = upper_bound(R, R+Rsz, m<span class="number">-1</span>-res);</div><div class="line">		<span class="keyword">if</span> (t1 != R) &#123;</div><div class="line">			t1--;</div><div class="line">			ans = max(ans, (res+(*t1))%m);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">int</span> *t2 = upper_bound(R, R+Rsz, <span class="number">2</span>*m<span class="number">-1</span>-res);</div><div class="line">		<span class="keyword">if</span> (t2 != R) &#123;</div><div class="line">			t2--;</div><div class="line">			ans = max(ans, (res+(*t2))%m);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="进阶一点"><a href="#进阶一点" class="headerlink" title="进阶一点"></a>进阶一点</h3><p><a href="https://community.topcoder.com/stat?c=problem_statement&amp;pm=11644&amp;rd=14548" target="_blank" rel="external">topcoder srm 523 AlphabetPath</a></p>
+<p><strong>Problem Statement</strong></p>
+<p>The original Latin alphabet contained the following 21 letters: </p>
+<p>A B C D E F Z H I K L M N O P Q R S T V X</p>
+<p>You are given a 2-dimensional matrix of characters represented by the String[] letterMaze. The i-th character of the j-th element of letterMaze will represent the character at row i and column j. The matrix will contain each of the 21 letters at least once. It may also contain empty cells marked as ‘.’ (quotes for clarity).</p>
+<p>A path is a sequence of matrix elements such that the second element is (horizontally or vertically) adjacent to the first one, the third element is adjacent to the second one, and so on. No element may be repeated on a path. A Latin alphabet path is a path consisting of exactly 21 elements, each containing a different letter of the Latin alphabet. The letters are not required to be in any particular order.</p>
+<p>Return the total number of Latin alphabet paths in the matrix described by letterMaze.</p>
+<p>题目意思就是给定一个$R\times C$的矩阵，格子里要么是空，要么包含0~20的整数，长度为21的路径，每个整数恰出现一次， $R,C\le 21$</p>
+<p>那么，我们枚举middle点，这样有$R\times C$种选择，假设Middle点为x，从Middle点出发DFS10步，令$S(P)$为不包含Middle点的10个格子的数值的集合。那么$S(P_1)\cup S(P_2)….\cup {x}$ = {0,1…20},那么整个时间复杂度就变成了$O(RC\times 4 \times 3^9)$</p>
+<h3 id="密码学中的应用"><a href="#密码学中的应用" class="headerlink" title="密码学中的应用"></a>密码学中的应用</h3><h4 id="DES"><a href="#DES" class="headerlink" title="DES"></a>DES</h4><p>首先介绍一下DES（Data Encryption Standard），DES是一种分组的对称加密技术，具体见下图（coursera crypto stanford笔记）：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://ovshqtujw.bkt.clouddn.com/WechatIMG11.jpeg" alt="DES" title="">
+                </div>
+                <div class="image-caption">DES</div>
+            </figure>
+<p>那么如何attack DES呢？</p>
+<p>Lemma: Suppose that DES is an ideal cipher ($2^{56}$ random invertible functions, key是56位)</p>
+<p>为什么不能用double DES呢？因为我们可以用meet in the middle attack来攻击：</p>
+<p>对于double DES来说：</p>
+<ol>
+<li>我们需要找到这样的$k_1$和$k_2$：$E(k_1, E(k_2, M))=C$,这和$E(k_2, M) = D(k_1, C)$一个意思</li>
+<li>首先，我们用表M记录$k_2$和$C^\prime=DES(k_2, M)$的所有值，时间复杂度为$O(2^{56})$</li>
+<li>然后我们就可以暴力枚举$k_1$，计算$C^{\prime\prime} =DES^{-1}(k_1, C)$, 看是否有对应的值在表中</li>
+<li>这样attack的时间复杂度就变成了$O(2^{56}+2^{56}) \lt O(2^{63})$ ,这比期望的$2^{112}$要小很多，以及空间复杂度为$O(2^{56})$。</li>
+</ol>
+<p>而换成3DES就没有这样的问题了！</p>
+<p>$C = E(K_3, D(K_2, E(K_1,P) ) ) $</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2017-11-12T08:15:04.000Z" itemprop="dateUpdated">2017-11-12 16:15:04</time>
+</span><br>
+
+
+        
+        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2017/11/12/meet-in-the-middle的一些实例/" target="_blank" rel="external">http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/</a>
+        
+    </div>
+    <footer>
+        <a href="http://wulimengmeng.top">
+            <img src="/img/avatar.jpg" alt="Mowayao">
+            Mowayao
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithms/">algorithms</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/&title=《Meet in the middle的一些实例》 — Mowayao's Blog&pic=http://wulimengmeng.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/&title=《Meet in the middle的一些实例》 — Mowayao's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Meet in the middle的一些实例》 — Mowayao's Blog&url=http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/&via=http://wulimengmeng.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/11/14/Networks/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Dual Path Networks</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/11/12/GatedRNN/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">GatedRNN</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Mowayao &copy; 2015 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/&title=《Meet in the middle的一些实例》 — Mowayao's Blog&pic=http://wulimengmeng.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/&title=《Meet in the middle的一些实例》 — Mowayao's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Meet in the middle的一些实例》 — Mowayao's Blog&url=http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/&via=http://wulimengmeng.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://wulimengmeng.top/2017/11/12/meet-in-the-middle的一些实例/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+
+</body>
+</html>

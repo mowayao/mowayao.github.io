@@ -1,34 +1,564 @@
-include mixins
+<!DOCTYPE html>
+<html>
+<head>
+    
 
-extends partial/layout
+    
 
-block site_title
-    != page.title + " · " + config.title
+    
 
-block description
-    - var desc = page.desc || strip_html(page.content).replace(/^\s*/, '').replace(/\s*$/, '').substring(0, 150);
-    meta(name="description", content=desc)
 
-block content
-  .autopagerize_page_element: .content: .post-page
-    include mixins
-    +make_post(page, true)
-    .share
-      .evernote
-        a.fa.fa-bookmark(href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent(document.title);}})();", ref="nofollow", target="_blank")
-      .weibo
-        a.fa.fa-weibo(href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&title=',e(d.title),'&appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));")
-      .twitter
-        a.fa.fa-twitter(href=url_for("http://twitter.com/home?status="+","+config.url+"/"+page.path+","+config.title+","+page.title+",;"))
-    - var prev = page.prev ? page.prev.path : false;
-    - var next = page.next ? page.next.path : false;
-    .pagination
-      ul.clearfix
-        if prev
-          li.pre.pagbuttons
-            a.btn(role="navigation",href=url_for(prev), title=page.prev.title)!= __('prev_post')
-        if next
-          li.next.pagbuttons
-            a.btn(role="navigation",href=url_for(next), title=page.next.title)!= __('next_post')
-    if page.comments
-        include partial/comments
+
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    
+    
+    
+    <title>机器学习中的向量化 | Mowayao&#39;s Blog | 一往无前虎山行</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="notes,machine learning">
+    <meta name="description" content="KNN以KNN算法为例，在训练过程中，也就是计算Xtraining和X_test的之间的距离的时候，可以用向量化，也就是矩阵运算加速，这里我们假设$X{train}\in R^{n\times d}$,$X_{test}\in R^{m\times d}$,那么我们就先需要计算一个$n\times m$ 的矩阵，最朴素的做法就是： 1234567num_test = X.shape[0]num_t">
+<meta name="keywords" content="notes,machine learning">
+<meta property="og:type" content="article">
+<meta property="og:title" content="机器学习中的向量化">
+<meta property="og:url" content="http://wulimengmeng.top/2017/05/11/机器学习中的向量化/index.html">
+<meta property="og:site_name" content="Mowayao&#39;s Blog">
+<meta property="og:description" content="KNN以KNN算法为例，在训练过程中，也就是计算Xtraining和X_test的之间的距离的时候，可以用向量化，也就是矩阵运算加速，这里我们假设$X{train}\in R^{n\times d}$,$X_{test}\in R^{m\times d}$,那么我们就先需要计算一个$n\times m$ 的矩阵，最朴素的做法就是： 1234567num_test = X.shape[0]num_t">
+<meta property="og:image" content="http://cs231n.github.io/assets/margin.jpg">
+<meta property="og:image" content="http://cs231n.github.io/assets/svmvssoftmax.png">
+<meta property="og:updated_time" content="2017-11-26T13:31:00.021Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="机器学习中的向量化">
+<meta name="twitter:description" content="KNN以KNN算法为例，在训练过程中，也就是计算Xtraining和X_test的之间的距离的时候，可以用向量化，也就是矩阵运算加速，这里我们假设$X{train}\in R^{n\times d}$,$X_{test}\in R^{m\times d}$,那么我们就先需要计算一个$n\times m$ 的矩阵，最朴素的做法就是： 1234567num_test = X.shape[0]num_t">
+<meta name="twitter:image" content="http://cs231n.github.io/assets/margin.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="Mowayao&#39;s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+    
+
+</head>
+
+<body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Mowayao</h5>
+          <a href="mailto:634206017@qq.com" title="634206017@qq.com" class="mail">634206017@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/yscoder" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://www.weibo.com/ysweb" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/custom"  >
+                <i class="icon icon-lg icon-link"></i>
+                测试
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">机器学习中的向量化</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">机器学习中的向量化</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-05-11T08:57:00.000Z" itemprop="datePublished" class="page-time">
+  2017-05-11
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#KNN"><span class="post-toc-number">1.</span> <span class="post-toc-text">KNN</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Multi-class-Support-Vector-Machine"><span class="post-toc-number">2.</span> <span class="post-toc-text">Multi-class Support Vector Machine</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Softmax"><span class="post-toc-number">3.</span> <span class="post-toc-text">Softmax</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Softmax和SVM的对比"><span class="post-toc-number">4.</span> <span class="post-toc-text">Softmax和SVM的对比</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="blog-机器学习中的向量化"
+  class="post-article article-type-blog fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">机器学习中的向量化</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-05-11 16:57:00" datetime="2017-05-11T08:57:00.000Z"  itemprop="datePublished">2017-05-11</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="KNN"><a href="#KNN" class="headerlink" title="KNN"></a>KNN</h2><p>以KNN算法为例，在训练过程中，也就是计算X<em>training和X_test的之间的距离的时候，可以用向量化，也就是矩阵运算加速，这里我们假设$X</em>{train}\in R^{n\times d}$,$X_{test}\in R^{m\times d}$,那么我们就先需要计算一个$n\times m$ 的矩阵，最朴素的做法就是：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">num_test = X.shape[<span class="number">0</span>]</div><div class="line">num_train = self.X_train.shape[<span class="number">0</span>]</div><div class="line">dists = np.zeros((num_test, num_train))</div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> xrange(num_test):</div><div class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> xrange(num_train):</div><div class="line">        dists[i, j] = np.sqrt(np.sum(np.square(X[i]-self.X_train[j])))</div><div class="line">        <span class="keyword">return</span> dists</div></pre></td></tr></table></figure>
+<p>如果用向量化呢？</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">num_test = X.shape[<span class="number">0</span>]</div><div class="line">num_train = self.X_train.shape[<span class="number">0</span>]</div><div class="line">dists = np.sqrt(<span class="number">-2</span>*np.dot(X, self.X_train.T) + np.sum(np.square(self.X_train), axis=<span class="number">1</span>) + np.sum(np.square(X), axis=<span class="number">1</span>).reshape(<span class="number">-1</span>, <span class="number">1</span>))</div></pre></td></tr></table></figure>
+<p>推导的过程是这样的：</p>
+<p>对于第i个$X<em>{test}$和第j个$X</em>{train}$的距离来说，可以先将平方展开，可以发现由三部分组成，分别是$X<em>{test}$的平方，$X</em>{train}$的平方，两者的乘积。对于第三部分的分析比较简单就是$X<em>{train}X</em>{test}^T$, 而对于前面两部分的分析其实就是对于第二个维度求和，然后加到目标矩阵相应的维度即可。</p>
+<p>看一下时间的对比：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Let's compare how fast the implementations are</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">time_function</span><span class="params">(f, *args)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    Call a function f with args and return the time (in seconds) that it took to execute.</span></div><div class="line"><span class="string">    """</span></div><div class="line">    <span class="keyword">import</span> time</div><div class="line">    tic = time.time()</div><div class="line">    f(*args)</div><div class="line">    toc = time.time()</div><div class="line">    <span class="keyword">return</span> toc - tic</div><div class="line"></div><div class="line">two_loop_time = time_function(classifier.compute_distances_two_loops, X_test)</div><div class="line">print(<span class="string">'Two loop version took %f seconds'</span> % two_loop_time)</div><div class="line">no_loop_time = time_function(classifier.compute_distances_no_loops, X_test)</div><div class="line">print(<span class="string">'No loop version took %f seconds'</span> % no_loop_time)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Two loop version took 21.228456 seconds</div><div class="line">No loop version took 0.182820 seconds</div></pre></td></tr></table></figure>
+<p>提升非常明显</p>
+<h2 id="Multi-class-Support-Vector-Machine"><a href="#Multi-class-Support-Vector-Machine" class="headerlink" title="Multi-class Support Vector Machine"></a>Multi-class Support Vector Machine</h2><p>那么它的loss function是：</p>
+<script type="math/tex; mode=display">
+Li=\sum_{j≠yi}\max(0,s_j−s_{yi}+\Delta)</script><p>$s_j = f(x_i, W)_j$, 这个loss function(hinge loss)其实保证的是label的score是最大的，否则不存在loss，还有梯度。</p>
+<p>再转换一下：</p>
+<script type="math/tex; mode=display">
+L_i = \sum_{j\neq y_i} \max(0, w_j^T x_i - w_{y_i}^T x_i + \Delta)</script><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://cs231n.github.io/assets/margin.jpg" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>那么对于$X_{train}\in R^{N\times D}$, $W\in R^{D\times M}$，它的loss和梯度计算过程(朴素方法)如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">svm_loss_naive</span><span class="params">(W, X, y, reg)</span>:</span></div><div class="line">  <span class="string">"""</span></div><div class="line"><span class="string">  Structured SVM loss function, naive implementation (with loops).</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">  Inputs have dimension D, there are C classes, and we operate on minibatches</span></div><div class="line"><span class="string">  of N examples.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">  Inputs:</span></div><div class="line"><span class="string">  - W: A numpy array of shape (D, C) containing weights.</span></div><div class="line"><span class="string">  - X: A numpy array of shape (N, D) containing a minibatch of data.</span></div><div class="line"><span class="string">  - y: A numpy array of shape (N,) containing training labels; y[i] = c means</span></div><div class="line"><span class="string">    that X[i] has label c, where 0 &lt;= c &lt; C.</span></div><div class="line"><span class="string">  - reg: (float) regularization strength</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">  Returns a tuple of:</span></div><div class="line"><span class="string">  - loss as single float</span></div><div class="line"><span class="string">  - gradient with respect to weights W; an array of same shape as W</span></div><div class="line"><span class="string">  """</span></div><div class="line">  dW = np.zeros(W.shape) <span class="comment"># initialize the gradient as zero</span></div><div class="line"></div><div class="line">  <span class="comment"># compute the loss and the gradient</span></div><div class="line">  num_classes = W.shape[<span class="number">1</span>]</div><div class="line">  num_train = X.shape[<span class="number">0</span>]</div><div class="line">  loss = <span class="number">0.0</span></div><div class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> xrange(num_train):</div><div class="line">    scores = X[i].dot(W)</div><div class="line">    correct_class_score = scores[y[i]]</div><div class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> xrange(num_classes):</div><div class="line">      <span class="keyword">if</span> j == y[i]:</div><div class="line">        <span class="keyword">continue</span></div><div class="line">      margin = scores[j] - correct_class_score + <span class="number">1</span> <span class="comment"># note delta = 1</span></div><div class="line">      <span class="keyword">if</span> margin &gt; <span class="number">0</span>:</div><div class="line">        loss += margin</div><div class="line"></div><div class="line">  <span class="comment"># Right now the loss is a sum over all training examples, but we want it</span></div><div class="line">  <span class="comment"># to be an average instead so we divide by num_train.</span></div><div class="line">  loss /= num_train</div><div class="line"></div><div class="line">  <span class="comment"># Add regularization to the loss.</span></div><div class="line">  loss += <span class="number">0.5</span> * reg * np.sum(W * W)</div><div class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> xrange(num_train):</div><div class="line">    scores = X[i].dot(W)</div><div class="line">    correct_class_score = scores[y[i]]</div><div class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> xrange(num_classes):</div><div class="line">      <span class="keyword">if</span> j == y[i]:</div><div class="line">        <span class="keyword">continue</span></div><div class="line">      margin = scores[j] - correct_class_score + <span class="number">1</span> <span class="comment"># note delta = 1</span></div><div class="line">      <span class="keyword">if</span> margin &gt; <span class="number">0</span>:</div><div class="line">        dW[:, j] += X[i]</div><div class="line">        dW[:, y[i]] -= X[i]</div><div class="line">  dW /= num_train</div><div class="line">  dW += reg * W</div><div class="line">  <span class="keyword">return</span> loss, dW</div></pre></td></tr></table></figure>
+<p>向量化之后就可以这样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">svm_loss_vectorized</span><span class="params">(W, X, y, reg)</span>:</span></div><div class="line">  <span class="string">"""</span></div><div class="line"><span class="string">  Structured SVM loss function, vectorized implementation.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">  Inputs and outputs are the same as svm_loss_naive.</span></div><div class="line"><span class="string">  """</span></div><div class="line">  loss = <span class="number">0.0</span></div><div class="line">  dW = np.zeros(W.shape) <span class="comment"># initialize the gradient as zero</span></div><div class="line">  num_classes = W.shape[<span class="number">1</span>]</div><div class="line">  num_train = X.shape[<span class="number">0</span>]</div><div class="line">  scores = (X.dot(W)).T</div><div class="line">  margins = np.maximum(<span class="number">0</span>, scores-scores[y, range(num_train)]+<span class="number">1</span>)</div><div class="line">  margins[y, range(num_train)] = <span class="number">0</span></div><div class="line">  loss += np.sum(margins) / num_train</div><div class="line">  loss += <span class="number">0.5</span> * reg * np.sum(W * W)</div><div class="line"></div><div class="line">  D = np.zeros_like(margins)</div><div class="line">  D[margins&gt;<span class="number">0</span>] = <span class="number">1</span></div><div class="line">  D[y, range(num_train)] = -np.sum(margins&gt;<span class="number">0</span>, axis=<span class="number">0</span>)</div><div class="line">  dW += np.dot(D, X).T</div><div class="line">  dW /= num_train</div><div class="line">  dW += reg  * W</div><div class="line"></div><div class="line">  <span class="keyword">return</span> loss, dW</div></pre></td></tr></table></figure>
+<p>比较一下效率</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">tic = time.time()</div><div class="line">_, grad_naive = svm_loss_naive(W, X_dev, y_dev, <span class="number">0.000005</span>)</div><div class="line">toc = time.time()</div><div class="line">print(<span class="string">'Naive loss and gradient: computed in %fs'</span> % (toc - tic))</div><div class="line"></div><div class="line">tic = time.time()</div><div class="line">_, grad_vectorized = svm_loss_vectorized(W, X_dev, y_dev, <span class="number">0.000005</span>)</div><div class="line">toc = time.time()</div><div class="line">print(<span class="string">'Vectorized loss and gradient: computed in %fs'</span> % (toc - tic))</div><div class="line"></div><div class="line"><span class="comment"># The loss is a single number, so it is easy to compare the values computed</span></div><div class="line"><span class="comment"># by the two implementations. The gradient on the other hand is a matrix, so</span></div><div class="line"><span class="comment"># we use the Frobenius norm to compare them.</span></div><div class="line">difference = np.linalg.norm(grad_naive - grad_vectorized, ord=<span class="string">'fro'</span>)</div><div class="line">print(<span class="string">'difference: %f'</span> % difference)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Naive loss and gradient: computed in 0.141285s</div><div class="line">Vectorized loss and gradient: computed in 0.007416s</div><div class="line">difference: 0.000000</div></pre></td></tr></table></figure>
+<p>提升非常大</p>
+<h2 id="Softmax"><a href="#Softmax" class="headerlink" title="Softmax"></a>Softmax</h2><p>softmax分类器用的是交叉熵（cross entropy）,有以下的形式：</p>
+<script type="math/tex; mode=display">
+L_i = -\log\left(\frac{e^{f_{y_i}}}{ \sum_j e^{f_j} }\right) \hspace{0.5in} \text{or equivalently} \hspace{0.5in} L_i = -f_{y_i} + \log\sum_j e^{f_j}</script><p>对这个这个loss函数，可以有两种解释：</p>
+<p>信息论的视角，也就是真的分布p和预测分布q之间的交叉熵：</p>
+<script type="math/tex; mode=display">
+H(p,q) = - \sum_x p(x) \log q(x)</script><p>p是这样一个向量：只有一个元素是1（$y_i$的位置），其他全是0。q就是模型输出的分布，所以两者相乘，得到上面的结果</p>
+<p>还有就是概率的解释，例如下面的表达式：</p>
+<script type="math/tex; mode=display">
+P(y_i \mid x_i; W) = \frac{e^{f_{y_i}}}{\sum_j e^{f_j} }</script><p>因此，我们就可以用最大似然估计（MLE）来求解，也就是最小化负的正确标签的log似然。</p>
+<p>softmax函数定义了每个类别的概率估计。</p>
+<p>朴素的求法：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">softmax_loss_naive</span><span class="params">(W, X, y, reg)</span>:</span></div><div class="line">  <span class="string">"""</span></div><div class="line"><span class="string">  Softmax loss function, naive implementation (with loops)</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">  Inputs have dimension D, there are C classes, and we operate on minibatches</span></div><div class="line"><span class="string">  of N examples.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">  Inputs:</span></div><div class="line"><span class="string">  - W: A numpy array of shape (D, C) containing weights.</span></div><div class="line"><span class="string">  - X: A numpy array of shape (N, D) containing a minibatch of data.</span></div><div class="line"><span class="string">  - y: A numpy array of shape (N,) containing training labels; y[i] = c means</span></div><div class="line"><span class="string">    that X[i] has label c, where 0 &lt;= c &lt; C.</span></div><div class="line"><span class="string">  - reg: (float) regularization strength</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">  Returns a tuple of:</span></div><div class="line"><span class="string">  - loss as single float</span></div><div class="line"><span class="string">  - gradient with respect to weights W; an array of same shape as W</span></div><div class="line"><span class="string">  """</span></div><div class="line">  <span class="comment"># Initialize the loss and gradient to zero.</span></div><div class="line">  loss = <span class="number">0.0</span></div><div class="line">  dW = np.zeros_like(W)</div><div class="line">  num_train = X.shape[<span class="number">0</span>]</div><div class="line">  num_classes = W.shape[<span class="number">1</span>]</div><div class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> xrange(num_train):</div><div class="line">    score = X[i].dot(W)</div><div class="line">    score -= np.max(score)</div><div class="line">    exp_score = np.exp(score)</div><div class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> xrange(num_classes):</div><div class="line">      dW[:, j] += X[i] * exp_score[j] / np.sum(exp_score)</div><div class="line">    dW[:, y[i]] -= X[i]</div><div class="line">    loss += -score[y[i]] + np.log(np.sum(exp_score))</div><div class="line">  loss /= num_train</div><div class="line">  loss += <span class="number">0.5</span> * reg * np.sum(W*W)</div><div class="line"></div><div class="line">  dW /= num_train</div><div class="line">  dW += reg * W</div><div class="line"></div><div class="line">  <span class="keyword">return</span> loss, dW</div></pre></td></tr></table></figure>
+<p>向量化：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">softmax_loss_vectorized</span><span class="params">(W, X, y, reg)</span>:</span></div><div class="line">  <span class="string">"""</span></div><div class="line"><span class="string">  Softmax loss function, vectorized version.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">  Inputs and outputs are the same as softmax_loss_naive.</span></div><div class="line"><span class="string">  """</span></div><div class="line">  <span class="comment"># Initialize the loss and gradient to zero.</span></div><div class="line">  loss = <span class="number">0.0</span></div><div class="line">  dW = np.zeros_like(W)</div><div class="line">  num_train = X.shape[<span class="number">0</span>]</div><div class="line">  num_classes = W.shape[<span class="number">1</span>]</div><div class="line">  scores = X.dot(W).T</div><div class="line">  scores -= np.max(scores, axis=<span class="number">0</span>, keepdims=<span class="keyword">True</span>)</div><div class="line">  exp_scores = np.exp(scores)</div><div class="line">  loss += np.sum(-scores[y, range(num_train)]) + np.sum(np.log(np.sum(exp_scores, axis=<span class="number">0</span>)))</div><div class="line">  loss /= num_train</div><div class="line">  loss += <span class="number">0.5</span> * reg * np.sum(W*W)</div><div class="line">  D = exp_scores / np.sum(exp_scores, axis=<span class="number">0</span>, keepdims=<span class="keyword">True</span>)</div><div class="line">  D[y, range(num_train)] -= <span class="number">1.0</span></div><div class="line">  dW += D.dot(X).T</div><div class="line">  dW /= num_train</div><div class="line">  dW += reg * W</div><div class="line">  <span class="keyword">return</span> loss, dW</div></pre></td></tr></table></figure>
+<p>对比一下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># Now that we have a naive implementation of the softmax loss function and its gradient,</span></div><div class="line"><span class="comment"># implement a vectorized version in softmax_loss_vectorized.</span></div><div class="line"><span class="comment"># The two versions should compute the same results, but the vectorized version should be</span></div><div class="line"><span class="comment"># much faster.</span></div><div class="line">tic = time.time()</div><div class="line">loss_naive, grad_naive = softmax_loss_naive(W, X_dev, y_dev, <span class="number">0.000005</span>)</div><div class="line">toc = time.time()</div><div class="line">print(<span class="string">'naive loss: %e computed in %fs'</span> % (loss_naive, toc - tic))</div><div class="line"></div><div class="line"><span class="keyword">from</span> cs231n.classifiers.softmax <span class="keyword">import</span> softmax_loss_vectorized</div><div class="line">tic = time.time()</div><div class="line">loss_vectorized, grad_vectorized = softmax_loss_vectorized(W, X_dev, y_dev, <span class="number">0.000005</span>)</div><div class="line">toc = time.time()</div><div class="line">print(<span class="string">'vectorized loss: %e computed in %fs'</span> % (loss_vectorized, toc - tic))</div><div class="line"></div><div class="line"><span class="comment"># As we did for the SVM, we use the Frobenius norm to compare the two versions</span></div><div class="line"><span class="comment"># of the gradient.</span></div><div class="line">grad_difference = np.linalg.norm(grad_naive - grad_vectorized, ord=<span class="string">'fro'</span>)</div><div class="line">print(<span class="string">'Loss difference: %f'</span> % np.abs(loss_naive - loss_vectorized))</div><div class="line">print(<span class="string">'Gradient difference: %f'</span> % grad_difference)</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">naive loss: 2.332690e+00 computed in 0.397665s</div><div class="line">vectorized loss: 2.332690e+00 computed in 0.007957s</div><div class="line">Loss difference: 0.000000</div><div class="line">Gradient difference: 0.000000</div></pre></td></tr></table></figure>
+<p>效果依然显著</p>
+<h2 id="Softmax和SVM的对比"><a href="#Softmax和SVM的对比" class="headerlink" title="Softmax和SVM的对比"></a>Softmax和SVM的对比</h2><p><img src="http://cs231n.github.io/assets/svmvssoftmax.png" alt=""></p>
+<p>其实两者性能上的差异非常小，对于SVM来说，如果正确的类的分数已经比其他类高了，那么它的loss为0，同时也没有梯度。而softmax则一直会有梯度，除非概率分布变成one-hot的形式且预测和标签相同。</p>
+<blockquote>
+<p>the Softmax classifier is never fully happy with the scores it produces: the correct class could always have a higher probability and the incorrect classes always a lower probability and the loss would always get better.</p>
+</blockquote>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2017-11-26T13:31:00.021Z" itemprop="dateUpdated">2017-11-26 21:31:00</time>
+</span><br>
+
+
+        
+        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2017/05/11/机器学习中的向量化/" target="_blank" rel="external">http://wulimengmeng.top/2017/05/11/机器学习中的向量化/</a>
+        
+    </div>
+    <footer>
+        <a href="http://wulimengmeng.top">
+            <img src="/img/avatar.jpg" alt="Mowayao">
+            Mowayao
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/machine-learning/">machine learning</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/notes/">notes</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://wulimengmeng.top/2017/05/11/机器学习中的向量化/&title=《机器学习中的向量化》 — Mowayao's Blog&pic=http://wulimengmeng.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://wulimengmeng.top/2017/05/11/机器学习中的向量化/&title=《机器学习中的向量化》 — Mowayao's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://wulimengmeng.top/2017/05/11/机器学习中的向量化/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《机器学习中的向量化》 — Mowayao's Blog&url=http://wulimengmeng.top/2017/05/11/机器学习中的向量化/&via=http://wulimengmeng.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://wulimengmeng.top/2017/05/11/机器学习中的向量化/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/05/12/cnn-case-study/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">CNN Case Stud</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/03/18/C-测试cache大小/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">C++测试cache大小</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Mowayao &copy; 2015 - 2017</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://wulimengmeng.top/2017/05/11/机器学习中的向量化/&title=《机器学习中的向量化》 — Mowayao's Blog&pic=http://wulimengmeng.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://wulimengmeng.top/2017/05/11/机器学习中的向量化/&title=《机器学习中的向量化》 — Mowayao's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://wulimengmeng.top/2017/05/11/机器学习中的向量化/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《机器学习中的向量化》 — Mowayao's Blog&url=http://wulimengmeng.top/2017/05/11/机器学习中的向量化/&via=http://wulimengmeng.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://wulimengmeng.top/2017/05/11/机器学习中的向量化/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://wulimengmeng.top/2017/05/11/机器学习中的向量化/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+
+</body>
+</html>
