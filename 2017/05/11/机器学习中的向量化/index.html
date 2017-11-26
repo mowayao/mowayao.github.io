@@ -20,19 +20,19 @@
     
     
     <meta name="keywords" content="notes,machine learning">
-    <meta name="description" content="KNN以KNN算法为例，在训练过程中，也就是计算Xtraining和X_test的之间的距离的时候，可以用向量化，也就是矩阵运算加速，这里我们假设$X{train}\in R^{n\times d}$,$X_{test}\in R^{m\times d}$,那么我们就先需要计算一个$n\times m$ 的矩阵，最朴素的做法就是： 1234567num_test = X.shape[0]num_t">
+    <meta name="description" content="KNN以KNN算法为例，在训练过程中，也就是计算$X{training}$和$X{test}$的之间的距离的时候，可以用向量化，也就是矩阵运算加速，这里我们假设 $X{train}\in R^{n\times d}$ ,$X{test}\in R^{m\times d}$,那么我们就先需要计算一个$n\times m$ 的矩阵，最朴素的做法就是： 1234567num_test = X.shape">
 <meta name="keywords" content="notes,machine learning">
 <meta property="og:type" content="article">
 <meta property="og:title" content="机器学习中的向量化">
 <meta property="og:url" content="http://wulimengmeng.top/2017/05/11/机器学习中的向量化/index.html">
 <meta property="og:site_name" content="Mowayao&#39;s Blog">
-<meta property="og:description" content="KNN以KNN算法为例，在训练过程中，也就是计算Xtraining和X_test的之间的距离的时候，可以用向量化，也就是矩阵运算加速，这里我们假设$X{train}\in R^{n\times d}$,$X_{test}\in R^{m\times d}$,那么我们就先需要计算一个$n\times m$ 的矩阵，最朴素的做法就是： 1234567num_test = X.shape[0]num_t">
+<meta property="og:description" content="KNN以KNN算法为例，在训练过程中，也就是计算$X{training}$和$X{test}$的之间的距离的时候，可以用向量化，也就是矩阵运算加速，这里我们假设 $X{train}\in R^{n\times d}$ ,$X{test}\in R^{m\times d}$,那么我们就先需要计算一个$n\times m$ 的矩阵，最朴素的做法就是： 1234567num_test = X.shape">
 <meta property="og:image" content="http://cs231n.github.io/assets/margin.jpg">
 <meta property="og:image" content="http://cs231n.github.io/assets/svmvssoftmax.png">
-<meta property="og:updated_time" content="2017-11-26T13:31:00.021Z">
+<meta property="og:updated_time" content="2017-11-26T14:44:17.152Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="机器学习中的向量化">
-<meta name="twitter:description" content="KNN以KNN算法为例，在训练过程中，也就是计算Xtraining和X_test的之间的距离的时候，可以用向量化，也就是矩阵运算加速，这里我们假设$X{train}\in R^{n\times d}$,$X_{test}\in R^{m\times d}$,那么我们就先需要计算一个$n\times m$ 的矩阵，最朴素的做法就是： 1234567num_test = X.shape[0]num_t">
+<meta name="twitter:description" content="KNN以KNN算法为例，在训练过程中，也就是计算$X{training}$和$X{test}$的之间的距离的时候，可以用向量化，也就是矩阵运算加速，这里我们假设 $X{train}\in R^{n\times d}$ ,$X{test}\in R^{m\times d}$,那么我们就先需要计算一个$n\times m$ 的矩阵，最朴素的做法就是： 1234567num_test = X.shape">
 <meta name="twitter:image" content="http://cs231n.github.io/assets/margin.jpg">
     
         <link rel="alternate" type="application/atom+xml" title="Mowayao&#39;s Blog" href="/atom.xml">
@@ -182,7 +182,7 @@
 
         </div>
         <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="KNN"><a href="#KNN" class="headerlink" title="KNN"></a>KNN</h2><p>以KNN算法为例，在训练过程中，也就是计算X<em>training和X_test的之间的距离的时候，可以用向量化，也就是矩阵运算加速，这里我们假设$X</em>{train}\in R^{n\times d}$,$X_{test}\in R^{m\times d}$,那么我们就先需要计算一个$n\times m$ 的矩阵，最朴素的做法就是：</p>
+            <h2 id="KNN"><a href="#KNN" class="headerlink" title="KNN"></a>KNN</h2><p>以KNN算法为例，在训练过程中，也就是计算$X<em>{training}$和$X</em>{test}$的之间的距离的时候，可以用向量化，也就是矩阵运算加速，这里我们假设 $X<em>{train}\in R^{n\times d}$ ,$X</em>{test}\in R^{m\times d}$,那么我们就先需要计算一个$n\times m$ 的矩阵，最朴素的做法就是：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">num_test = X.shape[<span class="number">0</span>]</div><div class="line">num_train = self.X_train.shape[<span class="number">0</span>]</div><div class="line">dists = np.zeros((num_test, num_train))</div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> xrange(num_test):</div><div class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> xrange(num_train):</div><div class="line">        dists[i, j] = np.sqrt(np.sum(np.square(X[i]-self.X_train[j])))</div><div class="line">        <span class="keyword">return</span> dists</div></pre></td></tr></table></figure>
 <p>如果用向量化呢？</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">num_test = X.shape[<span class="number">0</span>]</div><div class="line">num_train = self.X_train.shape[<span class="number">0</span>]</div><div class="line">dists = np.sqrt(<span class="number">-2</span>*np.dot(X, self.X_train.T) + np.sum(np.square(self.X_train), axis=<span class="number">1</span>) + np.sum(np.square(X), axis=<span class="number">1</span>).reshape(<span class="number">-1</span>, <span class="number">1</span>))</div></pre></td></tr></table></figure>
@@ -242,7 +242,7 @@ P(y_i \mid x_i; W) = \frac{e^{f_{y_i}}}{\sum_j e^{f_j} }</script><p>因此，我
     <div class="content">
         
 <span class="post-time">
-    Last updated: <time datetime="2017-11-26T13:31:00.021Z" itemprop="dateUpdated">2017-11-26 21:31:00</time>
+    Last updated: <time datetime="2017-11-26T14:44:17.152Z" itemprop="dateUpdated">2017-11-26 22:44:17</time>
 </span><br>
 
 

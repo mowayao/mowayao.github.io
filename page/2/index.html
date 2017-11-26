@@ -317,8 +317,8 @@ CONV1-&gt;MAX POOL1-&gt;NORM1-&gt;CONV2-&gt;MAX POOL2-&gt;NORM-&gt;CONV3-&gt;CON
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        KNN以KNN算法为例，在训练过程中，也就是计算Xtraining和X_test的之间的距离的时候，可以用向量化，也就是矩阵运算加速，这里我们假设$X{train}\in R^{n\times d}$,$X_{test}\in R^{m\times d}$,那么我们就先需要计算一个$n\times m$ 的矩阵，最朴素的做法就是：
-1234567num_test = X.shape[0]nu...
+        KNN以KNN算法为例，在训练过程中，也就是计算$X{training}$和$X{test}$的之间的距离的时候，可以用向量化，也就是矩阵运算加速，这里我们假设 $X{train}\in R^{n\times d}$ ,$X{test}\in R^{m\times d}$,那么我们就先需要计算一个$n\times m$ 的矩阵，最朴素的做法就是：
+1234567num_test = X.sh...
     
 
         <a href="/2017/05/11/机器学习中的向量化/" class="post-more waves-effect waves-button">
