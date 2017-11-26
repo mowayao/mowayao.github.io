@@ -1,0 +1,436 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>CNN Case Stud | Mowayao&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="AlexNet结构： CONV1-&amp;gt;MAX POOL1-&amp;gt;NORM1-&amp;gt;CONV2-&amp;gt;MAX POOL2-&amp;gt;NORM-&amp;gt;CONV3-&amp;gt;CONV4-&amp;gt;CONV5-&amp;gt;MAX POOL3-&amp;gt;FC6-&amp;gt;FC7-&amp;gt;FC8 输入： $227\times 227\times 3$ 的图像 第一层（CONV1），96个$11\times11$">
+<meta name="keywords" content="notes,computer vision">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CNN Case Stud">
+<meta property="og:url" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/index.html">
+<meta property="og:site_name" content="Mowayao&#39;s Blog">
+<meta property="og:description" content="AlexNet结构： CONV1-&amp;gt;MAX POOL1-&amp;gt;NORM1-&amp;gt;CONV2-&amp;gt;MAX POOL2-&amp;gt;NORM-&amp;gt;CONV3-&amp;gt;CONV4-&amp;gt;CONV5-&amp;gt;MAX POOL3-&amp;gt;FC6-&amp;gt;FC7-&amp;gt;FC8 输入： $227\times 227\times 3$ 的图像 第一层（CONV1），96个$11\times11$">
+<meta property="og:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/vgg.PNG">
+<meta property="og:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/googlenet.PNG">
+<meta property="og:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/incep.PNG">
+<meta property="og:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/incep1.PNG">
+<meta property="og:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/res1.PNG">
+<meta property="og:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/res2.PNG">
+<meta property="og:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/res3.PNG">
+<meta property="og:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/res4.PNG">
+<meta property="og:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/sqq.PNG">
+<meta property="og:updated_time" content="2017-11-26T13:34:37.927Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CNN Case Stud">
+<meta name="twitter:description" content="AlexNet结构： CONV1-&amp;gt;MAX POOL1-&amp;gt;NORM1-&amp;gt;CONV2-&amp;gt;MAX POOL2-&amp;gt;NORM-&amp;gt;CONV3-&amp;gt;CONV4-&amp;gt;CONV5-&amp;gt;MAX POOL3-&amp;gt;FC6-&amp;gt;FC7-&amp;gt;FC8 输入： $227\times 227\times 3$ 的图像 第一层（CONV1），96个$11\times11$">
+<meta name="twitter:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/vgg.PNG">
+  
+    <link rel="alternative" href="/atom.xml" title="Mowayao&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+</head>
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+  <div id="wrap">
+    <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Mowayao&#39;s Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">一往无前虎山行</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="wulimengmeng.top">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+    <div class="outer">
+      <section id="main"><article id="blog-cnn-case-study" class="article article-type-blog" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/05/12/cnn-case-study/" class="article-date">
+  <time datetime="2017-05-12T11:00:00.000Z" itemprop="datePublished">2017-05-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CNN Case Stud
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="AlexNet"><a href="#AlexNet" class="headerlink" title="AlexNet"></a>AlexNet</h2><p>结构：</p>
+<p>CONV1-&gt;MAX POOL1-&gt;NORM1-&gt;CONV2-&gt;MAX POOL2-&gt;NORM-&gt;CONV3-&gt;CONV4-&gt;CONV5-&gt;MAX POOL3-&gt;FC6-&gt;FC7-&gt;FC8</p>
+<p>输入： $227\times 227\times 3$ 的图像</p>
+<p>第一层（CONV1），96个$11\times11$的卷积和，stride为4，,因为（227-11）/4+1=55</p>
+<p>参数的大小是$11\star11\star3\star96$=35K,输出为$55\times55\times96$</p>
+<p>第二层（MAX POOL1）， $3\times 3$， 步数为2，因为（55-3）/2+1=27,所以，输出为$27\times27\times96$</p>
+<p>第三层（NORM1）</p>
+<p>第四层CONV2，256个$5\times5$的卷积和，stride为1，pad为2，因为（27-5+2*2）/1+1= 27，所以输出为$27\times27\times256$</p>
+<p>第五层（MAX POOL2）， $3\times 3$， stride为2，因为（27-3）/2+1=13,所以，输出为$13\times13\times256$</p>
+<p>第六层 （NORM2）</p>
+<p>第七层（CONV3），384个$3\times3$的卷积和，stride为1，pad为1，因为（13-3+1*2）/1+1 = 13,所以输出为$13\times13\times384$</p>
+<p>第八层（CONV4），384个$3\times3$的卷积和，stride为1，pad为1，因为（13-3+1*2）/1+1 = 13,所以输出为$13\times13\times384$</p>
+<p>第九层（CONV5），256个$3\times3$的卷积和，stride为1，pad为1，因为（13-3+1*2）/1+1 = 13,所以输出为$13\times13\times256$</p>
+<p>第十层（MAX POOL2）， $3\times 3$， 步数为2，因为（13-3）/2+1=6,所以，输出为$6\times6\times256$</p>
+<p>第十一层（FC6），4096个neurons</p>
+<p>第十二层（FC7）， 4096个neurons</p>
+<p>第十三层（FC8）， 1000个neurons</p>
+<h2 id="VGGNet"><a href="#VGGNet" class="headerlink" title="VGGNet"></a>VGGNet</h2><p><img src="~/vgg.PNG" alt=""></p>
+<p>为什么要使用小的卷积核（$3\times3$ conv）?</p>
+<p>因为3个$3\times3$stride为1的conv堆起来的receptive field是和$7\times7$的conv layer是一样的，这样的话网络可以更深，同时非线性能力提高，而且前者参数数量为：$3*(3^2C^2)$ 后者为 $7^2C^2$,前者数量较少。</p>
+<p>INPUT: [224x224x3]        memory:  $224<em>224</em>3$=150K   params: 0</p>
+<p>CONV3-64: [224x224x64]  memory:  $224<em>224</em>64$=3.2M   params:$ (3<em>3</em>3)*64 = 1,728$</p>
+<p>CONV3-64: [224x224x64]  memory:  $224<em>224</em>64$ =3.2M   params: $(3<em>3</em>64)*64 = 36,864$</p>
+<p>POOL2: [112x112x64]  memory:  $112<em>112</em>64$=800K   params: 0</p>
+<p>CONV3-128: [112x112x128]  memory:  $112<em>112</em>128$=1.6M   params: $(3<em>3</em>64)*128 = 73,728$</p>
+<p>CONV3-128: [112x112x128]  memory: $112<em>112</em>128$=1.6M   params:$ (3<em>3</em>128)*128 = 147,456 $</p>
+<p>POOL2: [56x56x128]  memory:  $56<em>56</em>128=400K$   params: 0</p>
+<p>CONV3-256: [56x56x256]  memory:  $56<em>56</em>256=800K$   params:$ (3<em>3</em>128)*256 = 294,912$</p>
+<p>CONV3-256: [56x56x256]  memory:  $56<em>56</em>256=800K$   params:$ (3<em>3</em>256)*256 = 589,824 $</p>
+<p>CONV3-256: [56x56x256]  memory:  $56<em>56</em>256=800K$   params:$ (3<em>3</em>256)*256 = 589,824$</p>
+<p>POOL2: [28x28x256]  memory:  $28<em>28</em>256=200K$   params: 0</p>
+<p>CONV3-512: [28x28x512]  memory:  $28<em>28</em>512=400K$   params:$ (3<em>3</em>256)*512 = 1,179,648$</p>
+<p>CONV3-512: [28x28x512]  memory: $ 28<em>28</em>512=400K $  params:$ (3<em>3</em>512)*512 = 2,359,296$</p>
+<p>CONV3-512: [28x28x512]  memory: $ 28<em>28</em>512=400K$   params: $(3<em>3</em>512)*512 = 2,359,296$</p>
+<p>POOL2: [14x14x512]  memory:  $14<em>14</em>512=100K$   params: 0 </p>
+<p>CONV3-512: [14x14x512]  memory: $ 14<em>14</em>512=100K$   params: $(3<em>3</em>512)*512 = 2,359,296$</p>
+<p>CONV3-512: [14x14x512]  memory: $ 14<em>14</em>512=100K$   params: $(3<em>3</em>512)*512 = 2,359,296 $</p>
+<p>CONV3-512: [14x14x512]  memory:  $14<em>14</em>512=100K$   params: $(3<em>3</em>512)*512 = 2,359,296$</p>
+<p>POOL2: [7x7x512]  memory:  $7<em>7</em>512=25K$  params: 0</p>
+<p>FC: [1x1x4096]  memory:  4096  params: $7<em>7</em>512*4096 = 102,760,448 $</p>
+<p>FC: [1x1x4096]  memory:  4096  params: $4096*4096 = 16,777,216$</p>
+<p>FC: [1x1x1000]  memory:  1000 params: $4096*1000 = 4,096,000 $</p>
+<p>总结一下：对于一张图片来说，需要花费的内存是24M*4 bytes = 96MB，而总共的参数有138M </p>
+<p>VGG的FC7的特征非常棒！通常用来提特征。</p>
+<h2 id="GoogleNet"><a href="#GoogleNet" class="headerlink" title="GoogleNet"></a>GoogleNet</h2><p>22层，有高效的inception module，没有FC层</p>
+<p><img src="~/googlenet.PNG" alt=""></p>
+<p>重点分析一下Inception module,下图是一个朴素的inception module</p>
+<p><img src="~/incep.PNG" alt=""></p>
+<p>采用的并行filter运算，有多个receptive field size的卷积，（$1\times1$,$3\times3$,$5\times5$）,从左向右第一个输出的size为$28\times28\times128$，第二个输出的size为$28\times28\times192$,第三个为$28\times28\times96$，第四个为$28\times28\times256$，concate以后的size为：$28\times28\times672$</p>
+<p>缺点就是卷积运算过多：</p>
+<p>[$1\times1$ conv, 128] $28\times28\times128\times1\times1\times256$</p>
+<p>[$3\times3$ conv, 192] $28\times28\times192\times3\times3\times256$</p>
+<p>[$5\times5$ conv, 96] $28\times28\times96\times5\times5\times256$</p>
+<p>总共需要854M次运算</p>
+<p>而且，最终的输出太大了！我们需要减少feature depth,可以用$1\times1$的卷积（$1\times1$ conv “bottleneck” layers）来解决，例如一个$56\times56\times64$的feature map经过32个$1\times1$以后，得到$56\times56\times32$,这样做就是将深度投影到较低的维度，（feature map的组合）</p>
+<p><img src="~/incep1.PNG" alt=""></p>
+<p>卷积运算的数量：</p>
+<p>[1x1 conv, 64]  $28\times28\times64\times1\times1\times256$</p>
+<p>[1x1 conv, 64]  $28\times28\times64\times1\times1\times256$</p>
+<p>[1x1 conv, 128]  $28\times28\times128\times1\times1\times256$</p>
+<p>[3x3 conv, 192]  $28\times28\times192\times3\times3\times64$</p>
+<p>[5x5 conv, 96]  $28\times28\times96\times5\times5\times64$</p>
+<p>[1x1 conv, 64]  $28\times28\times64\times1\times1\times256$ </p>
+<p>Total: 358M ops</p>
+<h2 id="ResNet"><a href="#ResNet" class="headerlink" title="ResNet"></a>ResNet</h2><ul>
+<li>每一层CONV层接BN</li>
+<li>没有dropout</li>
+</ul>
+<p>具体见：</p>
+<p><img src="~/res1.PNG" alt=""></p>
+<h2 id="Wide-Residual-Networks"><a href="#Wide-Residual-Networks" class="headerlink" title="Wide Residual Networks"></a>Wide Residual Networks</h2><blockquote>
+<p>Argues that residuals are the important factor, not depth</p>
+</blockquote>
+<p><img src="~/res2.PNG" alt=""></p>
+<h2 id="Deep-Networks-with-Stochastic-Depth"><a href="#Deep-Networks-with-Stochastic-Depth" class="headerlink" title="Deep Networks with Stochastic Depth"></a>Deep Networks with Stochastic Depth</h2><p>另一个形式的dropout，减少深度，防止梯度消失，训练时，随机扔掉一些layer。</p>
+<p><img src="~/res3.PNG" alt=""></p>
+<h2 id="Densely-Connected-Convolutional-Networks"><a href="#Densely-Connected-Convolutional-Networks" class="headerlink" title="Densely Connected Convolutional Networks"></a>Densely Connected Convolutional Networks</h2><p>减少梯度消失，加强特征的传播和重用。</p>
+<p><img src="~/res4.PNG" alt=""></p>
+<h2 id="SqueezeNet"><a href="#SqueezeNet" class="headerlink" title="SqueezeNet"></a>SqueezeNet</h2><p>就是将原来简单的一层conv层变成两层：squeeze层+expand层，各自带上Relu激活层。                                         </p>
+<p>在squeeze层里面全是1x1的卷积kernel，数量记为S11；在expand层里面有1x1和3x3的卷积kernel，数量分别记为E11和E33，要求S11 &lt; (E11+E33)即满足上面的设计原则（2）。expand层之后将1x1和3x3的卷积output feature maps在channel维度拼接起来。</p>
+<blockquote>
+<p>Fire modules consisting of a ‘squeeze’ layer with 1x1 filters feeding an ‘expand’ layer with 1x1 and 3x3 filters </p>
+</blockquote>
+<p><img src="~/sqq.PNG" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://wulimengmeng.top/2017/05/12/cnn-case-study/" data-id="cjagt7530000c4l0nnpmo1vcl" class="article-share-link" data-share="baidu" data-title="CNN Case Stud">Share</a>
+      
+
+      
+        <a href="http://wulimengmeng.top/2017/05/12/cnn-case-study/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/computer-vision/">computer vision</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/notes/">notes</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/05/17/一个离散概率分布中采样/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          一个离散概率分布中采样
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/05/11/机器学习中的向量化/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">机器学习中的向量化</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+  <section id="comments">
+    <div id="ds-thread" class="ds-thread" data-thread-key="2017/05/12/cnn-case-study/" data-title="CNN Case Stud" data-url="http://wulimengmeng.top/2017/05/12/cnn-case-study/"></div>
+  </section>
+</section>
+      
+      <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Deep-Learning/">Deep Learning</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RNN/">RNN</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithms/">algorithms</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/computer-vision/">computer vision</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/deep-learning/">deep learning</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/face-detection/">face detection</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/machine-learning/">machine learning</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/math/">math</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/notes/">notes</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paper/">paper</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/paper-notes/">paper notes</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/杂/">杂</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Deep-Learning/" style="font-size: 10px;">Deep Learning</a> <a href="/tags/RNN/" style="font-size: 10px;">RNN</a> <a href="/tags/algorithms/" style="font-size: 13.33px;">algorithms</a> <a href="/tags/computer-vision/" style="font-size: 10px;">computer vision</a> <a href="/tags/deep-learning/" style="font-size: 20px;">deep learning</a> <a href="/tags/face-detection/" style="font-size: 10px;">face detection</a> <a href="/tags/machine-learning/" style="font-size: 10px;">machine learning</a> <a href="/tags/math/" style="font-size: 13.33px;">math</a> <a href="/tags/notes/" style="font-size: 20px;">notes</a> <a href="/tags/paper/" style="font-size: 10px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 16.67px;">paper notes</a> <a href="/tags/杂/" style="font-size: 10px;">杂</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/03/">March 2017</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/11/24/capsule/">Introduction to Capsule Network</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/">Fixing  Weight Decay Regularization in Adam</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/14/Networks/">Dual Path Networks</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/12/meet-in-the-middle的一些实例/">Meet in the middle的一些实例</a>
+          </li>
+        
+          <li>
+            <a href="/2017/11/12/GatedRNN/">GatedRNN</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+      
+    </div>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Mowayao<br>
+      Powered by <a href="//hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+  </div>
+  <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+  <!-- totop start -->
+<div id="totop">
+<a title="totop"><img src="/img/scrollup.png"/></a>
+</div>
+
+<!-- totop end -->
+
+<!-- 多说公共js代码 start -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"reqianduan"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+<!-- 多说公共js代码 end -->
+
+
+<!-- 百度分享 start -->
+
+<div id="article-share-box" class="article-share-box">
+  <div id="bdshare" class="bdsharebuttonbox article-share-links">
+    <a class="article-share-weibo" data-cmd="tsina" title="分享到新浪微博"></a>
+    <a class="article-share-weixin" data-cmd="weixin" title="分享到微信"></a>
+    <a class="article-share-qq" data-cmd="sqq" title="分享到QQ"></a>
+    <a class="article-share-renren" data-cmd="renren" title="分享到人人网"></a>
+    <a class="article-share-more" data-cmd="more" title="更多"></a>
+  </div>
+</div>
+<script>
+  function SetShareData(cmd, config) {
+    if (shareDataTitle && shareDataUrl) {
+      config.bdText = shareDataTitle;
+      config.bdUrl = shareDataUrl;
+    }
+    return config;
+  }
+  window._bd_share_config={
+    "common":{onBeforeClick: SetShareData},
+    "share":{"bdCustomStyle":"/css/bdshare.css"}
+  };
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+<!-- 百度分享 end -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+                processEscapes: true
+                    
+}
+  
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+                  
+}
+    
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Queue(function() {
+            var all = MathJax.Hub.getAllJax(), i;
+            for(i=0; i < all.length; i += 1) {
+                            all[i].SourceElement().parentNode.className += ' has-jax';
+                                    
+            }
+                
+        });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.5.3/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<script src="/js/script.js"></script>
+
+</div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+</body>
+</html>
