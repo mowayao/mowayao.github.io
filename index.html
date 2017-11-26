@@ -16,6 +16,8 @@
     <title>Mowayao&#39;s Blog | 一往无前虎山行</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
+    <meta name="theme-color" content="#3F51B5">
+    
     
     <meta name="keywords" content="">
     <meta property="og:type" content="website">
@@ -27,8 +29,8 @@
     
         <link rel="alternate" type="application/atom+xml" title="Mowayao&#39;s Blog" href="/atom.xml">
     
-    <link rel="shortcut icon" href="/">
-    <link rel="stylesheet" href="/css/style.css?v=1.7.0">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
     <script>window.lazyScripts=[]</script>
 
     <!-- custom head --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
@@ -44,10 +46,10 @@
     <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
         <i class="icon icon-lg icon-close"></i>
     </a>
-    <div class="brand-wrap" style="background-image:url(/)">
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
       <div class="brand">
         <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="/">
+          <img src="/img/avatar.jpg">
         </a>
         <hgroup class="introduce">
           <h5 class="nickname">Mowayao</h5>
@@ -57,6 +59,55 @@
     </div>
     <div class="scroll-wrap flex-col">
       <ul class="nav">
+        
+            <li class="waves-block waves-effect active">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/mowayao" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="http://www.weibo.com/mowayao" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/custom"  >
+                <i class="icon icon-lg icon-link"></i>
+                测试
+              </a>
+            </li>
         
       </ul>
     </div>
@@ -71,6 +122,20 @@
         </a>
         <div class="flex-col header-title ellipsis">Mowayao&#39;s Blog</div>
         
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
         
     </div>
 </header>
@@ -121,7 +186,9 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Dynamic Routing Between Cap...
+        Dynamic Routing Between Capsules
+这是Hinton发表在NIPS2017的一篇文章，提出了capsule的概念。
+其实可以把capsule看成是neuron的一个特殊形式，neuron的输出是一个scalar，而capsule则会输出vector。除此之外，neuron可以detect到一个特定的pattern，但是这又存在很大的局限性，会有pattern冗余...
     
 
         <a href="/2017/11/24/capsule/" class="post-more waves-effect waves-button">
@@ -167,7 +234,13 @@
 
     
         文章的链接
-首先，文章理清了l2正则和weight d...
+首先，文章理清了l2正则和weight decay的区别，它们并不是对等的。 weight decay可以表示成:
+
+x_{t+1} = (1-w_t)x_{t} - \alpha_t\nabla f_t(x_t)而l2正则的表示是：
+
+f_{t,reg(x_t)} = f_t(x_t)+ \frac{w_t}{2} \|x_t\|_2^2所以：
+
+\nabla f_{t,reg...
     
 
         <a href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/" class="post-more waves-effect waves-button">
@@ -212,7 +285,7 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        This paper propose a novel ...
+        This paper propose a novel deep CNN architecture called Dual Path Networks(DPN). This idea is  based on the fact that the ResNet enables feature re-usage while DenseNet enable new features explorat...
     
 
         <a href="/2017/11/14/Networks/" class="post-more waves-effect waves-button">
@@ -257,7 +330,9 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Meet in the Middle是在搜索问题经常会...
+        Meet in the Middle是在搜索问题经常会用到的一个技巧，其核心思想就是解决一个A&lt;-&gt;B的问题，分别从A端和B端出发，向对方进发，当他们在中点相遇的时候，就找到了A&lt;-&gt;B的一个解。
+先看一道简单题：CF888E Maximum Subsequence
+You are given an array a consisting of n integers, ...
     
 
         <a href="/2017/11/12/meet-in-the-middle的一些实例/" class="post-more waves-effect waves-button">
@@ -303,7 +378,13 @@
 
     
         Gated RNNRNN
-h^\prime, y = ...
+h^\prime, y = f(h, x), h^\prime = \sigma(W^hh + W^i x), y = \sigma(W^oh^\prime)
+                
+                    
+                    
+                
+                RNN
+        ...
     
 
         <a href="/2017/11/12/GatedRNN/" class="post-more waves-effect waves-button">
@@ -348,7 +429,7 @@ h^\prime, y = ...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        Gist: The authors propose a...
+        Gist: The authors propose a new training strategy  dubbed mixup that trains a neural network on convex combinations of pairs of examples and their labels and improves the generalization of state-of...
     
 
         <a href="/2017/11/01/mixup/" class="post-more waves-effect waves-button">
@@ -393,7 +474,7 @@ h^\prime, y = ...
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        The authors propose to tile...
+        The authors propose to tile anchors on a wide range of layers to ensure that all scales of faces have enough features for detection. Besides, they try to improve the recall rate of small faces by a...
     
 
         <a href="/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" class="post-more waves-effect waves-button">
@@ -439,7 +520,10 @@ h^\prime, y = ...
 
     
         
-A Deep Spatial Contextual ...
+A Deep Spatial Contextual Long-term Recurrent Convolutional Network for Saliency Detection
+A Fast and Compact Saliency Score Regression Network Based on Fully Convolutional Network
+Amulet
+DHSNet: ...
     
 
         <a href="/2017/10/20/A-List-of-Saliency-Detection-Papers/" class="post-more waves-effect waves-button">
@@ -486,7 +570,11 @@ A Deep Spatial Contextual ...
     
         
                 
-         ...
+                    
+                    
+                
+                
+            
     
 
         <a href="/2017/09/05/图个新鲜/" class="post-more waves-effect waves-button">
@@ -533,7 +621,13 @@ A Deep Spatial Contextual ...
     
         R-CNN主要有三个步骤：
 
-用selective s...
+用selective search提取可能的objects
+使用Efficient Graph Based Image Segmentation中的方法来得到region
+得到所有region之间两两的相似度
+合并最像的两个region
+重新计算新合并region与其他region的相似度
+重复上述过程直到整张图片都聚合成一个大的region
+使用一种随机的计分...
     
 
         <a href="/2017/09/05/overview-of-object-detection/" class="post-more waves-effect waves-button">
@@ -566,6 +660,15 @@ A Deep Spatial Contextual ...
         <footer class="footer">
     <div class="top">
         
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
 
         <p>
             
@@ -575,7 +678,7 @@ A Deep Spatial Contextual ...
         </p>
     </div>
     <div class="bottom">
-        <p><span>Mowayao &copy; 2017</span>
+        <p><span>Mowayao &copy; 2015 - 2017</span>
             <span>
                 
                 Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
@@ -589,21 +692,106 @@ A Deep Spatial Contextual ...
 <a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
 
 
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://wulimengmeng.top/&title=Mowayao's Blog&pic=http://wulimengmeng.top/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://wulimengmeng.top/&title=Mowayao's Blog&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://wulimengmeng.top/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=Mowayao's Blog&url=http://wulimengmeng.top/&via=http://wulimengmeng.top" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://wulimengmeng.top/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://wulimengmeng.top/" alt="微信分享二维码">
+</div>
+
+
+
+
     <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
 <script>
-var BLOG = { ROOT: '/', SHARE: , REWARD: false };
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
 
 
 </script>
 
-<script src="/js/main.min.js?v=1.7.0"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
 
 
 
 
 
 
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 
 
