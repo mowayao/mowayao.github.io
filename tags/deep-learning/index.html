@@ -53,7 +53,7 @@
         </a>
         <hgroup class="introduce">
           <h5 class="nickname">Mowayao</h5>
-          <a href="mailto:634206017@qq.com" title="634206017@qq.com" class="mail">634206017@qq.com</a>
+          <a href="mailto:zpyao1992@gmail.com" title="zpyao1992@gmail.com" class="mail">zpyao1992@gmail.com</a>
         </hgroup>
       </div>
     </div>
@@ -74,6 +74,13 @@
               </a>
             </li>
         
+            <li class="waves-block waves-effect active">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
             <li class="waves-block waves-effect">
               <a href="https://github.com/mowayao" target="_blank" >
                 <i class="icon icon-lg icon-github"></i>
@@ -85,13 +92,6 @@
               <a href="http://www.weibo.com/mowayao" target="_blank" >
                 <i class="icon icon-lg icon-weibo"></i>
                 Weibo
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/custom"  >
-                <i class="icon icon-lg icon-link"></i>
-                测试
               </a>
             </li>
         
@@ -141,27 +141,23 @@
             ">All</a>
         
 
-            <a href="/tags/notes/" style="-webkit-order:6;order:6" class="tags-list-item waves-effect waves-button waves-light">notes</a>
+            <a href="/tags/paper/" style="-webkit-order:7;order:7" class="tags-list-item waves-effect waves-button waves-light">paper</a>
 
         
 
-            <a href="/tags/algorithms/" style="-webkit-order:7;order:7" class="tags-list-item waves-effect waves-button waves-light">algorithms</a>
+            <a href="/tags/notes/" style="-webkit-order:8;order:8" class="tags-list-item waves-effect waves-button waves-light">notes</a>
 
         
 
-            <a href="/tags/paper/" style="-webkit-order:8;order:8" class="tags-list-item waves-effect waves-button waves-light">paper</a>
+            <a href="/tags/algorithms/" style="-webkit-order:9;order:9" class="tags-list-item waves-effect waves-button waves-light">algorithms</a>
 
         
 
-            <a href="/tags/paper-notes/" style="-webkit-order:9;order:9" class="tags-list-item waves-effect waves-button waves-light">paper notes</a>
+            <a href="/tags/paper-notes/" style="-webkit-order:10;order:10" class="tags-list-item waves-effect waves-button waves-light">paper notes</a>
 
         
 
-            <a href="/tags/deep-learning/" style="-webkit-order:10;order:10" class="tags-list-item waves-effect waves-button waves-light">deep learning</a>
-
-        
-
-            <a href="/tags/face-detection/" style="-webkit-order:11;order:11" class="tags-list-item waves-effect waves-button waves-light">face detection</a>
+            <a href="/tags/deep-learning/" style="-webkit-order:11;order:11" class="tags-list-item waves-effect waves-button waves-light">deep learning</a>
 
         
 
@@ -173,19 +169,23 @@
 
         
 
-            <a href="/tags/computer-vision/" style="-webkit-order:2;order:2" class="tags-list-item waves-effect waves-button waves-light">computer vision</a>
+            <a href="/tags/face-detection/" style="-webkit-order:2;order:2" class="tags-list-item waves-effect waves-button waves-light">face detection</a>
 
         
 
-            <a href="/tags/math/" style="-webkit-order:3;order:3" class="tags-list-item waves-effect waves-button waves-light">math</a>
+            <a href="/tags/computer-vision/" style="-webkit-order:3;order:3" class="tags-list-item waves-effect waves-button waves-light">computer vision</a>
 
         
 
-            <a href="/tags/杂/" style="-webkit-order:4;order:4" class="tags-list-item waves-effect waves-button waves-light">杂</a>
+            <a href="/tags/math/" style="-webkit-order:4;order:4" class="tags-list-item waves-effect waves-button waves-light">math</a>
 
         
 
-            <a href="/tags/machine-learning/" style="-webkit-order:5;order:5" class="tags-list-item waves-effect waves-button waves-light">machine learning</a>
+            <a href="/tags/杂/" style="-webkit-order:5;order:5" class="tags-list-item waves-effect waves-button waves-light">杂</a>
+
+        
+
+            <a href="/tags/machine-learning/" style="-webkit-order:6;order:6" class="tags-list-item waves-effect waves-button waves-light">machine learning</a>
 
         
     </nav>
@@ -270,7 +270,7 @@
         </p>
     </div>
     <div class="bottom">
-        <p><span>Mowayao &copy; 2015 - 2017</span>
+        <p><span>Mowayao &copy; 2017</span>
             <span>
                 
                 Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
@@ -361,6 +361,27 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
 
 
 
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
 
 
 
@@ -383,38 +404,30 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
         }
     });
 })();
-</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 
 
 
 </body>
 </html>
-share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://wulimengmeng.top/tags/deep-learning/&title=Mowayao's Blog&pic=http://wulimengmeng.top/img/avatar.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://wulimengmeng.top/tags/deep-learning/&title=Mowayao's Blog&source=" data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://wulimengmeng.top/tags/deep-learning/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=Mowayao's Blog&url=http://wulimengmeng.top/tags/deep-learning/&via=http://wulimengmeng.top" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://wulimengmeng.top/tags/deep-learning/" data-title=" Google+">
+a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://wulimengmeng.top/tags/deep-learning/" data-title=" Google+">
           <i class="icon icon-google-plus"></i>
         </a>
       </li>
@@ -462,6 +475,27 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
 
 
 
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
+
 
 
 
@@ -484,7 +518,24 @@ var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
         }
     });
 })();
-</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 
 
 
