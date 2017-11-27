@@ -131,13 +131,16 @@ Algorithm: Simu">
 	  <p>先考虑一个简单的例子：</p>
 <p>一个n-sided dice. 其每一面是均匀的，也就是每一面的概率都是$\frac{1}{n}$,我们可以把区间[0,1)分成n份，采样的过程就可以变成：从[0,1)采样得到x，然后返回$\lfloor n\times x\rfloor$。</p>
 <blockquote>
-<h4 id="Algorithm-Simulating-a-Fair-Die"><a href="#Algorithm-Simulating-a-Fair-Die" class="headerlink" title="Algorithm: Simulating a Fair Die"></a>Algorithm: Simulating a Fair Die</h4><ol>
+<h4>Algorithm: Simulating a Fair Die</h4>
+<ol>
 <li>Generate a uniformly-random value xx in the range [0,1).</li>
 <li>Return $⌊x\times n⌋$</li>
 </ol>
 </blockquote>
-<h2 id="朴素的做法"><a href="#朴素的做法" class="headerlink" title="朴素的做法"></a>朴素的做法</h2><p>但如果不是均匀的呢？假设给定各个离散值的概率p(x)，先计算CDF，即 P(x)。然后从[0,1)采样，得到a，我们需要确定a所在的区间，朴素的做法就是二分搜索P（x）（单调性）。所以时间复杂度为$O(\log(n))$</p>
-<h2 id="The-Alias-Method"><a href="#The-Alias-Method" class="headerlink" title="The Alias Method"></a>The Alias Method</h2><p>如果想要用$O(1)$的时间采样呢？</p>
+<h2>朴素的做法</h2>
+<p>但如果不是均匀的呢？假设给定各个离散值的概率p(x)，先计算CDF，即 P(x)。然后从[0,1)采样，得到a，我们需要确定a所在的区间，朴素的做法就是二分搜索P（x）（单调性）。所以时间复杂度为$O(\log(n))$</p>
+<h2>The Alias Method</h2>
+<p>如果想要用$O(1)$的时间采样呢？</p>
 <p>考虑如下的情况：</p>
 <p>有四个概率：$\frac{1}{2}, \frac{1}{3}, \frac{1}{12},\frac{1}{12}$</p>
 <p><img src="http://www.keithschwarz.com/darts-dice-coins/images/aliasMethodInitialProbabilities.png" alt=""></p>
@@ -163,19 +166,23 @@ Algorithm: Simu">
 <p>首先对每列进行采样，列确定后，再采样，利用P和alias。过程非常简单，时间效率是$O(1)$</p>
 <p>接下来就是证明这个alias表和P表是否一定存在！</p>
 <blockquote>
-<p><strong>Theorem:</strong> Given k width-one rectangles of heights $h<em>0,h_1,…,h</em>{k−1}$ such that $\sum_{i=0}^{k-1}h_i=k$, there is a way of cutting the rectangles and distributing them into k columns, each of which has height 1, such that each column contains at most two different rectangles and the $i$th column contains at least one piece of the $i$th rectangle.</p>
+<p><strong>Theorem:</strong> Given k width-one rectangles of heights $h_0,h_1,...,h_{k−1}$ such that $\sum_{i=0}^{k-1}h_i=k$, there is a way of cutting the rectangles and distributing them into k columns, each of which has height 1, such that each column contains at most two different rectangles and the $i$th column contains at least one piece of the $i$th rectangle.</p>
 </blockquote>
 <p>证明：</p>
 <p>当k=1的时候，很明显是成立的。</p>
-<p>假设当$k=x$的时候成立，那么我们就需要证明$k=x+1$时，是否满足。<br>考虑任一个宽度为$x+1$的矩形，高度分别是：$h<em>0, h_1, …, h</em>{k}$, 且满足$\sum_{i = 0}^{k}{h_i} =  x+ 1$,假设一些高度$h_l \le 1$ 还有一些$h_g\ge 1$。不可能同时大于0或者小于0。</p>
+<p>假设当$k=x$的时候成立，那么我们就需要证明$k=x+1$时，是否满足。
+考虑任一个宽度为$x+1$的矩形，高度分别是：$h_0, h_1, ..., h_{k}$, 且满足$\sum_{i = 0}^{k}{h_i} =  x+ 1$,假设一些高度$h_l \le 1$ 还有一些$h_g\ge 1$。不可能同时大于0或者小于0。</p>
 <p>接下来就是用$h_g$把$h_l$填满，这样我们就只剩下$x$个未解决的。所以。。成立！</p>
 <p>具体的做法如下：</p>
 <blockquote>
-<h4 id="Algorithm-Naive-Alias-Method"><a href="#Algorithm-Naive-Alias-Method" class="headerlink" title="Algorithm: Naive Alias Method"></a>Algorithm: Naive Alias Method</h4><ul>
-<li>Initialization:<ol>
+<h4>Algorithm: Naive Alias Method</h4>
+<ul>
+<li>Initialization:
+<ol>
 <li>Multiply each probability $p_i$ by n.</li>
 <li>Create arrays Alias and Prob, each of size n.</li>
-<li>For j=1 to n−1:<ol>
+<li>For j=1 to n−1:
+<ol>
 <li>Find a probability pl satisfying $p_l\le1$.</li>
 <li>Find a probability $p_g$ (with $l\ne g$) satisfying $p_g\ge1$</li>
 <li>Set $Prob[l]=p_l$.</li>
@@ -188,10 +195,11 @@ Algorithm: Simu">
 <li>Set $Prob[i]=1$.</li>
 </ol>
 </li>
-<li>Generation:<ol>
+<li>Generation:
+<ol>
 <li>Generate a fair die roll from an n-sided die; call the side i.</li>
 <li>Flip a biased coin that comes up heads with probability Prob[i].</li>
-<li>If the coin comes up “heads,” return i.</li>
+<li>If the coin comes up &quot;heads,&quot; return i.</li>
 <li>Otherwise, return Alias[i].</li>
 </ol>
 </li>
