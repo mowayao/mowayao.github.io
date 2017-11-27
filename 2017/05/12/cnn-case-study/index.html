@@ -1,195 +1,143 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
 <head>
-    
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>CNN Case Stud | Mowayao&#39;s Blog</title>
+  <meta name="author" content="Mowayao">
+  
+  <meta name="description" content="AlexNet结构：
+CONV1-&amp;gt;MAX POOL1-&amp;gt;NORM1-&amp;gt;CONV2-&amp;gt;MAX POOL2-&amp;gt;NORM-&amp;gt;CONV3-&amp;gt;CONV4-&amp;gt;CONV5-&amp;gt;MAX POOL3-&amp;gt;FC6-&amp;gt;FC7-&amp;gt;FC8
+输入： $227">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    
+  <meta property="og:title" content="CNN Case Stud"/>
+  <meta property="og:site_name" content="Mowayao&#39;s Blog"/>
 
-    
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-70812759-1', 'auto');
+  ga('send', 'pageview');
+</script>
 
 
 
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    
-    
-    
-    <title>CNN Case Stud | Mowayao&#39;s Blog | 一往无前虎山行</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    
-    <meta name="theme-color" content="#3F51B5">
-    
-    
-    <meta name="keywords" content="notes,computer vision">
-    <meta name="description" content="AlexNet结构： CONV1-&amp;gt;MAX POOL1-&amp;gt;NORM1-&amp;gt;CONV2-&amp;gt;MAX POOL2-&amp;gt;NORM-&amp;gt;CONV3-&amp;gt;CONV4-&amp;gt;CONV5-&amp;gt;MAX POOL3-&amp;gt;FC6-&amp;gt;FC7-&amp;gt;FC8 输入： $227\times 227\times 3$ 的图像 第一层（CONV1），96个$11\times11$">
-<meta name="keywords" content="notes,computer vision">
-<meta property="og:type" content="article">
-<meta property="og:title" content="CNN Case Stud">
-<meta property="og:url" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/index.html">
-<meta property="og:site_name" content="Mowayao&#39;s Blog">
-<meta property="og:description" content="AlexNet结构： CONV1-&amp;gt;MAX POOL1-&amp;gt;NORM1-&amp;gt;CONV2-&amp;gt;MAX POOL2-&amp;gt;NORM-&amp;gt;CONV3-&amp;gt;CONV4-&amp;gt;CONV5-&amp;gt;MAX POOL3-&amp;gt;FC6-&amp;gt;FC7-&amp;gt;FC8 输入： $227\times 227\times 3$ 的图像 第一层（CONV1），96个$11\times11$">
-<meta property="og:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/vgg.PNG">
-<meta property="og:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/googlenet.PNG">
-<meta property="og:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/incep.PNG">
-<meta property="og:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/incep1.PNG">
-<meta property="og:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/res1.PNG">
-<meta property="og:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/res2.PNG">
-<meta property="og:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/res3.PNG">
-<meta property="og:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/res4.PNG">
-<meta property="og:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/sqq.PNG">
-<meta property="og:updated_time" content="2017-11-26T13:34:37.927Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="CNN Case Stud">
-<meta name="twitter:description" content="AlexNet结构： CONV1-&amp;gt;MAX POOL1-&amp;gt;NORM1-&amp;gt;CONV2-&amp;gt;MAX POOL2-&amp;gt;NORM-&amp;gt;CONV3-&amp;gt;CONV4-&amp;gt;CONV5-&amp;gt;MAX POOL3-&amp;gt;FC6-&amp;gt;FC7-&amp;gt;FC8 输入： $227\times 227\times 3$ 的图像 第一层（CONV1），96个$11\times11$">
-<meta name="twitter:image" content="http://wulimengmeng.top/2017/05/12/cnn-case-study/~/vgg.PNG">
-    
-        <link rel="alternate" type="application/atom+xml" title="Mowayao&#39;s Blog" href="/atom.xml">
-    
-    <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
-    <script>window.lazyScripts=[]</script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
-    <!-- custom head --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-    
 
 </head>
 
-<body>
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="loading" class="active"></div>
-
-    <aside id="menu" class="hide" >
-  <div class="inner flex-row-vertical">
-    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
-        <i class="icon icon-lg icon-close"></i>
-    </a>
-    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
-      <div class="brand">
-        <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="/img/avatar.jpg">
-        </a>
-        <hgroup class="introduce">
-          <h5 class="nickname">Mowayao</h5>
-          <a href="mailto:zpyao1992@gmail.com" title="zpyao1992@gmail.com" class="mail">zpyao1992@gmail.com</a>
-        </hgroup>
+ <body>  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">Mowayao&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class=""></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class=""></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class=""></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class=""></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class=""></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
       </div>
-    </div>
-    <div class="scroll-wrap flex-col">
-      <ul class="nav">
-        
-            <li class="waves-block waves-effect">
-              <a href="/"  >
-                <i class="icon icon-lg icon-home"></i>
-                主页
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/archives"  >
-                <i class="icon icon-lg icon-archives"></i>
-                Archives
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/tags"  >
-                <i class="icon icon-lg icon-tags"></i>
-                Tags
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://github.com/mowayao" target="_blank" >
-                <i class="icon icon-lg icon-github"></i>
-                Github
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="http://www.weibo.com/mowayao" target="_blank" >
-                <i class="icon icon-lg icon-weibo"></i>
-                Weibo
-              </a>
-            </li>
-        
-      </ul>
-    </div>
-  </div>
-</aside>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
 
-    <main id="main">
-        <header class="top-header" id="header">
-    <div class="flex-row">
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
-          <i class="icon icon-lg icon-navicon"></i>
-        </a>
-        <div class="flex-col header-title ellipsis">CNN Case Stud</div>
-        
-        <div class="search-wrap" id="search-wrap">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-                <i class="icon icon-lg icon-chevron-left"></i>
-            </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
-                <i class="icon icon-lg icon-search"></i>
-            </a>
-        </div>
-        
-        
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
-            <i class="icon icon-lg icon-share-alt"></i>
-        </a>
-        
-    </div>
-</header>
-<header class="content-header post-header">
-
-    <div class="container fade-scale">
-        <h1 class="title">CNN Case Stud</h1>
-        <h5 class="subtitle">
-            
-                <time datetime="2017-05-12T11:00:00.000Z" itemprop="datePublished" class="page-time">
-  2017-05-12
-</time>
+  <div class="container">
+  	<div class="content">
+    	 
 
 
-            
-        </h5>
-    </div>
-
-    
-
-
-</header>
+	
+		<div class="page-header">
+			<h1> CNN Case Stud</h1>
+		</div>
+	
 
 
-<div class="container body-wrap">
-    
-    <aside class="post-widget">
-        <nav class="post-toc-wrap" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#AlexNet"><span class="post-toc-number">1.</span> <span class="post-toc-text">AlexNet</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#VGGNet"><span class="post-toc-number">2.</span> <span class="post-toc-text">VGGNet</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#GoogleNet"><span class="post-toc-number">3.</span> <span class="post-toc-text">GoogleNet</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ResNet"><span class="post-toc-number">4.</span> <span class="post-toc-text">ResNet</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Wide-Residual-Networks"><span class="post-toc-number">5.</span> <span class="post-toc-text">Wide Residual Networks</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Deep-Networks-with-Stochastic-Depth"><span class="post-toc-number">6.</span> <span class="post-toc-text">Deep Networks with Stochastic Depth</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Densely-Connected-Convolutional-Networks"><span class="post-toc-number">7.</span> <span class="post-toc-text">Densely Connected Convolutional Networks</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#SqueezeNet"><span class="post-toc-number">8.</span> <span class="post-toc-text">SqueezeNet</span></a></li></ol>
-        </nav>
-    </aside>
-    
-<article id="blog-cnn-case-study"
-  class="post-article article-type-blog fade" itemprop="blogPost">
 
-    <div class="post-card">
-        <h1 class="post-card-title">CNN Case Stud</h1>
-        <div class="post-meta">
-            <time class="post-time" title="2017-05-12 19:00:00" datetime="2017-05-12T11:00:00.000Z"  itemprop="datePublished">2017-05-12</time>
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
 
-            
+	<!-- content -->
+	<div class="mypage">		
+	  		
 
-
-            
-<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
-    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
-</span>
-
-
-        </div>
-        <div class="post-content" id="post-content" itemprop="postContent">
-            <h2 id="AlexNet"><a href="#AlexNet" class="headerlink" title="AlexNet"></a>AlexNet</h2><p>结构：</p>
+	  <h2 id="AlexNet"><a href="#AlexNet" class="headerlink" title="AlexNet"></a>AlexNet</h2><p>结构：</p>
 <p>CONV1-&gt;MAX POOL1-&gt;NORM1-&gt;CONV2-&gt;MAX POOL2-&gt;NORM-&gt;CONV3-&gt;CONV4-&gt;CONV5-&gt;MAX POOL3-&gt;FC6-&gt;FC7-&gt;FC8</p>
 <p>输入： $227\times 227\times 3$ 的图像</p>
 <p>第一层（CONV1），96个$11\times11$的卷积和，stride为4，,因为（227-11）/4+1=55</p>
@@ -206,13 +154,7 @@
 <p>第十一层（FC6），4096个neurons</p>
 <p>第十二层（FC7）， 4096个neurons</p>
 <p>第十三层（FC8）， 1000个neurons</p>
-<h2 id="VGGNet"><a href="#VGGNet" class="headerlink" title="VGGNet"></a>VGGNet</h2><figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="~/vgg.PNG" alt="" title="">
-                </div>
-                <div class="image-caption"></div>
-            </figure>
+<h2 id="VGGNet"><a href="#VGGNet" class="headerlink" title="VGGNet"></a>VGGNet</h2><p><img src="~/vgg.PNG" alt=""></p>
 <p>为什么要使用小的卷积核（$3\times3$ conv）?</p>
 <p>因为3个$3\times3$stride为1的conv堆起来的receptive field是和$7\times7$的conv layer是一样的，这样的话网络可以更深，同时非线性能力提高，而且前者参数数量为：$3*(3^2C^2)$ 后者为 $7^2C^2$,前者数量较少。</p>
 <p>INPUT: [224x224x3]        memory:  $224<em>224</em>3$=150K   params: 0</p>
@@ -250,13 +192,7 @@
 <p>[$5\times5$ conv, 96] $28\times28\times96\times5\times5\times256$</p>
 <p>总共需要854M次运算</p>
 <p>而且，最终的输出太大了！我们需要减少feature depth,可以用$1\times1$的卷积（$1\times1$ conv “bottleneck” layers）来解决，例如一个$56\times56\times64$的feature map经过32个$1\times1$以后，得到$56\times56\times32$,这样做就是将深度投影到较低的维度，（feature map的组合）</p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="~/incep1.PNG" alt="" title="">
-                </div>
-                <div class="image-caption"></div>
-            </figure>
+<p><img src="~/incep1.PNG" alt=""></p>
 <p>卷积运算的数量：</p>
 <p>[1x1 conv, 64]  $28\times28\times64\times1\times1\times256$</p>
 <p>[1x1 conv, 64]  $28\times28\times64\times1\times1\times256$</p>
@@ -285,310 +221,128 @@
 <p>Fire modules consisting of a ‘squeeze’ layer with 1x1 filters feeding an ‘expand’ layer with 1x1 and 3x3 filters </p>
 </blockquote>
 <p><img src="~/sqq.PNG" alt=""></p>
+	  
+	</div>
 
-        </div>
+	<div>
+  	<center>
+	<div class="pagination">
 
-        <blockquote class="post-copyright">
-    <div class="content">
-        
-<span class="post-time">
-    Last updated: <time datetime="2017-11-26T13:34:37.927Z" itemprop="dateUpdated">2017-11-26 21:34:37</time>
-</span><br>
-
-
-        
-    </div>
-    <footer>
-        <a href="http://wulimengmeng.top">
-            <img src="/img/avatar.jpg" alt="Mowayao">
-            Mowayao
-        </a>
-    </footer>
-</blockquote>
-
-        
-
-
-        <div class="post-footer">
-            
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/computer-vision/">computer vision</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/notes/">notes</a></li></ul>
-
-
-            
-<div class="page-share-wrap">
+    
+    
+    <a href="/2017/05/17/一个离散概率分布中采样/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Anterior</a>
     
 
-<div class="page-share" id="pageShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://wulimengmeng.top/2017/05/12/cnn-case-study/&title=《CNN Case Stud》 — Mowayao's Blog&pic=http://wulimengmeng.top/img/avatar.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://wulimengmeng.top/2017/05/12/cnn-case-study/&title=《CNN Case Stud》 — Mowayao's Blog&source=" data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://wulimengmeng.top/2017/05/12/cnn-case-study/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CNN Case Stud》 — Mowayao's Blog&url=http://wulimengmeng.top/2017/05/12/cnn-case-study/&via=http://wulimengmeng.top" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://wulimengmeng.top/2017/05/12/cnn-case-study/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2017/05/11/机器学习中的向量化/" type="button" class="btn btn-default ">Próximo<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comentários</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2017-05-12 
+	</div>
+	
+
+	<!-- categories -->
+    
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/notes/">notes<span>5</span></a></li> <li><a href="/tags/computer-vision/">computer vision<span>1</span></a></li>
     </ul>
- </div>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
 
 
 
-    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
-        <i class="icon icon-share-alt icon-lg"></i>
-    </a>
-</div>
-
-
-
-        </div>
-    </div>
-
-    
-<nav class="post-nav flex-row flex-justify-between">
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2017 Mowayao
   
-    <div class="waves-block waves-effect prev">
-      <a href="/2017/05/17/一个离散概率分布中采样/" id="post-prev" class="post-nav-link">
-        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">一个离散概率分布中采样</h4>
-      </a>
-    </div>
-  
-
-  
-    <div class="waves-block waves-effect next">
-      <a href="/2017/05/11/机器学习中的向量化/" id="post-next" class="post-nav-link">
-        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">机器学习中的向量化</h4>
-      </a>
-    </div>
-  
-</nav>
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-    <!-- Valine Comments -->
-    <div class="comments vcomment" id="comments"></div>
-    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-    <script src="//unpkg.com/valine@latest/dist/Valine.min.js"></script>
-    <!-- Valine Comments script -->
-    <script>
-        var GUEST_INFO = ['nick','mail','link'];
-        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
-          return GUEST_INFO.indexOf(item) > -1
-        });
-        new Valine({
-            el: '#comments',
-            notify: 'false' == 'true',
-            verify: 'true' == 'true',
-            appId: "K78etJ6E0Os1yP3aXKXFgOVy-gzGzoHsz",
-            appKey: "Qd80SpxyoVbyTCD54CU3SOQd",
-            avatar: "mm",
-            placeholder: "Just go go",
-            guest_info: guest_info.length == 0 ? GUEST_INFO : guest_info,
-            pageSize: "10"
-        })
-    </script>
-    <!-- Valine Comments end -->
-
-
-
-
-</article>
-
-
-
-</div>
-
-        <footer class="footer">
-    <div class="top">
-        
-<p>
-    <span id="busuanzi_container_site_uv" style='display:none'>
-        站点总访客数：<span id="busuanzi_value_site_uv"></span>
-    </span>
-    <span id="busuanzi_container_site_pv" style='display:none'>
-        站点总访问量：<span id="busuanzi_value_site_pv"></span>
-    </span>
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
 </p>
+ </footer>
+</div> <!-- container-narrow -->
+  
 
 
-        <p>
-            
-                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
-            
-            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
-        </p>
-    </div>
-    <div class="bottom">
-        <p><span>Mowayao &copy; 2017</span>
-            <span>
-                
-                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
-            </span>
-        </p>
-    </div>
-</footer>
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
 
-    </main>
-    <div class="mask" id="mask"></div>
-<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
 
 
-
-<div class="global-share" id="globalShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://wulimengmeng.top/2017/05/12/cnn-case-study/&title=《CNN Case Stud》 — Mowayao's Blog&pic=http://wulimengmeng.top/img/avatar.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://wulimengmeng.top/2017/05/12/cnn-case-study/&title=《CNN Case Stud》 — Mowayao's Blog&source=" data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://wulimengmeng.top/2017/05/12/cnn-case-study/" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CNN Case Stud》 — Mowayao's Blog&url=http://wulimengmeng.top/2017/05/12/cnn-case-study/&via=http://wulimengmeng.top" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://wulimengmeng.top/2017/05/12/cnn-case-study/" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-<div class="page-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://wulimengmeng.top/2017/05/12/cnn-case-study/" alt="微信分享二维码">
-</div>
-
-
-
-
-    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
-<script>
-var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
-
-
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
 </script>
 
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
 
 
-<div class="search-panel" id="search-panel">
-    <ul class="search-result" id="search-result"></ul>
-</div>
-<template id="search-tpl">
-<li class="item">
-    <a href="{path}" class="waves-block waves-effect">
-        <div class="title ellipsis" title="{title}">{title}</div>
-        <div class="flex-row flex-middle">
-            <div class="tags ellipsis">
-                {tags}
-            </div>
-            <time class="flex-col time">{date}</time>
-        </div>
-    </a>
-</li>
-</template>
-
-<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
-
-
-
-<!-- mathjax config similar to math.stackexchange -->
-
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    }
-});
-
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-});
-</script>
-
-<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" async></script>
-
-
-
-
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
-<script>
-(function() {
-    var OriginTitile = document.title, titleTime;
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            document.title = '死鬼去哪里了！';
-            clearTimeout(titleTime);
-        } else {
-            document.title = '(つェ⊂)咦!又好了!';
-            titleTime = setTimeout(function() {
-                document.title = OriginTitile;
-            },2000);
-        }
-    });
-})();
-</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
 </script>
@@ -607,7 +361,5 @@ MathJax.Hub.Queue(function() {
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->
 
-
-
 </body>
-</html>
+   </html>
