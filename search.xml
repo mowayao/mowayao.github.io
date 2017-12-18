@@ -84,7 +84,7 @@ $$</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fml67e6yo4j30fa0cpdht.jpg" alt=""></p>
 <p>(a) 求skipgram的关于$v_c$和$\mu_w$的梯度：
 $$
-\hat{y}<em>o= p(o|c)=\frac{\exp(\mu_o^\mathrm{T}v_c)}{\sum</em>{w=1}^W\exp(\mu_w^\mathrm{T}v_c)}
+\hat{y}<em>o= p(o|c)=\frac{\exp(\mu_o^Tv_c)}{\sum</em>{w=1}^W\exp(\mu_w^Tv_c)}
 $$
 o表示输出词的下标，c表示的是中心词的下标，$u_o$表示输出向量</p>
 <p>预测的词向量$v_c$代表第c个中心词，$w$表示的是第w个词, i表示目标。
