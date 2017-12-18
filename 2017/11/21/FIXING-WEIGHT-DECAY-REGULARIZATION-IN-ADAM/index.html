@@ -11,12 +11,9 @@
   
   <meta name="description" content="文章的链接
 首先，文章理清了l2正则和weight decay的区别，它们并不是对等的。 weight decay可以表示成:
-$$
-x_{t+1} = (1-w_t)x_{t}-\alpha_t\nabla f_t(x_t)
-$$
+$$x_{t+1} = (1-w_t)x_{t}-\alpha_t\nabla f_t(x_t)$$
 而l2正则的表示是：
-$$
-f_{t,reg(x_t)} = f_">
+$$f_{t,reg(x_t)} = f_t(x">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -52,9 +49,19 @@ f_{t,reg(x_t)} = f_">
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
   ga('create', 'UA-110229492-1', 'auto');
   ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
 </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-
-
 
 
 </head>
@@ -74,25 +81,31 @@ f_{t,reg(x_t)} = f_">
 		  
 		  <li>
 			<a href="/archives" title="All the articles.">
-			  <i class=""></i>Archives
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
 			</a>
 		  </li>
 		  
 		  <li>
 			<a href="/tags" title="All the tags.">
-			  <i class=""></i>Tags
+			  <i class="fa fa-tags"></i>Tags
 			</a>
 		  </li>
 		  
 		  <li>
 			<a href="/about" title="About me.">
-			  <i class=""></i>About
+			  <i class="fa fa-user"></i>About
 			</a>
 		  </li>
 		  
 		  <li>
 			<a href="/atom.xml" title="Subscribe me.">
-			  <i class=""></i>RSS
+			  <i class="fa fa-user"></i>RSS
 			</a>
 		  </li>
 		  
@@ -128,17 +141,11 @@ f_{t,reg(x_t)} = f_">
 
 	  <p><a href="https://arxiv.org/pdf/1711.05101.pdf" target="_blank" rel="external">文章的链接</a></p>
 <p>首先，文章理清了l2正则和weight decay的区别，它们并不是对等的。 weight decay可以表示成:</p>
-<p>$$
-x_{t+1} = (1-w_t)x_{t}-\alpha_t\nabla f_t(x_t)
-$$</p>
+<p>$$<br>x_{t+1} = (1-w_t)x_{t}-\alpha_t\nabla f_t(x_t)<br>$$</p>
 <p>而l2正则的表示是：</p>
-<p>$$
-f_{t,reg(x_t)} = f_t(x_t)+ \frac{w_t}{2} |x_t|_2^2
-$$</p>
+<p>$$<br>f_{t,reg(x_t)} = f_t(x_t)+ \frac{w_t}{2} |x_t|_2^2<br>$$</p>
 <p>所以：</p>
-<p>$$
-\nabla f_{t,reg(x_t)} = \nabla f_t(x_t)+w_tx_t
-$$</p>
+<p>$$<br>\nabla f_{t,reg(x_t)} = \nabla f_t(x_t)+w_tx_t<br>$$</p>
 <p>注意到weight decay的系数只有$w_t$，那么，在大部分框架中，例如tensorflow, keras, pytorch等把weight decay和l2正则等价了，</p>
 <p>我们切换到SGD Mometum中来：因求完梯度以后，需要累加mometum，在$x_t$前面就存在了三个参数：$\alpha$学习率,$w_t$,$\eta_t$平滑系数。那么就和weight decay不对等了，当然可以把这三者乘积看成一个系数，但是这样还是削弱了原本的weight decay（系数变小了）。</p>
 <p>因此，作者把传统的SGD with momentum做了以下修改：</p>
@@ -164,12 +171,12 @@ $$</p>
     
     
     <a href="/2017/11/24/capsule/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Anterior</a>
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2017/11/14/Networks/" type="button" class="btn btn-default ">Próximo<i
+    <a href="/2017/11/14/Networks/" type="button" class="btn btn-default ">Next<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -182,7 +189,7 @@ $$</p>
 	<!-- comment -->
 	
 <section id="comment">
-    <h2 class="title">Comentários</h2>
+    <h2 class="title">Comments</h2>
 
     
 </section>
@@ -311,7 +318,24 @@ $$</p>
 </script>
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 
 
 </body>

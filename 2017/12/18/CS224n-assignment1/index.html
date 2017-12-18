@@ -9,13 +9,8 @@
   <title>CS224n assignment1 | Mowayao&#39;s Blog</title>
   <meta name="author" content="Mowayao">
   
-  <meta name="description" content="Softmax
-(a) 证明softmax(x) = softmax(x+c), 这样就可以把c设为$\max(x)$来保证数值计算的稳定性
-$$
-softmax(x)_i = \frac{e^{x_i}}{\sum_je^{x_j}}
-$$
-$$
-(softmax(x+c))i = \frac{\">
+  <meta name="description" content="Softmax(a) 证明softmax(x) = softmax(x+c), 这样就可以把c设为$\max(x)$来保证数值计算的稳定性$$softmax(x)_i = \frac{e^{x_i}}{\sum_je^{x_j}}$$
+$$(softmax(x+c))_i = \frac{\exp(">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -51,9 +46,19 @@ $$
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
   ga('create', 'UA-110229492-1', 'auto');
   ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
 </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-
-
 
 
 </head>
@@ -73,25 +78,31 @@ $$
 		  
 		  <li>
 			<a href="/archives" title="All the articles.">
-			  <i class=""></i>Archives
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
 			</a>
 		  </li>
 		  
 		  <li>
 			<a href="/tags" title="All the tags.">
-			  <i class=""></i>Tags
+			  <i class="fa fa-tags"></i>Tags
 			</a>
 		  </li>
 		  
 		  <li>
 			<a href="/about" title="About me.">
-			  <i class=""></i>About
+			  <i class="fa fa-user"></i>About
 			</a>
 		  </li>
 		  
 		  <li>
 			<a href="/atom.xml" title="Subscribe me.">
-			  <i class=""></i>RSS
+			  <i class="fa fa-user"></i>RSS
 			</a>
 		  </li>
 		  
@@ -125,88 +136,66 @@ $$
 	<div class="mypage">		
 	  		
 
-	  <h2>Softmax</h2>
-<p>(a) 证明softmax(x) = softmax(x+c), 这样就可以把c设为$\max(x)$来保证数值计算的稳定性
-$$
-softmax(x)_i = \frac{e^{x_i}}{\sum_je^{x_j}}
-$$</p>
-<p>$$
-(softmax(x+c))<em>i = \frac{\exp(x_i+c)}{\sum</em>{j=1}^{\dim(x)}\exp(x_j+c)}=\frac{\exp(x_i)\exp(c)}{\exp(c)\sum_{j=1}^{\dim(x)}\exp(x_j)} = \frac{\exp(x_i)}{\sum_{j=1}^{\dim(x)}\exp(x_j)}
-$$</p>
-<p>(b) 实现q1_softmax.py:</p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">softmax</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="string">"""Compute the softmax function for each row of the input x.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    x -- A N dimensional vector or M x N dimensional numpy matrix.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Return:</span></div><div class="line"><span class="string">    x -- You are allowed to modify x in-place</span></div><div class="line"><span class="string">    """</span></div><div class="line">    orig_shape = x.shape</div><div class="line"></div><div class="line">    <span class="keyword">if</span> len(x.shape) &gt; <span class="number">1</span>:</div><div class="line">        <span class="comment"># Matrix</span></div><div class="line">        x -= np.max(x, axis=<span class="number">1</span>, keepdims=<span class="keyword">True</span>)</div><div class="line">        x = np.exp(x) / np.sum(np.exp(x), axis=<span class="number">1</span>, keepdims=<span class="keyword">True</span>)</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="comment"># Vector</span></div><div class="line">        x -= np.max(x)</div><div class="line">        x = np.exp(x) / np.sum(np.exp(x))</div><div class="line"></div><div class="line">    <span class="keyword">assert</span> x.shape == orig_shape</div><div class="line">    <span class="keyword">return</span> x</div></pre></td></tr></table></figure></p>
-<h2>Neural Network Basics</h2>
-<p>(a) 推导一下sigmoid函数的导数：
-$$
-\sigma(x) = \frac{1}{1+e^{-x}}
-$$</p>
-<p>$$
-\sigma^\prime(x) = \sigma(x)(1 − \sigma(x))
-$$</p>
-<p>(b) 推导一下softmax函数的导数：
-$$
-CE(y,\hat{y}) = -\sum_i y_i \log(\hat{y}_i), \hat{y} = softmax(\theta)
-$$
-k是目标类
-$$
-\frac{\partial CE(y,\hat{y})}{\partial \theta_i} =  \left{
-\begin{align}
-&amp;\hat{y_i} - 1,i=k\
+	  <h2 id="Softmax"><a href="#Softmax" class="headerlink" title="Softmax"></a>Softmax</h2><p>(a) 证明softmax(x) = softmax(x+c), 这样就可以把c设为$\max(x)$来保证数值计算的稳定性<br>$$<br>softmax(x)_i = \frac{e^{x_i}}{\sum_je^{x_j}}<br>$$</p>
+<p>$$<br>(softmax(x+c))_i = \frac{\exp(x_i+c)}{\sum_{j=1}\exp(x_j+c)}=\frac{\exp(x_i)\exp(c)}{\exp(c)\sum_{j=1}\exp(x_j)} = \frac{\exp(x_i)}{\sum_{j=1}\exp(x_j)}<br>$$</p>
+<p>(b) 实现q1_softmax.py: </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">softmax</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="string">"""Compute the softmax function for each row of the input x.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    x -- A N dimensional vector or M x N dimensional numpy matrix.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Return:</span></div><div class="line"><span class="string">    x -- You are allowed to modify x in-place</span></div><div class="line"><span class="string">    """</span></div><div class="line">    orig_shape = x.shape</div><div class="line"></div><div class="line">    <span class="keyword">if</span> len(x.shape) &gt; <span class="number">1</span>:</div><div class="line">        <span class="comment"># Matrix</span></div><div class="line">        x -= np.max(x, axis=<span class="number">1</span>, keepdims=<span class="keyword">True</span>)</div><div class="line">        x = np.exp(x) / np.sum(np.exp(x), axis=<span class="number">1</span>, keepdims=<span class="keyword">True</span>)</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="comment"># Vector</span></div><div class="line">        x -= np.max(x)</div><div class="line">        x = np.exp(x) / np.sum(np.exp(x))</div><div class="line"></div><div class="line">    <span class="keyword">assert</span> x.shape == orig_shape</div><div class="line">    <span class="keyword">return</span> x</div></pre></td></tr></table></figure>
+<h2 id="Neural-Network-Basics"><a href="#Neural-Network-Basics" class="headerlink" title="Neural Network Basics"></a>Neural Network Basics</h2><p>(a) 推导一下sigmoid函数的导数：<br>$$<br>\sigma(x) = \frac{1}{1+e^{-x}}<br>$$</p>
+<p>$$<br>\sigma^\prime(x) = \sigma(x)(1 − \sigma(x))<br>$$</p>
+<p>(b) 推导一下softmax函数的导数：<br>$$<br>CE(y,\hat{y}) = -\sum_i y_i \log(\hat{y}_i), \hat{y} = softmax(\theta)<br>$$<br>k是目标类<br><span>$$\frac{\partial CE(y,\hat{y})}{\partial \theta_i} =  \left\{
+\begin{align} 
+&amp;\hat{y_i} - 1,i=k \\ 
 &amp;\hat{y_i}, otherwise
 \end{align}
-\right.
-$$
-等价于：
-$$
-\frac{\partial CE(y,\hat{y})}{\partial \theta} = \hat{y} -y
-$$</p>
+\right.$$</span><!-- Has MathJax --><br>等价于：</p>
+<p>$$<br>\frac{\partial CE(y,\hat{y})}{\partial \theta} = \hat{y} -y<br>$$</p>
 <p>(c) x是一层神经网络的输入，推导x的梯度也就是$\frac{\partial J}{\partial x}$, $J = CE(y, \hat{y})$，神经网络的隐藏层激活函数是$sigmoid$，而最后一层的是$softmax$</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-18%20%E4%B8%8B%E5%8D%8812.15.18.png" alt="">
-$$
-z1 = xW_1 + b_1, h = sigmoid(z_1), z_2=hW_2 + b_2, \hat{y} = softmax(z_2),
-$$</p>
-<p>$$
-\frac{\partial J}{\partial x} = \frac{\partial J}{\partial z_2} \frac{\partial z_2}{\partial h}\frac{\partial h}{\partial z_1}\frac{\partial z_1}{\partial x}
-$$</p>
-<p>$$
-\frac{\partial J}{\partial z_2} = \hat{y} -y
-$$</p>
-<p>$$
-\frac{\partial z_2}{\partial h} = W_2
-$$</p>
-<p>$$
-\frac{\partial h}{\partial z_1} = sigmoid(z_1) (1-sigmoid(z_1))
-$$</p>
-<p>$$
-\frac{\partial z_1}{\partial x} = W_1
-$$</p>
-<p>(d) 上个网络的参数个数, 输入的维度是$D_x$,输出的维度是$D_y$, 隐藏层是H：
-$$
-D_x * H + H + H * D_y + D_y
-$$
-(e) 实现q2 sigmoid.py:</p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sigmoid</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    Compute the sigmoid function for the input here.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    x -- A scalar or numpy array.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Return:</span></div><div class="line"><span class="string">    s -- sigmoid(x)</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    s = <span class="number">1</span> / (<span class="number">1</span>+np.exp(-x))</div><div class="line"></div><div class="line">    <span class="keyword">return</span> s</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sigmoid_grad</span><span class="params">(s)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    Compute the gradient for the sigmoid function here. Note that</span></div><div class="line"><span class="string">    for this implementation, the input s should be the sigmoid</span></div><div class="line"><span class="string">    function value of your original input x.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    s -- A scalar or numpy array.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Return:</span></div><div class="line"><span class="string">    ds -- Your computed gradient.</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    ds = s * (<span class="number">1</span>-s)</div><div class="line"></div><div class="line">    <span class="keyword">return</span> ds</div></pre></td></tr></table></figure></p>
-<p>(f) 实现梯度检查: q2 gradcheck.py
-$$
-\frac{\partial J(\theta)}{\partial \theta} = \lim_{\epsilon\rightarrow0}\frac{J(\theta+\epsilon)-J(\theta-\epsilon)}{2\epsilon}
-$$</p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">gradcheck_naive</span><span class="params">(f, x)</span>:</span></div><div class="line">    <span class="string">""" Gradient check for a function f.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    f -- a function that takes a single argument and outputs the</span></div><div class="line"><span class="string">         cost and its gradients</span></div><div class="line"><span class="string">    x -- the point (numpy array) to check the gradient at</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    rndstate = random.getstate()</div><div class="line">    random.setstate(rndstate)</div><div class="line">    fx, grad = f(x) <span class="comment"># Evaluate function value at original point</span></div><div class="line">    h = <span class="number">1e-4</span>        <span class="comment"># Do not change this!</span></div><div class="line"></div><div class="line">    <span class="comment"># Iterate over all indexes in x</span></div><div class="line">    it = np.nditer(x, flags=[<span class="string">'multi_index'</span>], op_flags=[<span class="string">'readwrite'</span>])</div><div class="line">    <span class="keyword">while</span> <span class="keyword">not</span> it.finished:</div><div class="line">        ix = it.multi_index</div><div class="line"></div><div class="line">        <span class="comment"># Try modifying x[ix] with h defined above to compute</span></div><div class="line">        <span class="comment"># numerical gradients. Make sure you call random.setstate(rndstate)</span></div><div class="line">        <span class="comment"># before calling f(x) each time. This will make it possible</span></div><div class="line">        <span class="comment"># to test cost functions with built in randomness later.</span></div><div class="line"></div><div class="line">        old_xix = x[ix]</div><div class="line">        x[ix] = old_xix + h</div><div class="line">        random.setstate(rndstate)</div><div class="line">        fp = f(x)[<span class="number">0</span>]</div><div class="line">        x[ix] = old_xix - h</div><div class="line">        random.setstate(rndstate)</div><div class="line">        fm = f(x)[<span class="number">0</span>]</div><div class="line">        x[ix] = old_xix</div><div class="line">        <span class="comment">#random.setstate(rndstate)</span></div><div class="line">        numgrad = (fp-fm) / (<span class="number">2</span>*h)</div><div class="line">        <span class="comment"># Compare gradients</span></div><div class="line">        reldiff = abs(numgrad - grad[ix]) / max(<span class="number">1</span>, abs(numgrad), abs(grad[ix]))</div><div class="line">        <span class="keyword">if</span> reldiff &gt; <span class="number">1e-5</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">"Gradient check failed."</span></div><div class="line">            <span class="keyword">print</span> <span class="string">"First gradient error found at index %s"</span> % str(ix)</div><div class="line">            <span class="keyword">print</span> <span class="string">"Your gradient: %f \t Numerical gradient: %f"</span> % (</div><div class="line">                grad[ix], numgrad)</div><div class="line">            <span class="keyword">return</span></div><div class="line"></div><div class="line">        it.iternext() <span class="comment"># Step to next dimension</span></div><div class="line"></div><div class="line">    <span class="keyword">print</span> <span class="string">"Gradient check passed!"</span></div></pre></td></tr></table></figure></p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-18%20%E4%B8%8B%E5%8D%8812.15.18.png" alt=""><br>$$<br>z1 = xW_1 + b_1, h = sigmoid(z_1), z_2=hW_2 + b_2, \hat{y} = softmax(z_2),<br>$$</p>
+<p>$$<br>\frac{\partial J}{\partial x} = \frac{\partial J}{\partial z_2} \frac{\partial z_2}{\partial h}\frac{\partial h}{\partial z_1}\frac{\partial z_1}{\partial x}<br>$$</p>
+<p>$$<br>\frac{\partial J}{\partial z_2} = \hat{y} -y<br>$$</p>
+<p>$$<br>\frac{\partial z_2}{\partial h} = W_2<br>$$</p>
+<p>$$<br>\frac{\partial h}{\partial z_1} = sigmoid(z_1) (1-sigmoid(z_1))<br>$$</p>
+<p>$$<br>\frac{\partial z_1}{\partial x} = W_1<br>$$</p>
+<p>(d) 上个网络的参数个数, 输入的维度是$D_x$,输出的维度是$D_y$, 隐藏层是H：<br>$$<br>D_x \cdot H + H + H \cdot D_y + D_y<br>$$<br>(e) 实现q2 sigmoid.py:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sigmoid</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    Compute the sigmoid function for the input here.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    x -- A scalar or numpy array.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Return:</span></div><div class="line"><span class="string">    s -- sigmoid(x)</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    s = <span class="number">1</span> / (<span class="number">1</span>+np.exp(-x))</div><div class="line"></div><div class="line">    <span class="keyword">return</span> s</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sigmoid_grad</span><span class="params">(s)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    Compute the gradient for the sigmoid function here. Note that</span></div><div class="line"><span class="string">    for this implementation, the input s should be the sigmoid</span></div><div class="line"><span class="string">    function value of your original input x.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    s -- A scalar or numpy array.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Return:</span></div><div class="line"><span class="string">    ds -- Your computed gradient.</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    ds = s * (<span class="number">1</span>-s)</div><div class="line"></div><div class="line">    <span class="keyword">return</span> ds</div></pre></td></tr></table></figure>
+<p>(f) 实现梯度检查: q2 gradcheck.py<br>$$<br>\frac{\partial J(\theta)}{\partial \theta} = \lim_{\epsilon\rightarrow0}\frac{J(\theta+\epsilon)-J(\theta-\epsilon)}{2\epsilon}<br>$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">gradcheck_naive</span><span class="params">(f, x)</span>:</span></div><div class="line">    <span class="string">""" Gradient check for a function f.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    f -- a function that takes a single argument and outputs the</span></div><div class="line"><span class="string">         cost and its gradients</span></div><div class="line"><span class="string">    x -- the point (numpy array) to check the gradient at</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    rndstate = random.getstate()</div><div class="line">    random.setstate(rndstate)</div><div class="line">    fx, grad = f(x) <span class="comment"># Evaluate function value at original point</span></div><div class="line">    h = <span class="number">1e-4</span>        <span class="comment"># Do not change this!</span></div><div class="line"></div><div class="line">    <span class="comment"># Iterate over all indexes in x</span></div><div class="line">    it = np.nditer(x, flags=[<span class="string">'multi_index'</span>], op_flags=[<span class="string">'readwrite'</span>])</div><div class="line">    <span class="keyword">while</span> <span class="keyword">not</span> it.finished:</div><div class="line">        ix = it.multi_index</div><div class="line"></div><div class="line">        <span class="comment"># Try modifying x[ix] with h defined above to compute</span></div><div class="line">        <span class="comment"># numerical gradients. Make sure you call random.setstate(rndstate)</span></div><div class="line">        <span class="comment"># before calling f(x) each time. This will make it possible</span></div><div class="line">        <span class="comment"># to test cost functions with built in randomness later.</span></div><div class="line"></div><div class="line">        old_xix = x[ix]</div><div class="line">        x[ix] = old_xix + h</div><div class="line">        random.setstate(rndstate)</div><div class="line">        fp = f(x)[<span class="number">0</span>]</div><div class="line">        x[ix] = old_xix - h</div><div class="line">        random.setstate(rndstate)</div><div class="line">        fm = f(x)[<span class="number">0</span>]</div><div class="line">        x[ix] = old_xix</div><div class="line">        <span class="comment">#random.setstate(rndstate)</span></div><div class="line">        numgrad = (fp-fm) / (<span class="number">2</span>*h)</div><div class="line">        <span class="comment"># Compare gradients</span></div><div class="line">        reldiff = abs(numgrad - grad[ix]) / max(<span class="number">1</span>, abs(numgrad), abs(grad[ix]))</div><div class="line">        <span class="keyword">if</span> reldiff &gt; <span class="number">1e-5</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">"Gradient check failed."</span></div><div class="line">            <span class="keyword">print</span> <span class="string">"First gradient error found at index %s"</span> % str(ix)</div><div class="line">            <span class="keyword">print</span> <span class="string">"Your gradient: %f \t Numerical gradient: %f"</span> % (</div><div class="line">                grad[ix], numgrad)</div><div class="line">            <span class="keyword">return</span></div><div class="line"></div><div class="line">        it.iternext() <span class="comment"># Step to next dimension</span></div><div class="line"></div><div class="line">    <span class="keyword">print</span> <span class="string">"Gradient check passed!"</span></div></pre></td></tr></table></figure>
 <p>(g) 实现: q2 neural.py</p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward_backward_prop</span><span class="params">(data, labels, params, dimensions)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    Forward and backward propagation for a two-layer sigmoidal network</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Compute the forward propagation and for the cross entropy cost,</span></div><div class="line"><span class="string">    and backward propagation for the gradients for all parameters.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    data -- M x Dx matrix, where each row is a training example.</span></div><div class="line"><span class="string">    labels -- M x Dy matrix, where each row is a one-hot vector.</span></div><div class="line"><span class="string">    params -- Model parameters, these are unpacked for you.</span></div><div class="line"><span class="string">    dimensions -- A tuple of input dimension, number of hidden units</span></div><div class="line"><span class="string">                  and output dimension</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    <span class="comment">### Unpack network parameters (do not modify)</span></div><div class="line">    ofs = <span class="number">0</span></div><div class="line">    Dx, H, Dy = (dimensions[<span class="number">0</span>], dimensions[<span class="number">1</span>], dimensions[<span class="number">2</span>])</div><div class="line"></div><div class="line">    W1 = np.reshape(params[ofs:ofs+ Dx * H], (Dx, H))</div><div class="line">    ofs += Dx * H</div><div class="line">    b1 = np.reshape(params[ofs:ofs + H], (<span class="number">1</span>, H))</div><div class="line">    ofs += H</div><div class="line">    W2 = np.reshape(params[ofs:ofs + H * Dy], (H, Dy))</div><div class="line">    ofs += H * Dy</div><div class="line">    b2 = np.reshape(params[ofs:ofs + Dy], (<span class="number">1</span>, Dy))</div><div class="line"></div><div class="line">    </div><div class="line">    z1 = np.dot(data, W1) + b1</div><div class="line">    h1 = sigmoid(z1)</div><div class="line">    z2 = np.dot(h1, W2) + b2</div><div class="line">    y = softmax(z2)</div><div class="line"></div><div class="line">    cost = -np.sum(labels * np.log(y))</div><div class="line"></div><div class="line">    gradz2 = y - labels</div><div class="line"></div><div class="line"></div><div class="line">    gradW2 = np.dot(h1.T, gradz2)</div><div class="line">    gradb2 = np.sum(gradz2, axis=<span class="number">0</span>).reshape((<span class="number">1</span>, Dy))</div><div class="line"></div><div class="line">    gradh1 = np.dot(gradz2, W2.T)</div><div class="line">    gradz1 = gradh1 * sigmoid_grad(h1)</div><div class="line"></div><div class="line">    gradW1 = np.dot(data.T, gradz1)</div><div class="line">    gradb1 = np.sum(gradz1, axis=<span class="number">0</span>).reshape((<span class="number">1</span>, H))</div><div class="line"></div><div class="line">    <span class="keyword">assert</span> gradW1.shape == W1.shape</div><div class="line">    <span class="keyword">assert</span> gradW2.shape == W2.shape</div><div class="line">    <span class="comment">### Stack gradients (do not modify)</span></div><div class="line">    grad = np.concatenate((gradW1.flatten(), gradb1.flatten(),</div><div class="line">        gradW2.flatten(), gradb2.flatten()))</div><div class="line"></div><div class="line">    <span class="keyword">return</span> cost, grad</div></pre></td></tr></table></figure></p>
-<h2>Word2Vec</h2>
-<p>主要包括word embeeding中的两个模型： Skip-gram和CBOW</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward_backward_prop</span><span class="params">(data, labels, params, dimensions)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    Forward and backward propagation for a two-layer sigmoidal network</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Compute the forward propagation and for the cross entropy cost,</span></div><div class="line"><span class="string">    and backward propagation for the gradients for all parameters.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    data -- M x Dx matrix, where each row is a training example.</span></div><div class="line"><span class="string">    labels -- M x Dy matrix, where each row is a one-hot vector.</span></div><div class="line"><span class="string">    params -- Model parameters, these are unpacked for you.</span></div><div class="line"><span class="string">    dimensions -- A tuple of input dimension, number of hidden units</span></div><div class="line"><span class="string">                  and output dimension</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    <span class="comment">### Unpack network parameters (do not modify)</span></div><div class="line">    ofs = <span class="number">0</span></div><div class="line">    Dx, H, Dy = (dimensions[<span class="number">0</span>], dimensions[<span class="number">1</span>], dimensions[<span class="number">2</span>])</div><div class="line"></div><div class="line">    W1 = np.reshape(params[ofs:ofs+ Dx * H], (Dx, H))</div><div class="line">    ofs += Dx * H</div><div class="line">    b1 = np.reshape(params[ofs:ofs + H], (<span class="number">1</span>, H))</div><div class="line">    ofs += H</div><div class="line">    W2 = np.reshape(params[ofs:ofs + H * Dy], (H, Dy))</div><div class="line">    ofs += H * Dy</div><div class="line">    b2 = np.reshape(params[ofs:ofs + Dy], (<span class="number">1</span>, Dy))</div><div class="line"></div><div class="line">    </div><div class="line">    z1 = np.dot(data, W1) + b1</div><div class="line">    h1 = sigmoid(z1)</div><div class="line">    z2 = np.dot(h1, W2) + b2</div><div class="line">    y = softmax(z2)</div><div class="line"></div><div class="line">    cost = -np.sum(labels * np.log(y))</div><div class="line"></div><div class="line">    gradz2 = y - labels</div><div class="line"></div><div class="line"></div><div class="line">    gradW2 = np.dot(h1.T, gradz2)</div><div class="line">    gradb2 = np.sum(gradz2, axis=<span class="number">0</span>).reshape((<span class="number">1</span>, Dy))</div><div class="line"></div><div class="line">    gradh1 = np.dot(gradz2, W2.T)</div><div class="line">    gradz1 = gradh1 * sigmoid_grad(h1)</div><div class="line"></div><div class="line">    gradW1 = np.dot(data.T, gradz1)</div><div class="line">    gradb1 = np.sum(gradz1, axis=<span class="number">0</span>).reshape((<span class="number">1</span>, H))</div><div class="line"></div><div class="line">    <span class="keyword">assert</span> gradW1.shape == W1.shape</div><div class="line">    <span class="keyword">assert</span> gradW2.shape == W2.shape</div><div class="line">    <span class="comment">### Stack gradients (do not modify)</span></div><div class="line">    grad = np.concatenate((gradW1.flatten(), gradb1.flatten(),</div><div class="line">        gradW2.flatten(), gradb2.flatten()))</div><div class="line"></div><div class="line">    <span class="keyword">return</span> cost, grad</div></pre></td></tr></table></figure>
+<h2 id="Word2Vec"><a href="#Word2Vec" class="headerlink" title="Word2Vec"></a>Word2Vec</h2><p>主要包括word embeeding中的两个模型： Skip-gram和CBOW</p>
 <ol>
 <li>skipgram:Predict context words given target (position independent)</li>
 </ol>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-18%20%E4%B8%8B%E5%8D%883.47.29.png" alt=""></p>
-<ol start="2">
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fml280dpabj313q0to1kx.jpg" alt=""></p>
+<ol>
 <li>Predict target word from bag-of-words context</li>
 </ol>
-<p>(a) 求skipgram的关于$v_c$和$\mu_w$的梯度：
-$$
-\hat{y}^o= p(o|c)=\frac{\exp(\mu_o^\mathrm{T}v_c)}{\sum_{w=1}^W\exp(\mu_w^\mathrm{T}v_c)}
-$$
-预测的词向量$v_c$代表第c个中心词，$w$表示的是第w个词。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fml67e6yo4j30fa0cpdht.jpg" alt=""></p>
+<p>(a) 求skipgram的关于$v_c$和$\mu_w$的梯度：<br>$$<br>\hat{y}_o= p(o|c)=\frac{\exp(\mu_o^\mathrm{T}v_c)}{\sum_{w=1}^W\exp(\mu_w^\mathrm{T}v_c)}<br>$$<br>预测的词向量$v_c$代表第c个中心词，$w$表示的是第w个词, i表示目标。</p>
+<p>$$<br>J_{softmax-CE}(o,v_c, U) = CE(y, \hat{y}), U= [u_1,u_2,…,u_W]<br>$$</p>
+<p>$$<br>\frac{\partial J}{\partial v_c} = -u_i + \sum_{w=1}^Wu_w\hat{y}_w = U(\hat{y}-y)<br>$$</p>
+<span>$$\frac{\partial J}{\partial u_w} =  \left\{
+\begin{align} 
+&amp;(\hat{y_w} - 1)v_c,w=o \\ 
+&amp;\hat{y_w}v_c, otherwise
+\end{align}
+\right.$$</span><!-- Has MathJax -->
+<p>(b) negative sampling:  更新全词表的代价有点大，从而采样K个，更新。$v_c$是预测的词向量，$o$是期望d额输出词<br>$$<br>J_{neg_sample}(o,v_c,U) = -\log(\sigma(u_o^Tv_c)) - \sum_{k=1}^K \log(\sigma(-u_k^Tv_c))<br>$$</p>
+<p>$$<br>\frac{\partial J}{\partial v_c} =(\sigma(u_o^Tv_c)-1)u_o-\sum_{k=1}^K(\sigma(-u_k^Tv_c)-1)u_k<br>$$</p>
+<p>$$<br>\frac{\partial J}{\partial u_o} =(\sigma(u_o^Tv_c)-1)v_c<br>$$</p>
+<p>$$<br>\frac{\partial J}{\partial u_k} =-(\sigma(-u_k^Tv_c)-1)v_c, k = 1,2,…,K<br>$$</p>
+<p>(c) 推导skip gram和CBOW的梯度：</p>
+<p>给定一系列的上下文单词$[word_{c-m},…,word_{c-1},word_c,word_{c+1},…,word_{c+m}]$</p>
+<p>输入词向量为$v_k$,输出词向量为$u_k$, $\hat{v}=v_c$</p>
+<p>这里， skip gram的cost函数为：<br>$$<br>J_{skip_gram}(word_{c-m…c+m}) = \sum_{-m\le j\le m, j\ne0} F(w_{c+j}, v_c)<br>$$</p>
+<p>$$<br>\frac{\partial J_{skip_gram}(word_{c-m…c+m})}{\partial U} =\sum_{-m\le j\le m, j\ne0} \frac{\partial F(w_{c+j}, v_c)}{\partial U}<br>$$</p>
+<p>$$<br>\frac{\partial J_{skip_gram}(word_{c-m…c+m})}{\partial v_c} =\sum_{-m\le j\le m, j\ne0} \frac{\partial F(w_{c+j}, v_c)}{\partial v_c}<br>$$</p>
+<p>$$<br>\frac{\partial J_{skip_gram}(word_{c-m…c+m})}{\partial v_j} =0, j \ne c<br>$$</p>
+<p>而CBOW有点不同，首先：<br>$$<br>\hat{v} = \sum_{-m\le j\le m, j\ne0} v_{c+j}<br>$$<br>它的cost函数为：<br>$$<br>J_{CBOW}(word_{c-m…c+m})=F(w_c, \hat{v})<br>$$</p>
+<p>$$<br>\frac{\partial J_{CBOW}(word_{c-m…c+m})}{\partial U} = \frac{\partial F(w_c, v_c)}{\partial U}<br>$$</p>
+<p>$$<br>\frac{\partial J_{CBOW}(word_{c-m…c+m})}{\partial v_j} = \frac{\partial F(w_c, v_c)}{\partial \hat{v}}, j\in{c-m,…,c-1,c+1,…,c+m}<br>$$</p>
+<p>$$<br>\frac{\partial J_{CBOW}(word_{c-m…c+m})}{\partial v_j} =0, j\notin{c-m,…,c-1,c+1,…,c+m}<br>$$</p>
 	  
 	</div>
 
@@ -216,12 +205,12 @@ $$
 
     
     
-    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Anterior</a>
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2017/12/09/Network-Architecture-of-Deblurring/" type="button" class="btn btn-default ">Próximo<i
+    <a href="/2017/12/09/Network-Architecture-of-Deblurring/" type="button" class="btn btn-default ">Next<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -234,7 +223,7 @@ $$
 	<!-- comment -->
 	
 <section id="comment">
-    <h2 class="title">Comentários</h2>
+    <h2 class="title">Comments</h2>
 
     
 </section>
@@ -256,6 +245,17 @@ $$
 
 	<!-- categories -->
     
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/algorithms/">algorithms<span>1</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
 
 	<!-- tags -->
 	
@@ -363,7 +363,24 @@ $$
 </script>
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 
 
 </body>

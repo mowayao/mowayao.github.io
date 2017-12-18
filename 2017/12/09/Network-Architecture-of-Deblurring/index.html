@@ -46,9 +46,19 @@
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
   ga('create', 'UA-110229492-1', 'auto');
   ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
 </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-
-
 
 
 </head>
@@ -68,25 +78,31 @@
 		  
 		  <li>
 			<a href="/archives" title="All the articles.">
-			  <i class=""></i>Archives
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
 			</a>
 		  </li>
 		  
 		  <li>
 			<a href="/tags" title="All the tags.">
-			  <i class=""></i>Tags
+			  <i class="fa fa-tags"></i>Tags
 			</a>
 		  </li>
 		  
 		  <li>
 			<a href="/about" title="About me.">
-			  <i class=""></i>About
+			  <i class="fa fa-user"></i>About
 			</a>
 		  </li>
 		  
 		  <li>
 			<a href="/atom.xml" title="Subscribe me.">
-			  <i class=""></i>RSS
+			  <i class="fa fa-user"></i>RSS
 			</a>
 		  </li>
 		  
@@ -126,13 +142,13 @@
 <p>Wang L, Li Y, Wang S. DeepDeblur: Fast one-step blurry face images restoration. arXiv preprint arXiv:1711.09515, 2017.</p>
 <p>这篇文章主要针对的是人脸的运动噪声去模糊，其中kernel是人工模拟的，利用高斯过程生成，网络结构的话就是利用多个inception module和resnet的结构。</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-09%20%E4%B8%8B%E5%8D%885.15.21.png" alt=""></p>
-<p>Kupyn O, Budzan V, Mykhailych M, et al. DeblurGAN: Blind Motion Deblurring Using Conditional Adversarial Networks. arXiv preprint arXiv:1711.07064, 2017.</p>
+<p>Kupyn O, Budzan V, Mykhailych M, et al. DeblurGAN: Blind Motion Deblurring Using Conditional Adversarial Networks. arXiv preprint arXiv:1711.07064, 2017. </p>
 <p>这篇文章的结构比较接单，就是利用多个ResBlocks来作为generater，然后在discriminator loss中加入critic loss（用Wasserstein GAN）和perceptual loss(features dissimilarity)。</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-09%20%E4%B8%8B%E5%8D%885.18.01.png" alt=""></p>
-<p>Noroozi M, Chandramouli P, Favaro P. Motion Deblurring in the Wild. arXiv preprint arXiv:1701.01486, 2017.</p>
+<p>Noroozi M, Chandramouli P, Favaro P. Motion Deblurring in the Wild. arXiv preprint arXiv:1701.01486, 2017. </p>
 <p>主要利用了mutli-scale和skip-connection</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-09%20%E4%B8%8B%E5%8D%885.57.08.png" alt=""></p>
-<p>Nah S, Kim T H, Lee K M. Deep multi-scale convolutional neural network for dynamic scene deblurring. arXiv preprint arXiv:1612.02177, 2016.</p>
+<p>Nah S, Kim T H, Lee K M. Deep multi-scale convolutional neural network for dynamic scene deblurring. arXiv preprint arXiv:1612.02177, 2016. </p>
 <p>这篇文章主要用到了一些残差学习的方法，不仅用了ResBlock，还将小尺度的结果作为残差传给大尺度，简化学习的难度。</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-09%20%E4%B8%8B%E5%8D%886.00.27.png" alt=""></p>
 	  
@@ -145,12 +161,12 @@
     
     
     <a href="/2017/12/18/CS224n-assignment1/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Anterior</a>
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2017/12/05/Generate-Motion-Blur/" type="button" class="btn btn-default ">Próximo<i
+    <a href="/2017/12/05/Generate-Motion-Blur/" type="button" class="btn btn-default ">Next<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -163,7 +179,7 @@
 	<!-- comment -->
 	
 <section id="comment">
-    <h2 class="title">Comentários</h2>
+    <h2 class="title">Comments</h2>
 
     
 </section>
@@ -292,7 +308,24 @@
 </script>
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 
 
 </body>

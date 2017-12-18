@@ -10,9 +10,8 @@
   <meta name="author" content="Mowayao">
   
   <meta name="description" content="Meet in the Middle是在搜索问题经常会用到的一个技巧，其核心思想就是解决一个A&amp;lt;-&amp;gt;B的问题，分别从A端和B端出发，向对方进发，当他们在中点相遇的时候，就找到了A&amp;lt;-&amp;gt;B的一个解。
-先看一道简单题：
-CF888E Maximum Subsequence
-You">
+先看一道简单题：CF888E Maximum Subsequence
+You ">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -48,9 +47,19 @@ You">
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
   ga('create', 'UA-110229492-1', 'auto');
   ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
 </script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-
-
 
 
 </head>
@@ -70,25 +79,31 @@ You">
 		  
 		  <li>
 			<a href="/archives" title="All the articles.">
-			  <i class=""></i>Archives
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
 			</a>
 		  </li>
 		  
 		  <li>
 			<a href="/tags" title="All the tags.">
-			  <i class=""></i>Tags
+			  <i class="fa fa-tags"></i>Tags
 			</a>
 		  </li>
 		  
 		  <li>
 			<a href="/about" title="About me.">
-			  <i class=""></i>About
+			  <i class="fa fa-user"></i>About
 			</a>
 		  </li>
 		  
 		  <li>
 			<a href="/atom.xml" title="Subscribe me.">
-			  <i class=""></i>RSS
+			  <i class="fa fa-user"></i>RSS
 			</a>
 		  </li>
 		  
@@ -123,32 +138,28 @@ You">
 	  		
 
 	  <p>Meet in the Middle是在搜索问题经常会用到的一个技巧，其核心思想就是解决一个A&lt;-&gt;B的问题，分别从A端和B端出发，向对方进发，当他们在中点相遇的时候，就找到了A&lt;-&gt;B的一个解。</p>
-<h3>先看一道简单题：</h3>
-<p><a href="http://codeforces.com/contest/888/problem/E" target="_blank" rel="external">CF888E Maximum Subsequence</a></p>
-<p>You are given an array <em>a</em> consisting of <em>n</em> integers, and additionally an integer <em>m</em>. You have to choose some sequence of indices $b_1, b_2, ..., b_k (1 \le b_1 \lt b_2 \lt … \lt b_k\le n)$ in such a way that the value of <img src="http://codeforces.com/predownloaded/db/28/db283c0794aac433c817bad7534d99cc6287207c.png" alt="img"> is maximized. Chosen sequence can be empty.</p>
+<h3 id="先看一道简单题："><a href="#先看一道简单题：" class="headerlink" title="先看一道简单题："></a>先看一道简单题：</h3><p><a href="http://codeforces.com/contest/888/problem/E" target="_blank" rel="external">CF888E Maximum Subsequence</a></p>
+<p>You are given an array <em>a</em> consisting of <em>n</em> integers, and additionally an integer <em>m</em>. You have to choose some sequence of indices $b_1, b_2, …, b_k (1 \le b_1 \lt b_2 \lt … \lt b_k\le n)$ in such a way that the value of <img src="http://codeforces.com/predownloaded/db/28/db283c0794aac433c817bad7534d99cc6287207c.png" alt="img"> is maximized. Chosen sequence can be empty.</p>
 <p>Print the maximum possible value of <img src="http://codeforces.com/predownloaded/db/28/db283c0794aac433c817bad7534d99cc6287207c.png" alt="img">.</p>
 <p><strong>Input</strong></p>
 <p>The first line contains two integers <em>n</em> and <em>m</em> ($1 \le n\le 35$, $1 \le m \le 10^9$).</p>
-<p>The second line contains <em>n</em> integers $a_1, a_2, ..., a_n$ ($1 \le a_i \le10^9$).</p>
+<p>The second line contains <em>n</em> integers $a_1, a_2, …, a_n$ ($1 \le a_i \le10^9$).</p>
 <p><strong>Output</strong></p>
 <p>Print the maximum possible value of <img src="http://codeforces.com/predownloaded/db/28/db283c0794aac433c817bad7534d99cc6287207c.png" alt="img">.</p>
 <p>题目意思很简单，就是从一个大小为n的数组中挑选k个，使他们的和对m求余最大。</p>
 <p>如果直接枚举a的所有子集，大小为$2^{35}$， 明显会超时。</p>
 <p>如果利用meet in the middle的思路： 先枚举左边17，右边17，再让他们meet in the middle，然后利用求余的性质，左边和右边的和都小于m，进行排序，二分即可： $L_i+R_i \lt m$   or  $ m \lt L_i + R_i \lt 2*m$</p>
-<p><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">40</span>;</div><div class="line"></div><div class="line"><span class="keyword">int</span> a[maxn];</div><div class="line"></div><div class="line"><span class="keyword">int</span> L[<span class="number">1</span>&lt;&lt;<span class="number">18</span>], R[<span class="number">1</span>&lt;&lt;<span class="number">18</span>];</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="comment">//freopen("in", "r", stdin);</span></div><div class="line">	<span class="keyword">int</span> n, m;</div><div class="line">	<span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;</div><div class="line"></div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">		<span class="built_in">cin</span> &gt;&gt; a[i];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">int</span> ans = <span class="number">0</span>;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> mask = <span class="number">0</span>; mask &lt; (<span class="number">1</span>&lt;&lt;<span class="number">18</span>); mask++) &#123;</div><div class="line">		<span class="keyword">int</span> res = <span class="number">0</span>;</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">18</span>; j++) &#123;</div><div class="line">			<span class="keyword">if</span> ((mask &gt;&gt; j) &amp; <span class="number">1</span>) &#123;</div><div class="line">				res = (res+a[j]) % m;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		L[mask] = res;</div><div class="line">		ans = max(ans, res);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (n &lt;= <span class="number">18</span>) &#123;</div><div class="line">		<span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">		<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> mask = <span class="number">0</span>; mask &lt; (<span class="number">1</span>&lt;&lt;(n<span class="number">-18</span>)); mask++) &#123;</div><div class="line">		<span class="keyword">int</span> res = <span class="number">0</span>;</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">18</span>; j &lt; n; j++) &#123;</div><div class="line">			<span class="keyword">if</span> ((mask &gt;&gt; (j<span class="number">-18</span>)) &amp; <span class="number">1</span>) &#123;</div><div class="line">				res = (res+a[j]) % m;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		R[mask] = res;</div><div class="line">		ans = max(ans, res);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">int</span> Lsz = (<span class="number">1</span>&lt;&lt;<span class="number">18</span>);</div><div class="line">	<span class="keyword">int</span> Rsz = (<span class="number">1</span>&lt;&lt;(n<span class="number">-18</span>));</div><div class="line">	sort(R, R+Rsz);</div><div class="line"></div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; Lsz; i++) &#123;</div><div class="line">		<span class="keyword">int</span> res = L[i];</div><div class="line">		<span class="keyword">int</span> *t1 = upper_bound(R, R+Rsz, m<span class="number">-1</span>-res);</div><div class="line">		<span class="keyword">if</span> (t1 != R) &#123;</div><div class="line">			t1--;</div><div class="line">			ans = max(ans, (res+(*t1))%m);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">int</span> *t2 = upper_bound(R, R+Rsz, <span class="number">2</span>*m<span class="number">-1</span>-res);</div><div class="line">		<span class="keyword">if</span> (t2 != R) &#123;</div><div class="line">			t2--;</div><div class="line">			ans = max(ans, (res+(*t2))%m);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<h3>进阶一点</h3>
-<p><a href="https://community.topcoder.com/stat?c=problem_statement&amp;pm=11644&amp;rd=14548" target="_blank" rel="external">topcoder srm 523 AlphabetPath</a></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">40</span>;</div><div class="line"></div><div class="line"><span class="keyword">int</span> a[maxn];</div><div class="line"></div><div class="line"><span class="keyword">int</span> L[<span class="number">1</span>&lt;&lt;<span class="number">18</span>], R[<span class="number">1</span>&lt;&lt;<span class="number">18</span>];</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="comment">//freopen("in", "r", stdin);</span></div><div class="line">	<span class="keyword">int</span> n, m;</div><div class="line">	<span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;</div><div class="line"></div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">		<span class="built_in">cin</span> &gt;&gt; a[i];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">int</span> ans = <span class="number">0</span>;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> mask = <span class="number">0</span>; mask &lt; (<span class="number">1</span>&lt;&lt;<span class="number">18</span>); mask++) &#123;</div><div class="line">		<span class="keyword">int</span> res = <span class="number">0</span>;</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">18</span>; j++) &#123;</div><div class="line">			<span class="keyword">if</span> ((mask &gt;&gt; j) &amp; <span class="number">1</span>) &#123;</div><div class="line">				res = (res+a[j]) % m;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		L[mask] = res;</div><div class="line">		ans = max(ans, res);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (n &lt;= <span class="number">18</span>) &#123;</div><div class="line">		<span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">		<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> mask = <span class="number">0</span>; mask &lt; (<span class="number">1</span>&lt;&lt;(n<span class="number">-18</span>)); mask++) &#123;</div><div class="line">		<span class="keyword">int</span> res = <span class="number">0</span>;</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">18</span>; j &lt; n; j++) &#123;</div><div class="line">			<span class="keyword">if</span> ((mask &gt;&gt; (j<span class="number">-18</span>)) &amp; <span class="number">1</span>) &#123;</div><div class="line">				res = (res+a[j]) % m;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		R[mask] = res;</div><div class="line">		ans = max(ans, res);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">int</span> Lsz = (<span class="number">1</span>&lt;&lt;<span class="number">18</span>);</div><div class="line">	<span class="keyword">int</span> Rsz = (<span class="number">1</span>&lt;&lt;(n<span class="number">-18</span>));</div><div class="line">	sort(R, R+Rsz);</div><div class="line"></div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; Lsz; i++) &#123;</div><div class="line">		<span class="keyword">int</span> res = L[i];</div><div class="line">		<span class="keyword">int</span> *t1 = upper_bound(R, R+Rsz, m<span class="number">-1</span>-res);</div><div class="line">		<span class="keyword">if</span> (t1 != R) &#123;</div><div class="line">			t1--;</div><div class="line">			ans = max(ans, (res+(*t1))%m);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">int</span> *t2 = upper_bound(R, R+Rsz, <span class="number">2</span>*m<span class="number">-1</span>-res);</div><div class="line">		<span class="keyword">if</span> (t2 != R) &#123;</div><div class="line">			t2--;</div><div class="line">			ans = max(ans, (res+(*t2))%m);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="进阶一点"><a href="#进阶一点" class="headerlink" title="进阶一点"></a>进阶一点</h3><p><a href="https://community.topcoder.com/stat?c=problem_statement&amp;pm=11644&amp;rd=14548" target="_blank" rel="external">topcoder srm 523 AlphabetPath</a></p>
 <p><strong>Problem Statement</strong></p>
-<p>The original Latin alphabet contained the following 21 letters:</p>
+<p>The original Latin alphabet contained the following 21 letters: </p>
 <p>A B C D E F Z H I K L M N O P Q R S T V X</p>
-<p>You are given a 2-dimensional matrix of characters represented by the String[] letterMaze. The i-th character of the j-th element of letterMaze will represent the character at row i and column j. The matrix will contain each of the 21 letters at least once. It may also contain empty cells marked as '.' (quotes for clarity).</p>
+<p>You are given a 2-dimensional matrix of characters represented by the String[] letterMaze. The i-th character of the j-th element of letterMaze will represent the character at row i and column j. The matrix will contain each of the 21 letters at least once. It may also contain empty cells marked as ‘.’ (quotes for clarity).</p>
 <p>A path is a sequence of matrix elements such that the second element is (horizontally or vertically) adjacent to the first one, the third element is adjacent to the second one, and so on. No element may be repeated on a path. A Latin alphabet path is a path consisting of exactly 21 elements, each containing a different letter of the Latin alphabet. The letters are not required to be in any particular order.</p>
 <p>Return the total number of Latin alphabet paths in the matrix described by letterMaze.</p>
 <p>题目意思就是给定一个$R\times C$的矩阵，格子里要么是空，要么包含0~20的整数，长度为21的路径，每个整数恰出现一次， $R,C\le 21$</p>
 <p>那么，我们枚举middle点，这样有$R\times C$种选择，假设Middle点为x，从Middle点出发DFS10步，令$S(P)$为不包含Middle点的10个格子的数值的集合。那么$S(P_1)\cup S(P_2)….\cup {x}$ = {0,1…20},那么整个时间复杂度就变成了$O(RC\times 4 \times 3^9)$</p>
-<h3>密码学中的应用</h3>
-<h4>DES</h4>
-<p>首先介绍一下DES（Data Encryption Standard），DES是一种分组的对称加密技术，具体见下图（coursera crypto stanford笔记）：</p>
+<h3 id="密码学中的应用"><a href="#密码学中的应用" class="headerlink" title="密码学中的应用"></a>密码学中的应用</h3><h4 id="DES"><a href="#DES" class="headerlink" title="DES"></a>DES</h4><p>首先介绍一下DES（Data Encryption Standard），DES是一种分组的对称加密技术，具体见下图（coursera crypto stanford笔记）：</p>
 <p><img src="http://ovshqtujw.bkt.clouddn.com/WechatIMG11.jpeg" alt="DES"></p>
 <p>那么如何attack DES呢？</p>
 <p>Lemma: Suppose that DES is an ideal cipher ($2^{56}$ random invertible functions, key是56位)</p>
@@ -172,12 +183,12 @@ You">
     
     
     <a href="/2017/11/14/Networks/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Anterior</a>
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2017/11/12/GatedRNN/" type="button" class="btn btn-default ">Próximo<i
+    <a href="/2017/11/12/GatedRNN/" type="button" class="btn btn-default ">Next<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -190,7 +201,7 @@ You">
 	<!-- comment -->
 	
 <section id="comment">
-    <h2 class="title">Comentários</h2>
+    <h2 class="title">Comments</h2>
 
     
 </section>
@@ -319,7 +330,24 @@ You">
 </script>
 
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 
 
 </body>
