@@ -217,6 +217,7 @@ var _hmt = _hmt || [];
 <p>$$<br>\frac{\partial J_{CBOW}(word_{c-m…c+m})}{\partial v_j} = \frac{\partial F(w_c, v_c)}{\partial \hat{v}}, j\in{c-m,…,c-1,c+1,…,c+m}<br>$$</p>
 <p>$$<br>\frac{\partial J_{CBOW}(word_{c-m…c+m})}{\partial v_j} =0, j\notin{c-m,…,c-1,c+1,…,c+m}<br>$$</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">cbow</span><span class="params">(currentWord, C, contextWords, tokens, inputVectors, outputVectors,</span></span></div><div class="line"><span class="function"><span class="params">         dataset, word2vecCostAndGradient=softmaxCostAndGradient)</span>:</span></div><div class="line">    <span class="string">"""CBOW model in word2vec</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Implement the continuous bag-of-words model in this function.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments/Return specifications: same as the skip-gram model</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    cost = <span class="number">0.0</span></div><div class="line">    gradIn = np.zeros(inputVectors.shape)</div><div class="line">    gradOut = np.zeros(outputVectors.shape)</div><div class="line"></div><div class="line">    </div><div class="line">    target = tokens[currentWord]</div><div class="line">    target_vec = inputVectors[target]</div><div class="line">    source_idx = map(<span class="keyword">lambda</span> x: tokens[x], contextWords)</div><div class="line">    predicted = np.sum(inputVectors[source_idx], axis=<span class="number">0</span>)</div><div class="line"></div><div class="line">    cost, gradPred, gradOut = word2vecCostAndGradient(predicted, target, outputVectors, dataset)</div><div class="line"></div><div class="line">    <span class="keyword">for</span> idx <span class="keyword">in</span> source_idx:</div><div class="line">        gradIn[idx] += gradPred</div><div class="line"></div><div class="line">    <span class="keyword">return</span> cost, gradIn, gradOut</div></pre></td></tr></table></figure>
+<h2 id="Sentiment-Analysis"><a href="#Sentiment-Analysis" class="headerlink" title="Sentiment Analysis"></a>Sentiment Analysis</h2><p>语义分析， 将每个句子的词向量取平均，再进行情绪分类</p>
 
 	
 	</div>
@@ -681,31 +682,31 @@ var _hmt = _hmt || [];
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
+			<li><a href="/tags/notes/">notes<span>6</span></a></li>
+		
+			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
+		
+			<li><a href="/tags/杂/">杂<span>1</span></a></li>
+		
+			<li><a href="/tags/deep-learning/">deep learning<span>6</span></a></li>
+		
+			<li><a href="/tags/paper/">paper<span>1</span></a></li>
+		
 			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
 		
 			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
 		
 			<li><a href="/tags/computer-vision/">computer vision<span>3</span></a></li>
 		
-			<li><a href="/tags/paper/">paper<span>1</span></a></li>
-		
-			<li><a href="/tags/summary/">summary<span>2</span></a></li>
-		
-			<li><a href="/tags/notes/">notes<span>6</span></a></li>
-		
 			<li><a href="/tags/math/">math<span>2</span></a></li>
-		
-			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
-		
-			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
 		
 			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
 		
+			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
+		
 			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
 		
-			<li><a href="/tags/deep-learning/">deep learning<span>6</span></a></li>
-		
-			<li><a href="/tags/杂/">杂<span>1</span></a></li>
+			<li><a href="/tags/summary/">summary<span>2</span></a></li>
 		
 		 
 		</ul>
