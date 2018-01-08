@@ -136,6 +136,90 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2017/11/01/mixup/" >mixup-Beyond Empirical Risk Minimization</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2017-11-01  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p><strong>Gist</strong>: The authors propose a new training strategy  dubbed <strong>mixup</strong> that trains a neural network on convex combinations of pairs of examples and their labels and improves the generalization of state-of-the-art neural network architectures.    </p>
+<p>​    </p>
+<p><strong>Pytorch Code</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (x1, y1), (x2, y2) <span class="keyword">in</span> zip(loader1, loader2): </div><div class="line">  	lam = numpy.random.beta(alpha, alpha)</div><div class="line">	x = Variable(lam * x1 + (<span class="number">1.</span> - lam) * x2)</div><div class="line">	y = Variable(lam * y1 + (<span class="number">1.</span> - lam) * y2) optimizer.zero_grad()</div><div class="line">    loss(net(x), y).backward()</div><div class="line">    optimizer.step()</div></pre></td></tr></table></figure>
+<p><strong>Empirical Risk Minimization</strong></p>
+<p>We need to minimize the <strong>expected risk</strong>, that is the average of the loss function $l$ over the data distribution $P$</p>
+<p>$$R(f ) = \int l(f (x), y)dP (x, y)$$</p>
+<p>$l$ is the loss function, $P(x,y)$ is a joint data distribution, $f\in F$ is a function that describes the relationship between a random vector X and a random target vector Y .</p>
+<p>Unsually, the distribution of P is unknown. In most pracitical situation, we may approximate $P$ by the <strong><em>empirical distribution</em></strong>, though it is easy to compute, it ofen leads to the undesirable behaviour of $f$ outside the training data.</p>
+<p>$$P_\sigma(x,y)=\frac{1}{n}\sum_{i=1}^{n}\sigma(x=x_i, y=y_i)$$</p>
+<p>where $\sigma(x = x_i, y = y_i)$ is a Dirac mass centered at $(x_i, y_i)$</p>
+<p>$$R_\sigma(f) = \frac{1}{n}\sum_{i=1}^nl(f(x_i), y_i)$$</p>
+<p><strong>Vicinal Risk Minimization</strong></p>
+<p>$$P_v (\widetilde{x}, \widetilde{y})=\frac{1}{n}\sum_{i=1}^nv(\widetilde{x}, \widetilde{y}|x_i,y_i)$$<br>where $v(\widetilde{x}, \widetilde{y}|x_i,y_i)$ is  a vicinity distribution that measures the probability of finding the virtual feature-target pair $(\widetilde{x}, \widetilde{y})$ in the vicinity of the training feature-target pair $(x_i,y_i)$</p>
+<p>This paper propose a generic vicinal distribution, <strong><em>mixup</em></strong>:</p>
+<p>$$\mu(\widetilde{x}, \widetilde{y}|x_i,y_i)=\frac{1}{n}\sum_j^n\mathbb{E}_\lambda[\sigma(\widetilde{x}=\lambda \cdot x_i+(1-\lambda)\cdot x_j,\widetilde{y} =\lambda \cdot y_i + (1-\lambda) \cdot y_j)]$$<br>where $\lambda \sim Beta(\alpha, \alpha)$ , for $\alpha \in (0, \infty)$Sampling from the mixup vicinal distribution:<br>$$\widetilde{x} = \lambda \cdot x_i + (1 − \lambda)\cdot x_j$$<br>$$\widetilde{y} = \lambda \cdot y_i + (1 − \lambda)\cdot y_j$$</p>
+
+	
+	</div>
+  <a type="button" href="/2017/11/01/mixup/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/" >Single Shot Scale-invariant Face Detector</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2017-11-01  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>The authors propose to tile anchors on a wide range of layers to ensure that all scales of faces have enough features for detection. Besides, they try to improve the recall rate of small faces by a scale compensation anchor matching strategy. Max-out background label is used to reduce the false positive rate of small faces.</p>
+<p>Key points:</p>
+<ul>
+<li>VGG net (throgh Pool5 layer) and some extra convolutional layers</li>
+<li>Anchor  is 1:1 aspect ratio (face annotation)</li>
+<li>two stages to improve the anchor matching strategy<ul>
+<li>stage one: decrese the jaccord overlap threshold from 0.5 to 0.35</li>
+<li>stage two: decrese the threshold to 0.1 and sort to select the top-N</li>
+</ul>
+</li>
+<li>max-out operation is performed on the background label scores</li>
+</ul>
+<p>model architecture:</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-01%20%E4%B8%8B%E5%8D%887.46.53.png" alt=""></p>
+
+	
+	</div>
+  <a type="button" href="/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2017/10/20/A-List-of-Saliency-Detection-Papers/" >A List of Saliency Detection Papers</a>
 		</h3>
 		</div>
@@ -649,7 +733,7 @@ var _hmt = _hmt || [];
 		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/algorithms/">algorithms<span>1</span></a></li>
+			<li><a href="/categories/algorithms/">algorithms<span>3</span></a></li>
 		
 		</ul>
 	</div>
@@ -660,31 +744,33 @@ var _hmt = _hmt || [];
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
+			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
+		
+			<li><a href="/tags/deep-learning/">deep learning<span>7</span></a></li>
 		
 			<li><a href="/tags/computer-vision/">computer vision<span>3</span></a></li>
 		
-			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
-		
-			<li><a href="/tags/杂/">杂<span>1</span></a></li>
-		
-			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
-		
-			<li><a href="/tags/deep-learning/">deep learning<span>6</span></a></li>
-		
-			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
-		
-			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
-		
-			<li><a href="/tags/paper/">paper<span>1</span></a></li>
+			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
 		
 			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
 		
-			<li><a href="/tags/summary/">summary<span>2</span></a></li>
-		
-			<li><a href="/tags/notes/">notes<span>6</span></a></li>
+			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
 		
 			<li><a href="/tags/math/">math<span>2</span></a></li>
+		
+			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
+		
+			<li><a href="/tags/杂/">杂<span>1</span></a></li>
+		
+			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
+		
+			<li><a href="/tags/notes/">notes<span>7</span></a></li>
+		
+			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
+		
+			<li><a href="/tags/summary/">summary<span>2</span></a></li>
+		
+			<li><a href="/tags/paper/">paper<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -698,6 +784,14 @@ var _hmt = _hmt || [];
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2018/01/05/Comic-Generation/" ><i class="fa fa-file-o"></i>Comic Generation</a>
+      </li>
+    
+      <li>
+        <a href="/2017/12/20/CS224n-assignment2/" ><i class="fa fa-file-o"></i>CS224n-assignment2</a>
+      </li>
+    
+      <li>
         <a href="/2017/12/18/CS224n-assignment1/" ><i class="fa fa-file-o"></i>CS224n assignment1</a>
       </li>
     
@@ -707,14 +801,6 @@ var _hmt = _hmt || [];
     
       <li>
         <a href="/2017/12/05/Generate-Motion-Blur/" ><i class="fa fa-file-o"></i>Generate Motion Blur</a>
-      </li>
-    
-      <li>
-        <a href="/2017/11/24/capsule/" ><i class="fa fa-file-o"></i>Introduction to Capsule Net...</a>
-      </li>
-    
-      <li>
-        <a href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/" ><i class="fa fa-file-o"></i>Fixing  Weight Decay Regula...</a>
       </li>
     
   </ul>
@@ -745,7 +831,7 @@ var _hmt = _hmt || [];
   </div>
   <div class="container-narrow">
   <footer> <p>
-  &copy; 2017 Mowayao
+  &copy; 2018 Mowayao
   
       with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
      <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    

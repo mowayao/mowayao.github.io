@@ -6,17 +6,13 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>如何在圆内均匀采样 | Mowayao&#39;s Blog</title>
+  <title>GAN | Mowayao&#39;s Blog</title>
   <meta name="author" content="Mowayao">
-  
-  <meta name="description" content="这个问题之前在面试网易游戏的时候碰到过，当时只想了一个很朴素(naive)的做法，现在有时间重新推导了一下：
-假设圆是一个单元圆，半径为1, 面积为$\pi$。
-当时面试的时候想的方法是用一个长度为1的外接正方形来代替采样，如果在圆内，则返回，不然继续采样，这样的采样方法明显是不稳定的，但是期望的采">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="如何在圆内均匀采样"/>
+  
   <meta property="og:site_name" content="Mowayao&#39;s Blog"/>
 
   
@@ -117,112 +113,151 @@ var _hmt = _hmt || [];
   	<div class="content">
     	 
 
-
-	
-		<div class="page-header">
-			<h1> 如何在圆内均匀采样</h1>
-		</div>
-	
-
-
-
-<div class="row post">
-	<!-- cols -->
-	
-	<div id="top_meta"></div>
-	<div class="col-md-9">
-	
-
-	<!-- content -->
-	<div class="mypage">		
-	  		
-
-	  <p>这个问题之前在面试网易游戏的时候碰到过，当时只想了一个很朴素(naive)的做法，现在有时间重新推导了一下：</p>
-<p>假设圆是一个单元圆，半径为1, 面积为$\pi$。</p>
-<p>当时面试的时候想的方法是用一个长度为1的外接正方形来代替采样，如果在圆内，则返回，不然继续采样，这样的采样方法明显是不稳定的，但是期望的采样步数很容易计算，是$\frac{4}{\pi}$。</p>
-<p>后来想到说可以先采样角度，每个角度确定一个半径，再在半径上均匀采样，面试官有提示说在半径上是均匀的吗？ 明显在半径上采样是不均匀的，因为在半径上的每一个点对应的周长是不一样的！！</p>
-<p>正确的姿势是这样的：</p>
-<p>我们计算长度为$r(0\le r\le1)$的概率为$p(r)$:</p>
-<p>首先我们需要计算落在$r\sim r+\Delta r$的概率，很直观，就是面积/$\pi$，然后因为均匀采样所以需要除以$\Delta r$求得$p(r)$也就是：<br>$$<br>p(r\sim r+\Delta r) = \lim_{\Delta r\rightarrow0}\frac{\pi(r+\Delta r)^2-\pi r^2}{\pi}<br>$$</p>
-<p>$$<br>p(r) = \lim_{\Delta r\rightarrow0}\frac{\pi(r+\Delta r)^2-\pi r^2}{\pi \Delta r}=2r<br>$$</p>
-<p>接下来就是求$p(r)$的CDF,$P(r)$，积分即可：<br>$$<br>P(r) = \int_0^r p(x) dx=r^2<br>$$<br>然后求得它的逆函数$P^{-1}(r)$:</p>
-<p>$$P^{-1}(r) = \sqrt r$$</p>
-<p>算到这里，答案呼之欲出，我们用一个随机变量$\zeta$ 在$[0,1]$均匀采样，然后在通过$r = \sqrt \zeta$求得r,为什么是均匀的呢，只要把$\sqrt \zeta$带入$P(r)$就可以发现$P(r)=\zeta$。</p>
-	  
-	</div>
-
-	<div>
-  	<center>
-	<div class="pagination">
-
-    
-    
-    <a href="/2017/09/05/overview-of-object-detection/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Prev</a>
-    
-
-    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
-    
-    <a href="/2017/05/17/一个离散概率分布中采样/" type="button" class="btn btn-default ">Next<i
-                class="fa fa-arrow-circle-o-right"></i></a>
-    
-
-    
+<!-- title -->
+<div class="page-header">
+  <h1 class="archive-title-tag"><i class="fa fa-archive"></i> GAN</h1>
 </div>
 
-    </center>
-	</div>
+<div class="row page">
+  <!-- cols -->
+  
+  <div class="col-md-9">
 	
-	<!-- comment -->
-	
-<section id="comment">
-    <h2 class="title">Comments</h2>
 
+	  <div id="top_search"></div>
+
+	  <div class="archive">
+		
+		
+		
+			
+			
+			<h4 class="archive-ul" data-toggle="collapse" data-target="#2018">2018<b class="caret"></b></h4>
+			<ul id="2018" class="collapse in">
+			
+		
+		<li class="listing-item">
+		<span class="date_class"> 2018-01-05 </span> &raquo;
+		
+		   <span class="title"><a href="/2018/01/05/Comic-Generation/" >Comic Generation</a></span>
+		
+		</li>			
+		
+		</ul>
+		</div>
+
+</div> <!-- col-md-9/col-md-12 -->
+
+
+<div class="col-md-3">
+	<div id="sidebar">
+	
+			
+  <div id="site_search">
+   <div class="form-group">
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
+   </div>  
+  <div id="local-search-result"></div>
+  </div>
+
+
+		
+			
+	<div class="widget">
+		<h4>Categories</h4>
+		<ul class="tag_box inline list-unstyled">
+		
+			<li><a href="/categories/algorithms/">algorithms<span>3</span></a></li>
+		
+		</ul>
+	</div>
+
+		
+			
+	<div class="widget">
+		<h4>Tag Cloud</h4>
+		<ul class="tag_box inline list-unstyled">		
+		
+			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
+		
+			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
+		
+			<li><a href="/tags/deep-learning/">deep learning<span>7</span></a></li>
+		
+			<li><a href="/tags/computer-vision/">computer vision<span>3</span></a></li>
+		
+			<li><a href="/tags/杂/">杂<span>1</span></a></li>
+		
+			<li><a href="/tags/notes/">notes<span>7</span></a></li>
+		
+			<li><a href="/tags/summary/">summary<span>2</span></a></li>
+		
+			<li><a href="/tags/math/">math<span>2</span></a></li>
+		
+			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
+		
+			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
+		
+			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
+		
+			<li><a href="/tags/paper/">paper<span>1</span></a></li>
+		
+			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
+		
+			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
+		
+		 
+		</ul>
+	</div>
+
+
+		
+			
+<div class="widget">
+  <h4>Recent Posts</h4>
+  <ul class="entry list-unstyled">
     
-</section>
-
-
-	</div> <!-- col-md-9/col-md-12 -->
-		
-	
-	<div id="side_meta">
-		<div class="col-md-3" id="post_meta"> 
-
-	<!-- date -->
-	
-	<div class="meta-widget">
-	<i class="fa fa-clock-o"></i>
-	2017-05-18 
-	</div>
-	
-
-	<!-- categories -->
+      <li>
+        <a href="/2018/01/05/Comic-Generation/" ><i class="fa fa-file-o"></i>Comic Generation</a>
+      </li>
     
+      <li>
+        <a href="/2017/12/20/CS224n-assignment2/" ><i class="fa fa-file-o"></i>CS224n-assignment2</a>
+      </li>
+    
+      <li>
+        <a href="/2017/12/18/CS224n-assignment1/" ><i class="fa fa-file-o"></i>CS224n assignment1</a>
+      </li>
+    
+      <li>
+        <a href="/2017/12/09/Network-Architecture-of-Deblurring/" ><i class="fa fa-file-o"></i>Network Architecture of Deb...</a>
+      </li>
+    
+      <li>
+        <a href="/2017/12/05/Generate-Motion-Blur/" ><i class="fa fa-file-o"></i>Generate Motion Blur</a>
+      </li>
+    
+  </ul>
+</div>
 
-	<!-- tags -->
-	
-	<div class="meta-widget">
-	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
-    <ul id="tags" class="tag_box list-unstyled collapse in">	  
-	    
-  <li><a href="/tags/math/">math<span>2</span></a></li>
-    </ul>
-	</div>
 		
+			
+<div class="widget">
+	<h4>Links</h4>
+	<ul class="blogroll list-unstyled">
+	
+		<li><i class="fa fa-github"></i><a href="http://www.github.com/mowayao" title="My Github account." target="_blank"]);">My Github</a></li>
+	
+		<li><i class="fa fa-linkedin"></i><a href="http://www.weibo.com/mowayao" title="My weibo account." target="_blank"]);">My Weibo</a></li>
+	
+	</ul>
+</div>
 
-	<!-- toc -->
-	<div class="meta-widget">
-	
-	</div>
-	
-    <hr>
-	
-</div><!-- col-md-3 -->
 
-	</div>
 		
+	</div> <!-- sidebar -->
+</div> <!-- col-md-3 -->
 
-</div><!-- row -->
 
 
 
