@@ -136,6 +136,70 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/" >Visualizing and UnderstandingConvolutional Networks笔记</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2018-01-18  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>论文：Visualizing and UnderstandingConvolutional Networks</p>
+<p>作者：Matthew D Zeiler, Rob Fergus, ECCV, 2014</p>
+<p>链接：<a href="https://cs.nyu.edu/~fergus/papers/zeilerECCV2014.pdf" target="_blank" rel="external">https://cs.nyu.edu/~fergus/papers/zeilerECCV2014.pdf</a></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkxf4e7rcj318g0dgdke.jpg" alt=""></p>
+<p><strong>Idea:</strong> 模型的可视化对模型的优化非常重要，更好的理解模型可以帮助我们更好地改进模型。作者将网络的任一层输出的feature maps通过Deconvnet反馈到最终的输入（input pixel space）上（reveals the input stimuli that excite individual feature maps at any layer in the model）。</p>
+<h5 id="Deconvnet"><a href="#Deconvnet" class="headerlink" title="Deconvnet"></a>Deconvnet</h5><p>Deconvnet，顾名思义，就是将卷积，pooling，ReLU等运算做逆运算，将feature maps映射回pixels。</p>
+<p>随机选择一些不同层的feature maps，经过“反向运算”，<strong><em>unpooling-&gt;ReLU-&gt;Conv Filter</em></strong>，映射到输入，具体可以见Fig. 1。</p>
+<p><strong>Unpooling:</strong> 通过记录每个pooling region的最大值的位置，在运算的时候将最大值复制到原来的位置，其他位置的值设为0。</p>
+<p><strong>ReLU</strong>：和forward时的ReLU运算相同</p>
+<p><strong>Filtering</strong>: 就是卷积的逆运算。</p>
+<p>考虑一个简单的卷积层运算，其参数为(feature map dim=4, kernel size=3, stride=1, padding=0, output dim=2)</p>
+<p>我们可以将$3\times3$ kernel转换成等价的稀疏矩阵C：<br>$$<br>\begin{pmatrix}     w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp; 0       &amp; w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp; 0       &amp;     w_{2,0} &amp; w_{2,1} &amp; w_{2,2} &amp; 0       &amp; 0       &amp; 0       &amp; 0       &amp; 0       \     0       &amp; w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp; 0       &amp; w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp;     0       &amp; w_{2,0} &amp; w_{2,1} &amp; w_{2,2} &amp; 0       &amp; 0       &amp; 0       &amp; 0       \     0       &amp; 0       &amp; 0       &amp; 0       &amp; w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp; 0       &amp;     w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp; 0       &amp; w_{2,0} &amp; w_{2,1} &amp; w_{2,2} &amp; 0       \     0       &amp; 0       &amp; 0       &amp; 0       &amp; 0       &amp; w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp;     0       &amp; w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp; 0       &amp; w_{2,0} &amp; w_{2,1} &amp; w_{2,2} \ \end{pmatrix}<br>$$<br>再将$4\times 4$的输入转换成等价的16维的向量，那么$Y=CX$的输出就是一个4维的向量，再将其转换成$2\times2$的矩阵，得到最终的结果。</p>
+<p>而Deconv也称Transposed conv，就是变成$YC^T$。</p>
+<p>其实整个过程和back-propagation是很像的。    </p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkv3ckslgj30us0qowkv.jpg" alt=""></p>
+<h5 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h5><p>基于AlexNet修改，将第一层$11\times 11$的大小减小到$7\times 7$, 并将步长从4减少到2， 并ImageNet 2012数据集上训练，具体见Fig. 3。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkzcp3ebcj30uy0i2791.jpg" alt=""></p>
+<h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p>######<strong>可视化：</strong></p>
+<p>结果见Fig. 2。 </p>
+<p>Layer 1: 可以看到基本上是一些图像最基本的元素，例如，edge，corner等。</p>
+<p>Layer 2-5： 随着深度的加深，其特征越来越具体，variance也越来越大！</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkzpsayskj30ji0sc1kx.jpg" alt=""></p>
+<p><strong>遮挡实验：</strong></p>
+<p>将图片中的一些区域进行遮挡，将其换成灰色方块，结果见Fig 6。具体以第一行为例，可以发现，当狗的身体一部分被遮挡时，网络还是显示亮蓝色，表示预测的是网球。说明，网络已经学会根据图像的context信息去剔除与目标无关的区域或者物体。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fnl01ru982j30q40s84hp.jpg" alt=""></p>
+<p><strong>Varying ImageNet Model Sizes：</strong></p>
+<p>对AlextNet进行模型调优，结果见Table 2。主要有几个发现：</p>
+<ul>
+<li>去掉全连接层反而降低了错误率</li>
+<li>增大中间层的卷积的数量可以大大提升模型性能</li>
+</ul>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fnl14d4h7dj30zu0m2q8s.jpg" alt=""></p>
+<p><strong>Feature Generalization:</strong></p>
+<p>测试模型的泛化能力，在Caltech-101, Caltech-256，PASCAL VOC 2012这三个数据集上测试模型提取特征的泛化性。 具体的做法就是1-7层的参数不动，然后训练一个新的softmax分类器。具体结果见Table 3, 4, 5，显示出了很强的泛化能力。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fnl1hi1a55j30z20b8tav.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnl1hwfrjwj30rs0ay40f.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnl1hydlkcj30zm0iy0yg.jpg" alt=""></p>
+
+	
+	</div>
+  <a type="button" href="/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2018/01/18/Network-In-Network算法笔记/" >Network In Network算法笔记</a>
 		</h3>
 		</div>
@@ -212,7 +276,7 @@ $$</p>
 
 	
 	</div>
-  <a type="button" href="/2018/01/18/Network-In-Network算法笔记/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2018/01/18/Network-In-Network算法笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -286,7 +350,7 @@ $[1000]$ FC8: 1000 neurons (class scores)</p>
 
 	
 	</div>
-  <a type="button" href="/2018/01/18/AlexNet算法笔记/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2018/01/18/AlexNet算法笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -463,7 +527,7 @@ $[1000]$ FC8: 1000 neurons (class scores)</p>
 
 	
 	</div>
-  <a type="button" href="/2018/01/18/VGGNet算法笔记/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2018/01/18/VGGNet算法笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -609,7 +673,7 @@ $$</p>
 
 	
 	</div>
-  <a type="button" href="/2018/01/05/Comic-Generation/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2018/01/05/Comic-Generation/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -643,7 +707,7 @@ $$</p>
 
 	
 	</div>
-  <a type="button" href="/2017/12/20/CS224n-assignment2/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2017/12/20/CS224n-assignment2/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -815,7 +879,7 @@ $$</p>
 
 	
 	</div>
-  <a type="button" href="/2017/12/18/CS224n-assignment1/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2017/12/18/CS224n-assignment1/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -857,7 +921,7 @@ $$</p>
 
 	
 	</div>
-  <a type="button" href="/2017/12/09/Network-Architecture-of-Deblurring/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2017/12/09/Network-Architecture-of-Deblurring/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -900,7 +964,7 @@ $$
 
 	
 	</div>
-  <a type="button" href="/2017/12/05/Generate-Motion-Blur/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2017/12/05/Generate-Motion-Blur/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -944,62 +1008,7 @@ $$
 
 	
 	</div>
-  <a type="button" href="/2017/11/24/capsule/#more" class="btn btn-default more">Leia Mais</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/" >Fixing  Weight Decay Regularization in Adam</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2017-11-21  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p><a href="https://arxiv.org/pdf/1711.05101.pdf" target="_blank" rel="external">文章的链接</a></p>
-<p>首先，文章理清了l2正则和weight decay的区别，它们并不是对等的。 weight decay可以表示成:</p>
-<p>$$
-x_{t+1} = (1-w_t)x_{t}-\alpha_t\nabla f_t(x_t)
-$$</p>
-<p>而l2正则的表示是：</p>
-<p>$$
-f_{t,reg(x_t)} = f_t(x_t)+ \frac{w_t}{2} |x_t|_2^2
-$$</p>
-<p>所以：</p>
-<p>$$
-\nabla f_{t,reg(x_t)} = \nabla f_t(x_t)+w_tx_t
-$$</p>
-<p>注意到weight decay的系数只有$w_t$，那么，在大部分框架中，例如tensorflow, keras, pytorch等把weight decay和l2正则等价了，</p>
-<p>我们切换到SGD Mometum中来：因求完梯度以后，需要累加mometum，在$x_t$前面就存在了三个参数：$\alpha$学习率,$w_t$,$\eta_t$平滑系数。那么就和weight decay不对等了，当然可以把这三者乘积看成一个系数，但是这样还是削弱了原本的weight decay（系数变小了）。</p>
-<p>因此，作者把传统的SGD with momentum做了以下修改：</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.17.09.png" alt=""></p>
-<p>简单总结一下： 就是除了在梯度计算中加入weight decay，在mometum也加入了weight decay。这样就增强了weight decay的作用。</p>
-<p>除了对SGD with Mometum有影响，作者还对Adam进行了修改：</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.26.39.png" alt=""></p>
-<p>看一下Adam的公式：</p>
-<p>$$x_t = x_{t-1} - \eta_t\alpha \frac{\beta_1m_{t-1}+(1-\beta_1)g_t}{\sqrt{\beta_2v_{t-1}+(1-\beta_2)g_t^2+\epsilon}}$$</p>
-<p>with $g_t=\nabla f_t(x_{t-1})+w_tx_{t-1}$</p>
-<p>这里可以看到$g_t$被归一化了，同时$w_t$也带着被归一化了，这样$w_t$就被减弱了。</p>
-<p>实验结果：</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.38.45.png" alt=""></p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.38.53.png" alt=""></p>
-<p>横纵坐标分别是不同的weight decay和learning rate的组合, 可以看到learning rate和weight decay的相关性很大，固定weight decay，去调整learning rate，那么效果会变化较大，从图中看到，明显作者提出的算法，最有区域较大，更利于找出最优的参数组合。</p>
-
-	
-	</div>
-  <a type="button" href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2017/11/24/capsule/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -1013,12 +1022,12 @@ $$</p>
 
    
     
-           <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Anterior</a>
+           <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
         
 
         <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
  
-       <a href="/page/2/" type="button" class="btn btn-default ">Próximo<i class="fa fa-arrow-circle-o-right"></i></a>     
+       <a href="/page/2/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>     
         
 
   
@@ -1038,7 +1047,7 @@ $$</p>
 			
   <div id="site_search">
    <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="Busca" class="st-search-input st-default-search-input form-control"/>
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
    </div>  
   <div id="local-search-result"></div>
   </div>
@@ -1047,10 +1056,10 @@ $$</p>
 		
 			
 	<div class="widget">
-		<h4>Categorias</h4>
+		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/algorithms/">algorithms<span>6</span></a></li>
+			<li><a href="/categories/algorithms/">algorithms<span>7</span></a></li>
 		
 		</ul>
 	</div>
@@ -1061,35 +1070,35 @@ $$</p>
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/杂/">杂<span>1</span></a></li>
-		
-			<li><a href="/tags/summary/">summary<span>2</span></a></li>
-		
 			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
-		
-			<li><a href="/tags/math/">math<span>2</span></a></li>
-		
-			<li><a href="/tags/notes/">notes<span>7</span></a></li>
-		
-			<li><a href="/tags/paper/">paper<span>1</span></a></li>
-		
-			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
-		
-			<li><a href="/tags/deep-learning/">deep learning<span>10</span></a></li>
 		
 			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
 		
-			<li><a href="/tags/computer-vision/">computer vision<span>3</span></a></li>
+			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
+		
+			<li><a href="/tags/summary/">summary<span>2</span></a></li>
 		
 			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
 		
-			<li><a href="/tags/classfication/">classfication<span>2</span></a></li>
-		
 			<li><a href="/tags/classifcation/">classifcation<span>1</span></a></li>
+		
+			<li><a href="/tags/computer-vision/">computer vision<span>3</span></a></li>
+		
+			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
+		
+			<li><a href="/tags/paper/">paper<span>1</span></a></li>
+		
+			<li><a href="/tags/杂/">杂<span>1</span></a></li>
+		
+			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
+		
+			<li><a href="/tags/notes/">notes<span>7</span></a></li>
 		
 			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
 		
-			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
+			<li><a href="/tags/math/">math<span>2</span></a></li>
+		
+			<li><a href="/tags/deep-learning/">deep learning<span>11</span></a></li>
 		
 			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
 		
@@ -1101,8 +1110,12 @@ $$</p>
 		
 			
 <div class="widget">
-  <h4>Posts recentes</h4>
+  <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/" ><i class="fa fa-file-o"></i>Visualizing and Understandi...</a>
+      </li>
     
       <li>
         <a href="/2018/01/18/Network-In-Network算法笔记/" ><i class="fa fa-file-o"></i>Network In Network算法笔记</a>
@@ -1118,10 +1131,6 @@ $$</p>
     
       <li>
         <a href="/2018/01/05/Comic-Generation/" ><i class="fa fa-file-o"></i>Comic Generation</a>
-      </li>
-    
-      <li>
-        <a href="/2017/12/20/CS224n-assignment2/" ><i class="fa fa-file-o"></i>CS224n-assignment2</a>
       </li>
     
   </ul>

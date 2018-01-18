@@ -6,7 +6,7 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>Página 2 | Mowayao&#39;s Blog</title>
+  <title>Page 2 | Mowayao&#39;s Blog</title>
   <meta name="author" content="Mowayao">
   
   
@@ -136,6 +136,61 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/" >Fixing  Weight Decay Regularization in Adam</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2017-11-21  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p><a href="https://arxiv.org/pdf/1711.05101.pdf" target="_blank" rel="external">文章的链接</a></p>
+<p>首先，文章理清了l2正则和weight decay的区别，它们并不是对等的。 weight decay可以表示成:</p>
+<p>$$
+x_{t+1} = (1-w_t)x_{t}-\alpha_t\nabla f_t(x_t)
+$$</p>
+<p>而l2正则的表示是：</p>
+<p>$$
+f_{t,reg(x_t)} = f_t(x_t)+ \frac{w_t}{2} |x_t|_2^2
+$$</p>
+<p>所以：</p>
+<p>$$
+\nabla f_{t,reg(x_t)} = \nabla f_t(x_t)+w_tx_t
+$$</p>
+<p>注意到weight decay的系数只有$w_t$，那么，在大部分框架中，例如tensorflow, keras, pytorch等把weight decay和l2正则等价了，</p>
+<p>我们切换到SGD Mometum中来：因求完梯度以后，需要累加mometum，在$x_t$前面就存在了三个参数：$\alpha$学习率,$w_t$,$\eta_t$平滑系数。那么就和weight decay不对等了，当然可以把这三者乘积看成一个系数，但是这样还是削弱了原本的weight decay（系数变小了）。</p>
+<p>因此，作者把传统的SGD with momentum做了以下修改：</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.17.09.png" alt=""></p>
+<p>简单总结一下： 就是除了在梯度计算中加入weight decay，在mometum也加入了weight decay。这样就增强了weight decay的作用。</p>
+<p>除了对SGD with Mometum有影响，作者还对Adam进行了修改：</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.26.39.png" alt=""></p>
+<p>看一下Adam的公式：</p>
+<p>$$x_t = x_{t-1} - \eta_t\alpha \frac{\beta_1m_{t-1}+(1-\beta_1)g_t}{\sqrt{\beta_2v_{t-1}+(1-\beta_2)g_t^2+\epsilon}}$$</p>
+<p>with $g_t=\nabla f_t(x_{t-1})+w_tx_{t-1}$</p>
+<p>这里可以看到$g_t$被归一化了，同时$w_t$也带着被归一化了，这样$w_t$就被减弱了。</p>
+<p>实验结果：</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.38.45.png" alt=""></p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.38.53.png" alt=""></p>
+<p>横纵坐标分别是不同的weight decay和learning rate的组合, 可以看到learning rate和weight decay的相关性很大，固定weight decay，去调整learning rate，那么效果会变化较大，从图中看到，明显作者提出的算法，最有区域较大，更利于找出最优的参数组合。</p>
+
+	
+	</div>
+  <a type="button" href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2017/11/14/Networks/" >Dual Path Networks</a>
 		</h3>
 		</div>
@@ -166,7 +221,7 @@ where $x_k$ and $y_k$ denote the extracted information at k-th step from individ
 
 	
 	</div>
-  <a type="button" href="/2017/11/14/Networks/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2017/11/14/Networks/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -233,7 +288,7 @@ where $x_k$ and $y_k$ denote the extracted information at k-th step from individ
 
 	
 	</div>
-  <a type="button" href="/2017/11/12/meet-in-the-middle的一些实例/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2017/11/12/meet-in-the-middle的一些实例/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -294,7 +349,7 @@ $$</p>
 
 	
 	</div>
-  <a type="button" href="/2017/11/12/GatedRNN/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2017/11/12/GatedRNN/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -341,7 +396,7 @@ $$\widetilde{y} = \lambda \cdot y_i + (1 − \lambda)\cdot y_j$$</p>
 
 	
 	</div>
-  <a type="button" href="/2017/11/01/mixup/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2017/11/01/mixup/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -380,7 +435,7 @@ $$\widetilde{y} = \lambda \cdot y_i + (1 − \lambda)\cdot y_j$$</p>
 
 	
 	</div>
-  <a type="button" href="/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -426,7 +481,7 @@ $$\widetilde{y} = \lambda \cdot y_i + (1 − \lambda)\cdot y_j$$</p>
 
 	
 	</div>
-  <a type="button" href="/2017/10/20/A-List-of-Saliency-Detection-Papers/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2017/10/20/A-List-of-Saliency-Detection-Papers/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -454,7 +509,7 @@ $$\widetilde{y} = \lambda \cdot y_i + (1 − \lambda)\cdot y_j$$</p>
 
 	
 	</div>
-  <a type="button" href="/2017/09/05/图个新鲜/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2017/09/05/图个新鲜/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -536,7 +591,7 @@ $$
 
 	
 	</div>
-  <a type="button" href="/2017/09/05/overview-of-object-detection/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2017/09/05/overview-of-object-detection/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -583,111 +638,7 @@ $$
 
 	
 	</div>
-  <a type="button" href="/2017/05/18/如何在圆内均匀采样/#more" class="btn btn-default more">Leia Mais</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2017/05/17/一个离散概率分布中采样/" >一个离散概率分布中采样</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2017-05-17  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>先考虑一个简单的例子：</p>
-<p>一个n-sided dice. 其每一面是均匀的，也就是每一面的概率都是$\frac{1}{n}$,我们可以把区间[0,1)分成n份，采样的过程就可以变成：从[0,1)采样得到x，然后返回$\lfloor n\times x\rfloor$。</p>
-<blockquote>
-<h4>Algorithm: Simulating a Fair Die</h4>
-<ol>
-<li>Generate a uniformly-random value xx in the range [0,1).</li>
-<li>Return $⌊x\times n⌋$</li>
-</ol>
-</blockquote>
-<h2>朴素的做法</h2>
-<p>但如果不是均匀的呢？假设给定各个离散值的概率p(x)，先计算CDF，即 P(x)。然后从[0,1)采样，得到a，我们需要确定a所在的区间，朴素的做法就是二分搜索P（x）（单调性）。所以时间复杂度为$O(\log(n))$</p>
-<h2>The Alias Method</h2>
-<p>如果想要用$O(1)$的时间采样呢？</p>
-<p>考虑如下的情况：</p>
-<p>有四个概率：$\frac{1}{2}, \frac{1}{3}, \frac{1}{12},\frac{1}{12}$</p>
-<p><img src="http://www.keithschwarz.com/darts-dice-coins/images/aliasMethodInitialProbabilities.png" alt=""></p>
-<p>首先，将他们归一化，用均值做归一化操作</p>
-<p><img src="http://www.keithschwarz.com/darts-dice-coins/images/aliasMethodScaled.png" alt=""></p>
-<p>先画一个$1\times 4$的矩形：</p>
-<p><img src="http://www.keithschwarz.com/darts-dice-coins/images/aliasMethodSetup.png" alt=""></p>
-<p>可以看到$\frac{1}{2}, \frac{1}{3}$并不是完全在矩形内，如果我们允许将自身的矩阵切除，然后补到其他区域内？例如将$\frac{1}{2}$切掉一部分补到最后那个区域：</p>
-<p><img src="http://www.keithschwarz.com/darts-dice-coins/images/aliasMethodSetup2.png" alt=""></p>
-<p>到现在，还是在矩阵之外的块，接下来，把$\frac{1}{2}$切掉足够的部分补到第三个中：</p>
-<p><img src="http://www.keithschwarz.com/darts-dice-coins/images/aliasMethodSetup3.png" alt=""></p>
-<p>最后：</p>
-<p><img src="http://www.keithschwarz.com/darts-dice-coins/images/aliasMethodSetup4.png" alt=""></p>
-<p>完美！</p>
-<p>从上述可以看出有几条非常赞的性质：</p>
-<ol>
-<li>每个概率对应的面积都没有改变，随之对应的就是每个bar都是满的，这样保证了我每次采样都会命中！</li>
-<li>每个bar最多有两种颜色。</li>
-</ol>
-<p>alias method主要依赖于两张表，一张概率表P还有一张alias表 Alias</p>
-<p>构建完上述的表格以后，如何采样呢？</p>
-<p><img src="http://www.keithschwarz.com/darts-dice-coins/images/completedAliasSetup.png" alt=""></p>
-<p>首先对每列进行采样，列确定后，再采样，利用P和alias。过程非常简单，时间效率是$O(1)$</p>
-<p>接下来就是证明这个alias表和P表是否一定存在！</p>
-<blockquote>
-<p><strong>Theorem:</strong> Given k width-one rectangles of heights $h_0,h_1,...,h_{k−1}$ such that $\sum_{i=0}^{k-1}h_i=k$, there is a way of cutting the rectangles and distributing them into k columns, each of which has height 1, such that each column contains at most two different rectangles and the $i$th column contains at least one piece of the $i$th rectangle.</p>
-</blockquote>
-<p>证明：</p>
-<p>当k=1的时候，很明显是成立的。</p>
-<p>假设当$k=x$的时候成立，那么我们就需要证明$k=x+1$时，是否满足。
-考虑任一个宽度为$x+1$的矩形，高度分别是：$h_0, h_1, ..., h_{k}$, 且满足$\sum_{i = 0}^{k}{h_i} =  x+ 1$,假设一些高度$h_l \le 1$ 还有一些$h_g\ge 1$。不可能同时大于0或者小于0。</p>
-<p>接下来就是用$h_g$把$h_l$填满，这样我们就只剩下$x$个未解决的。所以。。成立！</p>
-<p>具体的做法如下：</p>
-<blockquote>
-<h4>Algorithm: Naive Alias Method</h4>
-<ul>
-<li>Initialization:
-<ol>
-<li>Multiply each probability $p_i$ by n.</li>
-<li>Create arrays Alias and Prob, each of size n.</li>
-<li>For j=1 to n−1:
-<ol>
-<li>Find a probability pl satisfying $p_l\le1$.</li>
-<li>Find a probability $p_g$ (with $l\ne g$) satisfying $p_g\ge1$</li>
-<li>Set $Prob[l]=p_l$.</li>
-<li>Set $Alias[l]=g$.</li>
-<li>Remove $p_l$ from the list of initial probabilities.</li>
-<li>Set $p_g:=p_g−(1−p_l)$.</li>
-</ol>
-</li>
-<li>Let i be the last probability remaining, which must have weight 1.</li>
-<li>Set $Prob[i]=1$.</li>
-</ol>
-</li>
-<li>Generation:
-<ol>
-<li>Generate a fair die roll from an n-sided die; call the side i.</li>
-<li>Flip a biased coin that comes up heads with probability $Prob[i]$.</li>
-<li>If the coin comes up &quot;heads,&quot; return i.</li>
-<li>Otherwise, return $Alias[i]$.</li>
-</ol>
-</li>
-</ul>
-</blockquote>
-
-	
-	</div>
-  <a type="button" href="/2017/05/17/一个离散概率分布中采样/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2017/05/18/如何在圆内均匀采样/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -701,12 +652,12 @@ $$
 
    
     
-     <a href="/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Anterior</a>
+     <a href="/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
       
 
         <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
  
-       <a href="/page/3/" type="button" class="btn btn-default ">Próximo<i class="fa fa-arrow-circle-o-right"></i></a>     
+       <a href="/page/3/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>     
         
 
   
@@ -726,7 +677,7 @@ $$
 			
   <div id="site_search">
    <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="Busca" class="st-search-input st-default-search-input form-control"/>
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
    </div>  
   <div id="local-search-result"></div>
   </div>
@@ -735,10 +686,10 @@ $$
 		
 			
 	<div class="widget">
-		<h4>Categorias</h4>
+		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/algorithms/">algorithms<span>6</span></a></li>
+			<li><a href="/categories/algorithms/">algorithms<span>7</span></a></li>
 		
 		</ul>
 	</div>
@@ -749,37 +700,37 @@ $$
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/classfication/">classfication<span>2</span></a></li>
-		
-			<li><a href="/tags/杂/">杂<span>1</span></a></li>
-		
-			<li><a href="/tags/math/">math<span>2</span></a></li>
-		
-			<li><a href="/tags/notes/">notes<span>7</span></a></li>
+			<li><a href="/tags/paper/">paper<span>1</span></a></li>
 		
 			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
 		
-			<li><a href="/tags/deep-learning/">deep learning<span>10</span></a></li>
-		
-			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
-		
-			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
-		
-			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
-		
-			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
-		
-			<li><a href="/tags/computer-vision/">computer vision<span>3</span></a></li>
-		
-			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
-		
-			<li><a href="/tags/summary/">summary<span>2</span></a></li>
+			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
 		
 			<li><a href="/tags/classifcation/">classifcation<span>1</span></a></li>
 		
-			<li><a href="/tags/paper/">paper<span>1</span></a></li>
+			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
+		
+			<li><a href="/tags/math/">math<span>2</span></a></li>
+		
+			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
+		
+			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
+		
+			<li><a href="/tags/notes/">notes<span>7</span></a></li>
+		
+			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
+		
+			<li><a href="/tags/computer-vision/">computer vision<span>3</span></a></li>
 		
 			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
+		
+			<li><a href="/tags/杂/">杂<span>1</span></a></li>
+		
+			<li><a href="/tags/deep-learning/">deep learning<span>11</span></a></li>
+		
+			<li><a href="/tags/summary/">summary<span>2</span></a></li>
+		
+			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
 		
 		 
 		</ul>
@@ -789,8 +740,12 @@ $$
 		
 			
 <div class="widget">
-  <h4>Posts recentes</h4>
+  <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/" ><i class="fa fa-file-o"></i>Visualizing and Understandi...</a>
+      </li>
     
       <li>
         <a href="/2018/01/18/Network-In-Network算法笔记/" ><i class="fa fa-file-o"></i>Network In Network算法笔记</a>
@@ -806,10 +761,6 @@ $$
     
       <li>
         <a href="/2018/01/05/Comic-Generation/" ><i class="fa fa-file-o"></i>Comic Generation</a>
-      </li>
-    
-      <li>
-        <a href="/2017/12/20/CS224n-assignment2/" ><i class="fa fa-file-o"></i>CS224n-assignment2</a>
       </li>
     
   </ul>
