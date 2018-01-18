@@ -1,0 +1,478 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>VGGNet算法笔记 | Mowayao&#39;s Blog</title>
+  <meta name="author" content="Mowayao">
+  
+  <meta name="description" content="论文：Very Deep Convolutional Networks for Large-Scale Image Recognition
+论文链接：https://arxiv.org/abs/1409.1556
+这篇文章发表在ICLR 2015上,作者是Karen Simonyan和Andrew ">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="VGGNet算法笔记"/>
+  <meta property="og:site_name" content="Mowayao&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-110229492-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</head>
+
+ <body>  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">Mowayao&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> VGGNet算法笔记</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>论文：Very Deep Convolutional Networks for Large-Scale Image Recognition</p>
+<p>论文链接：<a href="https://arxiv.org/abs/1409.1556" target="_blank" rel="external">https://arxiv.org/abs/1409.1556</a></p>
+<p>这篇文章发表在ICLR 2015上,作者是Karen Simonyan和Andrew Zisserman，其算法获得了ImageNet ILSVRC-2014的localization task的冠军和classification task的第二名。文章通过堆叠$3\times 3$的卷积，ReLU, $2\times 2$的max pooling逐渐加深网络的深度。所以，它的特点就是连续的Conv运算比较多，计算量比较大(与AlexNet相比)，同时也提高了模型的感受野，能够提取更high-level的特征。VGGNet被提出以后被应用在各种任务中，例如物体分类，物体检测(object proposal生成)，语义分割，特征提取(image retrieval)等任务，都取得了非常好的效果。</p>
+<p>Table 1是其VGG Net各个变种的网络结构参数，从左到右分别是A，A-LRN，B，C，D，E这6种，各个模型的深度分别是：11，11，13，16，16，19。可以发现，作者其实将整个网络分成两个部分，第一个部分是卷积层，第二个部分是全连接层，卷积层又分成了5个卷积组，卷积组的feature maps的深度从64逐渐增加到512，所以这5个卷积组的feature maps的深度分别是64，128，256，512，512，每个卷积组后面都会加一个$2\times 2$的non-overlapping的max pooling来降低feature maps的维度。</p>
+<p>除此之外，为了 在不影响感受野的前提下，提高决策函数的非线性能力(increase the non-linearity of the decision function without affecting the receptive fields of the conv. layers)，作者还在结构C中加入了$1\times1$的卷积。$1\times1$的卷积也被应用到很多的网络结构中，例如Google Net，Network in Network等。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fndp5zk8eaj30t80qcaff.jpg" alt=""></p>
+<p>以结构D为例，分析一下消耗的内存和模型的参数量：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>内存</th>
+<th>参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Input:[$224\times 224\times3$]</td>
+<td>$224\times 224\times3=150k$</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Conv3-64:[$224\times 224\times64$]</td>
+<td>$224\times 224\times64=3.2M$</td>
+<td>$3\times3\times3\times64=1728$</td>
+</tr>
+<tr>
+<td>Conv3-64:[$224\times 224\times64$]</td>
+<td>$224\times 224\times64=3.2M$</td>
+<td>$3\times3\times64\times64=36864$</td>
+</tr>
+<tr>
+<td>maxpool:[$112\times112\times64$]</td>
+<td>$112\times112\times64=800K$</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Conv3-128:[$112\times112\times128$]</td>
+<td>$112\times112\times128=1.6M$</td>
+<td>$3\times3\times64\times128=73728$</td>
+</tr>
+<tr>
+<td>Conv3-128:[$112\times112\times128$]</td>
+<td>$112\times112\times128=1.6M$</td>
+<td>$3\times3\times128\times128=147456$</td>
+</tr>
+<tr>
+<td>maxpool:[$56\times56\times128$]</td>
+<td>$56\times56\times128=400K$</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Conv3-256:[$56\times56\times256$]</td>
+<td>$56\times56\times256=800K$</td>
+<td>$3\times3\times128\times256=294912$</td>
+</tr>
+<tr>
+<td>Conv3-256:[$56\times56\times256$]</td>
+<td>$56\times56\times256=800K$</td>
+<td>$3\times3\times256\times256=589824$</td>
+</tr>
+<tr>
+<td>Conv3-256:[$56\times56\times256$]</td>
+<td>$56\times56\times256=800K$</td>
+<td>$3\times3\times256\times256=589824$</td>
+</tr>
+<tr>
+<td>maxpool:[$28\times28\times256$]</td>
+<td>$28\times28\times256=200K$</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Conv3-512:[$28\times28\times512$]</td>
+<td>$28\times28\times512=400K$</td>
+<td>$3\times3\times256\times512=1179648$</td>
+</tr>
+<tr>
+<td>Conv3-512:[$28\times28\times512$]</td>
+<td>$28\times28\times512=400K$</td>
+<td>$3\times3\times512\times512=2359296$</td>
+</tr>
+<tr>
+<td>Conv3-512:[$28\times28\times512$]</td>
+<td>$28\times28\times512=400K$</td>
+<td>$3\times3\times512\times512=2359296$</td>
+</tr>
+<tr>
+<td>maxpool:[$14\times14\times512$]</td>
+<td>$14\times14\times512=100K$</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Conv3-512:[$14\times14\times512$]</td>
+<td>$14\times14\times512=100K$</td>
+<td>$3\times3\times512\times512=2359296$</td>
+</tr>
+<tr>
+<td>Conv3-512:[$14\times14\times512$]</td>
+<td>$14\times14\times512=100K$</td>
+<td>$3\times3\times512\times512=2359296$</td>
+</tr>
+<tr>
+<td>Conv3-512:[$14\times14\times512$]</td>
+<td>$14\times14\times512=100K$</td>
+<td>$3\times3\times512\times512=2359296$</td>
+</tr>
+<tr>
+<td>maxpool:[$7\times7\times512$]</td>
+<td>$7\times7\times512=25K$</td>
+<td>0</td>
+</tr>
+<tr>
+<td>FC-4096 [$1\times1\times4096$]</td>
+<td>4096</td>
+<td>$25088\times4096=102760448$</td>
+</tr>
+<tr>
+<td>FC-4096 [$1\times1\times4096$]</td>
+<td>4096</td>
+<td>$4096\times4096=102760448$</td>
+</tr>
+<tr>
+<td>FC-1000 [$1\times1\times1000$]</td>
+<td>1000</td>
+<td>$4096\times1000=4096000$</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>各个模型的具体参数量可以见Table 2。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fndqy7970tj30jy030gm2.jpg" alt=""></p>
+<p>除此之外，作者还解释了为什么不用$5\times5$和$7\times7$的卷积，是因为一个$5\times5$卷积的感受野和两个连续的 $3\times3$的卷积是相同的，一个$7\times7$的卷积的感受野等价于3个连续的$3\times3$的卷积，一个$7\times 7$的卷积需要$7^2C^2$的参数，而3个连续的$3\times3$卷积需要$3(3^2C^2)$,所以用$3\times3$卷积的意义在于保证感受野的同时，可以降低参数数量和增加模型深度来提高模型的非线性能力，模型容量(model capacity)和模型复杂度(model complexity)。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fnhm3fh4d0j30jg0swdkp.jpg" alt=""></p>
+<p><strong>训练策略：</strong></p>
+<p>训练的时候，作者先将图像scale到S（S大于等于224），然后再crop得到$224\times224$的图像。</p>
+<p>In our experiments, we evaluated models trained at two fixed scales: S = 256 and S = 384. Given a ConvNet configuration, we first trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of $10^{−3}​$.</p>
+<p><strong>实验结果：</strong></p>
+<p>作者在ILSVRC-2012 dataset做了模型性能的评估。各个模型评估的结果见Table 3。我们可以发现从左到右随着深度的加深，模型的错误率逐渐降低，VGG 19的效果最好，取得了25.5%的 top-1 val error和8.0%的top-5 val. error。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fndqzo17l7j30qy0bstax.jpg" alt=""></p>
+<p>作者也分析了各个图片尺度对结果的影响。作者对比了两个策略：单尺度策略和多尺度策略。单尺度策略是在训练集上选择尺寸S，测试集的大小为${S-32,S,S+32}$。而多尺度策略是选择尺度[$S_{min}$;$S_{max}$]，然后测试集的尺度为${S_{min},0.5(S_{min}+S_{max}),S_{max}}$，可以发现后者的效果会比前者更好一点。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fndqzqx423j30rs0aomz8.jpg" alt=""></p>
+<p>训练的图像大小为S，测试的大小为Q。</p>
+<p>dense就是用 fully-convolutional替代fully connected，这样就不需要将测试图像rescale到相同的尺度。multi-crop，顾名思义，就是sample多个crop来进行分类，在评估dense和multi-crop时(见Table 5)，发现这两者是可以互补的。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fndrhfe79qj30t607uq4q.jpg" alt=""></p>
+<p>最后就是需要将各个模型进行融合，做最后的ensemble。通过将最后输出的softmax其平均，得到最后的概率分布。Table 6就是最终模型fusion的结果。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fndrhr8gxjj30um09u0uz.jpg" alt=""></p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a href="/2018/01/18/AlexNet算法笔记/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2018/01/05/Comic-Generation/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2018-01-18 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/algorithms/">algorithms<span>5</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/deep-learning/">deep learning<span>9</span></a></li> <li><a href="/tags/classifcation/">classifcation<span>1</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 Mowayao
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ['\\(','\\)'] ],
+      displayMath: [ ['$$','$$'], ['\[','\]'] ], 
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+</body>
+   </html>
