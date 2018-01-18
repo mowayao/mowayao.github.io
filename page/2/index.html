@@ -136,6 +136,42 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2017/11/14/Networks/" >Dual Path Networks</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2017-11-14  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>This paper propose a novel deep CNN architecture called <strong>Dual Path Networks(DPN)</strong>. This idea is  based on the fact that the ResNet enables feature re-usage while DenseNet enable new features exploration which are both important for learning good feature representation.  </p>
+<p><img src="http://ovshqtujw.bkt.clouddn.com/image.png" alt=""></p>
+<blockquote>
+<p>Basically, the ResNet and DenseNet differ in the way of “wiring”. ResNet provides a path with which a layer can get access to both the output and the input of the immediately previous layer. The DenseNet provides a path that can access the outputs of multiple previous layers. </p>
+</blockquote>
+<p><img src="http://ovshqtujw.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-14%20%E4%B8%8B%E5%8D%886.25.45.png" alt="Architecture comparison of different networks"></p>
+<p>The DPN balance ResNet and DenseNet in a tricky way, and can be formulated as:<br>$$<br>x^k = \sum_{t=1}^{k-1} f_t^k (h^t),\ y^k = \sum_{t=1}^{k-1} v_t(h^t) = y^{k-1} +\phi^{k-1}(y^{k-1}),\\r^k=x^k+y^k,\\h^k=g^k(r^k)<br>$$<br>where $x_k$ and $y_k$ denote the extracted information at k-th step from individual path, $v_t(\cdot)$is a feature learning function as $f_k^t(\cdot)$, $\phi_k(\cdot) = f_k(g_k(\cdot))$.  The dual path means the left side is ResNet, the right side is DenseNet. The block parameters are shared between them. The outputs of two sides will be concated as next block’s input.</p>
+<p>This is the implementation of dual path block</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">DualPathBlock</span><span class="params">(nn.Module)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, in_chs, num_1x1_a, num_3x3_b, num_1x1_c, inc, G, _type=<span class="string">'normal'</span>)</span>:</span></div><div class="line">        super(DualPathBlock, self).__init__()</div><div class="line">        self.num_1x1_c = num_1x1_c</div><div class="line"></div><div class="line">        <span class="keyword">if</span> _type <span class="keyword">is</span> <span class="string">'proj'</span>:</div><div class="line">            key_stride = <span class="number">1</span></div><div class="line">            self.has_proj = <span class="keyword">True</span></div><div class="line">        <span class="keyword">if</span> _type <span class="keyword">is</span> <span class="string">'down'</span>:</div><div class="line">            key_stride = <span class="number">2</span></div><div class="line">            self.has_proj = <span class="keyword">True</span></div><div class="line">        <span class="keyword">if</span> _type <span class="keyword">is</span> <span class="string">'normal'</span>:</div><div class="line">            key_stride = <span class="number">1</span></div><div class="line">            self.has_proj = <span class="keyword">False</span></div><div class="line"></div><div class="line">        <span class="keyword">if</span> self.has_proj:</div><div class="line">            self.c1x1_w = self.BN_ReLU_Conv(in_chs=in_chs, out_chs=num_1x1_c+<span class="number">2</span>*inc, kernel_size=<span class="number">1</span>, stride=key_stride)</div><div class="line"></div><div class="line">        self.layers = nn.Sequential(OrderedDict([</div><div class="line">            (<span class="string">'c1x1_a'</span>, self.BN_ReLU_Conv(in_chs=in_chs, out_chs=num_1x1_a, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>)),</div><div class="line">            (<span class="string">'c3x3_b'</span>, self.BN_ReLU_Conv(in_chs=num_1x1_a, out_chs=num_3x3_b, kernel_size=<span class="number">3</span>, stride=key_stride, padding=<span class="number">1</span>, groups=G)),</div><div class="line">            (<span class="string">'c1x1_c'</span>, self.BN_ReLU_Conv(in_chs=num_3x3_b, out_chs=num_1x1_c+inc, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>)),</div><div class="line">        ]))</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">BN_ReLU_Conv</span><span class="params">(self, in_chs, out_chs, kernel_size, stride, padding=<span class="number">0</span>, groups=<span class="number">1</span>)</span>:</span></div><div class="line">        <span class="keyword">return</span> nn.Sequential(OrderedDict([</div><div class="line">            (<span class="string">'norm'</span>, nn.BatchNorm2d(in_chs)),</div><div class="line">            (<span class="string">'relu'</span>, nn.ReLU(inplace=<span class="keyword">True</span>)),</div><div class="line">            (<span class="string">'conv'</span>, nn.Conv2d(in_chs, out_chs, kernel_size, stride, padding, groups=groups, bias=<span class="keyword">False</span>)),</div><div class="line">        ]))</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></div><div class="line">        data_in = torch.cat(x, dim=<span class="number">1</span>) <span class="keyword">if</span> isinstance(x, list) <span class="keyword">else</span> x</div><div class="line">        <span class="keyword">if</span> self.has_proj:</div><div class="line">            data_o = self.c1x1_w(data_in)</div><div class="line">            data_o1 = data_o[:,:self.num_1x1_c,:,:]</div><div class="line">            data_o2 = data_o[:,self.num_1x1_c:,:,:]</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            data_o1 = x[<span class="number">0</span>]</div><div class="line">            data_o2 = x[<span class="number">1</span>]</div><div class="line"></div><div class="line">        out = self.layers(data_in)</div><div class="line"></div><div class="line">        summ = data_o1 + out[:,:self.num_1x1_c,:,:]</div><div class="line">        dense = torch.cat([data_o2, out[:,self.num_1x1_c:,:,:]], dim=<span class="number">1</span>)</div><div class="line">        <span class="keyword">return</span> [summ, dense]</div></pre></td></tr></table></figure>
+
+	
+	</div>
+  <a type="button" href="/2017/11/14/Networks/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2017/11/12/meet-in-the-middle的一些实例/" >Meet in the middle的一些实例</a>
 		</h3>
 		</div>
@@ -603,103 +639,6 @@ var _hmt = _hmt || [];
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2017/05/12/cnn-case-study/" >CNN Case Stud</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2017-05-12  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="AlexNet"><a href="#AlexNet" class="headerlink" title="AlexNet"></a>AlexNet</h2><p>结构：</p>
-<p>CONV1-&gt;MAX POOL1-&gt;NORM1-&gt;CONV2-&gt;MAX POOL2-&gt;NORM-&gt;CONV3-&gt;CONV4-&gt;CONV5-&gt;MAX POOL3-&gt;FC6-&gt;FC7-&gt;FC8</p>
-<p>输入： $227\times 227\times 3$ 的图像</p>
-<p>第一层（CONV1），96个$11\times11$的卷积和，stride为4，,因为(227-11)/4+1=55</p>
-<p>参数的大小是$11\times11\times3\times96=35K$,输出为$55\times55\times96$</p>
-<p>第二层（MAX POOL1）， $3\times 3$， 步数为2，因为(55-3)/2+1=27,所以，输出为$27\times27\times96$</p>
-<p>第三层（NORM1）</p>
-<p>第四层CONV2，256个$5\times5$的卷积和，stride为1，pad为2，因为（27-5+2*2）/1+1= 27，所以输出为$27\times27\times256$</p>
-<p>第五层（MAX POOL2）， $3\times 3$， stride为2，因为(27-3)/2+1=13,所以，输出为$13\times13\times256$</p>
-<p>第六层 （NORM2）</p>
-<p>第七层（CONV3），384个$3\times3$的卷积和，stride为1，pad为1，因为(13-3+1*2)/1+1 = 13,所以输出为$13\times13\times384$</p>
-<p>第八层（CONV4），384个$3\times3$的卷积和，stride为1，pad为1，因为(13-3+1*2)/1+1 = 13,所以输出为$13\times13\times384$</p>
-<p>第九层（CONV5），256个$3\times3$的卷积和，stride为1，pad为1，因为(13-3+1*2)/1+1 = 13,所以输出为$13\times13\times256$</p>
-<p>第十层（MAX POOL2）， $3\times 3$， 步数为2，因为(13-3)/2+1=6,所以，输出为$6\times6\times256$</p>
-<p>第十一层（FC6），4096个neurons</p>
-<p>第十二层（FC7）， 4096个neurons</p>
-<p>第十三层（FC8）， 1000个neurons</p>
-<h2 id="VGGNet"><a href="#VGGNet" class="headerlink" title="VGGNet"></a>VGGNet</h2><p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-27%20%E4%B8%8B%E5%8D%883.11.48.png" alt=""></p>
-<p>为什么要使用小的卷积核（$3\times3$ conv）?</p>
-<p>因为3个$3\times3$stride为1的conv堆起来的receptive field是和$7\times7$的conv layer是一样的，这样的话网络可以更深，同时非线性能力提高，而且前者参数数量为：$3*(3^2C^2)$ 后者为 $7^2C^2$,前者数量较少。</p>
-<p>INPUT: $[224\times224\times3]$        memory:  $224<em>224</em>3$=150K   params: 0</p>
-<p>CONV3-64:$ [224\times224\times64] $ memory:  $224<em>224</em>64$=3.2M   params:$ (3<em>3</em>3)*64 = 1,728$</p>
-<p>CONV3-64:$ [224\times224\times64]$  memory:  $224<em>224</em>64$ =3.2M   params: $(3<em>3</em>64)*64 = 36,864$</p>
-<p>POOL2: $[112\times112\times64]$  memory:  $112<em>112</em>64$=800K   params: 0</p>
-<p>CONV3-128: $[112\times112\times128]$  memory:  $112<em>112</em>128$=1.6M   params: $(3<em>3</em>64)*128 = 73,728$</p>
-<p>CONV3-128: $[112\times112\times128] $ memory: $112<em>112</em>128$=1.6M   params:$ (3<em>3</em>128)*128 = 147,456 $</p>
-<p>POOL2:$ [56\times56\times128]$  memory:  $56<em>56</em>128=400K$   params: 0</p>
-<p>CONV3-256:$ [56\times56\times256] $ memory:  $56<em>56</em>256=800K$   params:$ (3<em>3</em>128)*256 = 294,912$</p>
-<p>CONV3-256:$ [56\times56\times256]$  memory:  $56<em>56</em>256=800K$   params:$ (3<em>3</em>256)*256 = 589,824 $</p>
-<p>CONV3-256: $[56\times56\times256] $ memory:  $56<em>56</em>256=800K$   params:$ (3<em>3</em>256)*256 = 589,824$</p>
-<p>POOL2: $[28\times28\times256]$  memory:  $28<em>28</em>256=200K$   params: 0</p>
-<p>CONV3-512:$ [28\times28\times512] $ memory:  $28<em>28</em>512=400K$   params:$ (3<em>3</em>256)*512 = 1,179,648$</p>
-<p>CONV3-512: $[28\times28\times512]$  memory: $ 28<em>28</em>512=400K $  params:$ (3<em>3</em>512)*512 = 2,359,296$</p>
-<p>CONV3-512:$ [28\times28\times512]$  memory: $ 28<em>28</em>512=400K$   params: $(3<em>3</em>512)*512 = 2,359,296$</p>
-<p>POOL2:$ [14\times14\times512]$  memory:  $14<em>14</em>512=100K$   params: 0 </p>
-<p>CONV3-512:$ [14\times14\times512]$  memory: $ 14<em>14</em>512=100K$   params: $(3<em>3</em>512)*512 = 2,359,296$</p>
-<p>CONV3-512:$ [14\times14\times512] $ memory: $ 14<em>14</em>512=100K$   params: $(3<em>3</em>512)*512 = 2,359,296 $</p>
-<p>CONV3-512: $[14\times14\times512]$  memory:  $14<em>14</em>512=100K$   params: $(3<em>3</em>512)*512 = 2,359,296$</p>
-<p>POOL2: $[7\times7\times512] $ memory:  $7<em>7</em>512=25K$  params: 0</p>
-<p>FC: $[1\times1\times4096]$  memory:  4096  params: $7<em>7</em>512*4096 = 102,760,448 $</p>
-<p>FC: $[1\times1\times4096]$  memory:  4096  params: $4096*4096 = 16,777,216$</p>
-<p>FC: $[1\times1\times1000]$  memory:  1000 params: $4096*1000 = 4,096,000 $</p>
-<p>总结一下：对于一张图片来说，需要花费的内存是24M*4 bytes = 96MB，而总共的参数有138M </p>
-<p>VGG的FC7的特征非常棒！通常用来提特征。</p>
-<h2 id="GoogleNet"><a href="#GoogleNet" class="headerlink" title="GoogleNet"></a>GoogleNet</h2><p>22层，有高效的inception module，没有FC层</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-27%20%E4%B8%8B%E5%8D%883.15.37.png" alt=""></p>
-<p>重点分析一下Inception module,下图是一个朴素的inception module</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-27%20%E4%B8%8B%E5%8D%883.12.08.png" alt=""></p>
-<p>采用的并行filter运算，有多个receptive field size的卷积，（$1\times1$,$3\times3$,$5\times5$）,从左向右第一个输出的size为$28\times28\times128$，第二个输出的size为$28\times28\times192$,第三个为$28\times28\times96$，第四个为$28\times28\times256$，concate以后的size为：$28\times28\times672$</p>
-<p>缺点就是卷积运算过多：</p>
-<p>$1\times1$ conv, 128=&gt;   $28\times28\times128\times1\times1\times256$</p>
-<p> $3\times3$ conv, 192=&gt; $28\times28\times192\times3\times3\times256$</p>
-<p> $5\times5$ conv, 96=&gt; $28\times28\times96\times5\times5\times256$</p>
-<p>总共需要854M次运算</p>
-<p>而且，最终的输出太大了！我们需要减少feature depth,可以用$1\times1$的卷积（$1\times1$ conv “bottleneck” layers）来解决，例如一个$56\times56\times64$的feature map经过32个$1\times1$以后，得到$56\times56\times32$,这样做就是将深度投影到较低的维度，（feature map的组合）</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-27%20%E4%B8%8B%E5%8D%883.12.36.png" alt=""></p>
-<p>卷积运算的数量：</p>
-<p>$[1\times1 conv, 64]$  $28\times28\times64\times1\times1\times256$</p>
-<p>$[1\times1 conv, 64]$  $28\times28\times64\times1\times1\times256$</p>
-<p>$[1\times1 conv, 128] $ $28\times28\times128\times1\times1\times256$</p>
-<p>$[3\times3 conv, 192]$  $28\times28\times192\times3\times3\times64$</p>
-<p>$[5\times5 conv, 96]$  $28\times28\times96\times5\times5\times64$</p>
-<p>$[1\times1 conv, 64]$  $28\times28\times64\times1\times1\times256$ </p>
-<p>Total: 358M ops</p>
-<h2 id="ResNet"><a href="#ResNet" class="headerlink" title="ResNet"></a>ResNet</h2><ul>
-<li>每一层CONV层接BN</li>
-<li>没有dropout</li>
-</ul>
-<p>具体见：</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-27%20%E4%B8%8B%E5%8D%883.17.12.png" alt=""></p>
-
-	
-	</div>
-  <a type="button" href="/2017/05/12/cnn-case-study/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -747,7 +686,7 @@ var _hmt = _hmt || [];
 		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/algorithms/">algorithms<span>5</span></a></li>
+			<li><a href="/categories/algorithms/">algorithms<span>6</span></a></li>
 		
 		</ul>
 	</div>
@@ -760,35 +699,35 @@ var _hmt = _hmt || [];
 		
 			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
 		
-			<li><a href="/tags/classfication/">classfication<span>1</span></a></li>
+			<li><a href="/tags/computer-vision/">computer vision<span>3</span></a></li>
 		
 			<li><a href="/tags/math/">math<span>2</span></a></li>
 		
+			<li><a href="/tags/classifcation/">classifcation<span>1</span></a></li>
+		
 			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
+		
+			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
+		
+			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
 		
 			<li><a href="/tags/paper/">paper<span>1</span></a></li>
 		
-			<li><a href="/tags/deep-learning/">deep learning<span>9</span></a></li>
-		
-			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
-		
-			<li><a href="/tags/summary/">summary<span>2</span></a></li>
-		
-			<li><a href="/tags/computer-vision/">computer vision<span>3</span></a></li>
+			<li><a href="/tags/notes/">notes<span>7</span></a></li>
 		
 			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
 		
 			<li><a href="/tags/杂/">杂<span>1</span></a></li>
 		
-			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
+			<li><a href="/tags/classfication/">classfication<span>2</span></a></li>
 		
-			<li><a href="/tags/classifcation/">classifcation<span>1</span></a></li>
+			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
 		
-			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
+			<li><a href="/tags/deep-learning/">deep learning<span>10</span></a></li>
 		
 			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
 		
-			<li><a href="/tags/notes/">notes<span>7</span></a></li>
+			<li><a href="/tags/summary/">summary<span>2</span></a></li>
 		
 		 
 		</ul>
@@ -800,6 +739,10 @@ var _hmt = _hmt || [];
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2018/01/18/Network-In-Network算法笔记/" ><i class="fa fa-file-o"></i>Network In Network算法笔记</a>
+      </li>
     
       <li>
         <a href="/2018/01/18/AlexNet算法笔记/" ><i class="fa fa-file-o"></i>AlexNet算法笔记</a>
@@ -815,10 +758,6 @@ var _hmt = _hmt || [];
     
       <li>
         <a href="/2017/12/20/CS224n-assignment2/" ><i class="fa fa-file-o"></i>CS224n-assignment2</a>
-      </li>
-    
-      <li>
-        <a href="/2017/12/18/CS224n-assignment1/" ><i class="fa fa-file-o"></i>CS224n assignment1</a>
       </li>
     
   </ul>
