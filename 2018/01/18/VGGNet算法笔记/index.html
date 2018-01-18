@@ -154,112 +154,112 @@ var _hmt = _hmt || [];
 </thead>
 <tbody>
 <tr>
-<td>Input:[$224\times 224\times3$]</td>
+<td>Input:$224\times 224\times3$</td>
 <td>$224\times 224\times3=150k$</td>
 <td>0</td>
 </tr>
 <tr>
-<td>Conv3-64:[$224\times 224\times64$]</td>
+<td>Conv3-64:$224\times 224\times64$</td>
 <td>$224\times 224\times64=3.2M$</td>
 <td>$3\times3\times3\times64=1728$</td>
 </tr>
 <tr>
-<td>Conv3-64:[$224\times 224\times64$]</td>
+<td>Conv3-64:$224\times 224\times64$</td>
 <td>$224\times 224\times64=3.2M$</td>
 <td>$3\times3\times64\times64=36864$</td>
 </tr>
 <tr>
-<td>maxpool:[$112\times112\times64$]</td>
+<td>maxpool:$112\times112\times64$</td>
 <td>$112\times112\times64=800K$</td>
 <td>0</td>
 </tr>
 <tr>
-<td>Conv3-128:[$112\times112\times128$]</td>
+<td>Conv3-128:$112\times112\times128$</td>
 <td>$112\times112\times128=1.6M$</td>
 <td>$3\times3\times64\times128=73728$</td>
 </tr>
 <tr>
-<td>Conv3-128:[$112\times112\times128$]</td>
+<td>Conv3-128:$112\times112\times128$</td>
 <td>$112\times112\times128=1.6M$</td>
 <td>$3\times3\times128\times128=147456$</td>
 </tr>
 <tr>
-<td>maxpool:[$56\times56\times128$]</td>
+<td>maxpool:$56\times56\times128$</td>
 <td>$56\times56\times128=400K$</td>
 <td>0</td>
 </tr>
 <tr>
-<td>Conv3-256:[$56\times56\times256$]</td>
+<td>Conv3-256:$56\times56\times256$</td>
 <td>$56\times56\times256=800K$</td>
 <td>$3\times3\times128\times256=294912$</td>
 </tr>
 <tr>
-<td>Conv3-256:[$56\times56\times256$]</td>
+<td>Conv3-256:$56\times56\times256$</td>
 <td>$56\times56\times256=800K$</td>
 <td>$3\times3\times256\times256=589824$</td>
 </tr>
 <tr>
-<td>Conv3-256:[$56\times56\times256$]</td>
+<td>Conv3-256:$56\times56\times256$</td>
 <td>$56\times56\times256=800K$</td>
 <td>$3\times3\times256\times256=589824$</td>
 </tr>
 <tr>
-<td>maxpool:[$28\times28\times256$]</td>
+<td>maxpool:$28\times28\times256$</td>
 <td>$28\times28\times256=200K$</td>
 <td>0</td>
 </tr>
 <tr>
-<td>Conv3-512:[$28\times28\times512$]</td>
+<td>Conv3-512:$28\times28\times512$</td>
 <td>$28\times28\times512=400K$</td>
 <td>$3\times3\times256\times512=1179648$</td>
 </tr>
 <tr>
-<td>Conv3-512:[$28\times28\times512$]</td>
+<td>Conv3-512:$28\times28\times512$</td>
 <td>$28\times28\times512=400K$</td>
 <td>$3\times3\times512\times512=2359296$</td>
 </tr>
 <tr>
-<td>Conv3-512:[$28\times28\times512$]</td>
+<td>Conv3-512:$28\times28\times512$</td>
 <td>$28\times28\times512=400K$</td>
 <td>$3\times3\times512\times512=2359296$</td>
 </tr>
 <tr>
-<td>maxpool:[$14\times14\times512$]</td>
+<td>maxpool:$14\times14\times512$</td>
 <td>$14\times14\times512=100K$</td>
 <td>0</td>
 </tr>
 <tr>
-<td>Conv3-512:[$14\times14\times512$]</td>
+<td>Conv3-512:$14\times14\times512$</td>
 <td>$14\times14\times512=100K$</td>
 <td>$3\times3\times512\times512=2359296$</td>
 </tr>
 <tr>
-<td>Conv3-512:[$14\times14\times512$]</td>
+<td>Conv3-512:$14\times14\times512$</td>
 <td>$14\times14\times512=100K$</td>
 <td>$3\times3\times512\times512=2359296$</td>
 </tr>
 <tr>
-<td>Conv3-512:[$14\times14\times512$]</td>
+<td>Conv3-512:$14\times14\times512$</td>
 <td>$14\times14\times512=100K$</td>
 <td>$3\times3\times512\times512=2359296$</td>
 </tr>
 <tr>
-<td>maxpool:[$7\times7\times512$]</td>
+<td>maxpool:$7\times7\times512$</td>
 <td>$7\times7\times512=25K$</td>
 <td>0</td>
 </tr>
 <tr>
-<td>FC-4096 [$1\times1\times4096$]</td>
+<td>FC-4096 $1\times1\times4096$</td>
 <td>4096</td>
 <td>$25088\times4096=102760448$</td>
 </tr>
 <tr>
-<td>FC-4096 [$1\times1\times4096$]</td>
+<td>FC-4096 $1\times1\times4096$</td>
 <td>4096</td>
 <td>$4096\times4096=102760448$</td>
 </tr>
 <tr>
-<td>FC-1000 [$1\times1\times1000$]</td>
+<td>FC-1000 $1\times1\times1000$</td>
 <td>1000</td>
 <td>$4096\times1000=4096000$</td>
 </tr>

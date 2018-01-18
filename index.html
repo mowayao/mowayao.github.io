@@ -156,7 +156,7 @@ var _hmt = _hmt || [];
 <p><strong>模型结构：</strong></p>
 <p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fndsfv7yy4j31a80fu0y3.jpg" alt=""></p>
 <p>下面是模型的具体描述：</p>
-<p>[$227\times227\times3$] 输入<br>[$55\times55\times96$] CONV1: 96 $11\times11$ filters at stride 4, pad 0   ==(227-11)/4+1 = 55==<br>[$27\times27\times96$] MAX POOL1: $3\times3$ filters at stride 2   ==(55-3)/2+1=27==<br>[$27\times27\times96$] NORM1: Normalization layer<br>[$27\times27\times256$] CONV2: 256 $5\times5$ filters at stride 1, pad 2   ==(27+2*2-5)/1 + 1=27==<br>[$13\times13\times256$] MAX POOL2: $3\times3$ filters at stride 2    ==(27-3)/2+1=13==<br>[$13\times13\times256$] NORM2: Normalization layer<br>[$13\times13\times384$] CONV3: 384 $3\times3$ filters at stride 1, pad 1<br>[$13\times13\times384$] CONV4: 384 $3\times3$ filters at stride 1, pad 1<br>[$13\times13\times256$] CONV5: 256 $3\times3$ filters at stride 1, pad 1<br>[$6\times6\times256$] MAX POOL3: $3\times3$ filters at stride 2    ==(13-3)/2+1=6==<br>[$4096$] FC6: 4096 neurons<br>[$4096$] FC7: 4096 neurons<br>[$1000$] FC8: 1000 neurons (class scores)</p>
+<p>$[227\times227\times3]$ 输入<br>$[55\times55\times96]$ CONV1: 96 $11\times11$ filters at stride 4, pad 0   <u>(227-11)/4+1 = 55</u><br>$[27\times27\times96]$  MAX POOL1: $3\times3$ filters at stride 2   <u>(55-3)/2+1=27</u><br>$[27\times27\times96]$ NORM1: Normalization layer<br>$[27\times27\times256]$ CONV2: 256 $5\times5$ filters at stride 1, pad 2   <u>(27+2*2-5)/1 + 1=27</u><br>$[13\times13\times256]$ MAX POOL2: $3\times3$ filters at stride 2   <u>(27-3)/2+1=13</u><br>$[13\times13\times256]$ NORM2: Normalization layer<br>$[13\times13\times384]$ CONV3: 384 $3\times3$ filters at stride 1, pad 1<br>$[13\times13\times384]$ CONV4: 384 $3\times3$ filters at stride 1, pad 1<br>$[13\times13\times256]$ CONV5: 256 $3\times3$ filters at stride 1, pad 1<br>$[6\times6\times256]$ MAX POOL3: $3\times3$ filters at stride 2    <u>(13-3)/2+1=6</u><br>$[4096]$ FC6: 4096 neurons<br>$[4096]$ FC7: 4096 neurons<br>[ $1000$ ] FC8: 1000 neurons (class scores)</p>
 <p>包含了5层卷积层和3层全连接层。</p>
 <p><strong>创新点：</strong></p>
 <ol>
@@ -224,112 +224,112 @@ var _hmt = _hmt || [];
 </thead>
 <tbody>
 <tr>
-<td>Input:[$224\times 224\times3$]</td>
+<td>Input:$224\times 224\times3$</td>
 <td>$224\times 224\times3=150k$</td>
 <td>0</td>
 </tr>
 <tr>
-<td>Conv3-64:[$224\times 224\times64$]</td>
+<td>Conv3-64:$224\times 224\times64$</td>
 <td>$224\times 224\times64=3.2M$</td>
 <td>$3\times3\times3\times64=1728$</td>
 </tr>
 <tr>
-<td>Conv3-64:[$224\times 224\times64$]</td>
+<td>Conv3-64:$224\times 224\times64$</td>
 <td>$224\times 224\times64=3.2M$</td>
 <td>$3\times3\times64\times64=36864$</td>
 </tr>
 <tr>
-<td>maxpool:[$112\times112\times64$]</td>
+<td>maxpool:$112\times112\times64$</td>
 <td>$112\times112\times64=800K$</td>
 <td>0</td>
 </tr>
 <tr>
-<td>Conv3-128:[$112\times112\times128$]</td>
+<td>Conv3-128:$112\times112\times128$</td>
 <td>$112\times112\times128=1.6M$</td>
 <td>$3\times3\times64\times128=73728$</td>
 </tr>
 <tr>
-<td>Conv3-128:[$112\times112\times128$]</td>
+<td>Conv3-128:$112\times112\times128$</td>
 <td>$112\times112\times128=1.6M$</td>
 <td>$3\times3\times128\times128=147456$</td>
 </tr>
 <tr>
-<td>maxpool:[$56\times56\times128$]</td>
+<td>maxpool:$56\times56\times128$</td>
 <td>$56\times56\times128=400K$</td>
 <td>0</td>
 </tr>
 <tr>
-<td>Conv3-256:[$56\times56\times256$]</td>
+<td>Conv3-256:$56\times56\times256$</td>
 <td>$56\times56\times256=800K$</td>
 <td>$3\times3\times128\times256=294912$</td>
 </tr>
 <tr>
-<td>Conv3-256:[$56\times56\times256$]</td>
+<td>Conv3-256:$56\times56\times256$</td>
 <td>$56\times56\times256=800K$</td>
 <td>$3\times3\times256\times256=589824$</td>
 </tr>
 <tr>
-<td>Conv3-256:[$56\times56\times256$]</td>
+<td>Conv3-256:$56\times56\times256$</td>
 <td>$56\times56\times256=800K$</td>
 <td>$3\times3\times256\times256=589824$</td>
 </tr>
 <tr>
-<td>maxpool:[$28\times28\times256$]</td>
+<td>maxpool:$28\times28\times256$</td>
 <td>$28\times28\times256=200K$</td>
 <td>0</td>
 </tr>
 <tr>
-<td>Conv3-512:[$28\times28\times512$]</td>
+<td>Conv3-512:$28\times28\times512$</td>
 <td>$28\times28\times512=400K$</td>
 <td>$3\times3\times256\times512=1179648$</td>
 </tr>
 <tr>
-<td>Conv3-512:[$28\times28\times512$]</td>
+<td>Conv3-512:$28\times28\times512$</td>
 <td>$28\times28\times512=400K$</td>
 <td>$3\times3\times512\times512=2359296$</td>
 </tr>
 <tr>
-<td>Conv3-512:[$28\times28\times512$]</td>
+<td>Conv3-512:$28\times28\times512$</td>
 <td>$28\times28\times512=400K$</td>
 <td>$3\times3\times512\times512=2359296$</td>
 </tr>
 <tr>
-<td>maxpool:[$14\times14\times512$]</td>
+<td>maxpool:$14\times14\times512$</td>
 <td>$14\times14\times512=100K$</td>
 <td>0</td>
 </tr>
 <tr>
-<td>Conv3-512:[$14\times14\times512$]</td>
+<td>Conv3-512:$14\times14\times512$</td>
 <td>$14\times14\times512=100K$</td>
 <td>$3\times3\times512\times512=2359296$</td>
 </tr>
 <tr>
-<td>Conv3-512:[$14\times14\times512$]</td>
+<td>Conv3-512:$14\times14\times512$</td>
 <td>$14\times14\times512=100K$</td>
 <td>$3\times3\times512\times512=2359296$</td>
 </tr>
 <tr>
-<td>Conv3-512:[$14\times14\times512$]</td>
+<td>Conv3-512:$14\times14\times512$</td>
 <td>$14\times14\times512=100K$</td>
 <td>$3\times3\times512\times512=2359296$</td>
 </tr>
 <tr>
-<td>maxpool:[$7\times7\times512$]</td>
+<td>maxpool:$7\times7\times512$</td>
 <td>$7\times7\times512=25K$</td>
 <td>0</td>
 </tr>
 <tr>
-<td>FC-4096 [$1\times1\times4096$]</td>
+<td>FC-4096 $1\times1\times4096$</td>
 <td>4096</td>
 <td>$25088\times4096=102760448$</td>
 </tr>
 <tr>
-<td>FC-4096 [$1\times1\times4096$]</td>
+<td>FC-4096 $1\times1\times4096$</td>
 <td>4096</td>
 <td>$4096\times4096=102760448$</td>
 </tr>
 <tr>
-<td>FC-1000 [$1\times1\times1000$]</td>
+<td>FC-1000 $1\times1\times1000$</td>
 <td>1000</td>
 <td>$4096\times1000=4096000$</td>
 </tr>
@@ -829,37 +829,37 @@ var _hmt = _hmt || [];
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/杂/">杂<span>1</span></a></li>
-		
-			<li><a href="/tags/notes/">notes<span>7</span></a></li>
-		
-			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
-		
-			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
-		
-			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
+			<li><a href="/tags/computer-vision/">computer vision<span>3</span></a></li>
 		
 			<li><a href="/tags/deep-learning/">deep learning<span>9</span></a></li>
-		
-			<li><a href="/tags/classifcation/">classifcation<span>1</span></a></li>
-		
-			<li><a href="/tags/math/">math<span>2</span></a></li>
 		
 			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
 		
 			<li><a href="/tags/summary/">summary<span>2</span></a></li>
 		
+			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
+		
 			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
 		
-			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
+			<li><a href="/tags/notes/">notes<span>7</span></a></li>
+		
+			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
+		
+			<li><a href="/tags/math/">math<span>2</span></a></li>
 		
 			<li><a href="/tags/paper/">paper<span>1</span></a></li>
 		
-			<li><a href="/tags/classfication/">classfication<span>1</span></a></li>
-		
-			<li><a href="/tags/computer-vision/">computer vision<span>3</span></a></li>
+			<li><a href="/tags/classifcation/">classifcation<span>1</span></a></li>
 		
 			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
+		
+			<li><a href="/tags/classfication/">classfication<span>1</span></a></li>
+		
+			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
+		
+			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
+		
+			<li><a href="/tags/杂/">杂<span>1</span></a></li>
 		
 		 
 		</ul>
