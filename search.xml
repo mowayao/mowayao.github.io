@@ -398,124 +398,53 @@ $[1000]$ FC8: 1000 neurons (class scores)</p>
       <title><![CDATA[Comic Generation]]></title>
       <url>/2018/01/05/Comic-Generation/</url>
       <content type="html"><![CDATA[<p>最近写了一下李宏毅的MLDS 2017的<a href="https://www.csie.ntu.edu.tw/~yvchen/f106-adl/A4" target="_blank" rel="external">HW4-Comics Generation</a>，正好总结一下GAN以及assignment的做法。</p>
-<h2>Basic Idea of GAN</h2>
-<p>给定数据分布：$P_{data}(x)$</p>
+<h2 id="Basic-Idea-of-GAN"><a href="#Basic-Idea-of-GAN" class="headerlink" title="Basic Idea of GAN"></a>Basic Idea of GAN</h2><p>给定数据分布：$P_{data}(x)$</p>
 <p>我们有一个分布$P_G(x;\theta)$</p>
 <p>从$P_{data}(x)$采样m个样本${x_1,x_2,…x_m}$</p>
 <p>我们的目的是找到这样的$\theta$使得分布$P_G(x;\theta)$尽可能的和$P_{data}(x)$接近</p>
-<p>如果给定参数$\theta$，我们就可以计算产生这一对样本的似然：
-$$
-L=\prod_{i=1}^mP_G(x_i;\theta)
-$$
-然后找到$\theta^\ast$最大化似然L：
-$$
-\theta^\ast = arg \max_\theta\prod_{i=1}^mP_G(x_i;\theta)=arg\max_\theta\log\prod_{i=1}^mP_G(x_i;\theta) =arg\max_\theta\sum_{i=1}^m\log P_G(x_i;\theta) \ \approx arg\max_\theta E_{x\sim P_{data}}[\log P_G(x;\theta)]
-$$
-现在，我们可以用NN来模拟$P_G(x;\theta)$
-$$
-P_G(x) = \int_z P_{prior}(z) I_{[G(z)=x]}dz
-$$
-z服从unit gaussian，但是这样似然明显很难计算！</p>
+<p>如果给定参数$\theta$，我们就可以计算产生这一对样本的似然：<br>$$<br>L=\prod_{i=1}^mP_G(x_i;\theta)<br>$$<br>然后找到$\theta^\ast$最大化似然L：<br>$$<br>\theta^\ast = arg \max_\theta\prod_{i=1}^mP_G(x_i;\theta)=arg\max_\theta\log\prod_{i=1}^mP_G(x_i;\theta) =arg\max_\theta\sum_{i=1}^m\log P_G(x_i;\theta) \ \approx arg\max_\theta E_{x\sim P_{data}}[\log P_G(x;\theta)]<br>$$<br>现在，我们可以用NN来模拟$P_G(x;\theta)$<br>$$<br>P_G(x) = \int_z P_{prior}(z) I_{[G(z)=x]}dz<br>$$<br>z服从unit gaussian，但是这样似然明显很难计算！</p>
 <ul>
-<li>Generator G
-<ul>
+<li>Generator G<ul>
 <li>G is a function, input z, output x</li>
 <li>Given a prior distribution$ P_{prior}(z)$, a probability distribution $P_G(x)$ is defined by function G</li>
 </ul>
 </li>
-<li>Discriminator D
-<ul>
+<li>Discriminator D<ul>
 <li>D is a function, input x, output scalar</li>
-<li>Evaluate the &quot;difference&quot; between $P_G(x)$ and $P_{data}(x)$</li>
+<li>Evaluate the “difference” between $P_G(x)$ and $P_{data}(x)$</li>
 </ul>
 </li>
 </ul>
-<p>目的是找到最佳的G：
-$$
-G^\ast = arg\min_G\max_DV(G,D)
-$$</p>
-<p>$$
-V= E_{x\sim P_{data}}[\log D(x)] + E_{x\sim P_G}[\log (1-D(x))]
-$$</p>
+<p>目的是找到最佳的G：<br>$$<br>G^\ast = arg\min_G\max_DV(G,D)<br>$$</p>
+<p>$$<br>V= E_{x\sim P_{data}}[\log D(x)] + E_{x\sim P_G}[\log (1-D(x))]<br>$$</p>
 <p>下面是将上述问题转化为：</p>
-<p>首先最优的D：
-$$
-P_{data}(x)\log D(x) + P_G(x) \log (1-D(x))
-$$</p>
-<p>$$
-f(D) = a\log(D) + b\log(1-D)
-$$</p>
-<p>求极值，得到：
-$$
-D^\ast(x) =\frac{P_{data}(x)}{P_{data}(x)+P_G(x)}
-$$
-所以
-$$
-\max_DV(G,D) = V(G,D^*)=E_{x\sim P_{data}}[\log\frac{P_{data}(x)}{P_{data}(x)+P_G(x)}] + E_{x\sim P_G}[\log\frac{P_G(x)}{P_{data}(x)+P_G(x)}] \ = -2\log 2+E_{x\sim P_{data}}[\log\frac{P_{data}(x)}{(P_{data}(x)+P_G(x))/2}] + E_{x\sim P_G}[\log\frac{P_G(x)}{(P_{data}(x)+P_G(x))/2}] \ =-2\log 2 + KL(P_{data}(x)||\frac{P_{data}(x)+P_G(x)}{2}) + KL(P_{G}(x)||\frac{P_{data}(x)+P_G(x)}{2})
-$$
-将分母项 $P_{data}(x)+P_G(x)$ 除以2，那么整个式子就需要减去 $2\log\frac{1}{2}$ ，这就等价成了JS散度，定义了两个分布的相似性：</p>
-<p>$$
-JSD(P||Q) = \frac{1}{2}KL(P||M)+\frac{1}{2}KL(Q||M), M = \frac{1}{2}(P+Q)
-$$</p>
-<h3>一些tricks:</h3>
-<p>有时候在训练的时候会碰到discriminator loss几乎一直是平的（0），这样就会让discriminator的作用变小（telling little information），也就意味着$P_{data}$和$P_{G}$几乎没有overlap，这是因为两者都是low dim manifold in high-dim space。</p>
+<p>首先最优的D：<br>$$<br>P_{data}(x)\log D(x) + P_G(x) \log (1-D(x))<br>$$</p>
+<p>$$<br>f(D) = a\log(D) + b\log(1-D)<br>$$</p>
+<p>求极值，得到：<br>$$<br>D^\ast(x) =\frac{P_{data}(x)}{P_{data}(x)+P_G(x)}<br>$$<br>所以<br>$$<br>\max_DV(G,D) = V(G,D^*)=E_{x\sim P_{data}}[\log\frac{P_{data}(x)}{P_{data}(x)+P_G(x)}] + E_{x\sim P_G}[\log\frac{P_G(x)}{P_{data}(x)+P_G(x)}] \ = -2\log 2+E_{x\sim P_{data}}[\log\frac{P_{data}(x)}{(P_{data}(x)+P_G(x))/2}] + E_{x\sim P_G}[\log\frac{P_G(x)}{(P_{data}(x)+P_G(x))/2}] \ =-2\log 2 + KL(P_{data}(x)||\frac{P_{data}(x)+P_G(x)}{2}) + KL(P_{G}(x)||\frac{P_{data}(x)+P_G(x)}{2})<br>$$<br>将分母项 $P_{data}(x)+P_G(x)$ 除以2，那么整个式子就需要减去 $2\log\frac{1}{2}$ ，这就等价成了JS散度，定义了两个分布的相似性：</p>
+<p>$$<br>JSD(P||Q) = \frac{1}{2}KL(P||M)+\frac{1}{2}KL(Q||M), M = \frac{1}{2}(P+Q)<br>$$</p>
+<h3 id="一些tricks"><a href="#一些tricks" class="headerlink" title="一些tricks:"></a>一些tricks:</h3><p>有时候在训练的时候会碰到discriminator loss几乎一直是平的（0），这样就会让discriminator的作用变小（telling little information），也就意味着$P_{data}$和$P_{G}$几乎没有overlap，这是因为两者都是low dim manifold in high-dim space。</p>
 <ul>
 <li>add noise，增加两个分布的接触点或面，而且noise要随机事件decay。</li>
 <li>​</li>
 </ul>
-<h3>Conditional GAN</h3>
-<p>z是噪声,y是条件，在初始的GAN加入了额外的条件y，y可以是任何形式的额外信息，包括类的属性等。</p>
+<h3 id="Conditional-GAN"><a href="#Conditional-GAN" class="headerlink" title="Conditional GAN"></a>Conditional GAN</h3><p>z是噪声,y是条件，在初始的GAN加入了额外的条件y，y可以是任何形式的额外信息，包括类的属性等。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fn60wm16qej30oe0ki40z.jpg" alt=""></p>
-<h3>FGAN</h3>
-<p>用f-divergence代替原始的KL divergence</p>
-<p>f-divergence, f is convex:
-$$
-D_f(P||Q) = \int_xq(x)f(\frac{p(x)}{q(x)})dx
-$$
-例如：
-$$
-f(x) = x\log x \ f(x) = -\log x \ f(x) = (x-1)^2
-$$</p>
-<h4>Fenchel Conjugate</h4>
-<p>$$
-f^\ast(t) = \max_{x\in dom(f)}(xt-f(x))
-$$</p>
-<p>$$
-f(x) = \max_{t\in dom(f^<em>)}{xt-f^\ast(t} \ D_f(P||Q) = \int_x q(x)(\max_{t\in dom(f^</em>)}{\frac{p(x)}{q(x)}t-f^\ast(t)}dx
-$$</p>
-<p>$$
-D_f(P||Q) \ge \int_x q(x)(x\frac{p(x)}{q(x)}D(x)-f^\ast(D(x)))dx \ = \int_xp(x)D(x)dx-\int_x q(x)f^\ast(D(x))dx \ =\max_DE_{x_\sim P}(D(x))-E_{x\sim Q}f^\ast(D(x))
-$$</p>
+<h3 id="FGAN"><a href="#FGAN" class="headerlink" title="FGAN"></a>FGAN</h3><p>用f-divergence代替原始的KL divergence</p>
+<p>f-divergence, f is convex:<br>$$<br>D_f(P||Q) = \int_xq(x)f(\frac{p(x)}{q(x)})dx<br>$$<br>例如：<br>$$<br>f(x) = x\log x \ f(x) = -\log x \ f(x) = (x-1)^2<br>$$</p>
+<h4 id="Fenchel-Conjugate"><a href="#Fenchel-Conjugate" class="headerlink" title="Fenchel Conjugate"></a>Fenchel Conjugate</h4><p>$$<br>f^\ast(t) = \max_{x\in dom(f)}(xt-f(x))<br>$$</p>
+<p>$$<br>f(x) = \max_{t\in dom(f^<em>)}{xt-f^\ast(t} \ D_f(P||Q) = \int_x q(x)(\max_{t\in dom(f^</em>)}{\frac{p(x)}{q(x)}t-f^\ast(t)}dx<br>$$</p>
+<p>$$<br>D_f(P||Q) \ge \int_x q(x)(x\frac{p(x)}{q(x)}D(x)-f^\ast(D(x)))dx \ = \int_xp(x)D(x)dx-\int_x q(x)f^\ast(D(x))dx \ =\max_DE_{x_\sim P}(D(x))-E_{x\sim Q}f^\ast(D(x))<br>$$</p>
 <p>D is a function whose input is x and output is t</p>
 <p>这就相当于定义了一个新的V(G,D)</p>
-<h3>LSGAN（Least Squares GANs）</h3>
-<p>使用最小二乘损失函数代替了GAN的损失函数,事实上，作者认为使用JS散度并不能拉近真实分布和生成分布之间的距离，使用最小二乘可以将图像的分布尽可能的接近决策边界
-$$
-\min_DV_{LSGAN}(D) = \frac{1}{2}E_{x\sim p_{data}(x)}[(D(x)-b)^2]+\frac{1}{2}E_{x\sim p_{z}(z)}[(D(G(z))-a)^2]
-$$</p>
-<p>$$
-\min_GV_{LSGAN}(G)= \frac{1}{2}E_{x\sim p_{data}(x)}[(D(G(z))-c)^2]
-$$</p>
-<h3>infoGAN</h3>
-<p>$$
-\min_{G,Q}\max_DV_{infoGAN}(D,G,Q) = V(D,G) - \lambda L_I(G,Q)
-$$</p>
+<h3 id="LSGAN（Least-Squares-GANs）"><a href="#LSGAN（Least-Squares-GANs）" class="headerlink" title="LSGAN（Least Squares GANs）"></a>LSGAN（Least Squares GANs）</h3><p>使用最小二乘损失函数代替了GAN的损失函数,事实上，作者认为使用JS散度并不能拉近真实分布和生成分布之间的距离，使用最小二乘可以将图像的分布尽可能的接近决策边界<br>$$<br>\min_DV_{LSGAN}(D) = \frac{1}{2}E_{x\sim p_{data}(x)}[(D(x)-b)^2]+\frac{1}{2}E_{x\sim p_{z}(z)}[(D(G(z))-a)^2]<br>$$</p>
+<p>$$<br>\min_GV_{LSGAN}(G)= \frac{1}{2}E_{x\sim p_{data}(x)}[(D(G(z))-c)^2]<br>$$</p>
+<h3 id="infoGAN"><a href="#infoGAN" class="headerlink" title="infoGAN"></a>infoGAN</h3><p>$$<br>\min_{G,Q}\max_DV_{infoGAN}(D,G,Q) = V(D,G) - \lambda L_I(G,Q)<br>$$</p>
 <p>其中，$L_1(G,Q)=E_{c\sim P(c),x\sim G(z,c)}[\log Q(c|x)]+H(c)$</p>
-<p>也就是：
-$$
-L_{D,Q}=L_D^{GAN} - \lambda L_1(c,c') \ L_{G} = L_G^{GAN} - \lambda L_1(c,c')
-$$</p>
+<p>也就是：<br>$$<br>L_{D,Q}=L_D^{GAN} - \lambda L_1(c,c’) \ L_{G} = L_G^{GAN} - \lambda L_1(c,c’)<br>$$</p>
 <p>###WGAN</p>
-<p>WGAN的假设
-$$
-L_D^{WGAN} = E[D(x)]-E[D(G(z))]
-$$</p>
-<p>$$
-L_G^{WGAN} = E[D(G(Z))]
-$$</p>
-<p>$$
-W_D\leftarrow clip_by_value(W_D, -0.01, 0.01)
-$$</p>
+<p>$$<br>L_D^{WGAN} = E[D(x)]-E[D(G(z))]<br>$$</p>
+<p>$$<br>L_G^{WGAN} = E[D(G(Z))]<br>$$</p>
+<p>$$<br>W_D\leftarrow clip_by_value(W_D, -0.01, 0.01)<br>$$</p>
 ]]></content>
       
         <categories>
@@ -530,33 +459,6 @@ $$</p>
             <tag> deep learning </tag>
             
             <tag> GAN </tag>
-            
-        </tags>
-        
-    </entry>
-    
-    <entry>
-      <title><![CDATA[CS224n-assignment2]]></title>
-      <url>/2017/12/20/CS224n-assignment2/</url>
-      <content type="html"><![CDATA[<h2>Tensorflow Softmax</h2>
-<p>(a) 用TensorFlow实现softmax</p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">softmax</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    Compute the softmax function in tensorflow.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Args:</span></div><div class="line"><span class="string">        x:   tf.Tensor with shape (n_samples, n_features).</span></div><div class="line"><span class="string">    Returns:</span></div><div class="line"><span class="string">        out: tf.Tensor with shape (n_sample, n_features). You need to construct this</span></div><div class="line"><span class="string">                  tensor in this problem.</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    x -= tf.reduce_max(x, axis=<span class="number">1</span>, keep_dims=<span class="keyword">True</span>)</div><div class="line">    out = tf.exp(x) / tf.reduce_sum(tf.exp(x), axis=<span class="number">1</span>)</div><div class="line"></div><div class="line">    <span class="keyword">return</span> out</div></pre></td></tr></table></figure></p>
-<p>(b) 实现TensorFlow实现cross entropy loss</p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">cross_entropy_loss</span><span class="params">(y, yhat)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    Compute the cross entropy loss in tensorflow.</span></div><div class="line"><span class="string">    The loss should be summed over the current minibatch.</span></div><div class="line"><span class="string">    Args:</span></div><div class="line"><span class="string">        y:    tf.Tensor with shape (n_samples, n_classes). One-hot encoded.</span></div><div class="line"><span class="string">        yhat: tf.Tensorwith shape (n_sample, n_classes). Each row encodes a</span></div><div class="line"><span class="string">                    probability distribution and should sum to 1.</span></div><div class="line"><span class="string">    Returns:</span></div><div class="line"><span class="string">        out:  tf.Tensor with shape (1,) (Scalar output). You need to construct this</span></div><div class="line"><span class="string">                    tensor in the problem.</span></div><div class="line"><span class="string">    """</span></div><div class="line">    out = -tf.reduce_sum((tf.to_float(y)*tf.log(yhat)))</div><div class="line"></div><div class="line">    <span class="keyword">return</span> out</div></pre></td></tr></table></figure></p>
-<p>(c), (d), (e) 实现简单的softmax classifer</p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SoftmaxModel</span><span class="params">(Model)</span>:</span></div><div class="line">    <span class="string">"""Implements a Softmax classifier with cross-entropy loss."""</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_placeholders</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="string">"""Generates placeholder variables to represent the input tensors.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">        These placeholders are used as inputs by the rest of the model building</span></div><div class="line"><span class="string">        and will be fed data during training.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">        Adds following nodes to the computational graph</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">        input_placeholder: Input placeholder tensor of shape</span></div><div class="line"><span class="string">                                              (batch_size, n_features), type tf.float32</span></div><div class="line"><span class="string">        labels_placeholder: Labels placeholder tensor of shape</span></div><div class="line"><span class="string">                                              (batch_size, n_classes), type tf.int32</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">        Add these placeholders to self as the instance variables</span></div><div class="line"><span class="string">            self.input_placeholder</span></div><div class="line"><span class="string">            self.labels_placeholder</span></div><div class="line"><span class="string">        """</span></div><div class="line">        self.input_placeholder = tf.placeholder(dtype=tf.float32, shape=(Config.batch_size, Config.n_features))</div><div class="line">        self.labels_placeholder = tf.placeholder(dtype=tf.int32, shape=(Config.batch_size, Config.n_classes))</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">create_feed_dict</span><span class="params">(self, inputs_batch, labels_batch=None)</span>:</span></div><div class="line">        <span class="string">"""Creates the feed_dict for training the given step.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">        A feed_dict takes the form of:</span></div><div class="line"><span class="string">        feed_dict = &#123;</span></div><div class="line"><span class="string">                &lt;placeholder&gt;: &lt;tensor of values to be passed for placeholder&gt;,</span></div><div class="line"><span class="string">                ....</span></div><div class="line"><span class="string">        &#125;</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">        If label_batch is None, then no labels are added to feed_dict.</span></div><div class="line"><span class="string">        Args:</span></div><div class="line"><span class="string">            inputs_batch: A batch of input data.</span></div><div class="line"><span class="string">            labels_batch: A batch of label data.</span></div><div class="line"><span class="string">        Returns:</span></div><div class="line"><span class="string">            feed_dict: The feed dictionary mapping from placeholders to values.</span></div><div class="line"><span class="string">        """</span></div><div class="line">        feed_dict = &#123;</div><div class="line">            self.input_placeholder: inputs_batch,</div><div class="line">            self.labels_placeholder: labels_batch</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> feed_dict</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_prediction_op</span><span class="params">(self)</span>:</span></div><div class="line">        <span class="string">"""Adds the core transformation for this model which transforms a batch of input</span></div><div class="line"><span class="string">        data into a batch of predictions. In this case, the transformation is a linear layer plus a</span></div><div class="line"><span class="string">        softmax transformation:</span></div><div class="line"><span class="string">        y = softmax(Wx + b)</span></div><div class="line"><span class="string">        Args:</span></div><div class="line"><span class="string">            input_data: A tensor of shape (batch_size, n_features).</span></div><div class="line"><span class="string">        Returns:</span></div><div class="line"><span class="string">            pred: A tensor of shape (batch_size, n_classes)</span></div><div class="line"><span class="string">        """</span></div><div class="line">        W = tf.Variable(tf.zeros(shape=[self.config.n_features, self.config.n_classes]))</div><div class="line">        b = tf.Variable(tf.zeros(shape=[self.config.n_classes]))</div><div class="line">        pred = tf.add(tf.matmul(self.input_placeholder, W), b)</div><div class="line">        pred = softmax(pred)</div><div class="line">        <span class="keyword">return</span> pred</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_loss_op</span><span class="params">(self, pred)</span>:</span></div><div class="line">        <span class="string">"""Adds cross_entropy_loss ops to the computational graph.</span></div><div class="line"><span class="string">        Args:</span></div><div class="line"><span class="string">            pred: A tensor of shape (batch_size, n_classes)</span></div><div class="line"><span class="string">        Returns:</span></div><div class="line"><span class="string">            loss: A 0-d tensor (scalar)</span></div><div class="line"><span class="string">        """</span></div><div class="line">        loss = cross_entropy_loss(self.labels_placeholder, pred)</div><div class="line">        <span class="keyword">return</span> loss</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">add_training_op</span><span class="params">(self, loss)</span>:</span></div><div class="line">        <span class="string">"""Sets up the training Ops.</span></div><div class="line"><span class="string">        Args:</span></div><div class="line"><span class="string">            loss: Loss tensor, from cross_entropy_loss.</span></div><div class="line"><span class="string">        Returns:</span></div><div class="line"><span class="string">            train_op: The Op for training.</span></div><div class="line"><span class="string">        """</span></div><div class="line">        optimizer = tf.train.GradientDescentOptimizer(Config.lr)</div><div class="line">        train_op = optimizer.minimize(loss)</div><div class="line">        <span class="keyword">return</span> train_op</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run_epoch</span><span class="params">(self, sess, inputs, labels)</span>:</span></div><div class="line">        <span class="string">"""Runs an epoch of training.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">        Args:</span></div><div class="line"><span class="string">            sess: tf.Session() object</span></div><div class="line"><span class="string">            inputs: np.ndarray of shape (n_samples, n_features)</span></div><div class="line"><span class="string">            labels: np.ndarray of shape (n_samples, n_classes)</span></div><div class="line"><span class="string">        Returns:</span></div><div class="line"><span class="string">            average_loss: scalar. Average minibatch loss of model on epoch.</span></div><div class="line"><span class="string">        """</span></div><div class="line">        n_minibatches, total_loss = <span class="number">0</span>, <span class="number">0</span></div><div class="line">        <span class="keyword">for</span> input_batch, labels_batch <span class="keyword">in</span> get_minibatches([inputs, labels], self.config.batch_size):</div><div class="line">            n_minibatches += <span class="number">1</span></div><div class="line">            total_loss += self.train_on_batch(sess, input_batch, labels_batch)</div><div class="line">        <span class="keyword">return</span> total_loss / n_minibatches</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">fit</span><span class="params">(self, sess, inputs, labels)</span>:</span></div><div class="line">        <span class="string">"""Fit model on provided data.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">        Args:</span></div><div class="line"><span class="string">            sess: tf.Session()</span></div><div class="line"><span class="string">            inputs: np.ndarray of shape (n_samples, n_features)</span></div><div class="line"><span class="string">            labels: np.ndarray of shape (n_samples, n_classes)</span></div><div class="line"><span class="string">        Returns:</span></div><div class="line"><span class="string">            losses: list of loss per epoch</span></div><div class="line"><span class="string">        """</span></div><div class="line">        losses = []</div><div class="line">        <span class="keyword">for</span> epoch <span class="keyword">in</span> range(self.config.n_epochs):</div><div class="line">            start_time = time.time()</div><div class="line">            average_loss = self.run_epoch(sess, inputs, labels)</div><div class="line">            duration = time.time() - start_time</div><div class="line">            <span class="keyword">print</span> <span class="string">'Epoch &#123;:&#125;: loss = &#123;:.2f&#125; (&#123;:.3f&#125; sec)'</span>.format(epoch, average_loss, duration)</div><div class="line">            losses.append(average_loss)</div><div class="line">        <span class="keyword">return</span> losses</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, config)</span>:</span></div><div class="line">        <span class="string">"""Initializes the model.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">        Args:</span></div><div class="line"><span class="string">            config: A model configuration object of type Config</span></div><div class="line"><span class="string">        """</span></div><div class="line">        self.config = config</div><div class="line">        self.build()</div></pre></td></tr></table></figure></p>
-]]></content>
-      
-        <categories>
-            
-            <category> algorithms </category>
-            
-        </categories>
-        
-        
-        <tags>
-            
-            <tag> notes </tag>
             
         </tags>
         
@@ -1311,10 +1213,9 @@ $$
     </entry>
     
     <entry>
-      <title><![CDATA[CNN Case Stud]]></title>
+      <title><![CDATA[CNN Case Study]]></title>
       <url>/2017/05/12/cnn-case-study/</url>
-      <content type="html"><![CDATA[<h2>AlexNet</h2>
-<p>结构：</p>
+      <content type="html"><![CDATA[<h2 id="AlexNet"><a href="#AlexNet" class="headerlink" title="AlexNet"></a>AlexNet</h2><p>结构：</p>
 <p>CONV1-&gt;MAX POOL1-&gt;NORM1-&gt;CONV2-&gt;MAX POOL2-&gt;NORM-&gt;CONV3-&gt;CONV4-&gt;CONV5-&gt;MAX POOL3-&gt;FC6-&gt;FC7-&gt;FC8</p>
 <p>输入： $227\times 227\times 3$ 的图像</p>
 <p>第一层（CONV1），96个$11\times11$的卷积和，stride为4，,因为(227-11)/4+1=55</p>
@@ -1331,8 +1232,7 @@ $$
 <p>第十一层（FC6），4096个neurons</p>
 <p>第十二层（FC7）， 4096个neurons</p>
 <p>第十三层（FC8）， 1000个neurons</p>
-<h2>VGGNet</h2>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-27%20%E4%B8%8B%E5%8D%883.11.48.png" alt=""></p>
+<h2 id="VGGNet"><a href="#VGGNet" class="headerlink" title="VGGNet"></a>VGGNet</h2><p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-27%20%E4%B8%8B%E5%8D%883.11.48.png" alt=""></p>
 <p>为什么要使用小的卷积核（$3\times3$ conv）?</p>
 <p>因为3个$3\times3$stride为1的conv堆起来的receptive field是和$7\times7$的conv layer是一样的，这样的话网络可以更深，同时非线性能力提高，而且前者参数数量为：$3*(3^2C^2)$ 后者为 $7^2C^2$,前者数量较少。</p>
 <p>INPUT: $[224\times224\times3]$        memory:  $224<em>224</em>3$=150K   params: 0</p>
@@ -1349,7 +1249,7 @@ $$
 <p>CONV3-512:$ [28\times28\times512] $ memory:  $28<em>28</em>512=400K$   params:$ (3<em>3</em>256)*512 = 1,179,648$</p>
 <p>CONV3-512: $[28\times28\times512]$  memory: $ 28<em>28</em>512=400K $  params:$ (3<em>3</em>512)*512 = 2,359,296$</p>
 <p>CONV3-512:$ [28\times28\times512]$  memory: $ 28<em>28</em>512=400K$   params: $(3<em>3</em>512)*512 = 2,359,296$</p>
-<p>POOL2:$ [14\times14\times512]$  memory:  $14<em>14</em>512=100K$   params: 0</p>
+<p>POOL2:$ [14\times14\times512]$  memory:  $14<em>14</em>512=100K$   params: 0 </p>
 <p>CONV3-512:$ [14\times14\times512]$  memory: $ 14<em>14</em>512=100K$   params: $(3<em>3</em>512)*512 = 2,359,296$</p>
 <p>CONV3-512:$ [14\times14\times512] $ memory: $ 14<em>14</em>512=100K$   params: $(3<em>3</em>512)*512 = 2,359,296 $</p>
 <p>CONV3-512: $[14\times14\times512]$  memory:  $14<em>14</em>512=100K$   params: $(3<em>3</em>512)*512 = 2,359,296$</p>
@@ -1357,20 +1257,19 @@ $$
 <p>FC: $[1\times1\times4096]$  memory:  4096  params: $7<em>7</em>512*4096 = 102,760,448 $</p>
 <p>FC: $[1\times1\times4096]$  memory:  4096  params: $4096*4096 = 16,777,216$</p>
 <p>FC: $[1\times1\times1000]$  memory:  1000 params: $4096*1000 = 4,096,000 $</p>
-<p>总结一下：对于一张图片来说，需要花费的内存是24M*4 bytes = 96MB，而总共的参数有138M</p>
+<p>总结一下：对于一张图片来说，需要花费的内存是24M*4 bytes = 96MB，而总共的参数有138M </p>
 <p>VGG的FC7的特征非常棒！通常用来提特征。</p>
-<h2>GoogleNet</h2>
-<p>22层，有高效的inception module，没有FC层</p>
+<h2 id="GoogleNet"><a href="#GoogleNet" class="headerlink" title="GoogleNet"></a>GoogleNet</h2><p>22层，有高效的inception module，没有FC层</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-27%20%E4%B8%8B%E5%8D%883.15.37.png" alt=""></p>
 <p>重点分析一下Inception module,下图是一个朴素的inception module</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-27%20%E4%B8%8B%E5%8D%883.12.08.png" alt=""></p>
 <p>采用的并行filter运算，有多个receptive field size的卷积，（$1\times1$,$3\times3$,$5\times5$）,从左向右第一个输出的size为$28\times28\times128$，第二个输出的size为$28\times28\times192$,第三个为$28\times28\times96$，第四个为$28\times28\times256$，concate以后的size为：$28\times28\times672$</p>
 <p>缺点就是卷积运算过多：</p>
 <p>$1\times1$ conv, 128=&gt;   $28\times28\times128\times1\times1\times256$</p>
-<p>$3\times3$ conv, 192=&gt; $28\times28\times192\times3\times3\times256$</p>
-<p>$5\times5$ conv, 96=&gt; $28\times28\times96\times5\times5\times256$</p>
+<p> $3\times3$ conv, 192=&gt; $28\times28\times192\times3\times3\times256$</p>
+<p> $5\times5$ conv, 96=&gt; $28\times28\times96\times5\times5\times256$</p>
 <p>总共需要854M次运算</p>
-<p>而且，最终的输出太大了！我们需要减少feature depth,可以用$1\times1$的卷积（$1\times1$ conv &quot;bottleneck&quot; layers）来解决，例如一个$56\times56\times64$的feature map经过32个$1\times1$以后，得到$56\times56\times32$,这样做就是将深度投影到较低的维度，（feature map的组合）</p>
+<p>而且，最终的输出太大了！我们需要减少feature depth,可以用$1\times1$的卷积（$1\times1$ conv “bottleneck” layers）来解决，例如一个$56\times56\times64$的feature map经过32个$1\times1$以后，得到$56\times56\times32$,这样做就是将深度投影到较低的维度，（feature map的组合）</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-27%20%E4%B8%8B%E5%8D%883.12.36.png" alt=""></p>
 <p>卷积运算的数量：</p>
 <p>$[1\times1 conv, 64]$  $28\times28\times64\times1\times1\times256$</p>
@@ -1378,10 +1277,9 @@ $$
 <p>$[1\times1 conv, 128] $ $28\times28\times128\times1\times1\times256$</p>
 <p>$[3\times3 conv, 192]$  $28\times28\times192\times3\times3\times64$</p>
 <p>$[5\times5 conv, 96]$  $28\times28\times96\times5\times5\times64$</p>
-<p>$[1\times1 conv, 64]$  $28\times28\times64\times1\times1\times256$</p>
+<p>$[1\times1 conv, 64]$  $28\times28\times64\times1\times1\times256$ </p>
 <p>Total: 358M ops</p>
-<h2>ResNet</h2>
-<ul>
+<h2 id="ResNet"><a href="#ResNet" class="headerlink" title="ResNet"></a>ResNet</h2><ul>
 <li>每一层CONV层接BN</li>
 <li>没有dropout</li>
 </ul>
