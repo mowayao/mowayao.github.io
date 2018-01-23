@@ -148,10 +148,9 @@ var _hmt = _hmt || [];
 <p><strong>ReLU</strong>：和forward时的ReLU运算相同</p>
 <p><strong>Filtering</strong>: 就是卷积的逆运算。</p>
 <p>考虑一个简单的卷积层运算，其参数为(feature map dim=4, kernel size=3, stride=1, padding=0, output dim=2)</p>
-<p>我们可以将$3\times3$ kernel转换成等价的稀疏矩阵C：<br>$$<br>\begin{pmatrix}     w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp; 0       &amp; w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp; 0       &amp;     w_{2,0} &amp; w_{2,1} &amp; w_{2,2} &amp; 0       &amp; 0       &amp; 0       &amp; 0       &amp; 0       \     0       &amp; w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp; 0       &amp; w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp;     0       &amp; w_{2,0} &amp; w_{2,1} &amp; w_{2,2} &amp; 0       &amp; 0       &amp; 0       &amp; 0       \     0       &amp; 0       &amp; 0       &amp; 0       &amp; w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp; 0       &amp;     w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp; 0       &amp; w_{2,0} &amp; w_{2,1} &amp; w_{2,2} &amp; 0       \     0       &amp; 0       &amp; 0       &amp; 0       &amp; 0       &amp; w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp;     0       &amp; w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp; 0       &amp; w_{2,0} &amp; w_{2,1} &amp; w_{2,2} \ \end{pmatrix}<br>$$<br>再将$4\times 4$的输入转换成等价的16维的向量，那么$Y=CX$的输出就是一个4维的向量，再将其转换成$2\times2$的矩阵，得到最终的结果。</p>
-<p>而Deconv也称Transposed conv，就是变成$YC^T$。</p>
-<p>其实整个过程和back-propagation是很像的。    </p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkv3ckslgj30us0qowkv.jpg" alt=""></p>
+<p>我们可以将$3\times3$ kernel转换成等价的稀疏矩阵C：<br>$$<br>\begin{pmatrix}     w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp; 0       &amp; w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp; 0       &amp;     w_{2,0} &amp; w_{2,1} &amp; w_{2,2} &amp; 0       &amp; 0       &amp; 0       &amp; 0       &amp; 0       \     0       &amp; w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp; 0       &amp; w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp;     0       &amp; w_{2,0} &amp; w_{2,1} &amp; w_{2,2} &amp; 0       &amp; 0       &amp; 0       &amp; 0       \     0       &amp; 0       &amp; 0       &amp; 0       &amp; w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp; 0       &amp;     w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp; 0       &amp; w_{2,0} &amp; w_{2,1} &amp; w_{2,2} &amp; 0       \     0       &amp; 0       &amp; 0       &amp; 0       &amp; 0       &amp; w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp;     0       &amp; w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp; 0       &amp; w_{2,0} &amp; w_{2,1} &amp; w_{2,2} \ \end{pmatrix}<br>$$<br>再将$[4\times 4]$的输入转换成等价的16维的向量，那么$y=Cx$的输出就是一个4维向量，再将其转换成$2\times2$的矩阵，得到最终的结果。</p>
+<p>而Deconv也称Transposed conv，就是变成$C^Ty$。</p>
+<p>其实整个过程和convolution的back-propagation是很像的。<br>$$<br>\frac{\partial L}{\partial x_i} = \sum_j\frac{\partial y_j}{\partial  x_i}\cdot\frac{\partial L}{\partial y_j} \ = \sum_{j}C_{i,j}\cdot \frac{\partial L}{\partial y_j} \\= C^T_{*,i} \frac{\partial L}{\partial y}<br>$$<br><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkv3ckslgj30us0qowkv.jpg" alt=""></p>
 <h5 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h5><p>基于AlexNet修改，将第一层$11\times 11$的大小减小到$7\times 7$, 并将步长从4减少到2， 并ImageNet 2012数据集上训练，具体见Fig. 3。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkzcp3ebcj30uy0i2791.jpg" alt=""></p>
 <h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p>######<strong>可视化：</strong></p>
@@ -183,12 +182,12 @@ var _hmt = _hmt || [];
 
     
     
-    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>上一页</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2018/01/18/Network-In-Network算法笔记/" type="button" class="btn btn-default ">Next<i
+    <a href="/2018/01/18/Network-In-Network算法笔记/" type="button" class="btn btn-default ">下一页<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -201,7 +200,7 @@ var _hmt = _hmt || [];
 	<!-- comment -->
 	
 <section id="comment">
-    <h2 class="title">Comments</h2>
+    <h2 class="title">留言</h2>
 
     
 </section>
