@@ -152,34 +152,23 @@ var _hmt = _hmt || [];
 	
 		<p>论文：Visualizing and UnderstandingConvolutional Networks</p>
 <p>作者：Matthew D Zeiler, Rob Fergus, ECCV, 2014</p>
-<p>链接：https://cs.nyu.edu/~fergus/papers/zeilerECCV2014.pdf</p>
+<p>链接：<a href="https://cs.nyu.edu/~fergus/papers/zeilerECCV2014.pdf" target="_blank" rel="external">https://cs.nyu.edu/~fergus/papers/zeilerECCV2014.pdf</a></p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkxf4e7rcj318g0dgdke.jpg" alt=""></p>
 <p><strong>Idea:</strong> 模型的可视化对模型的优化非常重要，更好的理解模型可以帮助我们更好地改进模型。作者将网络的任一层输出的feature maps通过Deconvnet反馈到最终的输入（input pixel space）上（reveals the input stimuli that excite individual feature maps at any layer in the model）。</p>
-<h5>Deconvnet</h5>
-<p>Deconvnet，顾名思义，就是将卷积，pooling，ReLU等运算做逆运算，将feature maps映射回pixels。</p>
+<h5 id="Deconvnet"><a href="#Deconvnet" class="headerlink" title="Deconvnet"></a>Deconvnet</h5><p>Deconvnet，顾名思义，就是将卷积，pooling，ReLU等运算做逆运算，将feature maps映射回pixels。</p>
 <p>随机选择一些不同层的feature maps，经过“反向运算”，<strong><em>unpooling-&gt;ReLU-&gt;Conv Filter</em></strong>，映射到输入，具体可以见Fig. 1。</p>
 <p><strong>Unpooling:</strong> 通过记录每个pooling region的最大值的位置，在运算的时候将最大值复制到原来的位置，其他位置的值设为0。</p>
 <p><strong>ReLU</strong>：和forward时的ReLU运算相同</p>
 <p><strong>Filtering</strong>: 就是卷积的逆运算。</p>
 <p>考虑一个简单的卷积层运算，其参数为(feature map dim=4, kernel size=3, stride=1, padding=0, output dim=2)</p>
 <p>我们可以将$3\times3$ kernel转换成等价的稀疏矩阵C：</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fnqehkh9h4j30kc02hweb.jpg" alt="">
-$$
-\begin{pmatrix}     w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp; 0       &amp; w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp; 0       &amp;     w_{2,0} &amp; w_{2,1} &amp; w_{2,2} &amp; 0       &amp; 0       &amp; 0       &amp; 0       &amp; 0\     0       &amp; w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp; 0       &amp; w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp;     0       &amp; w_{2,0} &amp; w_{2,1} &amp; w_{2,2} &amp; 0       &amp; 0       &amp; 0       &amp; 0       \     0       &amp; 0       &amp; 0       &amp; 0       &amp; w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp; 0       &amp;     w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp; 0       &amp; w_{2,0} &amp; w_{2,1} &amp; w_{2,2} &amp; 0       \     0       &amp; 0       &amp; 0       &amp; 0       &amp; 0       &amp; w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp;     0       &amp; w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp; 0       &amp; w_{2,0} &amp; w_{2,1} &amp; w_{2,2} \ \end{pmatrix}
-$$
-再将$[4\times 4]$的输入转换成等价的16维的向量，那么$y=Cx$的输出就是一个4维向量，再将其转换成$2\times2$的矩阵，得到最终的结果。</p>
-<p>而Deconv也称Transposed conv，就是变成$C^Ty​$。</p>
-<p>其实整个过程和convolution的back-propagation是很像的。
-$$
-\frac{\partial L}{\partial x_i} = \sum_j\frac{\partial y_j}{\partial  x_i}\cdot\frac{\partial L}{\partial y_j} \ = \sum_{j}C_{i,j}\cdot \frac{\partial L}{\partial y_j} \= C^T_{*,i} \frac{\partial L}{\partial y}
-$$
-<img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkv3ckslgj30us0qowkv.jpg" alt=""></p>
-<h5>Model</h5>
-<p>基于AlexNet修改，将第一层$11\times 11$的大小减小到$7\times 7$, 并将步长从4减少到2， 并ImageNet 2012数据集上训练，具体见Fig. 3。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fnqehkh9h4j30kc02hweb.jpg" alt=""><br>$$<br>\begin{pmatrix}     w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp; 0       &amp; w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp; 0       &amp;     w_{2,0} &amp; w_{2,1} &amp; w_{2,2} &amp; 0       &amp; 0       &amp; 0       &amp; 0       &amp; 0\     0       &amp; w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp; 0       &amp; w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp;     0       &amp; w_{2,0} &amp; w_{2,1} &amp; w_{2,2} &amp; 0       &amp; 0       &amp; 0       &amp; 0       \     0       &amp; 0       &amp; 0       &amp; 0       &amp; w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp; 0       &amp;     w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp; 0       &amp; w_{2,0} &amp; w_{2,1} &amp; w_{2,2} &amp; 0       \     0       &amp; 0       &amp; 0       &amp; 0       &amp; 0       &amp; w_{0,0} &amp; w_{0,1} &amp; w_{0,2} &amp;     0       &amp; w_{1,0} &amp; w_{1,1} &amp; w_{1,2} &amp; 0       &amp; w_{2,0} &amp; w_{2,1} &amp; w_{2,2} \ \end{pmatrix}<br>$$<br>再将$[4\times 4]$的输入转换成等价的16维的向量，那么$y=Cx$的输出就是一个4维向量，再将其转换成$2\times2$的矩阵，得到最终的结果。</p>
+<p>而Deconv也称Transposed conv，就是变成$C^Ty$。</p>
+<p>其实整个过程和convolution的back-propagation是很像的。<br>$$<br>\frac{\partial L}{\partial x_i} = \sum_j\frac{\partial y_j}{\partial  x_i}\cdot\frac{\partial L}{\partial y_j} \ = \sum_{j}C_{i,j}\cdot \frac{\partial L}{\partial y_j} \ = C^T_{*,i} \frac{\partial L}{\partial y}<br>$$<br><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkv3ckslgj30us0qowkv.jpg" alt=""></p>
+<h5 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h5><p>基于AlexNet修改，将第一层$11\times 11$的大小减小到$7\times 7$, 并将步长从4减少到2， 并ImageNet 2012数据集上训练，具体见Fig. 3。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkzcp3ebcj30uy0i2791.jpg" alt=""></p>
-<h5>实验</h5>
-<p>######<strong>可视化：</strong></p>
-<p>结果见Fig. 2。</p>
+<h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p>######可视化：</p>
+<p>结果见Fig. 2。 </p>
 <p>Layer 1: 可以看到基本上是一些图像最基本的元素，例如，edge，corner等。</p>
 <p>Layer 2-5： 随着深度的加深，其特征越来越具体，variance也越来越大！</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkzpsayskj30ji0sc1kx.jpg" alt=""></p>
@@ -201,7 +190,7 @@ $$
 
 	
 	</div>
-  <a type="button" href="/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/#more" class="btn btn-default more">Leia Mais</a>
 </div>
 
 		
@@ -296,7 +285,7 @@ $$</p>
 
 	
 	</div>
-  <a type="button" href="/2018/01/18/Network-In-Network算法笔记/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2018/01/18/Network-In-Network算法笔记/#more" class="btn btn-default more">Leia Mais</a>
 </div>
 
 		
@@ -370,7 +359,7 @@ $[1000]$ FC8: 1000 neurons (class scores)</p>
 
 	
 	</div>
-  <a type="button" href="/2018/01/18/AlexNet算法笔记/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2018/01/18/AlexNet算法笔记/#more" class="btn btn-default more">Leia Mais</a>
 </div>
 
 		
@@ -547,7 +536,7 @@ $[1000]$ FC8: 1000 neurons (class scores)</p>
 
 	
 	</div>
-  <a type="button" href="/2018/01/18/VGGNet算法笔记/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2018/01/18/VGGNet算法笔记/#more" class="btn btn-default more">Leia Mais</a>
 </div>
 
 		
@@ -693,7 +682,7 @@ $$</p>
 
 	
 	</div>
-  <a type="button" href="/2018/01/05/Comic-Generation/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2018/01/05/Comic-Generation/#more" class="btn btn-default more">Leia Mais</a>
 </div>
 
 		
@@ -727,7 +716,7 @@ $$</p>
 
 	
 	</div>
-  <a type="button" href="/2017/12/20/CS224n-assignment2/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2017/12/20/CS224n-assignment2/#more" class="btn btn-default more">Leia Mais</a>
 </div>
 
 		
@@ -899,7 +888,7 @@ $$</p>
 
 	
 	</div>
-  <a type="button" href="/2017/12/18/CS224n-assignment1/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2017/12/18/CS224n-assignment1/#more" class="btn btn-default more">Leia Mais</a>
 </div>
 
 		
@@ -941,7 +930,7 @@ $$</p>
 
 	
 	</div>
-  <a type="button" href="/2017/12/09/Network-Architecture-of-Deblurring/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2017/12/09/Network-Architecture-of-Deblurring/#more" class="btn btn-default more">Leia Mais</a>
 </div>
 
 		
@@ -984,7 +973,7 @@ $$
 
 	
 	</div>
-  <a type="button" href="/2017/12/05/Generate-Motion-Blur/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2017/12/05/Generate-Motion-Blur/#more" class="btn btn-default more">Leia Mais</a>
 </div>
 
 		
@@ -1028,7 +1017,7 @@ $$
 
 	
 	</div>
-  <a type="button" href="/2017/11/24/capsule/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2017/11/24/capsule/#more" class="btn btn-default more">Leia Mais</a>
 </div>
 
 		
@@ -1042,12 +1031,12 @@ $$
 
    
     
-           <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+           <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Anterior</a>
         
 
         <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
  
-       <a href="/page/2/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>     
+       <a href="/page/2/" type="button" class="btn btn-default ">Próximo<i class="fa fa-arrow-circle-o-right"></i></a>     
         
 
   
@@ -1067,7 +1056,7 @@ $$
 			
   <div id="site_search">
    <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="Busca" class="st-search-input st-default-search-input form-control"/>
    </div>  
   <div id="local-search-result"></div>
   </div>
@@ -1076,7 +1065,7 @@ $$
 		
 			
 	<div class="widget">
-		<h4>Categories</h4>
+		<h4>Categorias</h4>
 		<ul class="tag_box inline list-unstyled">
 		
 			<li><a href="/categories/algorithms/">algorithms<span>7</span></a></li>
@@ -1090,37 +1079,37 @@ $$
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
+			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
+		
+			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
+		
+			<li><a href="/tags/computer-vision/">computer vision<span>3</span></a></li>
+		
+			<li><a href="/tags/classifcation/">classifcation<span>1</span></a></li>
+		
+			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
+		
+			<li><a href="/tags/math/">math<span>2</span></a></li>
+		
 			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
+		
+			<li><a href="/tags/deep-learning/">deep learning<span>11</span></a></li>
+		
+			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
 		
 			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
 		
 			<li><a href="/tags/notes/">notes<span>7</span></a></li>
 		
-			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
-		
-			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
-		
-			<li><a href="/tags/deep-learning/">deep learning<span>11</span></a></li>
-		
-			<li><a href="/tags/paper/">paper<span>1</span></a></li>
-		
-			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
-		
-			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
-		
-			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
-		
-			<li><a href="/tags/computer-vision/">computer vision<span>3</span></a></li>
+			<li><a href="/tags/杂/">杂<span>1</span></a></li>
 		
 			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
 		
-			<li><a href="/tags/math/">math<span>2</span></a></li>
-		
-			<li><a href="/tags/classifcation/">classifcation<span>1</span></a></li>
-		
 			<li><a href="/tags/summary/">summary<span>2</span></a></li>
 		
-			<li><a href="/tags/杂/">杂<span>1</span></a></li>
+			<li><a href="/tags/paper/">paper<span>1</span></a></li>
+		
+			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -1130,7 +1119,7 @@ $$
 		
 			
 <div class="widget">
-  <h4>Recent Posts</h4>
+  <h4>Posts recentes</h4>
   <ul class="entry list-unstyled">
     
       <li>
