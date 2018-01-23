@@ -163,24 +163,18 @@ var _hmt = _hmt || [];
 <li>和CNN兼容，可以用BP训练</li>
 <li>自身可以作为一个deep model，可以用 $1\times 1$ 的卷积替代</li>
 </ol>
-<ul>
-<li>传统的CNN的feature maps的计算如下,ReLU为激活函数：</li>
-</ul>
-<p>$$
+<p>传统的CNN的feature maps的计算如下,ReLU为激活函数：
+$$
 f_{i,j,k} = \max(w_k^Tx_{i,j},0)
-$$</p>
-<ul>
-<li>maxout层feature maps的计算如下：</li>
-</ul>
-<p>$$
+$$
+maxout层feature maps的计算如下：
+$$
 f_{i,j,k}=\max_m(w_{k_m}^Tx_{i,j})
 $$
 maxout其实就是ReLU和Leaky ReLU的扩展，提升非线性能力，弥补了两者的缺点，例如应用ReLU激活函数，训练到后面，大部分neron会“挂掉”，因为已经死掉的neuron不会再有梯度了！除此之外，maxout的拟合能力是非常强的，它可以拟合任意的的凸函数。最直观的解释就是任意的凸函数都可以由分段线性函数以任意精度拟合。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fnlus4z8aaj30e904d74l.jpg" alt=""></p>
-<ul>
-<li>mlpconv layer的计算如下：</li>
-</ul>
-<p>$$
+<p>mlpconv layer的计算如下：
+$$
 f_{i,j,k_1}^1=\max({w_{k_1}^1}^Tx_{i,j}+b_{k_1},0) \ ... \ f_{i,j,k_n}^n=\max({w_{k_n}^n}^Tx_{i,j}+b_{k_n},0)
 $$</p>
 <p>n是多层感知机的层数。Figure 2是NIN的整体结构。</p>
