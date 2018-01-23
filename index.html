@@ -153,6 +153,7 @@ var _hmt = _hmt || [];
 		<p>论文：Visualizing and UnderstandingConvolutional Networks</p>
 <p>作者：Matthew D Zeiler, Rob Fergus, ECCV, 2014</p>
 <p>链接：https://cs.nyu.edu/~fergus/papers/zeilerECCV2014.pdf</p>
+<p>代码实现： https://github.com/mowayao/Deconvnet</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkxf4e7rcj318g0dgdke.jpg" alt=""></p>
 <p><strong>Idea:</strong> 模型的可视化对模型的优化非常重要，更好的理解模型可以帮助我们更好地改进模型。作者将网络的任一层输出的feature maps通过Deconvnet反馈到最终的输入（input pixel space）上（reveals the input stimuli that excite individual feature maps at any layer in the model）。</p>
 <h5>Deconvnet</h5>
@@ -178,7 +179,7 @@ $$
 <p><strong>可视化：</strong></p>
 <p>结果见Fig. 2。</p>
 <p>Layer 1: 可以看到基本上是一些图像最基本的元素，例如，edge，corner等。</p>
-<p>Layer 2-5： 随着深度的加深，其特征越来越具体，variance也越来越大！</p>
+<p>Layer 2-5： 随着深度的加深，其特征越来越具体，variance也越来越大！具有越来越强的辨别能力。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkzpsayskj30ji0sc1kx.jpg" alt=""></p>
 <p><strong>遮挡实验：</strong></p>
 <p>将图片中的一些区域进行遮挡，将其换成灰色方块，结果见Fig 6。具体以第一行为例，可以发现，当狗的身体一部分被遮挡时，网络还是显示亮蓝色，表示预测的是网球。说明，网络已经学会根据图像的context信息去剔除与目标无关的区域或者物体。</p>
@@ -1031,37 +1032,37 @@ $$</p>
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
+			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
+		
+			<li><a href="/tags/notes/">notes<span>6</span></a></li>
+		
+			<li><a href="/tags/杂/">杂<span>1</span></a></li>
+		
+			<li><a href="/tags/paper/">paper<span>1</span></a></li>
+		
+			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
+		
+			<li><a href="/tags/classifcation/">classifcation<span>1</span></a></li>
+		
+			<li><a href="/tags/computer-vision/">computer vision<span>3</span></a></li>
 		
 			<li><a href="/tags/deep-learning/">deep learning<span>11</span></a></li>
 		
+			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
+		
+			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
+		
+			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
+		
+			<li><a href="/tags/math/">math<span>2</span></a></li>
+		
 			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
+		
+			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
 		
 			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
 		
 			<li><a href="/tags/summary/">summary<span>2</span></a></li>
-		
-			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
-		
-			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
-		
-			<li><a href="/tags/classifcation/">classifcation<span>1</span></a></li>
-		
-			<li><a href="/tags/notes/">notes<span>6</span></a></li>
-		
-			<li><a href="/tags/computer-vision/">computer vision<span>3</span></a></li>
-		
-			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
-		
-			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
-		
-			<li><a href="/tags/math/">math<span>2</span></a></li>
-		
-			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
-		
-			<li><a href="/tags/paper/">paper<span>1</span></a></li>
-		
-			<li><a href="/tags/杂/">杂<span>1</span></a></li>
 		
 		 
 		</ul>
