@@ -136,6 +136,153 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2018/01/25/Batch-Normalization-Accelerating-Deep-Network-Training-by-Reducing-Internal-Covariate-Shift笔记/" >Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift笔记</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2018-01-25  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>论文 ：Batch Normalization: Accelerating Deep Network Training by Reducing Internal<br>  Covariate Shift, ICML 2015</p>
+<p>链接：<a href="http://proceedings.mlr.press/v37/ioffe15.pdf" target="_blank" rel="external">http://proceedings.mlr.press/v37/ioffe15.pdf</a></p>
+<p>作者: Sergey Ioffe，Christian Szegedy</p>
+<p>#####Idea</p>
+<p><strong>Internal Covariate Shift</strong></p>
+<p>什么是Covariate Shift？</p>
+<blockquote>
+<p>Another assumption one can make about the connection between the source and the target domains is that given the same observation <img src="http://sifaka.cs.uiuc.edu/jiang4/domain_adaptation/survey/img23.gif" alt="$ X = x$">, the conditional distributions of <img src="http://sifaka.cs.uiuc.edu/jiang4/domain_adaptation/survey/img2.gif" alt="$ Y$"> are the same in the two domains. However, the marginal distributions of <img src="http://sifaka.cs.uiuc.edu/jiang4/domain_adaptation/survey/img1.gif" alt="$ X$"> may be different in the source and the target domains. Formally, we assume that <img src="http://sifaka.cs.uiuc.edu/jiang4/domain_adaptation/survey/img74.gif" alt="$ P_s(Y \vert X = x) = P_t(Y \vert X = x)$"> for all <img src="http://sifaka.cs.uiuc.edu/jiang4/domain_adaptation/survey/img17.gif" alt="$ x \in \mathcal{X}$">, but <img src="http://sifaka.cs.uiuc.edu/jiang4/domain_adaptation/survey/img75.gif" alt="$ P_s(X) \ne P_t(X)$">. This difference between the two domains is called <em>covariate shift</em></p>
+</blockquote>
+<p>covariates其实就是输入特征，记做X，假设对任意的$x\in \mathcal{X}$,$P_s(Y|X=x)=P_t(Y|X=x)$，表示Y关于X的条件分布在source domain（训练集）和target domain（测试集）是一样的，但是$P_s(X)\neq P_t(X) $，两者的边缘分布是不一样的！这个问题经常发生在transfer learning中。从表面上看，对于分类问题，只要两者的条件分布相同，即使边缘分布不同，也不会影响分类的结果，但是，当模型是有参数的时候，也就是$P(Y|X,\theta)$的时候，我们需要选择最优的参数$\theta^*$来使得loss($\theta$)最小。在这个时候，如果$P_s(X)\neq P_t(X) $，也就打破了传统机器学习中，训练集和测试集的数据是i.i.d（独立同分布）的，那么在target domain的最优模型会和source domain的不一样，因为参数的求解依赖于X的边缘分布！<br>$$<br>P(\theta|D)=\frac{P(D|\theta)\times P(\theta)}{P(D)}<br>$$<br>Internal Covariate Shift表示的是在神经网络发生的convariate shift，因为网络参数在更新，在神经网络的特定层的输出分布就发生了改变，这就导致它的后面层需要去适应它分布的变化，这就降低了训练速度，影响了模型的训练效果。</p>
+<p><strong>Vanishing Gradient</strong></p>
+<p>一些容易饱和的非线性激活函数(tanh, sigmoid等)当输入很大的时候，梯度容易饱和。这使得模型在加深的时候，梯度容易消失！以及，ReLU的使用使得部分神经元“死掉”后不再有梯度传回去，随着网络的不断迭代，越来越多的神经元会“死掉”！所以这需要我们：</p>
+<ul>
+<li>调低学习率</li>
+<li>谨慎的初始化</li>
+</ul>
+<p><strong>Batch Normalization</strong></p>
+<p>作者引用了一些研究的发现：</p>
+<blockquote>
+<p>Network converges faster when the inputs are <em>whitened</em> - that is, normalized to have zero mean, unit variance, and decorrelated (diagonal covariance).</p>
+</blockquote>
+<p>当网络的输入数据是白化的（均值为0，方差为1的高斯分布）和独立的，网络收敛会更快！</p>
+<p>所以，作者将每一层的输出在激活函数前做归一化。利用均值和方差去归一化以后，还对数据做了线性变换。所有的步骤都是可微的，所以是可以用bp优化的。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fnsve61xlbj30sc0mg787.jpg" alt=""></p>
+<p><strong>代码实现：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchnorm_forward</span><span class="params">(x, gamma, beta, bn_param)</span>:</span></div><div class="line">  <span class="string">"""</span></div><div class="line"><span class="string">  Forward pass for batch normalization.</span></div><div class="line"><span class="string">  During training the sample mean and (uncorrected) sample variance are</span></div><div class="line"><span class="string">  computed from minibatch statistics and used to normalize the incoming data.</span></div><div class="line"><span class="string">  During training we also keep an exponentially decaying running mean of the mean</span></div><div class="line"><span class="string">  and variance of each feature, and these averages are used to normalize data</span></div><div class="line"><span class="string">  at test-time.</span></div><div class="line"><span class="string">  At each timestep we update the running averages for mean and variance using</span></div><div class="line"><span class="string">  an exponential decay based on the momentum parameter:</span></div><div class="line"><span class="string">  running_mean = momentum * running_mean + (1 - momentum) * sample_mean</span></div><div class="line"><span class="string">  running_var = momentum * running_var + (1 - momentum) * sample_var</span></div><div class="line"><span class="string">  Note that the batch normalization paper suggests a different test-time</span></div><div class="line"><span class="string">  behavior: they compute sample mean and variance for each feature using a</span></div><div class="line"><span class="string">  large number of training images rather than using a running average. For</span></div><div class="line"><span class="string">  this implementation we have chosen to use running averages instead since</span></div><div class="line"><span class="string">  they do not require an additional estimation step; the torch7 implementation</span></div><div class="line"><span class="string">  of batch normalization also uses running averages.</span></div><div class="line"><span class="string">  Input:</span></div><div class="line"><span class="string">  - x: Data of shape (N, D)</span></div><div class="line"><span class="string">  - gamma: Scale parameter of shape (D,)</span></div><div class="line"><span class="string">  - beta: Shift paremeter of shape (D,)</span></div><div class="line"><span class="string">  - bn_param: Dictionary with the following keys:</span></div><div class="line"><span class="string">    - mode: 'train' or 'test'; required</span></div><div class="line"><span class="string">    - eps: Constant for numeric stability</span></div><div class="line"><span class="string">    - momentum: Constant for running mean / variance.</span></div><div class="line"><span class="string">    - running_mean: Array of shape (D,) giving running mean of features</span></div><div class="line"><span class="string">    - running_var Array of shape (D,) giving running variance of features</span></div><div class="line"><span class="string">  Returns a tuple of:</span></div><div class="line"><span class="string">  - out: of shape (N, D)</span></div><div class="line"><span class="string">  - cache: A tuple of values needed in the backward pass</span></div><div class="line"><span class="string">  """</span></div><div class="line">  mode = bn_param[<span class="string">'mode'</span>]</div><div class="line">  eps = bn_param.get(<span class="string">'eps'</span>, <span class="number">1e-5</span>)</div><div class="line">  momentum = bn_param.get(<span class="string">'momentum'</span>, <span class="number">0.9</span>)</div><div class="line"></div><div class="line">  N, D = x.shape</div><div class="line">  running_mean = bn_param.get(<span class="string">'running_mean'</span>, np.zeros(D, dtype=x.dtype))</div><div class="line">  running_var = bn_param.get(<span class="string">'running_var'</span>, np.zeros(D, dtype=x.dtype))</div><div class="line"></div><div class="line">  out, cache = <span class="keyword">None</span>, <span class="keyword">None</span></div><div class="line">  <span class="keyword">if</span> mode == <span class="string">'train'</span>:</div><div class="line">    mean = np.sum(x,axis=<span class="number">0</span>)/float(N)</div><div class="line">    x_mean = (x - mean)</div><div class="line">    sqr_x_mean = x_mean**<span class="number">2</span></div><div class="line">    var = np.sum(sqr_x_mean, axis=<span class="number">0</span>)/float(N)</div><div class="line">    sqrt_var = np.sqrt(var+eps)</div><div class="line">    inv_sqrt_var = <span class="number">1.0</span>/sqrt_var</div><div class="line">    x_hat = x_mean*inv_sqrt_var</div><div class="line">    out = gamma * x_hat + beta</div><div class="line">    cache = (x_hat,gamma,sqr_x_mean,mean,var,sqrt_var,x_mean,inv_sqrt_var)</div><div class="line"></div><div class="line">    running_mean = momentum*running_mean + (<span class="number">1.0</span>-momentum)*mean</div><div class="line">    running_var = momentum*running_var + (<span class="number">1.0</span>-momentum)*var</div><div class="line">   </div><div class="line">  <span class="keyword">elif</span> mode == <span class="string">'test'</span>:</div><div class="line"></div><div class="line">    x_hat = (x - running_mean)/np.sqrt(running_var+eps)</div><div class="line">    out = gamma * x_hat + beta</div><div class="line">  <span class="keyword">else</span>:</div><div class="line">    <span class="keyword">raise</span> ValueError(<span class="string">'Invalid forward batchnorm mode "%s"'</span> % mode)</div><div class="line"></div><div class="line">  <span class="comment"># Store the updated running means back into bn_param</span></div><div class="line">  bn_param[<span class="string">'running_mean'</span>] = running_mean</div><div class="line">  bn_param[<span class="string">'running_var'</span>] = running_var</div><div class="line">  <span class="keyword">return</span> out, cache</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchnorm_backward</span><span class="params">(dout, cache)</span>:</span></div><div class="line">  <span class="string">"""</span></div><div class="line"><span class="string">  Backward pass for batch normalization.</span></div><div class="line"><span class="string">  For this implementation, you should write out a computation graph for</span></div><div class="line"><span class="string">  batch normalization on paper and propagate gradients backward through</span></div><div class="line"><span class="string">  intermediate nodes.</span></div><div class="line"><span class="string">  Inputs:</span></div><div class="line"><span class="string">  - dout: Upstream derivatives, of shape (N, D)</span></div><div class="line"><span class="string">  - cache: Variable of intermediates from batchnorm_forward.</span></div><div class="line"><span class="string">  Returns a tuple of:</span></div><div class="line"><span class="string">  - dx: Gradient with respect to inputs x, of shape (N, D)</span></div><div class="line"><span class="string">  - dgamma: Gradient with respect to scale parameter gamma, of shape (D,)</span></div><div class="line"><span class="string">  - dbeta: Gradient with respect to shift parameter beta, of shape (D,)</span></div><div class="line"><span class="string">  """</span></div><div class="line">  x_hat,gamma,sqr_x_mean,mean,var,sqrt_var,x_mean,inv_sqrt_var = cache</div><div class="line">  dx, dgamma, dbeta = <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span></div><div class="line"></div><div class="line">  N = x_hat.shape[<span class="number">0</span>]</div><div class="line">    </div><div class="line">  dx_hat = dout * gamma</div><div class="line">  dx_mean = dx_hat*inv_sqrt_var</div><div class="line">  dinv_sqrt_var = np.sum(dx_hat*x_mean,axis=<span class="number">0</span>)</div><div class="line">  dsqrt_var = <span class="number">-1.0</span>/(sqrt_var**<span class="number">2</span>)*dinv_sqrt_var</div><div class="line">  dvar = <span class="number">0.5</span>*inv_sqrt_var*dsqrt_var</div><div class="line">  dsqr_x_mean = <span class="number">1.0</span>/N*np.ones(sqr_x_mean.shape)*dvar</div><div class="line">  dx_mean += <span class="number">2</span>*x_mean*dsqr_x_mean</div><div class="line"></div><div class="line">  dmean = -np.sum(dx_mean,axis=<span class="number">0</span>)</div><div class="line">  dx1 = dx_mean</div><div class="line">  dx2 = <span class="number">1.0</span>/N*np.ones(mean.shape)*dmean</div><div class="line">  dx = dx1+dx2</div><div class="line">  dgamma = np.sum(x_hat*dout,axis=<span class="number">0</span>)</div><div class="line">  dbeta =  np.sum(dout,axis=<span class="number">0</span>)</div><div class="line"></div><div class="line">  <span class="keyword">return</span> dx, dgamma, dbeta</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchnorm_backward_alt</span><span class="params">(dout, cache)</span>:</span></div><div class="line">  <span class="string">"""</span></div><div class="line"><span class="string">  Alternative backward pass for batch normalization.</span></div><div class="line"><span class="string">  For this implementation you should work out the derivatives for the batch</span></div><div class="line"><span class="string">  normalizaton backward pass on paper and simplify as much as possible. You</span></div><div class="line"><span class="string">  should be able to derive a simple expression for the backward pass.</span></div><div class="line"><span class="string">  Note: This implementation should expect to receive the same cache variable</span></div><div class="line"><span class="string">  as batchnorm_backward, but might not use all of the values in the cache.</span></div><div class="line"><span class="string">  Inputs / outputs: Same as batchnorm_backward</span></div><div class="line"><span class="string">  """</span></div><div class="line">  dx, dgamma, dbeta = <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span></div><div class="line">  x_hat,gamma,sqr_x_mean,mean,var,sqrt_var,x_mean,inv_sqrt_var = cache</div><div class="line">  N = x_hat.shape[<span class="number">0</span>]</div><div class="line">  dbeta = np.sum(dout,axis=<span class="number">0</span>)</div><div class="line">  dgamma = np.sum(dout*x_hat,axis=<span class="number">0</span>)</div><div class="line"></div><div class="line">  dx = <span class="number">1.0</span>/N*inv_sqrt_var*gamma*(</div><div class="line">   N*dout</div><div class="line">   -np.sum(dout,axis=<span class="number">0</span>)</div><div class="line">   -x_mean*(inv_sqrt_var**<span class="number">2</span>)*np.sum(dout*x_mean,axis=<span class="number">0</span>)</div><div class="line">  )</div><div class="line"></div><div class="line">  <span class="keyword">return</span> dx, dgamma, dbeta</div></pre></td></tr></table></figure>
+
+	
+	</div>
+  <a type="button" href="/2018/01/25/Batch-Normalization-Accelerating-Deep-Network-Training-by-Reducing-Internal-Covariate-Shift笔记/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2018/01/25/Going-Deeper-with-Convolutions笔记/" >Going Deeper with Convolutions笔记</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2018-01-25  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>论文 ：Going Deeper with Convolutions,CVPR 2015 </p>
+<p>链接：<a href="https://www.cs.unc.edu/~wliu/papers/GoogLeNet.pdf" target="_blank" rel="external">https://www.cs.unc.edu/~wliu/papers/GoogLeNet.pdf</a></p>
+<p>作者: Christian Szegedy, Wei Liu, Yangqing Jia, Pierre Sermanet, Scott Reed,Dragomir Anguelov, Dumitru Erhan, Vincent Vanhoucke, Andrew Rabinovich </p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fnsrwl5iuuj31040kc1dy.jpg" alt=""></p>
+<p><strong>Contribution</strong> </p>
+<ul>
+<li>提出了GoogleNet的网络结构，由若干Inception Module堆叠而成。 </li>
+<li>在ILSVRC 2014上拿到了classification task和detection task的冠军。</li>
+</ul>
+<p><strong>Motivation</strong></p>
+<p>对于DCNN来说，增大网络的大小是一个直接提升网络性能的方法，增大网络大小包括增加网络的深度，增大网络的宽度，也就是每个level的神经元数量。 但是增大网络也伴随着问题：</p>
+<ol>
+<li>大量的参数需要优化</li>
+<li>容易过拟合</li>
+<li>需要大量的喂大量的标签数据，而数据是很昂贵的！</li>
+<li>模型越大，所需要的计算资源也越多</li>
+</ol>
+<p>所以，本着<em>Occam’s Razor</em>，简洁才是王道的思想，需要更加精细地优化网络结构。</p>
+<p>作者也引用了一些理论依据：</p>
+<blockquote>
+<p>if the probability distribution of the dataset is representable by a large, very sparse deep neural network, then the optimal network topology can be constructed layer after layer by analyzing the correlation statistics of the preceding layer activations and clustering neurons with highly correlated outputs.</p>
+<p> Hebbian principle – neurons that fire together, wire together</p>
+</blockquote>
+<p>还有一些客观事实：</p>
+<blockquote>
+<p>Steadily improving and highly tuned numerical libraries that allow for extremely fast dense matrix multiplication</p>
+</blockquote>
+<p>所以，作者想到的是用一些readily avaliable dense blocks去模拟近似构造local sparse structure。</p>
+<p><strong>Inception Module:</strong></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fnsryufma2j30o20titbv.jpg" alt=""></p>
+<p>Fig 2是Inception Module的图示，从Fig 2(a)可以看出主要有5个部分：</p>
+<ol>
+<li>$1\times 1$ convolution</li>
+<li>$3\times 3$ convolution</li>
+<li>$5\times 5$ convolution</li>
+<li>$3\times 3$ max pooling</li>
+<li>filter concatenation</li>
+</ol>
+<p>运用了不同感受野的卷积，1x1的卷积可以capture dense information clusters，3x3 and 5x5的卷积可以capture more spatially spread out clusters</p>
+<p>但是容易发现，这样的结构会导致channel的数量增长很快！</p>
+<p>以下图为例： 输入大小是$28\times28\times256$，输出分别是$28\times28\times128$，$28\times28\times192$，$28\times28\times96$，$28\times28\times256$，filter concatenation以后，输出是$28\times28\times672$!!!</p>
+<p>再看一下计算量:</p>
+<p>[1x1 conv, 128]  $28\times28\times128\times1\times1\times256$</p>
+<p>[3x3 conv, 192] $28\times28\times192\times3\times3\times256$<br>[5x5 conv, 96] $28\times28\times96\times5\times5\times256$</p>
+<p>总共大概有854M ops。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fnss7rs69gj30qg0gijtb.jpg" alt=""></p>
+<p>优化：通过$1\times 1$卷积进行降维（保留空间信息，降低深度），其实可以等价成做embedding，将高维的信息映射到低维，同时保证低维的embeddings包含高维数据的大部分信息。</p>
+<p>下图是经过优化后的结构，再统计一下卷积计算量：</p>
+<p>[1x1 conv, 64] $28\times28\times64\times1\times1\times256$<br>[1x1 conv, 64] $28\times28\times64\times1\times1\times256$<br>[1x1 conv, 128] $28\times28\times128\times1\times1\times256$<br>[3x3 conv, 192] $28\times28\times192\times3\times3\times64$<br>[5x5 conv, 96] $28\times28\times96\times5\times5\times64$<br>[1x1 conv, 64] $28\times28\times64\times1\times1\times256$<br>总共358M ops</p>
+<p>和naive的版本比较，可以说少了一半！</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fnsshqu6hij30qg0kowhs.jpg" alt=""></p>
+<p>Fig 3是模型的全图，可以发现，整个模型基本上是由多个inception module堆叠而成，同时模型也利用多multi-scale的特征建立auxiliary classifiers，也可以帮助梯度的回传。Table 1是模型可视化的另一个形式。可以发现，随着深度的增加，inception module里面，1x1卷积的fitlers的数量和3x3卷积或5x5卷积的比率逐渐升高。<strong><em>其实深度越深，空间信息对特征抽象的重要性在逐渐降低（as features of higher abstraction are captured by higher layers, their spatial concentration is expected to decrease.。</em></strong></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fnssmysygpj30ba0r8go0.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fnssrbjv00j312i0qm0zf.jpg" alt=""></p>
+<p><strong>训练细节：</strong></p>
+<ul>
+<li>没有使用额外数据</li>
+<li>独立训练7个相同结构的模型</li>
+<li>将每个图像resize到四个不同的scale(256,288,320,352)，然后拿到left,center,right的square image，在对每个square image取四个角落，中间，以及resized这6个图像，然后再对它们做镜像，所以每张图像一共有4x3x6x2=144张！</li>
+<li>将每个crop的softmax加起来取平均</li>
+</ul>
+<p><strong>实验：</strong></p>
+<p>Table 2-5都是实验对比结果,Table 2中，可以发现GoogLeNet在ILSVRC 2014分类比赛中，拿到第一，并取得了Error(top-5) 6.67%的成绩。Table 4是在detection任务上的表现，获得了第一。Table 5是单模型在detection任务上的表现，也非常不错。Table 3是在预测图像时选用不用模型数量和crop的数量的表现对比，可以发现，多模型和尽可能多的crop对表现提升最大。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fnst7i0modj30py0hoq5r.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fnst7k1klyj30q80foacb.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fnst7ottrsj313q0by415.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fnst7mjw0hj30oo0newhg.jpg" alt=""></p>
+
+	
+	</div>
+  <a type="button" href="/2018/01/25/Going-Deeper-with-Convolutions笔记/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/" >Visualizing and UnderstandingConvolutional Networks笔记</a>
 		</h3>
 		</div>
@@ -296,45 +443,28 @@ var _hmt = _hmt || [];
 	
 	
 		<p>论文：ImageNet Classification with Deep Convolutional Neural Networks</p>
-<p>链接：https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf</p>
+<p>链接：<a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf" target="_blank" rel="external">https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf</a></p>
 <p>AlexNet是发表在NIPS 2012的一篇文章，可以称作是深度学习的经典之作，获得了ImageNet LSVRC-2010的冠军，达到了15.3%的top-5 error。</p>
 <p><strong>模型结构：</strong></p>
 <p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fndsfv7yy4j31a80fu0y3.jpg" alt=""></p>
 <p>下面是模型的具体描述：</p>
-<p>$[227\times227\times3]$ 输入
-$[55\times55\times96]$ CONV1: 96 $11\times11$ filters at stride 4, pad 0   &lt;u&gt;(227-11)/4+1 = 55&lt;/u&gt;
-$[27\times27\times96]$  MAX POOL1: $3\times3$ filters at stride 2   &lt;u&gt;(55-3)/2+1=27&lt;/u&gt;
-$[27\times27\times96]$ NORM1: Normalization layer
-$[27\times27\times256]$ CONV2: 256 $5\times5$ filters at stride 1, pad 2   &lt;u&gt;(27+2*2-5)/1 + 1=27&lt;/u&gt;
-$[13\times13\times256]$ MAX POOL2: $3\times3$ filters at stride 2   &lt;u&gt;(27-3)/2+1=13&lt;/u&gt;
-$[13\times13\times256]$ NORM2: Normalization layer
-$[13\times13\times384]$ CONV3: 384 $3\times3$ filters at stride 1, pad 1
-$[13\times13\times384]$ CONV4: 384 $3\times3$ filters at stride 1, pad 1
-$[13\times13\times256]$ CONV5: 256 $3\times3$ filters at stride 1, pad 1
-$[6\times6\times256]$ MAX POOL3: $3\times3$ filters at stride 2    &lt;u&gt;(13-3)/2+1=6&lt;/u&gt;
-$[4096]$ FC6: 4096 neurons
-$[4096]$ FC7: 4096 neurons
-$[1000]$ FC8: 1000 neurons (class scores)</p>
+<p>$[227\times227\times3]$ 输入<br>$[55\times55\times96]$ CONV1: 96 $11\times11$ filters at stride 4, pad 0   <u>(227-11)/4+1 = 55</u><br>$[27\times27\times96]$  MAX POOL1: $3\times3$ filters at stride 2   <u>(55-3)/2+1=27</u><br>$[27\times27\times96]$ NORM1: Normalization layer<br>$[27\times27\times256]$ CONV2: 256 $5\times5$ filters at stride 1, pad 2   <u>(27+2*2-5)/1 + 1=27</u><br>$[13\times13\times256]$ MAX POOL2: $3\times3$ filters at stride 2   <u>(27-3)/2+1=13</u><br>$[13\times13\times256]$ NORM2: Normalization layer<br>$[13\times13\times384]$ CONV3: 384 $3\times3$ filters at stride 1, pad 1<br>$[13\times13\times384]$ CONV4: 384 $3\times3$ filters at stride 1, pad 1<br>$[13\times13\times256]$ CONV5: 256 $3\times3$ filters at stride 1, pad 1<br>$[6\times6\times256]$ MAX POOL3: $3\times3$ filters at stride 2    <u>(13-3)/2+1=6</u><br>$[4096]$ FC6: 4096 neurons<br>$[4096]$ FC7: 4096 neurons<br>$[1000]$ FC8: 1000 neurons (class scores)</p>
 <p>包含了5层卷积层和3层全连接层。</p>
 <p><strong>创新点：</strong></p>
 <ol>
-<li>
-<p>第一次使用了ReLU激活函数。传统的sigmoid和tanh激活函数的问题在于梯度容易饱和，造成训练困难，下图是sigmoid函数的梯度。而$f(x)=\max(0,x)$看出，ReLU是一个非线性激活函数，而且它的梯度不会饱和，当x&gt;0的时候，梯度一直是1，这样和sigmoid和tanh函数相比，加快了训练的速度。</p>
+<li><p>第一次使用了ReLU激活函数。传统的sigmoid和tanh激活函数的问题在于梯度容易饱和，造成训练困难，下图是sigmoid函数的梯度。而$f(x)=\max(0,x)$看出，ReLU是一个非线性激活函数，而且它的梯度不会饱和，当x&gt;0的时候，梯度一直是1，这样和sigmoid和tanh函数相比，加快了训练的速度。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnhlvvatogj30my0egtbr.jpg" alt=""></p>
 </li>
-<li>
-<p>使用了Norm Layer，对局部区域进行归一化，对相同空间位置上相邻深度的卷积做归一化。$b_{x,y}^i=\frac{a_{x,y}^i}{(k+\alpha\sum_{j=\max(0,i-n/2)}^{min(N-1,i+n/2)}(a_{i,j})^2)^\beta}$,其中$a_{x,y}^i$表示的是第i个通道的卷积核在$(x,y)$位置处的输出结果，随后经过ReLU激活函数作用。a是每一个神经元的激活值，n是kernel的大小，N是kernel总数，k,alpha,beta都是预设的hyper-parameters.，$k=2,n=5,\alpha=1e-4,\beta=0.75$。从公式可以看出，给原来的激活值$a$加了一个权重，生成了新的激活值b,也就是在不同map的同一空间位置进行了归一化，提高了计算效率。但是这些值为什么这么设置就不得而知了。</p>
+<li><p>使用了Norm Layer，对局部区域进行归一化，对相同空间位置上相邻深度的卷积做归一化。$b_{x,y}^i=\frac{a_{x,y}^i}{(k+\alpha\sum_{j=\max(0,i-n/2)}^{min(N-1,i+n/2)}(a_{i,j})^2)^\beta}$,其中$a_{x,y}^i$表示的是第i个通道的卷积核在$(x,y)$位置处的输出结果，随后经过ReLU激活函数作用。a是每一个神经元的激活值，n是kernel的大小，N是kernel总数，k,alpha,beta都是预设的hyper-parameters.，$k=2,n=5,\alpha=1e-4,\beta=0.75$。从公式可以看出，给原来的激活值$a$加了一个权重，生成了新的激活值b,也就是在不同map的同一空间位置进行了归一化，提高了计算效率。但是这些值为什么这么设置就不得而知了。</p>
 </li>
-<li>
-<p>大量的数据增强，水平翻转，镜像等。调整RGB channel的值，对数据集所有图像的RGB值做PCA变换，完成去噪功能，同时为了保证图像的多样性，在特征值上加了一个随机的尺度因子，每一轮重新生成一个尺度因子，起到了正则化的作用。</p>
+<li><p>大量的数据增强，水平翻转，镜像等。调整RGB channel的值，对数据集所有图像的RGB值做PCA变换，完成去噪功能，同时为了保证图像的多样性，在特征值上加了一个随机的尺度因子，每一轮重新生成一个尺度因子，起到了正则化的作用。</p>
 </li>
-<li>
-<p>Dropout, hidden layer的输出有0.5的几率会被置为0，那些被droped的点不会参与forward pass和backprogation，这样起到了正则化的作用。需要注意的是，在测试过程中，需要将输出乘上0.5。这是因为在训练的过程中，我们只选择了其中的一半，训练出来的结果相当于原来方法的两倍，所以当测试的时候需要乘上0.5来消除这个影响。</p>
+<li><p>Dropout, hidden layer的输出有0.5的几率会被置为0，那些被droped的点不会参与forward pass和backprogation，这样起到了正则化的作用。需要注意的是，在测试过程中，需要将输出乘上0.5。这是因为在训练的过程中，我们只选择了其中的一半，训练出来的结果相当于原来方法的两倍，所以当测试的时候需要乘上0.5来消除这个影响。</p>
 </li>
 </ol>
 <p><strong>训练细节：</strong></p>
 <ul>
-<li>batch size为128，momentum为0.9，weight decay为0.0005，其实weight decay是l2正则是有区别的，详细可见：https://arxiv.org/pdf/1711.05101.pdf</li>
+<li>batch size为128，momentum为0.9，weight decay为0.0005，其实weight decay是l2正则是有区别的，详细可见：<a href="https://arxiv.org/pdf/1711.05101.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1711.05101.pdf</a></li>
 <li>初始的learning rate设为1e-2, 当验证集的正确率停止的时候乘0.1</li>
 </ul>
 <p><strong>实验结果：</strong></p>
@@ -370,7 +500,7 @@ $[1000]$ FC8: 1000 neurons (class scores)</p>
 	
 	
 		<p>论文：Very Deep Convolutional Networks for Large-Scale Image Recognition</p>
-<p>论文链接：https://arxiv.org/abs/1409.1556</p>
+<p>论文链接：<a href="https://arxiv.org/abs/1409.1556" target="_blank" rel="external">https://arxiv.org/abs/1409.1556</a></p>
 <p>这篇文章发表在ICLR 2015上,作者是Karen Simonyan和Andrew Zisserman，其算法获得了ImageNet ILSVRC-2014的localization task的冠军和classification task的第二名。文章通过堆叠$3\times 3$的卷积，ReLU, $2\times 2$的max pooling逐渐加深网络的深度。所以，它的特点就是连续的Conv运算比较多，计算量比较大(与AlexNet相比)，同时也提高了模型的感受野，能够提取更high-level的特征。VGGNet被提出以后被应用在各种任务中，例如物体分类，物体检测(object proposal生成)，语义分割，特征提取(image retrieval)等任务，都取得了非常好的效果。</p>
 <p>Table 1是其VGG Net各个变种的网络结构参数，从左到右分别是A，A-LRN，B，C，D，E这6种，各个模型的深度分别是：11，11，13，16，16，19。可以发现，作者其实将整个网络分成两个部分，第一个部分是卷积层，第二个部分是全连接层，卷积层又分成了5个卷积组，卷积组的feature maps的深度从64逐渐增加到512，所以这5个卷积组的feature maps的深度分别是64，128，256，512，512，每个卷积组后面都会加一个$2\times 2$的non-overlapping的max pooling来降低feature maps的维度。</p>
 <p>除此之外，为了 在不影响感受野的前提下，提高决策函数的非线性能力(increase the non-linearity of the decision function without affecting the receptive fields of the conv. layers)，作者还在结构C中加入了$1\times1$的卷积。$1\times1$的卷积也被应用到很多的网络结构中，例如Google Net，Network in Network等。</p>
@@ -498,7 +628,6 @@ $[1000]$ FC8: 1000 neurons (class scores)</p>
 <tr>
 <td></td>
 <td></td>
-<td></td>
 </tr>
 </tbody>
 </table>
@@ -621,151 +750,73 @@ $[1000]$ FC8: 1000 neurons (class scores)</p>
   <div class="row">
 	
 	
-		<h2>Softmax</h2>
-<p>(a) 证明softmax(x) = softmax(x+c), 这样就可以把c设为$\max(x)$来保证数值计算的稳定性</p>
-<p>$$
-softmax(x)_i = \frac{e^{x_i}}{\sum_je^{x_j}}
-$$</p>
-<p>$$
-(softmax(x+c))<em>i = \frac{\exp(x_i+c)}{\sum</em>{j=1}\exp(x_j+c)}=\ \frac{\exp(x_i)\exp(c)}{\exp(c)\sum_{j=1}\exp(x_j)} = \frac{\exp(x_i)}{\sum_{j=1}\exp(x_j)}
-$$</p>
-<p>(b) 实现q1_softmax.py:</p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">softmax</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="string">"""Compute the softmax function for each row of the input x.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    x -- A N dimensional vector or M x N dimensional numpy matrix.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Return:</span></div><div class="line"><span class="string">    x -- You are allowed to modify x in-place</span></div><div class="line"><span class="string">    """</span></div><div class="line">    orig_shape = x.shape</div><div class="line"></div><div class="line">    <span class="keyword">if</span> len(x.shape) &gt; <span class="number">1</span>:</div><div class="line">        <span class="comment"># Matrix</span></div><div class="line">        x -= np.max(x, axis=<span class="number">1</span>, keepdims=<span class="keyword">True</span>)</div><div class="line">        x = np.exp(x) / np.sum(np.exp(x), axis=<span class="number">1</span>, keepdims=<span class="keyword">True</span>)</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="comment"># Vector</span></div><div class="line">        x -= np.max(x)</div><div class="line">        x = np.exp(x) / np.sum(np.exp(x))</div><div class="line"></div><div class="line">    <span class="keyword">assert</span> x.shape == orig_shape</div><div class="line">    <span class="keyword">return</span> x</div></pre></td></tr></table></figure></p>
-<h2>Neural Network Basics</h2>
-<p>(a) 推导一下sigmoid函数的导数：
-$$
-\sigma(x) = \frac{1}{1+e^{-x}}
-$$</p>
-<p>$$
-\sigma^\prime(x) = \sigma(x)(1 − \sigma(x))
-$$</p>
-<p>(b) 推导一下softmax函数的导数：
-$$
-CE(y,\hat{y}) = -\sum_i y_i \log(\hat{y}_i), \hat{y} = softmax(\theta)
-$$
-k是目标类
-<span>$$\frac{\partial CE(y,\hat{y})}{\partial \theta_i} =  \left\{
+		<h2 id="Softmax"><a href="#Softmax" class="headerlink" title="Softmax"></a>Softmax</h2><p>(a) 证明softmax(x) = softmax(x+c), 这样就可以把c设为$\max(x)$来保证数值计算的稳定性</p>
+<p>$$<br>softmax(x)_i = \frac{e^{x_i}}{\sum_je^{x_j}}<br>$$</p>
+<p>$$<br>(softmax(x+c))_i = \frac{\exp(x_i+c)}{\sum_{j=1}\exp(x_j+c)}=\ \frac{\exp(x_i)\exp(c)}{\exp(c)\sum_{j=1}\exp(x_j)} = \frac{\exp(x_i)}{\sum_{j=1}\exp(x_j)}<br>$$</p>
+<p>(b) 实现q1_softmax.py: </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">softmax</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="string">"""Compute the softmax function for each row of the input x.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    x -- A N dimensional vector or M x N dimensional numpy matrix.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Return:</span></div><div class="line"><span class="string">    x -- You are allowed to modify x in-place</span></div><div class="line"><span class="string">    """</span></div><div class="line">    orig_shape = x.shape</div><div class="line"></div><div class="line">    <span class="keyword">if</span> len(x.shape) &gt; <span class="number">1</span>:</div><div class="line">        <span class="comment"># Matrix</span></div><div class="line">        x -= np.max(x, axis=<span class="number">1</span>, keepdims=<span class="keyword">True</span>)</div><div class="line">        x = np.exp(x) / np.sum(np.exp(x), axis=<span class="number">1</span>, keepdims=<span class="keyword">True</span>)</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="comment"># Vector</span></div><div class="line">        x -= np.max(x)</div><div class="line">        x = np.exp(x) / np.sum(np.exp(x))</div><div class="line"></div><div class="line">    <span class="keyword">assert</span> x.shape == orig_shape</div><div class="line">    <span class="keyword">return</span> x</div></pre></td></tr></table></figure>
+<h2 id="Neural-Network-Basics"><a href="#Neural-Network-Basics" class="headerlink" title="Neural Network Basics"></a>Neural Network Basics</h2><p>(a) 推导一下sigmoid函数的导数：<br>$$<br>\sigma(x) = \frac{1}{1+e^{-x}}<br>$$</p>
+<p>$$<br>\sigma^\prime(x) = \sigma(x)(1 − \sigma(x))<br>$$</p>
+<p>(b) 推导一下softmax函数的导数：<br>$$<br>CE(y,\hat{y}) = -\sum_i y_i \log(\hat{y}_i), \hat{y} = softmax(\theta)<br>$$<br>k是目标类<br><span>$$\frac{\partial CE(y,\hat{y})}{\partial \theta_i} =  \left\{
 \begin{align} 
 &amp;\hat{y_i} - 1,i=k \\ 
 &amp;\hat{y_i}, otherwise
 \end{align}
-\right.$$</span><!-- Has MathJax -->
-等价于：</p>
-<p>$$
-\frac{\partial CE(y,\hat{y})}{\partial \theta} = \hat{y} -y
-$$</p>
+\right.$$</span><!-- Has MathJax --><br>等价于：</p>
+<p>$$<br>\frac{\partial CE(y,\hat{y})}{\partial \theta} = \hat{y} -y<br>$$</p>
 <p>(c) x是一层神经网络的输入，推导x的梯度也就是$\frac{\partial J}{\partial x}$, $J = CE(y, \hat{y})$，神经网络的隐藏层激活函数是$sigmoid$，而最后一层的是$softmax$</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-18%20%E4%B8%8B%E5%8D%8812.15.18.png" alt="">
-$$
-z1 = xW_1 + b_1, h = sigmoid(z_1), z_2=hW_2 + b_2, \hat{y} = softmax(z_2),
-$$</p>
-<p>$$
-\frac{\partial J}{\partial x} = \frac{\partial J}{\partial z_2} \frac{\partial z_2}{\partial h}\frac{\partial h}{\partial z_1}\frac{\partial z_1}{\partial x}
-$$</p>
-<p>$$
-\frac{\partial J}{\partial z_2} = \hat{y} -y
-$$</p>
-<p>$$
-\frac{\partial z_2}{\partial h} = W_2
-$$</p>
-<p>$$
-\frac{\partial h}{\partial z_1} = sigmoid(z_1) (1-sigmoid(z_1))
-$$</p>
-<p>$$
-\frac{\partial z_1}{\partial x} = W_1
-$$</p>
-<p>(d) 上个网络的参数个数, 输入的维度是$D_x$,输出的维度是$D_y$, 隐藏层是H：
-$$
-D_x \cdot H + H + H \cdot D_y + D_y
-$$
-(e) 实现q2 sigmoid.py:</p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sigmoid</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    Compute the sigmoid function for the input here.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    x -- A scalar or numpy array.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Return:</span></div><div class="line"><span class="string">    s -- sigmoid(x)</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    s = <span class="number">1</span> / (<span class="number">1</span>+np.exp(-x))</div><div class="line"></div><div class="line">    <span class="keyword">return</span> s</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sigmoid_grad</span><span class="params">(s)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    Compute the gradient for the sigmoid function here. Note that</span></div><div class="line"><span class="string">    for this implementation, the input s should be the sigmoid</span></div><div class="line"><span class="string">    function value of your original input x.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    s -- A scalar or numpy array.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Return:</span></div><div class="line"><span class="string">    ds -- Your computed gradient.</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    ds = s * (<span class="number">1</span>-s)</div><div class="line"></div><div class="line">    <span class="keyword">return</span> ds</div></pre></td></tr></table></figure></p>
-<p>(f) 实现梯度检查: q2 gradcheck.py
-$$
-\frac{\partial J(\theta)}{\partial \theta} = \lim_{\epsilon\rightarrow0}\frac{J(\theta+\epsilon)-J(\theta-\epsilon)}{2\epsilon}
-$$</p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">gradcheck_naive</span><span class="params">(f, x)</span>:</span></div><div class="line">    <span class="string">""" Gradient check for a function f.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    f -- a function that takes a single argument and outputs the</span></div><div class="line"><span class="string">         cost and its gradients</span></div><div class="line"><span class="string">    x -- the point (numpy array) to check the gradient at</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    rndstate = random.getstate()</div><div class="line">    random.setstate(rndstate)</div><div class="line">    fx, grad = f(x) <span class="comment"># Evaluate function value at original point</span></div><div class="line">    h = <span class="number">1e-4</span>        <span class="comment"># Do not change this!</span></div><div class="line"></div><div class="line">    <span class="comment"># Iterate over all indexes in x</span></div><div class="line">    it = np.nditer(x, flags=[<span class="string">'multi_index'</span>], op_flags=[<span class="string">'readwrite'</span>])</div><div class="line">    <span class="keyword">while</span> <span class="keyword">not</span> it.finished:</div><div class="line">        ix = it.multi_index</div><div class="line"></div><div class="line">        <span class="comment"># Try modifying x[ix] with h defined above to compute</span></div><div class="line">        <span class="comment"># numerical gradients. Make sure you call random.setstate(rndstate)</span></div><div class="line">        <span class="comment"># before calling f(x) each time. This will make it possible</span></div><div class="line">        <span class="comment"># to test cost functions with built in randomness later.</span></div><div class="line"></div><div class="line">        old_xix = x[ix]</div><div class="line">        x[ix] = old_xix + h</div><div class="line">        random.setstate(rndstate)</div><div class="line">        fp = f(x)[<span class="number">0</span>]</div><div class="line">        x[ix] = old_xix - h</div><div class="line">        random.setstate(rndstate)</div><div class="line">        fm = f(x)[<span class="number">0</span>]</div><div class="line">        x[ix] = old_xix</div><div class="line">        <span class="comment">#random.setstate(rndstate)</span></div><div class="line">        numgrad = (fp-fm) / (<span class="number">2</span>*h)</div><div class="line">        <span class="comment"># Compare gradients</span></div><div class="line">        reldiff = abs(numgrad - grad[ix]) / max(<span class="number">1</span>, abs(numgrad), abs(grad[ix]))</div><div class="line">        <span class="keyword">if</span> reldiff &gt; <span class="number">1e-5</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">"Gradient check failed."</span></div><div class="line">            <span class="keyword">print</span> <span class="string">"First gradient error found at index %s"</span> % str(ix)</div><div class="line">            <span class="keyword">print</span> <span class="string">"Your gradient: %f \t Numerical gradient: %f"</span> % (</div><div class="line">                grad[ix], numgrad)</div><div class="line">            <span class="keyword">return</span></div><div class="line"></div><div class="line">        it.iternext() <span class="comment"># Step to next dimension</span></div><div class="line"></div><div class="line">    <span class="keyword">print</span> <span class="string">"Gradient check passed!"</span></div></pre></td></tr></table></figure></p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-18%20%E4%B8%8B%E5%8D%8812.15.18.png" alt=""><br>$$<br>z1 = xW_1 + b_1, h = sigmoid(z_1), z_2=hW_2 + b_2, \hat{y} = softmax(z_2),<br>$$</p>
+<p>$$<br>\frac{\partial J}{\partial x} = \frac{\partial J}{\partial z_2} \frac{\partial z_2}{\partial h}\frac{\partial h}{\partial z_1}\frac{\partial z_1}{\partial x}<br>$$</p>
+<p>$$<br>\frac{\partial J}{\partial z_2} = \hat{y} -y<br>$$</p>
+<p>$$<br>\frac{\partial z_2}{\partial h} = W_2<br>$$</p>
+<p>$$<br>\frac{\partial h}{\partial z_1} = sigmoid(z_1) (1-sigmoid(z_1))<br>$$</p>
+<p>$$<br>\frac{\partial z_1}{\partial x} = W_1<br>$$</p>
+<p>(d) 上个网络的参数个数, 输入的维度是$D_x$,输出的维度是$D_y$, 隐藏层是H：<br>$$<br>D_x \cdot H + H + H \cdot D_y + D_y<br>$$<br>(e) 实现q2 sigmoid.py:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sigmoid</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    Compute the sigmoid function for the input here.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    x -- A scalar or numpy array.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Return:</span></div><div class="line"><span class="string">    s -- sigmoid(x)</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    s = <span class="number">1</span> / (<span class="number">1</span>+np.exp(-x))</div><div class="line"></div><div class="line">    <span class="keyword">return</span> s</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">sigmoid_grad</span><span class="params">(s)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    Compute the gradient for the sigmoid function here. Note that</span></div><div class="line"><span class="string">    for this implementation, the input s should be the sigmoid</span></div><div class="line"><span class="string">    function value of your original input x.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    s -- A scalar or numpy array.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Return:</span></div><div class="line"><span class="string">    ds -- Your computed gradient.</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    ds = s * (<span class="number">1</span>-s)</div><div class="line"></div><div class="line">    <span class="keyword">return</span> ds</div></pre></td></tr></table></figure>
+<p>(f) 实现梯度检查: q2 gradcheck.py<br>$$<br>\frac{\partial J(\theta)}{\partial \theta} = \lim_{\epsilon\rightarrow0}\frac{J(\theta+\epsilon)-J(\theta-\epsilon)}{2\epsilon}<br>$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">gradcheck_naive</span><span class="params">(f, x)</span>:</span></div><div class="line">    <span class="string">""" Gradient check for a function f.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    f -- a function that takes a single argument and outputs the</span></div><div class="line"><span class="string">         cost and its gradients</span></div><div class="line"><span class="string">    x -- the point (numpy array) to check the gradient at</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    rndstate = random.getstate()</div><div class="line">    random.setstate(rndstate)</div><div class="line">    fx, grad = f(x) <span class="comment"># Evaluate function value at original point</span></div><div class="line">    h = <span class="number">1e-4</span>        <span class="comment"># Do not change this!</span></div><div class="line"></div><div class="line">    <span class="comment"># Iterate over all indexes in x</span></div><div class="line">    it = np.nditer(x, flags=[<span class="string">'multi_index'</span>], op_flags=[<span class="string">'readwrite'</span>])</div><div class="line">    <span class="keyword">while</span> <span class="keyword">not</span> it.finished:</div><div class="line">        ix = it.multi_index</div><div class="line"></div><div class="line">        <span class="comment"># Try modifying x[ix] with h defined above to compute</span></div><div class="line">        <span class="comment"># numerical gradients. Make sure you call random.setstate(rndstate)</span></div><div class="line">        <span class="comment"># before calling f(x) each time. This will make it possible</span></div><div class="line">        <span class="comment"># to test cost functions with built in randomness later.</span></div><div class="line"></div><div class="line">        old_xix = x[ix]</div><div class="line">        x[ix] = old_xix + h</div><div class="line">        random.setstate(rndstate)</div><div class="line">        fp = f(x)[<span class="number">0</span>]</div><div class="line">        x[ix] = old_xix - h</div><div class="line">        random.setstate(rndstate)</div><div class="line">        fm = f(x)[<span class="number">0</span>]</div><div class="line">        x[ix] = old_xix</div><div class="line">        <span class="comment">#random.setstate(rndstate)</span></div><div class="line">        numgrad = (fp-fm) / (<span class="number">2</span>*h)</div><div class="line">        <span class="comment"># Compare gradients</span></div><div class="line">        reldiff = abs(numgrad - grad[ix]) / max(<span class="number">1</span>, abs(numgrad), abs(grad[ix]))</div><div class="line">        <span class="keyword">if</span> reldiff &gt; <span class="number">1e-5</span>:</div><div class="line">            <span class="keyword">print</span> <span class="string">"Gradient check failed."</span></div><div class="line">            <span class="keyword">print</span> <span class="string">"First gradient error found at index %s"</span> % str(ix)</div><div class="line">            <span class="keyword">print</span> <span class="string">"Your gradient: %f \t Numerical gradient: %f"</span> % (</div><div class="line">                grad[ix], numgrad)</div><div class="line">            <span class="keyword">return</span></div><div class="line"></div><div class="line">        it.iternext() <span class="comment"># Step to next dimension</span></div><div class="line"></div><div class="line">    <span class="keyword">print</span> <span class="string">"Gradient check passed!"</span></div></pre></td></tr></table></figure>
 <p>(g) 实现: q2 neural.py</p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward_backward_prop</span><span class="params">(data, labels, params, dimensions)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    Forward and backward propagation for a two-layer sigmoidal network</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Compute the forward propagation and for the cross entropy cost,</span></div><div class="line"><span class="string">    and backward propagation for the gradients for all parameters.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    data -- M x Dx matrix, where each row is a training example.</span></div><div class="line"><span class="string">    labels -- M x Dy matrix, where each row is a one-hot vector.</span></div><div class="line"><span class="string">    params -- Model parameters, these are unpacked for you.</span></div><div class="line"><span class="string">    dimensions -- A tuple of input dimension, number of hidden units</span></div><div class="line"><span class="string">                  and output dimension</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    <span class="comment">### Unpack network parameters (do not modify)</span></div><div class="line">    ofs = <span class="number">0</span></div><div class="line">    Dx, H, Dy = (dimensions[<span class="number">0</span>], dimensions[<span class="number">1</span>], dimensions[<span class="number">2</span>])</div><div class="line"></div><div class="line">    W1 = np.reshape(params[ofs:ofs+ Dx * H], (Dx, H))</div><div class="line">    ofs += Dx * H</div><div class="line">    b1 = np.reshape(params[ofs:ofs + H], (<span class="number">1</span>, H))</div><div class="line">    ofs += H</div><div class="line">    W2 = np.reshape(params[ofs:ofs + H * Dy], (H, Dy))</div><div class="line">    ofs += H * Dy</div><div class="line">    b2 = np.reshape(params[ofs:ofs + Dy], (<span class="number">1</span>, Dy))</div><div class="line"></div><div class="line">    </div><div class="line">    z1 = np.dot(data, W1) + b1</div><div class="line">    h1 = sigmoid(z1)</div><div class="line">    z2 = np.dot(h1, W2) + b2</div><div class="line">    y = softmax(z2)</div><div class="line"></div><div class="line">    cost = -np.sum(labels * np.log(y))</div><div class="line"></div><div class="line">    gradz2 = y - labels</div><div class="line"></div><div class="line"></div><div class="line">    gradW2 = np.dot(h1.T, gradz2)</div><div class="line">    gradb2 = np.sum(gradz2, axis=<span class="number">0</span>).reshape((<span class="number">1</span>, Dy))</div><div class="line"></div><div class="line">    gradh1 = np.dot(gradz2, W2.T)</div><div class="line">    gradz1 = gradh1 * sigmoid_grad(h1)</div><div class="line"></div><div class="line">    gradW1 = np.dot(data.T, gradz1)</div><div class="line">    gradb1 = np.sum(gradz1, axis=<span class="number">0</span>).reshape((<span class="number">1</span>, H))</div><div class="line"></div><div class="line">    <span class="keyword">assert</span> gradW1.shape == W1.shape</div><div class="line">    <span class="keyword">assert</span> gradW2.shape == W2.shape</div><div class="line">    <span class="comment">### Stack gradients (do not modify)</span></div><div class="line">    grad = np.concatenate((gradW1.flatten(), gradb1.flatten(),</div><div class="line">        gradW2.flatten(), gradb2.flatten()))</div><div class="line"></div><div class="line">    <span class="keyword">return</span> cost, grad</div></pre></td></tr></table></figure></p>
-<h2>Word2Vec</h2>
-<p>主要包括word embeeding中的两个模型： Skip-gram和CBOW</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">forward_backward_prop</span><span class="params">(data, labels, params, dimensions)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    Forward and backward propagation for a two-layer sigmoidal network</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Compute the forward propagation and for the cross entropy cost,</span></div><div class="line"><span class="string">    and backward propagation for the gradients for all parameters.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    data -- M x Dx matrix, where each row is a training example.</span></div><div class="line"><span class="string">    labels -- M x Dy matrix, where each row is a one-hot vector.</span></div><div class="line"><span class="string">    params -- Model parameters, these are unpacked for you.</span></div><div class="line"><span class="string">    dimensions -- A tuple of input dimension, number of hidden units</span></div><div class="line"><span class="string">                  and output dimension</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    <span class="comment">### Unpack network parameters (do not modify)</span></div><div class="line">    ofs = <span class="number">0</span></div><div class="line">    Dx, H, Dy = (dimensions[<span class="number">0</span>], dimensions[<span class="number">1</span>], dimensions[<span class="number">2</span>])</div><div class="line"></div><div class="line">    W1 = np.reshape(params[ofs:ofs+ Dx * H], (Dx, H))</div><div class="line">    ofs += Dx * H</div><div class="line">    b1 = np.reshape(params[ofs:ofs + H], (<span class="number">1</span>, H))</div><div class="line">    ofs += H</div><div class="line">    W2 = np.reshape(params[ofs:ofs + H * Dy], (H, Dy))</div><div class="line">    ofs += H * Dy</div><div class="line">    b2 = np.reshape(params[ofs:ofs + Dy], (<span class="number">1</span>, Dy))</div><div class="line"></div><div class="line">    </div><div class="line">    z1 = np.dot(data, W1) + b1</div><div class="line">    h1 = sigmoid(z1)</div><div class="line">    z2 = np.dot(h1, W2) + b2</div><div class="line">    y = softmax(z2)</div><div class="line"></div><div class="line">    cost = -np.sum(labels * np.log(y))</div><div class="line"></div><div class="line">    gradz2 = y - labels</div><div class="line"></div><div class="line"></div><div class="line">    gradW2 = np.dot(h1.T, gradz2)</div><div class="line">    gradb2 = np.sum(gradz2, axis=<span class="number">0</span>).reshape((<span class="number">1</span>, Dy))</div><div class="line"></div><div class="line">    gradh1 = np.dot(gradz2, W2.T)</div><div class="line">    gradz1 = gradh1 * sigmoid_grad(h1)</div><div class="line"></div><div class="line">    gradW1 = np.dot(data.T, gradz1)</div><div class="line">    gradb1 = np.sum(gradz1, axis=<span class="number">0</span>).reshape((<span class="number">1</span>, H))</div><div class="line"></div><div class="line">    <span class="keyword">assert</span> gradW1.shape == W1.shape</div><div class="line">    <span class="keyword">assert</span> gradW2.shape == W2.shape</div><div class="line">    <span class="comment">### Stack gradients (do not modify)</span></div><div class="line">    grad = np.concatenate((gradW1.flatten(), gradb1.flatten(),</div><div class="line">        gradW2.flatten(), gradb2.flatten()))</div><div class="line"></div><div class="line">    <span class="keyword">return</span> cost, grad</div></pre></td></tr></table></figure>
+<h2 id="Word2Vec"><a href="#Word2Vec" class="headerlink" title="Word2Vec"></a>Word2Vec</h2><p>主要包括word embeeding中的两个模型： Skip-gram和CBOW</p>
 <ol>
 <li>skipgram:Predict context words given target (position independent)</li>
 </ol>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-18%20%E4%B8%8B%E5%8D%883.47.29.png" alt=""></p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fml280dpabj313q0to1kx.jpg" alt=""></p>
-<ol start="2">
+<ol>
 <li>Predict target word from bag-of-words context</li>
 </ol>
 <p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fml67e6yo4j30fa0cpdht.jpg" alt=""></p>
-<p>(a) 求skipgram的关于$v_c$和$\mu_w$的梯度：</p>
-<p>$$
-\hat{y}<em>o= p(o|c)=\frac{\exp(\mu_o^T v_c)}{\sum</em>{w=1}^W\exp(\mu_w^T v_c)}
-$$</p>
+<p>(a) 求skipgram的关于$v_c$和$\mu_w$的梯度： </p>
+<p>$$<br>\hat{y}_o= p(o|c)=\frac{\exp(\mu_o^T v_c)}{\sum_{w=1}^W\exp(\mu_w^T v_c)}<br>$$</p>
 <p>o表示输出词的下标，c表示的是中心词的下标，$u_o$表示输出向量</p>
-<p>预测的词向量$v_c$代表第c个中心词，$w$表示的是第w个词, i表示目标。
-$$
-J_{softmax-CE}(o,v_c, U) = CE(y, \hat{y}), U= [u_1,u_2,...,u_W]
-$$</p>
-<p>$$
-\frac{\partial J}{\partial v_c} = -u_i + \sum_{w=1}^Wu_w\hat{y}_w = U(\hat{y}-y)
-$$</p>
-<p><span>$$\frac{\partial J}{\partial u_w} =  \left\{
+<p>预测的词向量$v_c$代表第c个中心词，$w$表示的是第w个词, i表示目标。<br>$$<br>J_{softmax-CE}(o,v_c, U) = CE(y, \hat{y}), U= [u_1,u_2,…,u_W]<br>$$</p>
+<p>$$<br>\frac{\partial J}{\partial v_c} = -u_i + \sum_{w=1}^Wu_w\hat{y}_w = U(\hat{y}-y)<br>$$</p>
+<span>$$\frac{\partial J}{\partial u_w} =  \left\{
 \begin{align} 
 &amp;(\hat{y_w} - 1)v_c,w=o \\ 
 &amp;\hat{y_w}v_c, otherwise
 \end{align}
-\right.$$</span><!-- Has MathJax --></p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">softmaxCostAndGradient</span><span class="params">(predicted, target, outputVectors, dataset)</span>:</span></div><div class="line">    <span class="string">""" Softmax cost function for word2vec models</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    predicted -- numpy ndarray, predicted word vector (\hat&#123;v&#125; in</span></div><div class="line"><span class="string">                 the written component)</span></div><div class="line"><span class="string">    target -- integer, the index of the target word</span></div><div class="line"><span class="string">    outputVectors -- "output" vectors (as rows) for all tokens</span></div><div class="line"><span class="string">    dataset -- needed for negative sampling, unused here.   </span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Return:</span></div><div class="line"><span class="string">    cost -- cross entropy cost for the softmax word prediction</span></div><div class="line"><span class="string">    gradPred -- the gradient with respect to the predicted word</span></div><div class="line"><span class="string">           vector</span></div><div class="line"><span class="string">    grad -- the gradient with respect to all the other word</span></div><div class="line"><span class="string">           vectors</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    """</span></div><div class="line">    out = np.dot(outputVectors, predicted)</div><div class="line">    score = out[target]</div><div class="line">    exp_sum = np.sum(np.exp(out))</div><div class="line">    cost = np.log(exp_sum) - score</div><div class="line">    margin = np.exp(out) / np.sum(np.exp(out))</div><div class="line">    margin[target] -= <span class="number">1</span> </div><div class="line">    gradPred = np.dot(margin.T, outputVectors)</div><div class="line">    grad = np.dot(margin, predicted.T)</div><div class="line">    <span class="keyword">return</span> cost, gradPred, grad</div></pre></td></tr></table></figure></p>
-<p>(b) negative sampling:  更新全词表的代价有点大，从而负采样K个，更新。$v_c$是预测的词向量，$o$是期望输出词
-$$
-J_{neg-sample}(o,v_c,U) = -\log(\sigma(u_o^Tv_c)) - \sum_{k=1}^K \log(\sigma(-u_k^Tv_c))
-$$</p>
-<p>$$
-\frac{\partial J}{\partial v_c} =(\sigma(u_o^Tv_c)-1)u_o-\sum_{k=1}^K(\sigma(-u_k^Tv_c)-1)u_k
-$$</p>
-<p>$$
-\frac{\partial J}{\partial u_o} =(\sigma(u_o^Tv_c)-1)v_c
-$$</p>
-<p>$$
-\frac{\partial J}{\partial u_k} =-(\sigma(-u_k^Tv_c)-1)v_c, k = 1,2,...,K
-$$</p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">getNegativeSamples</span><span class="params">(target, dataset, K)</span>:</span></div><div class="line">    <span class="string">""" Samples K indexes which are not the target """</span></div><div class="line"></div><div class="line">    indices = [<span class="keyword">None</span>] * K</div><div class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> xrange(K):</div><div class="line">        newidx = dataset.sampleTokenIdx()</div><div class="line">        <span class="keyword">while</span> newidx == target:</div><div class="line">            newidx = dataset.sampleTokenIdx()</div><div class="line">        indices[k] = newidx</div><div class="line">    <span class="keyword">return</span> indices</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">negSamplingCostAndGradient</span><span class="params">(predicted, target, outputVectors, dataset,</span></span></div><div class="line"><span class="function"><span class="params">                               K=<span class="number">10</span>)</span>:</span></div><div class="line">    <span class="string">""" Negative sampling cost function for word2vec models</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Implement the cost and gradients for one predicted word vector</span></div><div class="line"><span class="string">    and one target word vector as a building block for word2vec</span></div><div class="line"><span class="string">    models, using the negative sampling technique. K is the sample</span></div><div class="line"><span class="string">    size.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Note: See test_word2vec below for dataset's initialization.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments/Return Specifications: same as softmaxCostAndGradient</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    <span class="comment"># Sampling of indices is done for you. Do not modify this if you</span></div><div class="line">    <span class="comment"># wish to match the autograder and receive points!</span></div><div class="line">    indices = [target]</div><div class="line">    indices.extend(getNegativeSamples(target, dataset, K))</div><div class="line"></div><div class="line">    labels = -np.ones((K+<span class="number">1</span>,))</div><div class="line">    labels[<span class="number">0</span>] = <span class="number">1</span></div><div class="line"></div><div class="line">    out = np.dot(outputVectors[indices], predicted) * labels</div><div class="line">    </div><div class="line">    scores = sigmoid(out)</div><div class="line">    cost = -np.sum(np.log(scores))</div><div class="line"></div><div class="line">    d = labels * (scores<span class="number">-1</span>)</div><div class="line">    gradPred = np.dot(d.reshape((<span class="number">1</span>, <span class="number">-1</span>)), outputVectors[indices]).flatten()</div><div class="line">    gradtemp = np.dot(d.reshape((<span class="number">-1</span>, <span class="number">1</span>)), predicted.reshape((<span class="number">1</span>,<span class="number">-1</span>)))</div><div class="line">    grad = np.zeros_like(outputVectors)</div><div class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> range(K+<span class="number">1</span>):</div><div class="line">        grad[indices[k]] += gradtemp[k,:]</div><div class="line">    <span class="keyword">return</span> cost, gradPred, grad</div></pre></td></tr></table></figure></p>
+\right.$$</span><!-- Has MathJax -->
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">softmaxCostAndGradient</span><span class="params">(predicted, target, outputVectors, dataset)</span>:</span></div><div class="line">    <span class="string">""" Softmax cost function for word2vec models</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    predicted -- numpy ndarray, predicted word vector (\hat&#123;v&#125; in</span></div><div class="line"><span class="string">                 the written component)</span></div><div class="line"><span class="string">    target -- integer, the index of the target word</span></div><div class="line"><span class="string">    outputVectors -- "output" vectors (as rows) for all tokens</span></div><div class="line"><span class="string">    dataset -- needed for negative sampling, unused here.   </span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Return:</span></div><div class="line"><span class="string">    cost -- cross entropy cost for the softmax word prediction</span></div><div class="line"><span class="string">    gradPred -- the gradient with respect to the predicted word</span></div><div class="line"><span class="string">           vector</span></div><div class="line"><span class="string">    grad -- the gradient with respect to all the other word</span></div><div class="line"><span class="string">           vectors</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    """</span></div><div class="line">    out = np.dot(outputVectors, predicted)</div><div class="line">    score = out[target]</div><div class="line">    exp_sum = np.sum(np.exp(out))</div><div class="line">    cost = np.log(exp_sum) - score</div><div class="line">    margin = np.exp(out) / np.sum(np.exp(out))</div><div class="line">    margin[target] -= <span class="number">1</span> </div><div class="line">    gradPred = np.dot(margin.T, outputVectors)</div><div class="line">    grad = np.dot(margin, predicted.T)</div><div class="line">    <span class="keyword">return</span> cost, gradPred, grad</div></pre></td></tr></table></figure>
+<p>(b) negative sampling:  更新全词表的代价有点大，从而负采样K个，更新。$v_c$是预测的词向量，$o$是期望输出词<br>$$<br>J_{neg-sample}(o,v_c,U) = -\log(\sigma(u_o^Tv_c)) - \sum_{k=1}^K \log(\sigma(-u_k^Tv_c))<br>$$</p>
+<p>$$<br>\frac{\partial J}{\partial v_c} =(\sigma(u_o^Tv_c)-1)u_o-\sum_{k=1}^K(\sigma(-u_k^Tv_c)-1)u_k<br>$$</p>
+<p>$$<br>\frac{\partial J}{\partial u_o} =(\sigma(u_o^Tv_c)-1)v_c<br>$$</p>
+<p>$$<br>\frac{\partial J}{\partial u_k} =-(\sigma(-u_k^Tv_c)-1)v_c, k = 1,2,…,K<br>$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">getNegativeSamples</span><span class="params">(target, dataset, K)</span>:</span></div><div class="line">    <span class="string">""" Samples K indexes which are not the target """</span></div><div class="line"></div><div class="line">    indices = [<span class="keyword">None</span>] * K</div><div class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> xrange(K):</div><div class="line">        newidx = dataset.sampleTokenIdx()</div><div class="line">        <span class="keyword">while</span> newidx == target:</div><div class="line">            newidx = dataset.sampleTokenIdx()</div><div class="line">        indices[k] = newidx</div><div class="line">    <span class="keyword">return</span> indices</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">negSamplingCostAndGradient</span><span class="params">(predicted, target, outputVectors, dataset,</span></span></div><div class="line"><span class="function"><span class="params">                               K=<span class="number">10</span>)</span>:</span></div><div class="line">    <span class="string">""" Negative sampling cost function for word2vec models</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Implement the cost and gradients for one predicted word vector</span></div><div class="line"><span class="string">    and one target word vector as a building block for word2vec</span></div><div class="line"><span class="string">    models, using the negative sampling technique. K is the sample</span></div><div class="line"><span class="string">    size.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Note: See test_word2vec below for dataset's initialization.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments/Return Specifications: same as softmaxCostAndGradient</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    <span class="comment"># Sampling of indices is done for you. Do not modify this if you</span></div><div class="line">    <span class="comment"># wish to match the autograder and receive points!</span></div><div class="line">    indices = [target]</div><div class="line">    indices.extend(getNegativeSamples(target, dataset, K))</div><div class="line"></div><div class="line">    labels = -np.ones((K+<span class="number">1</span>,))</div><div class="line">    labels[<span class="number">0</span>] = <span class="number">1</span></div><div class="line"></div><div class="line">    out = np.dot(outputVectors[indices], predicted) * labels</div><div class="line">    </div><div class="line">    scores = sigmoid(out)</div><div class="line">    cost = -np.sum(np.log(scores))</div><div class="line"></div><div class="line">    d = labels * (scores<span class="number">-1</span>)</div><div class="line">    gradPred = np.dot(d.reshape((<span class="number">1</span>, <span class="number">-1</span>)), outputVectors[indices]).flatten()</div><div class="line">    gradtemp = np.dot(d.reshape((<span class="number">-1</span>, <span class="number">1</span>)), predicted.reshape((<span class="number">1</span>,<span class="number">-1</span>)))</div><div class="line">    grad = np.zeros_like(outputVectors)</div><div class="line">    <span class="keyword">for</span> k <span class="keyword">in</span> range(K+<span class="number">1</span>):</div><div class="line">        grad[indices[k]] += gradtemp[k,:]</div><div class="line">    <span class="keyword">return</span> cost, gradPred, grad</div></pre></td></tr></table></figure>
 <p>(c) 推导skip gram和CBOW的梯度：</p>
 <p>给定一系列的上下文单词$[word_{c-m},…,word_{c-1},word_c,word_{c+1},…,word_{c+m}]$</p>
 <p>输入词向量为$v_k$,输出词向量为$u_k$, $\hat{v}=v_c$</p>
-<p>这里， skip gram的cost函数为：
-$$
-J_{skip_gram}(word_{c-m...c+m}) = \sum_{-m\le j\le m, j\ne0} F(w_{c+j}, v_c)
-$$</p>
-<p>$$
-\frac{\partial J_{skip_gram}(word_{c-m...c+m})}{\partial U} =\sum_{-m\le j\le m, j\ne0} \frac{\partial F(w_{c+j}, v_c)}{\partial U}
-$$</p>
-<p>$$
-\frac{\partial J_{skip_gram}(word_{c-m...c+m})}{\partial v_c} =\sum_{-m\le j\le m, j\ne0} \frac{\partial F(w_{c+j}, v_c)}{\partial v_c}
-$$</p>
-<p>$$
-\frac{\partial J_{skip_gram}(word_{c-m...c+m})}{\partial v_j} =0, j \ne c
-$$</p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">skipgram</span><span class="params">(currentWord, C, contextWords, tokens, inputVectors, outputVectors,</span></span></div><div class="line"><span class="function"><span class="params">             dataset, word2vecCostAndGradient=softmaxCostAndGradient)</span>:</span></div><div class="line">    <span class="string">""" Skip-gram model in word2vec</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    currrentWord -- a string of the current center word</span></div><div class="line"><span class="string">    C -- integer, context size</span></div><div class="line"><span class="string">    contextWords -- list of no more than 2*C strings, the context words</span></div><div class="line"><span class="string">    tokens -- a dictionary that maps words to their indices in</span></div><div class="line"><span class="string">              the word vector list</span></div><div class="line"><span class="string">    inputVectors -- "input" word vectors (as rows) for all tokens</span></div><div class="line"><span class="string">    outputVectors -- "output" word vectors (as rows) for all tokens</span></div><div class="line"><span class="string">    word2vecCostAndGradient -- the cost and gradient function for</span></div><div class="line"><span class="string">                               a prediction vector given the target</span></div><div class="line"><span class="string">                               word vectors, could be one of the two</span></div><div class="line"><span class="string">                               cost functions you implemented above.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Return:</span></div><div class="line"><span class="string">    cost -- the cost function value for the skip-gram model</span></div><div class="line"><span class="string">    grad -- the gradient with respect to the word vectors</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    cost = <span class="number">0.0</span></div><div class="line">    gradIn = np.zeros(inputVectors.shape)</div><div class="line">    gradOut = np.zeros(outputVectors.shape)</div><div class="line"></div><div class="line">    </div><div class="line">    center = tokens[currentWord]</div><div class="line">    predicted = inputVectors[center]</div><div class="line">    </div><div class="line">    <span class="keyword">for</span> target_word <span class="keyword">in</span> contextWords:</div><div class="line">        target = tokens[target_word]</div><div class="line">        cost_i, gradPred, grad = word2vecCostAndGradient(predicted, target, outputVectors, dataset)</div><div class="line">        cost += cost_i</div><div class="line">        gradIn[center] += gradPred</div><div class="line">        gradOut += grad</div><div class="line"></div><div class="line">    <span class="keyword">return</span> cost, gradIn, gradOut</div></pre></td></tr></table></figure></p>
-<p>而CBOW有点不同，首先：
-$$
-\hat{v} = \sum_{-m\le j\le m, j\ne0} v_{c+j}
-$$
-它的cost函数为：
-$$
-J_{CBOW}(word_{c-m...c+m})=F(w_c, \hat{v})
-$$</p>
-<p>$$
-\frac{\partial J_{CBOW}(word_{c-m...c+m})}{\partial U} = \frac{\partial F(w_c, v_c)}{\partial U}
-$$</p>
-<p>$$
-\frac{\partial J_{CBOW}(word_{c-m...c+m})}{\partial v_j} = \frac{\partial F(w_c, v_c)}{\partial \hat{v}}, j\in{c-m,...,c-1,c+1,...,c+m}
-$$</p>
-<p>$$
-\frac{\partial J_{CBOW}(word_{c-m...c+m})}{\partial v_j} =0, j\notin{c-m,...,c-1,c+1,...,c+m}
-$$</p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">cbow</span><span class="params">(currentWord, C, contextWords, tokens, inputVectors, outputVectors,</span></span></div><div class="line"><span class="function"><span class="params">         dataset, word2vecCostAndGradient=softmaxCostAndGradient)</span>:</span></div><div class="line">    <span class="string">"""CBOW model in word2vec</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Implement the continuous bag-of-words model in this function.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments/Return specifications: same as the skip-gram model</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    cost = <span class="number">0.0</span></div><div class="line">    gradIn = np.zeros(inputVectors.shape)</div><div class="line">    gradOut = np.zeros(outputVectors.shape)</div><div class="line"></div><div class="line">    </div><div class="line">    target = tokens[currentWord]</div><div class="line">    target_vec = inputVectors[target]</div><div class="line">    source_idx = map(<span class="keyword">lambda</span> x: tokens[x], contextWords)</div><div class="line">    predicted = np.sum(inputVectors[source_idx], axis=<span class="number">0</span>)</div><div class="line"></div><div class="line">    cost, gradPred, gradOut = word2vecCostAndGradient(predicted, target, outputVectors, dataset)</div><div class="line"></div><div class="line">    <span class="keyword">for</span> idx <span class="keyword">in</span> source_idx:</div><div class="line">        gradIn[idx] += gradPred</div><div class="line"></div><div class="line">    <span class="keyword">return</span> cost, gradIn, gradOut</div></pre></td></tr></table></figure></p>
+<p>这里， skip gram的cost函数为：<br>$$<br>J_{skip_gram}(word_{c-m…c+m}) = \sum_{-m\le j\le m, j\ne0} F(w_{c+j}, v_c)<br>$$</p>
+<p>$$<br>\frac{\partial J_{skip_gram}(word_{c-m…c+m})}{\partial U} =\sum_{-m\le j\le m, j\ne0} \frac{\partial F(w_{c+j}, v_c)}{\partial U}<br>$$</p>
+<p>$$<br>\frac{\partial J_{skip_gram}(word_{c-m…c+m})}{\partial v_c} =\sum_{-m\le j\le m, j\ne0} \frac{\partial F(w_{c+j}, v_c)}{\partial v_c}<br>$$</p>
+<p>$$<br>\frac{\partial J_{skip_gram}(word_{c-m…c+m})}{\partial v_j} =0, j \ne c<br>$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">skipgram</span><span class="params">(currentWord, C, contextWords, tokens, inputVectors, outputVectors,</span></span></div><div class="line"><span class="function"><span class="params">             dataset, word2vecCostAndGradient=softmaxCostAndGradient)</span>:</span></div><div class="line">    <span class="string">""" Skip-gram model in word2vec</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments:</span></div><div class="line"><span class="string">    currrentWord -- a string of the current center word</span></div><div class="line"><span class="string">    C -- integer, context size</span></div><div class="line"><span class="string">    contextWords -- list of no more than 2*C strings, the context words</span></div><div class="line"><span class="string">    tokens -- a dictionary that maps words to their indices in</span></div><div class="line"><span class="string">              the word vector list</span></div><div class="line"><span class="string">    inputVectors -- "input" word vectors (as rows) for all tokens</span></div><div class="line"><span class="string">    outputVectors -- "output" word vectors (as rows) for all tokens</span></div><div class="line"><span class="string">    word2vecCostAndGradient -- the cost and gradient function for</span></div><div class="line"><span class="string">                               a prediction vector given the target</span></div><div class="line"><span class="string">                               word vectors, could be one of the two</span></div><div class="line"><span class="string">                               cost functions you implemented above.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Return:</span></div><div class="line"><span class="string">    cost -- the cost function value for the skip-gram model</span></div><div class="line"><span class="string">    grad -- the gradient with respect to the word vectors</span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    cost = <span class="number">0.0</span></div><div class="line">    gradIn = np.zeros(inputVectors.shape)</div><div class="line">    gradOut = np.zeros(outputVectors.shape)</div><div class="line"></div><div class="line">    </div><div class="line">    center = tokens[currentWord]</div><div class="line">    predicted = inputVectors[center]</div><div class="line">    </div><div class="line">    <span class="keyword">for</span> target_word <span class="keyword">in</span> contextWords:</div><div class="line">        target = tokens[target_word]</div><div class="line">        cost_i, gradPred, grad = word2vecCostAndGradient(predicted, target, outputVectors, dataset)</div><div class="line">        cost += cost_i</div><div class="line">        gradIn[center] += gradPred</div><div class="line">        gradOut += grad</div><div class="line"></div><div class="line">    <span class="keyword">return</span> cost, gradIn, gradOut</div></pre></td></tr></table></figure>
+<p>而CBOW有点不同，首先：<br>$$<br>\hat{v} = \sum_{-m\le j\le m, j\ne0} v_{c+j}<br>$$<br>它的cost函数为：<br>$$<br>J_{CBOW}(word_{c-m…c+m})=F(w_c, \hat{v})<br>$$</p>
+<p>$$<br>\frac{\partial J_{CBOW}(word_{c-m…c+m})}{\partial U} = \frac{\partial F(w_c, v_c)}{\partial U}<br>$$</p>
+<p>$$<br>\frac{\partial J_{CBOW}(word_{c-m…c+m})}{\partial v_j} = \frac{\partial F(w_c, v_c)}{\partial \hat{v}}, j\in{c-m,…,c-1,c+1,…,c+m}<br>$$</p>
+<p>$$<br>\frac{\partial J_{CBOW}(word_{c-m…c+m})}{\partial v_j} =0, j\notin{c-m,…,c-1,c+1,…,c+m}<br>$$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">cbow</span><span class="params">(currentWord, C, contextWords, tokens, inputVectors, outputVectors,</span></span></div><div class="line"><span class="function"><span class="params">         dataset, word2vecCostAndGradient=softmaxCostAndGradient)</span>:</span></div><div class="line">    <span class="string">"""CBOW model in word2vec</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Implement the continuous bag-of-words model in this function.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Arguments/Return specifications: same as the skip-gram model</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    """</span></div><div class="line"></div><div class="line">    cost = <span class="number">0.0</span></div><div class="line">    gradIn = np.zeros(inputVectors.shape)</div><div class="line">    gradOut = np.zeros(outputVectors.shape)</div><div class="line"></div><div class="line">    </div><div class="line">    target = tokens[currentWord]</div><div class="line">    target_vec = inputVectors[target]</div><div class="line">    source_idx = map(<span class="keyword">lambda</span> x: tokens[x], contextWords)</div><div class="line">    predicted = np.sum(inputVectors[source_idx], axis=<span class="number">0</span>)</div><div class="line"></div><div class="line">    cost, gradPred, gradOut = word2vecCostAndGradient(predicted, target, outputVectors, dataset)</div><div class="line"></div><div class="line">    <span class="keyword">for</span> idx <span class="keyword">in</span> source_idx:</div><div class="line">        gradIn[idx] += gradPred</div><div class="line"></div><div class="line">    <span class="keyword">return</span> cost, gradIn, gradOut</div></pre></td></tr></table></figure>
 
 	
 	</div>
@@ -799,13 +850,13 @@ $$</p>
 <p>Wang L, Li Y, Wang S. DeepDeblur: Fast one-step blurry face images restoration. arXiv preprint arXiv:1711.09515, 2017.</p>
 <p>这篇文章主要针对的是人脸的运动噪声去模糊，其中kernel是人工模拟的，利用高斯过程生成，网络结构的话就是利用多个inception module和resnet的结构。</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-09%20%E4%B8%8B%E5%8D%885.15.21.png" alt=""></p>
-<p>Kupyn O, Budzan V, Mykhailych M, et al. DeblurGAN: Blind Motion Deblurring Using Conditional Adversarial Networks. arXiv preprint arXiv:1711.07064, 2017.</p>
+<p>Kupyn O, Budzan V, Mykhailych M, et al. DeblurGAN: Blind Motion Deblurring Using Conditional Adversarial Networks. arXiv preprint arXiv:1711.07064, 2017. </p>
 <p>这篇文章的结构比较接单，就是利用多个ResBlocks来作为generater，然后在discriminator loss中加入critic loss（用Wasserstein GAN）和perceptual loss(features dissimilarity)。</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-09%20%E4%B8%8B%E5%8D%885.18.01.png" alt=""></p>
-<p>Noroozi M, Chandramouli P, Favaro P. Motion Deblurring in the Wild. arXiv preprint arXiv:1701.01486, 2017.</p>
+<p>Noroozi M, Chandramouli P, Favaro P. Motion Deblurring in the Wild. arXiv preprint arXiv:1701.01486, 2017. </p>
 <p>主要利用了mutli-scale和skip-connection</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-09%20%E4%B8%8B%E5%8D%885.57.08.png" alt=""></p>
-<p>Nah S, Kim T H, Lee K M. Deep multi-scale convolutional neural network for dynamic scene deblurring. arXiv preprint arXiv:1612.02177, 2016.</p>
+<p>Nah S, Kim T H, Lee K M. Deep multi-scale convolutional neural network for dynamic scene deblurring. arXiv preprint arXiv:1612.02177, 2016. </p>
 <p>这篇文章主要用到了一些残差学习的方法，不仅用了ResBlock，还将小尺度的结果作为残差传给大尺度，简化学习的难度。</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-09%20%E4%B8%8B%E5%8D%886.00.27.png" alt=""></p>
 
@@ -838,122 +889,18 @@ $$</p>
 		<p>本文主要介绍几种常用的人工合成运动噪声的方法：</p>
 <p>###基于spline平滑的方法</p>
 <p>在一个$n\times n$大小的矩阵内，随机采样6个点，再用三阶的spline平滑拟合，这样采样得到若干个在矩阵内的整数点，这些整数点上的值，再用高斯采样得到，然后就是归一化：</p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_kernel_spline</span><span class="params">(steps, n_samples)</span>:</span></div><div class="line"></div><div class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> xrange(n_samples):</div><div class="line">		psz = <span class="number">24</span>  <span class="comment">##矩阵大小</span></div><div class="line">		kern = np.zeros((psz, psz))</div><div class="line">		x = np.random.randint(<span class="number">1</span>, psz+<span class="number">1</span>, (steps,))</div><div class="line">		y = np.random.randint(<span class="number">1</span>, psz+<span class="number">1</span>, (steps,))</div><div class="line">		</div><div class="line">		x = interpolate.spline(xk=np.linspace(<span class="number">0</span>, <span class="number">1</span>, steps), yk=x, xnew=np.linspace(<span class="number">0</span>, <span class="number">1</span>, steps*<span class="number">5000</span>))</div><div class="line">		y = interpolate.spline(xk=np.linspace(<span class="number">0</span>, <span class="number">1</span>, steps), yk=y, xnew=np.linspace(<span class="number">0</span>, <span class="number">1</span>, steps*<span class="number">5000</span>))</div><div class="line"></div><div class="line"></div><div class="line">		x = np.round(np.maximum(<span class="number">1</span>, np.minimum(psz, x)))</div><div class="line"></div><div class="line">		y = np.round(np.maximum(<span class="number">1</span>, np.minimum(psz, y)))</div><div class="line"></div><div class="line">		idxs = (x<span class="number">-1</span>) * psz + y</div><div class="line"></div><div class="line">		idxs = np.unique(idxs).astype(int)</div><div class="line"></div><div class="line">		wt = np.maximum(<span class="number">0</span>, np.random.randn(idxs.shape[<span class="number">0</span>],) * <span class="number">0.5</span> + <span class="number">1</span>)</div><div class="line">		<span class="keyword">if</span> np.sum(wt) == <span class="number">0</span>:</div><div class="line">			<span class="keyword">continue</span></div><div class="line">		wt /= np.sum(wt)</div><div class="line">		<span class="keyword">for</span> i, idx <span class="keyword">in</span> enumerate(idxs):</div><div class="line">			x = idx % psz</div><div class="line">			y = idx / psz</div><div class="line">			kern[x, y] = wt[i]</div></pre></td></tr></table></figure></p>
-<h3>基于高斯过程的方法</h3>
-<blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_kernel_spline</span><span class="params">(steps, n_samples)</span>:</span></div><div class="line"></div><div class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> xrange(n_samples):</div><div class="line">		psz = <span class="number">24</span>  <span class="comment">##矩阵大小</span></div><div class="line">		kern = np.zeros((psz, psz))</div><div class="line">		x = np.random.randint(<span class="number">1</span>, psz+<span class="number">1</span>, (steps,))</div><div class="line">		y = np.random.randint(<span class="number">1</span>, psz+<span class="number">1</span>, (steps,))</div><div class="line">		</div><div class="line">		x = interpolate.spline(xk=np.linspace(<span class="number">0</span>, <span class="number">1</span>, steps), yk=x, xnew=np.linspace(<span class="number">0</span>, <span class="number">1</span>, steps*<span class="number">5000</span>))</div><div class="line">		y = interpolate.spline(xk=np.linspace(<span class="number">0</span>, <span class="number">1</span>, steps), yk=y, xnew=np.linspace(<span class="number">0</span>, <span class="number">1</span>, steps*<span class="number">5000</span>))</div><div class="line"></div><div class="line"></div><div class="line">		x = np.round(np.maximum(<span class="number">1</span>, np.minimum(psz, x)))</div><div class="line"></div><div class="line">		y = np.round(np.maximum(<span class="number">1</span>, np.minimum(psz, y)))</div><div class="line"></div><div class="line">		idxs = (x<span class="number">-1</span>) * psz + y</div><div class="line"></div><div class="line">		idxs = np.unique(idxs).astype(int)</div><div class="line"></div><div class="line">		wt = np.maximum(<span class="number">0</span>, np.random.randn(idxs.shape[<span class="number">0</span>],) * <span class="number">0.5</span> + <span class="number">1</span>)</div><div class="line">		<span class="keyword">if</span> np.sum(wt) == <span class="number">0</span>:</div><div class="line">			<span class="keyword">continue</span></div><div class="line">		wt /= np.sum(wt)</div><div class="line">		<span class="keyword">for</span> i, idx <span class="keyword">in</span> enumerate(idxs):</div><div class="line">			x = idx % psz</div><div class="line">			y = idx / psz</div><div class="line">			kern[x, y] = wt[i]</div></pre></td></tr></table></figure>
+<h3 id="基于高斯过程的方法"><a href="#基于高斯过程的方法" class="headerlink" title="基于高斯过程的方法"></a>基于高斯过程的方法</h3><blockquote>
 <p>In <a href="https://en.wikipedia.org/wiki/Probability_theory" target="_blank" rel="external">probability theory</a> and <a href="https://en.wikipedia.org/wiki/Statistics" target="_blank" rel="external">statistics</a>, a <strong>Gaussian process</strong> is a particular kind of statistical model where <a href="https://en.wikipedia.org/wiki/Random_variate" target="_blank" rel="external">observations</a> occur in a continuous domain, e.g. time or space. In a Gaussian process, every point in some continuous input space is associated with a <a href="https://en.wikipedia.org/wiki/Normal_distribution" target="_blank" rel="external">normally distributed</a> <a href="https://en.wikipedia.org/wiki/Random_variable" target="_blank" rel="external">random variable</a>. Moreover, every finite collection of those random variables has a <a href="https://en.wikipedia.org/wiki/Multivariate_normal_distribution" target="_blank" rel="external">multivariate normal distribution</a>, i.e. every finite <a href="https://en.wikipedia.org/wiki/Linear_combination" target="_blank" rel="external">linear combination</a> of them is normally distributed. The distribution of a Gaussian process is the <a href="https://en.wikipedia.org/wiki/Joint_distribution" target="_blank" rel="external">joint distribution</a> of all those (infinitely many) random variables, and as such, it is a distribution over functions with a continuous domain, e.g. time or space.</p>
 </blockquote>
 <p>高斯过程其实就是多元高斯分布的无限维度扩展，我们通过观察无限维度的数据的子集（这些子集也服从多元高斯分布），然后构造函数来对数据进行建模。</p>
 <p>例如，我们需要测量一年中每天中午的温度（温度明显是一个有连续空间的变量），这里GP就是一个函数f, 输入${x_n}_{n=1}^{365}$, $f(x_n)$就是每天温度的预测值。 GP函数主要包含两部分： mean function, $m(x)$和kernel function, $k(x, x^\prime)$。</p>
-<p>我们需要对x坐标和y坐标进行采样：
-$$
-f_x(t), f_y(t) \sim GP(0, k(t, t')), k(t,t') = \sigma_f^2(1+\frac{\sqrt(5)|t-t'|}{l}+\frac{5(t-t')^2}{3l^2})\exp(-\frac{\sqrt 5|t-t'|}{l})
-$$
-这里，$l=0.3$, $\sigma_f=0.25$</p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">kernel</span><span class="params">(x1, x2)</span>:</span></div><div class="line">	sigma_f = <span class="number">1.</span>/<span class="number">4</span></div><div class="line">	l = <span class="number">0.3</span></div><div class="line">	delta = np.abs(x1-x2)</div><div class="line">	<span class="keyword">return</span> sigma_f * sigma_f * (<span class="number">1</span>+np.sqrt(<span class="number">5</span>)*delta/l + <span class="number">5</span> * delta*delta/(<span class="number">3</span>*l*l)) * np.exp(-np.sqrt(<span class="number">5</span>)*delta/l)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">gram_matrix</span><span class="params">(xs)</span>:</span></div><div class="line">	<span class="keyword">return</span> [[kernel(x1, x2) <span class="keyword">for</span> x2 <span class="keyword">in</span> xs] <span class="keyword">for</span> x1 <span class="keyword">in</span> xs]</div></pre></td></tr></table></figure></p>
+<p>我们需要对x坐标和y坐标进行采样：<br>$$<br>f_x(t), f_y(t) \sim GP(0, k(t, t’)), k(t,t’) = \sigma_f^2(1+\frac{\sqrt(5)|t-t’|}{l}+\frac{5(t-t’)^2}{3l^2})\exp(-\frac{\sqrt 5|t-t’|}{l})<br>$$<br>这里，$l=0.3$, $\sigma_f=0.25$</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">kernel</span><span class="params">(x1, x2)</span>:</span></div><div class="line">	sigma_f = <span class="number">1.</span>/<span class="number">4</span></div><div class="line">	l = <span class="number">0.3</span></div><div class="line">	delta = np.abs(x1-x2)</div><div class="line">	<span class="keyword">return</span> sigma_f * sigma_f * (<span class="number">1</span>+np.sqrt(<span class="number">5</span>)*delta/l + <span class="number">5</span> * delta*delta/(<span class="number">3</span>*l*l)) * np.exp(-np.sqrt(<span class="number">5</span>)*delta/l)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">gram_matrix</span><span class="params">(xs)</span>:</span></div><div class="line">	<span class="keyword">return</span> [[kernel(x1, x2) <span class="keyword">for</span> x2 <span class="keyword">in</span> xs] <span class="keyword">for</span> x1 <span class="keyword">in</span> xs]</div></pre></td></tr></table></figure>
 
 	
 	</div>
   <a type="button" href="/2017/12/05/Generate-Motion-Blur/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2017/11/24/capsule/" >Introduction to Capsule Network</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2017-11-24  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p><a href="https://arxiv.org/abs/1710.09829" target="_blank" rel="external">Dynamic Routing Between Capsules</a></p>
-<p>这是Hinton发表在NIPS2017的一篇文章，提出了capsule的概念。</p>
-<p>其实可以把capsule看成是neuron的一个特殊形式，neuron的输出是一个scalar，而capsule则会输出vector。除此之外，neuron可以detect到一个特定的pattern，但是这又存在很大的局限性，会有pattern冗余，例如：</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.11.12.png" alt=""></p>
-<p>所以capsule输出vector就可以避免这样的情况，输出特征v的每个维度表示的是对应pattern的特性，以上图为例，可能某个表示鸟嘴方向的维度，分别对应1和-1。</p>
-<p>再以人脸为例，传统的CNN可能可以detect到眼睛的pattern, 嘴巴的pattern等，只能表示它的存在，但是无法表示五官的属性，例如相对位置，大小，相对角度等等。而向量的大小表示的是整个pattern的概率，或者可以叫做confidence, 例如下图：</p>
-<p><img src="https://jhui.github.io/assets/capsule/face4.jpg" alt=""><img src="https://jhui.github.io/assets/capsule/face5.jpg" alt=""></p>
-<p>具体的计算过程见下图：</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.15.27.png" alt=""></p>
-<p>$$
-u^1=W^1V^1, u^2=W^2v^2 \ s=c_1u^1 \ v=Squash(s) , v = \frac{|s|}{1+|s|^2}\frac{s}{|s|}
-$$
-接下来就是核心，dynamic routing:</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.51.30.png" alt=""></p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.24.52.png" alt=""></p>
-<p>和传统CNN简单粗暴的max pooling不同的是它动态地调整routing的系数，系数是在testing的时候online地决定的，调整的方法就是通过T次迭代，根据aggrement，其实就是提高越相关的v的系数。 上图中，如果$a^r$和$u^i$相关性较强的话，就可以得到更大的$b_i$。</p>
-<p>也可以将dynamic routing的过程看成是一个不断排除outlier的一个过程，例如现在$u^1$,$u^2$很接近，而$u^3$与他们差距很大，他们两个队最终的$a^r$贡献很大，那么随着不断迭代，$u^3$就被消除了。</p>
-
-	
-	</div>
-  <a type="button" href="/2017/11/24/capsule/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/" >Fixing  Weight Decay Regularization in Adam</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2017-11-21  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p><a href="https://arxiv.org/pdf/1711.05101.pdf" target="_blank" rel="external">文章的链接</a></p>
-<p>首先，文章理清了l2正则和weight decay的区别，它们并不是对等的。 weight decay可以表示成:</p>
-<p>$$
-x_{t+1} = (1-w_t)x_{t}-\alpha_t\nabla f_t(x_t)
-$$</p>
-<p>而l2正则的表示是：</p>
-<p>$$
-f_{t,reg(x_t)} = f_t(x_t)+ \frac{w_t}{2} |x_t|_2^2
-$$</p>
-<p>所以：</p>
-<p>$$
-\nabla f_{t,reg(x_t)} = \nabla f_t(x_t)+w_tx_t
-$$</p>
-<p>注意到weight decay的系数只有$w_t$，那么，在大部分框架中，例如tensorflow, keras, pytorch等把weight decay和l2正则等价了，</p>
-<p>我们切换到SGD Mometum中来：因求完梯度以后，需要累加mometum，在$x_t$前面就存在了三个参数：$\alpha$学习率,$w_t$,$\eta_t$平滑系数。那么就和weight decay不对等了，当然可以把这三者乘积看成一个系数，但是这样还是削弱了原本的weight decay（系数变小了）。</p>
-<p>因此，作者把传统的SGD with momentum做了以下修改：</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.17.09.png" alt=""></p>
-<p>简单总结一下： 就是除了在梯度计算中加入weight decay，在mometum也加入了weight decay。这样就增强了weight decay的作用。</p>
-<p>除了对SGD with Mometum有影响，作者还对Adam进行了修改：</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.26.39.png" alt=""></p>
-<p>看一下Adam的公式：</p>
-<p>$$x_t = x_{t-1} - \eta_t\alpha \frac{\beta_1m_{t-1}+(1-\beta_1)g_t}{\sqrt{\beta_2v_{t-1}+(1-\beta_2)g_t^2+\epsilon}}$$</p>
-<p>with $g_t=\nabla f_t(x_{t-1})+w_tx_{t-1}$</p>
-<p>这里可以看到$g_t$被归一化了，同时$w_t$也带着被归一化了，这样$w_t$就被减弱了。</p>
-<p>实验结果：</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.38.45.png" alt=""></p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-21%20%E4%B8%8B%E5%8D%887.38.53.png" alt=""></p>
-<p>横纵坐标分别是不同的weight decay和learning rate的组合, 可以看到learning rate和weight decay的相关性很大，固定weight decay，去调整learning rate，那么效果会变化较大，从图中看到，明显作者提出的算法，最有区域较大，更利于找出最优的参数组合。</p>
-
-	
-	</div>
-  <a type="button" href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -1004,7 +951,7 @@ $$</p>
 		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/algorithms/">algorithms<span>6</span></a></li>
+			<li><a href="/categories/algorithms/">algorithms<span>8</span></a></li>
 		
 		</ul>
 	</div>
@@ -1015,37 +962,37 @@ $$</p>
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
+			<li><a href="/tags/math/">math<span>2</span></a></li>
+		
 			<li><a href="/tags/summary/">summary<span>2</span></a></li>
-		
-			<li><a href="/tags/computer-vision/">computer vision<span>3</span></a></li>
-		
-			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
-		
-			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
-		
-			<li><a href="/tags/notes/">notes<span>6</span></a></li>
-		
-			<li><a href="/tags/deep-learning/">deep learning<span>11</span></a></li>
-		
-			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
-		
-			<li><a href="/tags/classifcation/">classifcation<span>1</span></a></li>
-		
-			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
 		
 			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
 		
+			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
+		
+			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
+		
+			<li><a href="/tags/notes/">notes<span>6</span></a></li>
+		
+			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
+		
+			<li><a href="/tags/classifcation/">classifcation<span>3</span></a></li>
+		
+			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
+		
+			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
+		
 			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
 		
-			<li><a href="/tags/math/">math<span>2</span></a></li>
+			<li><a href="/tags/paper/">paper<span>1</span></a></li>
 		
-			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
+			<li><a href="/tags/computer-vision/">computer vision<span>3</span></a></li>
 		
 			<li><a href="/tags/杂/">杂<span>1</span></a></li>
 		
-			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
+			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
 		
-			<li><a href="/tags/paper/">paper<span>1</span></a></li>
+			<li><a href="/tags/deep-learning/">deep learning<span>13</span></a></li>
 		
 		 
 		</ul>
@@ -1059,6 +1006,14 @@ $$</p>
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2018/01/25/Batch-Normalization-Accelerating-Deep-Network-Training-by-Reducing-Internal-Covariate-Shift笔记/" ><i class="fa fa-file-o"></i>Batch Normalization: Accele...</a>
+      </li>
+    
+      <li>
+        <a href="/2018/01/25/Going-Deeper-with-Convolutions笔记/" ><i class="fa fa-file-o"></i>Going Deeper with Convoluti...</a>
+      </li>
+    
+      <li>
         <a href="/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/" ><i class="fa fa-file-o"></i>Visualizing and Understandi...</a>
       </li>
     
@@ -1068,14 +1023,6 @@ $$</p>
     
       <li>
         <a href="/2018/01/18/AlexNet算法笔记/" ><i class="fa fa-file-o"></i>AlexNet算法笔记</a>
-      </li>
-    
-      <li>
-        <a href="/2018/01/18/VGGNet算法笔记/" ><i class="fa fa-file-o"></i>VGGNet算法笔记</a>
-      </li>
-    
-      <li>
-        <a href="/2018/01/05/Comic-Generation/" ><i class="fa fa-file-o"></i>Comic Generation</a>
       </li>
     
   </ul>

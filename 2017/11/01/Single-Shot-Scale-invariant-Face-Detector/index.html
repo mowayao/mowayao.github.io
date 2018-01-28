@@ -140,9 +140,11 @@ var _hmt = _hmt || [];
 <ul>
 <li>VGG net (throgh Pool5 layer) and some extra convolutional layers</li>
 <li>Anchor  is 1:1 aspect ratio (face annotation)</li>
-<li>two stages to improve the anchor matching strategy</li>
+<li>two stages to improve the anchor matching strategy<ul>
 <li>stage one: decrese the jaccord overlap threshold from 0.5 to 0.35</li>
 <li>stage two: decrese the threshold to 0.1 and sort to select the top-N</li>
+</ul>
+</li>
 <li>max-out operation is performed on the background label scores</li>
 </ul>
 <p>model architecture:</p>
