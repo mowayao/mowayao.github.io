@@ -150,21 +150,15 @@ var _hmt = _hmt || [];
   <div class="row">
 	
 	
-		<p>论文 ：Batch Normalization: Accelerating Deep Network Training by Reducing Internal
-Covariate Shift, ICML 2015</p>
-<p>链接：http://proceedings.mlr.press/v37/ioffe15.pdf</p>
+		<p>论文 ：Batch Normalization: Accelerating Deep Network Training by Reducing Internal<br>  Covariate Shift, ICML 2015</p>
+<p>链接：<a href="http://proceedings.mlr.press/v37/ioffe15.pdf" target="_blank" rel="external">http://proceedings.mlr.press/v37/ioffe15.pdf</a></p>
 <p>作者: Sergey Ioffe，Christian Szegedy</p>
-<p>#####Ide</p>
-<p><strong>Internal Covariate Shift</strong></p>
+<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p><strong>Internal Covariate Shift</strong></p>
 <p>什么是Covariate Shift？</p>
 <blockquote>
 <p>Another assumption one can make about the connection between the source and the target domains is that given the same observation$X=x$, the conditional distributions of Y are the same in the two domains. However, the marginal distributions of X may be different in the source and the target domains. Formally, we assume that $ P_s(Y \vert X = x) = P_t(Y \vert X = x)$ for all $ x \in \mathcal{X}$! but $ P_s(X) \ne P_t(X)$. This difference between the two domains is called <em>covariate shift</em></p>
 </blockquote>
-<p>covariates其实就是输入特征，记做X，假设对任意的$x\in \mathcal{X}$,$P_s(Y|X=x)=P_t(Y|X=x)$，表示Y关于X的条件分布在source domain（训练集）和target domain（测试集）是一样的，但是$P_s(X)\neq P_t(X) $，两者的边缘分布是不一样的！这个问题经常发生在transfer learning中。从表面上看，对于分类问题，只要两者的条件分布相同，即使边缘分布不同，也不会影响分类的结果，但是，当模型是有参数的时候，也就是$P(Y|X,\theta)$的时候，我们需要选择最优的参数$\theta^*$来使得loss($\theta$)最小。在这个时候，如果$P_s(X)\neq P_t(X) $，也就打破了传统机器学习中训练集和测试集的数据是i.i.d（独立同分布）的，那么在target domain的最优模型会和source domain的不一样，因为参数的求解依赖于X的分布（似然函数）！
-$$
-P(\theta|D)=\frac{P(D|\theta)\times P(\theta)}{P(D)}
-$$
-Internal Covariate Shift表示的是在神经网络发生的convariate shift，因为网络参数在更新，在神经网络的特定层的输出分布就发生了改变，这就导致它的后面层需要去适应它分布的变化，这就降低了训练速度，影响了模型的训练效果。</p>
+<p>covariates其实就是输入特征，记做X，假设对任意的$x\in \mathcal{X}$,$P_s(Y|X=x)=P_t(Y|X=x)$，表示Y关于X的条件分布在source domain（训练集）和target domain（测试集）是一样的，但是$P_s(X)\neq P_t(X) $，两者的边缘分布是不一样的！这个问题经常发生在transfer learning中。从表面上看，对于分类问题，只要两者的条件分布相同，即使边缘分布不同，也不会影响分类的结果，但是，当模型是有参数的时候，也就是$P(Y|X,\theta)$的时候，我们需要选择最优的参数$\theta^*$来使得loss($\theta$)最小。在这个时候，如果$P_s(X)\neq P_t(X) $，也就打破了传统机器学习中训练集和测试集的数据是i.i.d（独立同分布）的，那么在target domain的最优模型会和source domain的不一样，因为参数的求解依赖于X的分布（似然函数）！<br>$$<br>P(\theta|D)=\frac{P(D|\theta)\times P(\theta)}{P(D)}<br>$$<br>Internal Covariate Shift表示的是在神经网络发生的convariate shift，因为网络参数在更新，在神经网络的特定层的输出分布就发生了改变，这就导致它的后面层需要去适应它分布的变化，这就降低了训练速度，影响了模型的训练效果。</p>
 <p><strong>Vanishing Gradient</strong></p>
 <p>一些容易饱和的非线性激活函数(tanh, sigmoid等)当输入很大的时候，梯度容易饱和。这使得模型在加深的时候，梯度容易消失！以及，ReLU的使用使得部分神经元“死掉”后不再有梯度传回去，随着网络的不断迭代，越来越多的神经元会“死掉”！所以这需要我们：</p>
 <ul>
@@ -187,40 +181,35 @@ Internal Covariate Shift表示的是在神经网络发生的convariate shift，�
 <p>the model blows up when the normalization parameters are computed outside the gradient descent step</p>
 </blockquote>
 <p><strong>Batch Normalization</strong></p>
-<p>所以，作者将每一层的输出在激活函数前做归一化（假设数据都是i.i.d）。利用均值和方差去归一化以后，还对数据做了平移放缩。所有的步骤都是可微的，所以是可以用bp优化的。</p>
+<p>所以，作者将每一层的输出在激活函数前做归一化（假设数据都是i.i.d）。利用均值和方差去归一化以后，还对数据做了平移放缩。所有的步骤都是可微的，所以是可以用bp优化的。    </p>
 <p>对于卷积层的BN，做法是将每个各自feature map归一化，例如feature map的大小为pxq，batch size为n，就是计算nxpxq的平均值和方差。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fnsve61xlbj30sc0mg787.jpg" alt=""></p>
 <p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fnxqbppxzbj30ja0b4myf.jpg" alt=""></p>
 <p><strong>BN的好处</strong></p>
 <ul>
-<li>
-<p>减少internal covariant shift，梯度爆炸，梯度消失，从而减少训练时间</p>
+<li><p>减少internal covariant shift，梯度爆炸，梯度消失，从而减少训练时间</p>
 <ul>
 <li>将输入的分布固定</li>
 </ul>
 </li>
-<li>
-<p>可以减少正则化的使用，例如l2正则，dropout等</p>
+<li><p>可以减少正则化的使用，例如l2正则，dropout等</p>
 <ul>
 <li>实验证明</li>
 </ul>
 </li>
-<li>
-<p>可以使用一些饱和的非线性函数，sigmoid等, 例如ReLU激活函数，有些neuron在不加BN的情况下已经死掉了，但是经过BN以后，还是会有梯度回传回去</p>
+<li><p>可以使用一些饱和的非线性函数，sigmoid等, 例如ReLU激活函数，有些neuron在不加BN的情况下已经死掉了，但是经过BN以后，还是会有梯度回传回去</p>
 <ul>
 <li>平移和缩放</li>
 </ul>
 </li>
-<li>
-<p>可以使用更高的学习率</p>
-<p>BN(	Wu)=BN((aW)u),因为$\frac{\partial BN((aW)u)}{\partial u}=\frac{\partial BN(Wu)}{\partial u}$，以及$\frac{\partial BN((aW)u)}{\partial aW}=\frac{1}{a}\frac{\partial BN(Wu)}{\partial W}$。大的weight，反而是会让梯度更小，这样就可以使训练更加平稳。</p>
+<li><p>可以使用更高的学习率</p>
+<p>BN(    Wu)=BN((aW)u),因为$\frac{\partial BN((aW)u)}{\partial u}=\frac{\partial BN(Wu)}{\partial u}$，以及$\frac{\partial BN((aW)u)}{\partial aW}=\frac{1}{a}\frac{\partial BN(Wu)}{\partial W}$。大的weight，反而是会让梯度更小，这样就可以使训练更加平稳。</p>
 <p>​</p>
 </li>
 </ul>
 <p><strong>代码实现：</strong></p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchnorm_forward</span><span class="params">(x, gamma, beta, bn_param)</span>:</span></div><div class="line">  <span class="string">"""</span></div><div class="line"><span class="string">  Forward pass for batch normalization.</span></div><div class="line"><span class="string">  During training the sample mean and (uncorrected) sample variance are</span></div><div class="line"><span class="string">  computed from minibatch statistics and used to normalize the incoming data.</span></div><div class="line"><span class="string">  During training we also keep an exponentially decaying running mean of the mean</span></div><div class="line"><span class="string">  and variance of each feature, and these averages are used to normalize data</span></div><div class="line"><span class="string">  at test-time.</span></div><div class="line"><span class="string">  At each timestep we update the running averages for mean and variance using</span></div><div class="line"><span class="string">  an exponential decay based on the momentum parameter:</span></div><div class="line"><span class="string">  running_mean = momentum * running_mean + (1 - momentum) * sample_mean</span></div><div class="line"><span class="string">  running_var = momentum * running_var + (1 - momentum) * sample_var</span></div><div class="line"><span class="string">  Note that the batch normalization paper suggests a different test-time</span></div><div class="line"><span class="string">  behavior: they compute sample mean and variance for each feature using a</span></div><div class="line"><span class="string">  large number of training images rather than using a running average. For</span></div><div class="line"><span class="string">  this implementation we have chosen to use running averages instead since</span></div><div class="line"><span class="string">  they do not require an additional estimation step; the torch7 implementation</span></div><div class="line"><span class="string">  of batch normalization also uses running averages.</span></div><div class="line"><span class="string">  Input:</span></div><div class="line"><span class="string">  - x: Data of shape (N, D)</span></div><div class="line"><span class="string">  - gamma: Scale parameter of shape (D,)</span></div><div class="line"><span class="string">  - beta: Shift paremeter of shape (D,)</span></div><div class="line"><span class="string">  - bn_param: Dictionary with the following keys:</span></div><div class="line"><span class="string">    - mode: 'train' or 'test'; required</span></div><div class="line"><span class="string">    - eps: Constant for numeric stability</span></div><div class="line"><span class="string">    - momentum: Constant for running mean / variance.</span></div><div class="line"><span class="string">    - running_mean: Array of shape (D,) giving running mean of features</span></div><div class="line"><span class="string">    - running_var Array of shape (D,) giving running variance of features</span></div><div class="line"><span class="string">  Returns a tuple of:</span></div><div class="line"><span class="string">  - out: of shape (N, D)</span></div><div class="line"><span class="string">  - cache: A tuple of values needed in the backward pass</span></div><div class="line"><span class="string">  """</span></div><div class="line">  mode = bn_param[<span class="string">'mode'</span>]</div><div class="line">  eps = bn_param.get(<span class="string">'eps'</span>, <span class="number">1e-5</span>)</div><div class="line">  momentum = bn_param.get(<span class="string">'momentum'</span>, <span class="number">0.9</span>)</div><div class="line"></div><div class="line">  N, D = x.shape</div><div class="line">  running_mean = bn_param.get(<span class="string">'running_mean'</span>, np.zeros(D, dtype=x.dtype))</div><div class="line">  running_var = bn_param.get(<span class="string">'running_var'</span>, np.zeros(D, dtype=x.dtype))</div><div class="line"></div><div class="line">  out, cache = <span class="keyword">None</span>, <span class="keyword">None</span></div><div class="line">  <span class="keyword">if</span> mode == <span class="string">'train'</span>:</div><div class="line">    mean = np.sum(x,axis=<span class="number">0</span>)/float(N)</div><div class="line">    x_mean = (x - mean)</div><div class="line">    sqr_x_mean = x_mean**<span class="number">2</span></div><div class="line">    var = np.sum(sqr_x_mean, axis=<span class="number">0</span>)/float(N)</div><div class="line">    sqrt_var = np.sqrt(var+eps)</div><div class="line">    inv_sqrt_var = <span class="number">1.0</span>/sqrt_var</div><div class="line">    x_hat = x_mean*inv_sqrt_var</div><div class="line">    out = gamma * x_hat + beta</div><div class="line">    cache = (x_hat,gamma,sqr_x_mean,mean,var,sqrt_var,x_mean,inv_sqrt_var)</div><div class="line"></div><div class="line">    running_mean = momentum*running_mean + (<span class="number">1.0</span>-momentum)*mean</div><div class="line">    running_var = momentum*running_var + (<span class="number">1.0</span>-momentum)*var</div><div class="line">   </div><div class="line">  <span class="keyword">elif</span> mode == <span class="string">'test'</span>:</div><div class="line"></div><div class="line">    x_hat = (x - running_mean)/np.sqrt(running_var+eps)</div><div class="line">    out = gamma * x_hat + beta</div><div class="line">  <span class="keyword">else</span>:</div><div class="line">    <span class="keyword">raise</span> ValueError(<span class="string">'Invalid forward batchnorm mode "%s"'</span> % mode)</div><div class="line"></div><div class="line">  <span class="comment"># Store the updated running means back into bn_param</span></div><div class="line">  bn_param[<span class="string">'running_mean'</span>] = running_mean</div><div class="line">  bn_param[<span class="string">'running_var'</span>] = running_var</div><div class="line">  <span class="keyword">return</span> out, cache</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchnorm_backward</span><span class="params">(dout, cache)</span>:</span></div><div class="line">  <span class="string">"""</span></div><div class="line"><span class="string">  Backward pass for batch normalization.</span></div><div class="line"><span class="string">  For this implementation, you should write out a computation graph for</span></div><div class="line"><span class="string">  batch normalization on paper and propagate gradients backward through</span></div><div class="line"><span class="string">  intermediate nodes.</span></div><div class="line"><span class="string">  Inputs:</span></div><div class="line"><span class="string">  - dout: Upstream derivatives, of shape (N, D)</span></div><div class="line"><span class="string">  - cache: Variable of intermediates from batchnorm_forward.</span></div><div class="line"><span class="string">  Returns a tuple of:</span></div><div class="line"><span class="string">  - dx: Gradient with respect to inputs x, of shape (N, D)</span></div><div class="line"><span class="string">  - dgamma: Gradient with respect to scale parameter gamma, of shape (D,)</span></div><div class="line"><span class="string">  - dbeta: Gradient with respect to shift parameter beta, of shape (D,)</span></div><div class="line"><span class="string">  """</span></div><div class="line">  x_hat,gamma,sqr_x_mean,mean,var,sqrt_var,x_mean,inv_sqrt_var = cache</div><div class="line">  dx, dgamma, dbeta = <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span></div><div class="line"></div><div class="line">  N = x_hat.shape[<span class="number">0</span>]</div><div class="line">    </div><div class="line">  dx_hat = dout * gamma</div><div class="line">  dx_mean = dx_hat*inv_sqrt_var</div><div class="line">  dinv_sqrt_var = np.sum(dx_hat*x_mean,axis=<span class="number">0</span>)</div><div class="line">  dsqrt_var = <span class="number">-1.0</span>/(sqrt_var**<span class="number">2</span>)*dinv_sqrt_var</div><div class="line">  dvar = <span class="number">0.5</span>*inv_sqrt_var*dsqrt_var</div><div class="line">  dsqr_x_mean = <span class="number">1.0</span>/N*np.ones(sqr_x_mean.shape)*dvar</div><div class="line">  dx_mean += <span class="number">2</span>*x_mean*dsqr_x_mean</div><div class="line"></div><div class="line">  dmean = -np.sum(dx_mean,axis=<span class="number">0</span>)</div><div class="line">  dx1 = dx_mean</div><div class="line">  dx2 = <span class="number">1.0</span>/N*np.ones(mean.shape)*dmean</div><div class="line">  dx = dx1+dx2</div><div class="line">  dgamma = np.sum(x_hat*dout,axis=<span class="number">0</span>)</div><div class="line">  dbeta =  np.sum(dout,axis=<span class="number">0</span>)</div><div class="line"></div><div class="line">  <span class="keyword">return</span> dx, dgamma, dbeta</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchnorm_backward_alt</span><span class="params">(dout, cache)</span>:</span></div><div class="line">  <span class="string">"""</span></div><div class="line"><span class="string">  Alternative backward pass for batch normalization.</span></div><div class="line"><span class="string">  For this implementation you should work out the derivatives for the batch</span></div><div class="line"><span class="string">  normalizaton backward pass on paper and simplify as much as possible. You</span></div><div class="line"><span class="string">  should be able to derive a simple expression for the backward pass.</span></div><div class="line"><span class="string">  Note: This implementation should expect to receive the same cache variable</span></div><div class="line"><span class="string">  as batchnorm_backward, but might not use all of the values in the cache.</span></div><div class="line"><span class="string">  Inputs / outputs: Same as batchnorm_backward</span></div><div class="line"><span class="string">  """</span></div><div class="line">  dx, dgamma, dbeta = <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span></div><div class="line">  x_hat,gamma,sqr_x_mean,mean,var,sqrt_var,x_mean,inv_sqrt_var = cache</div><div class="line">  N = x_hat.shape[<span class="number">0</span>]</div><div class="line">  dbeta = np.sum(dout,axis=<span class="number">0</span>)</div><div class="line">  dgamma = np.sum(dout*x_hat,axis=<span class="number">0</span>)</div><div class="line"></div><div class="line">  dx = <span class="number">1.0</span>/N*inv_sqrt_var*gamma*(</div><div class="line">   N*dout</div><div class="line">   -np.sum(dout,axis=<span class="number">0</span>)</div><div class="line">   -x_mean*(inv_sqrt_var**<span class="number">2</span>)*np.sum(dout*x_mean,axis=<span class="number">0</span>)</div><div class="line">  )</div><div class="line"></div><div class="line">  <span class="keyword">return</span> dx, dgamma, dbeta</div></pre></td></tr></table></figure></p>
-<h5>实验</h5>
-<p><strong>MNIST</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchnorm_forward</span><span class="params">(x, gamma, beta, bn_param)</span>:</span></div><div class="line">  <span class="string">"""</span></div><div class="line"><span class="string">  Forward pass for batch normalization.</span></div><div class="line"><span class="string">  During training the sample mean and (uncorrected) sample variance are</span></div><div class="line"><span class="string">  computed from minibatch statistics and used to normalize the incoming data.</span></div><div class="line"><span class="string">  During training we also keep an exponentially decaying running mean of the mean</span></div><div class="line"><span class="string">  and variance of each feature, and these averages are used to normalize data</span></div><div class="line"><span class="string">  at test-time.</span></div><div class="line"><span class="string">  At each timestep we update the running averages for mean and variance using</span></div><div class="line"><span class="string">  an exponential decay based on the momentum parameter:</span></div><div class="line"><span class="string">  running_mean = momentum * running_mean + (1 - momentum) * sample_mean</span></div><div class="line"><span class="string">  running_var = momentum * running_var + (1 - momentum) * sample_var</span></div><div class="line"><span class="string">  Note that the batch normalization paper suggests a different test-time</span></div><div class="line"><span class="string">  behavior: they compute sample mean and variance for each feature using a</span></div><div class="line"><span class="string">  large number of training images rather than using a running average. For</span></div><div class="line"><span class="string">  this implementation we have chosen to use running averages instead since</span></div><div class="line"><span class="string">  they do not require an additional estimation step; the torch7 implementation</span></div><div class="line"><span class="string">  of batch normalization also uses running averages.</span></div><div class="line"><span class="string">  Input:</span></div><div class="line"><span class="string">  - x: Data of shape (N, D)</span></div><div class="line"><span class="string">  - gamma: Scale parameter of shape (D,)</span></div><div class="line"><span class="string">  - beta: Shift paremeter of shape (D,)</span></div><div class="line"><span class="string">  - bn_param: Dictionary with the following keys:</span></div><div class="line"><span class="string">    - mode: 'train' or 'test'; required</span></div><div class="line"><span class="string">    - eps: Constant for numeric stability</span></div><div class="line"><span class="string">    - momentum: Constant for running mean / variance.</span></div><div class="line"><span class="string">    - running_mean: Array of shape (D,) giving running mean of features</span></div><div class="line"><span class="string">    - running_var Array of shape (D,) giving running variance of features</span></div><div class="line"><span class="string">  Returns a tuple of:</span></div><div class="line"><span class="string">  - out: of shape (N, D)</span></div><div class="line"><span class="string">  - cache: A tuple of values needed in the backward pass</span></div><div class="line"><span class="string">  """</span></div><div class="line">  mode = bn_param[<span class="string">'mode'</span>]</div><div class="line">  eps = bn_param.get(<span class="string">'eps'</span>, <span class="number">1e-5</span>)</div><div class="line">  momentum = bn_param.get(<span class="string">'momentum'</span>, <span class="number">0.9</span>)</div><div class="line"></div><div class="line">  N, D = x.shape</div><div class="line">  running_mean = bn_param.get(<span class="string">'running_mean'</span>, np.zeros(D, dtype=x.dtype))</div><div class="line">  running_var = bn_param.get(<span class="string">'running_var'</span>, np.zeros(D, dtype=x.dtype))</div><div class="line"></div><div class="line">  out, cache = <span class="keyword">None</span>, <span class="keyword">None</span></div><div class="line">  <span class="keyword">if</span> mode == <span class="string">'train'</span>:</div><div class="line">    mean = np.sum(x,axis=<span class="number">0</span>)/float(N)</div><div class="line">    x_mean = (x - mean)</div><div class="line">    sqr_x_mean = x_mean**<span class="number">2</span></div><div class="line">    var = np.sum(sqr_x_mean, axis=<span class="number">0</span>)/float(N)</div><div class="line">    sqrt_var = np.sqrt(var+eps)</div><div class="line">    inv_sqrt_var = <span class="number">1.0</span>/sqrt_var</div><div class="line">    x_hat = x_mean*inv_sqrt_var</div><div class="line">    out = gamma * x_hat + beta</div><div class="line">    cache = (x_hat,gamma,sqr_x_mean,mean,var,sqrt_var,x_mean,inv_sqrt_var)</div><div class="line"></div><div class="line">    running_mean = momentum*running_mean + (<span class="number">1.0</span>-momentum)*mean</div><div class="line">    running_var = momentum*running_var + (<span class="number">1.0</span>-momentum)*var</div><div class="line">   </div><div class="line">  <span class="keyword">elif</span> mode == <span class="string">'test'</span>:</div><div class="line"></div><div class="line">    x_hat = (x - running_mean)/np.sqrt(running_var+eps)</div><div class="line">    out = gamma * x_hat + beta</div><div class="line">  <span class="keyword">else</span>:</div><div class="line">    <span class="keyword">raise</span> ValueError(<span class="string">'Invalid forward batchnorm mode "%s"'</span> % mode)</div><div class="line"></div><div class="line">  <span class="comment"># Store the updated running means back into bn_param</span></div><div class="line">  bn_param[<span class="string">'running_mean'</span>] = running_mean</div><div class="line">  bn_param[<span class="string">'running_var'</span>] = running_var</div><div class="line">  <span class="keyword">return</span> out, cache</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchnorm_backward</span><span class="params">(dout, cache)</span>:</span></div><div class="line">  <span class="string">"""</span></div><div class="line"><span class="string">  Backward pass for batch normalization.</span></div><div class="line"><span class="string">  For this implementation, you should write out a computation graph for</span></div><div class="line"><span class="string">  batch normalization on paper and propagate gradients backward through</span></div><div class="line"><span class="string">  intermediate nodes.</span></div><div class="line"><span class="string">  Inputs:</span></div><div class="line"><span class="string">  - dout: Upstream derivatives, of shape (N, D)</span></div><div class="line"><span class="string">  - cache: Variable of intermediates from batchnorm_forward.</span></div><div class="line"><span class="string">  Returns a tuple of:</span></div><div class="line"><span class="string">  - dx: Gradient with respect to inputs x, of shape (N, D)</span></div><div class="line"><span class="string">  - dgamma: Gradient with respect to scale parameter gamma, of shape (D,)</span></div><div class="line"><span class="string">  - dbeta: Gradient with respect to shift parameter beta, of shape (D,)</span></div><div class="line"><span class="string">  """</span></div><div class="line">  x_hat,gamma,sqr_x_mean,mean,var,sqrt_var,x_mean,inv_sqrt_var = cache</div><div class="line">  dx, dgamma, dbeta = <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span></div><div class="line"></div><div class="line">  N = x_hat.shape[<span class="number">0</span>]</div><div class="line">    </div><div class="line">  dx_hat = dout * gamma</div><div class="line">  dx_mean = dx_hat*inv_sqrt_var</div><div class="line">  dinv_sqrt_var = np.sum(dx_hat*x_mean,axis=<span class="number">0</span>)</div><div class="line">  dsqrt_var = <span class="number">-1.0</span>/(sqrt_var**<span class="number">2</span>)*dinv_sqrt_var</div><div class="line">  dvar = <span class="number">0.5</span>*inv_sqrt_var*dsqrt_var</div><div class="line">  dsqr_x_mean = <span class="number">1.0</span>/N*np.ones(sqr_x_mean.shape)*dvar</div><div class="line">  dx_mean += <span class="number">2</span>*x_mean*dsqr_x_mean</div><div class="line"></div><div class="line">  dmean = -np.sum(dx_mean,axis=<span class="number">0</span>)</div><div class="line">  dx1 = dx_mean</div><div class="line">  dx2 = <span class="number">1.0</span>/N*np.ones(mean.shape)*dmean</div><div class="line">  dx = dx1+dx2</div><div class="line">  dgamma = np.sum(x_hat*dout,axis=<span class="number">0</span>)</div><div class="line">  dbeta =  np.sum(dout,axis=<span class="number">0</span>)</div><div class="line"></div><div class="line">  <span class="keyword">return</span> dx, dgamma, dbeta</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchnorm_backward_alt</span><span class="params">(dout, cache)</span>:</span></div><div class="line">  <span class="string">"""</span></div><div class="line"><span class="string">  Alternative backward pass for batch normalization.</span></div><div class="line"><span class="string">  For this implementation you should work out the derivatives for the batch</span></div><div class="line"><span class="string">  normalizaton backward pass on paper and simplify as much as possible. You</span></div><div class="line"><span class="string">  should be able to derive a simple expression for the backward pass.</span></div><div class="line"><span class="string">  Note: This implementation should expect to receive the same cache variable</span></div><div class="line"><span class="string">  as batchnorm_backward, but might not use all of the values in the cache.</span></div><div class="line"><span class="string">  Inputs / outputs: Same as batchnorm_backward</span></div><div class="line"><span class="string">  """</span></div><div class="line">  dx, dgamma, dbeta = <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span></div><div class="line">  x_hat,gamma,sqr_x_mean,mean,var,sqrt_var,x_mean,inv_sqrt_var = cache</div><div class="line">  N = x_hat.shape[<span class="number">0</span>]</div><div class="line">  dbeta = np.sum(dout,axis=<span class="number">0</span>)</div><div class="line">  dgamma = np.sum(dout*x_hat,axis=<span class="number">0</span>)</div><div class="line"></div><div class="line">  dx = <span class="number">1.0</span>/N*inv_sqrt_var*gamma*(</div><div class="line">   N*dout</div><div class="line">   -np.sum(dout,axis=<span class="number">0</span>)</div><div class="line">   -x_mean*(inv_sqrt_var**<span class="number">2</span>)*np.sum(dout*x_mean,axis=<span class="number">0</span>)</div><div class="line">  )</div><div class="line"></div><div class="line">  <span class="keyword">return</span> dx, dgamma, dbeta</div></pre></td></tr></table></figure>
+<h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p><strong>MNIST</strong></p>
 <p>Fig 1(a)是一个小网络在MNIST数据集上的表现，可以看出加了BN整个训练过程更加平稳。Fig 1(b,c)是输入分布的变化，三条线分别是15，50，85，可以发现BN的数值更加分开，更有区分度，分布更加稳定。</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fnxqqs6d9sj30m40eewhn.jpg" alt=""></p>
 <p><strong>IMAGENET</strong></p>
@@ -239,7 +228,7 @@ Internal Covariate Shift表示的是在神经网络发生的convariate shift，�
 
 	
 	</div>
-  <a type="button" href="/2018/01/25/Batch-Normalization-Accelerating-Deep-Network-Training-by-Reducing-Internal-Covariate-Shift笔记/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2018/01/25/Batch-Normalization-Accelerating-Deep-Network-Training-by-Reducing-Internal-Covariate-Shift笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -342,7 +331,7 @@ $[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
 
 	
 	</div>
-  <a type="button" href="/2018/01/25/Going-Deeper-with-Convolutions笔记/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2018/01/25/Going-Deeper-with-Convolutions笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -412,7 +401,7 @@ $[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
 
 	
 	</div>
-  <a type="button" href="/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -487,7 +476,7 @@ $[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
 
 	
 	</div>
-  <a type="button" href="/2018/01/18/Network-In-Network算法笔记/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2018/01/18/Network-In-Network算法笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -544,7 +533,7 @@ $[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
 
 	
 	</div>
-  <a type="button" href="/2018/01/18/AlexNet算法笔记/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2018/01/18/AlexNet算法笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -720,7 +709,7 @@ $[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
 
 	
 	</div>
-  <a type="button" href="/2018/01/18/VGGNet算法笔记/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2018/01/18/VGGNet算法笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -795,7 +784,7 @@ $[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
 
 	
 	</div>
-  <a type="button" href="/2018/01/05/Comic-Generation/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2018/01/05/Comic-Generation/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -889,7 +878,7 @@ $[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
 
 	
 	</div>
-  <a type="button" href="/2017/12/18/CS224n-assignment1/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2017/12/18/CS224n-assignment1/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -931,7 +920,7 @@ $[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
 
 	
 	</div>
-  <a type="button" href="/2017/12/09/Network-Architecture-of-Deblurring/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2017/12/09/Network-Architecture-of-Deblurring/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -969,7 +958,7 @@ $[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
 
 	
 	</div>
-  <a type="button" href="/2017/12/05/Generate-Motion-Blur/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2017/12/05/Generate-Motion-Blur/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -983,12 +972,12 @@ $[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
 
    
     
-           <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>上一页</a>
+           <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
         
 
         <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
  
-       <a href="/page/2/" type="button" class="btn btn-default ">下一页<i class="fa fa-arrow-circle-o-right"></i></a>     
+       <a href="/page/2/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>     
         
 
   
@@ -1008,7 +997,7 @@ $[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
 			
   <div id="site_search">
    <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="搜索" class="st-search-input st-default-search-input form-control"/>
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
    </div>  
   <div id="local-search-result"></div>
   </div>
@@ -1017,7 +1006,7 @@ $[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
 		
 			
 	<div class="widget">
-		<h4>分类</h4>
+		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
 			<li><a href="/categories/algorithms/">algorithms<span>8</span></a></li>
@@ -1028,40 +1017,40 @@ $[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
 		
 			
 	<div class="widget">
-		<h4>标签云</h4>
+		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
-		
-			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
-		
-			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
-		
-			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
-		
-			<li><a href="/tags/summary/">summary<span>2</span></a></li>
-		
-			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
-		
-			<li><a href="/tags/paper/">paper<span>1</span></a></li>
-		
-			<li><a href="/tags/math/">math<span>2</span></a></li>
 		
 			<li><a href="/tags/computer-vision/">computer vision<span>3</span></a></li>
 		
-			<li><a href="/tags/杂/">杂<span>1</span></a></li>
+			<li><a href="/tags/math/">math<span>2</span></a></li>
 		
-			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
-		
-			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
-		
-			<li><a href="/tags/classifcation/">classifcation<span>3</span></a></li>
-		
-			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
-		
-			<li><a href="/tags/notes/">notes<span>6</span></a></li>
+			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
 		
 			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
 		
+			<li><a href="/tags/classifcation/">classifcation<span>3</span></a></li>
+		
+			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
+		
+			<li><a href="/tags/paper/">paper<span>1</span></a></li>
+		
+			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
+		
+			<li><a href="/tags/notes/">notes<span>6</span></a></li>
+		
+			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
+		
+			<li><a href="/tags/summary/">summary<span>2</span></a></li>
+		
+			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
+		
+			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
+		
+			<li><a href="/tags/杂/">杂<span>1</span></a></li>
+		
 			<li><a href="/tags/deep-learning/">deep learning<span>13</span></a></li>
+		
+			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -1071,7 +1060,7 @@ $[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
 		
 			
 <div class="widget">
-  <h4>最新文章</h4>
+  <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
     
       <li>
@@ -1100,7 +1089,7 @@ $[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
 		
 			
 <div class="widget">
-	<h4>链接</h4>
+	<h4>Links</h4>
 	<ul class="blogroll list-unstyled">
 	
 		<li><i class="fa fa-github"></i><a href="http://www.github.com/mowayao" title="My Github account." target="_blank"]);">My Github</a></li>
