@@ -249,8 +249,11 @@ var _hmt = _hmt || [];
 <p>If the optimal function is closer to an identity mapping than to a zero mapping, it should be easier for the solver to find the perturbations with reference to an identity mapping, than to learn the function as a new one.</p>
 </blockquote>
 <p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fo2bil5j4xj30ts0foq6o.jpg" alt=""></p>
-<p>#####模型结构</p>
-<p><strong>short connection</strong><br>$$<br>y = \mathbf{F}(x,{W_i})+x<br>$$<br>$\mathbf{F}(x,{W_i})$表示待学习的残差mapping。而后面+x这个运算可以通过shortcuts进行element-wise的加法。优点是不需要额外的参数，当维度不统一的时候，可以进行zero padding或者线性投影（虽然会引入少量的参数）使得两者的维度一致。<br>$$<br>y = \mathbf{F}(x,{W_i})+W_sx<br>$$<br><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo2br70niwj30za0g0gnk.jpg" alt=""></p>
+<h5 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h5><p><strong>short connection</strong></p>
+<script type="math/tex; mode=display">
+y = \mathbf{F}(x,\{W_i\})+x</script><p>$\mathbf{F}(x,{W_i})$表示待学习的残差mapping。而后面+x这个运算可以通过shortcuts进行element-wise的加法。优点是不需要额外的参数，当维度不统一的时候，可以进行zero padding或者线性投影（虽然会引入少量的参数）使得两者的维度一致。</p>
+<script type="math/tex; mode=display">
+y = \mathbf{F}(x,\{W_i\})+W_sx</script><p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo2br70niwj30za0g0gnk.jpg" alt=""></p>
 <p><strong>Bottleneck design</strong></p>
 <p>在3x3卷积前后加入1x1卷积来降低和提高feature map的深度，实现feature map之间的线性组合，提高模型的非线性能力，同时还可以使得输入输出的维度保持一致，具体见Figure 5。</p>
 <p>Bottleneck的结构也被应用到了50-layer,101-layer,152-layer的网络中。</p>
@@ -1092,35 +1095,35 @@ var _hmt = _hmt || [];
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
-		
-			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
-		
 			<li><a href="/tags/paper/">paper<span>1</span></a></li>
 		
-			<li><a href="/tags/classifcation/">classifcation<span>5</span></a></li>
+			<li><a href="/tags/杂/">杂<span>1</span></a></li>
 		
-			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
+			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
 		
 			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
 		
 			<li><a href="/tags/summary/">summary<span>2</span></a></li>
 		
-			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
+			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
 		
-			<li><a href="/tags/notes/">notes<span>6</span></a></li>
+			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
+		
+			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
 		
 			<li><a href="/tags/computer-vision/">computer vision<span>3</span></a></li>
 		
-			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
+			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
 		
-			<li><a href="/tags/杂/">杂<span>1</span></a></li>
-		
-			<li><a href="/tags/math/">math<span>2</span></a></li>
+			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
 		
 			<li><a href="/tags/deep-learning/">deep learning<span>15</span></a></li>
 		
-			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
+			<li><a href="/tags/math/">math<span>2</span></a></li>
+		
+			<li><a href="/tags/classifcation/">classifcation<span>5</span></a></li>
+		
+			<li><a href="/tags/notes/">notes<span>6</span></a></li>
 		
 			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
 		
