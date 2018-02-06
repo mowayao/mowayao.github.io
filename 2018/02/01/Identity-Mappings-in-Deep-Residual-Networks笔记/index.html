@@ -6,16 +6,17 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>AlexNet算法笔记 | Mowayao&#39;s Blog</title>
+  <title>Identity Mappings in Deep Residual Networks笔记 | Mowayao&#39;s Blog</title>
   <meta name="author" content="Mowayao">
   
-  <meta name="description" content="论文：ImageNet Classification with Deep Convolutional Neural Networks
-链接：https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutiona">
+  <meta name="description" content="论文 ：Identity Mappings in Deep Residual Networks, ECCV 2016
+链接：https://arxiv.org/pdf/1603.05027.pdf
+作者: Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian S">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="AlexNet算法笔记"/>
+  <meta property="og:title" content="Identity Mappings in Deep Residual Networks笔记"/>
   <meta property="og:site_name" content="Mowayao&#39;s Blog"/>
 
   
@@ -119,7 +120,7 @@ var _hmt = _hmt || [];
 
 	
 		<div class="page-header">
-			<h1> AlexNet算法笔记</h1>
+			<h1> Identity Mappings in Deep Residual Networks笔记</h1>
 		</div>
 	
 
@@ -136,36 +137,64 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  		
 
-	  <p>论文：ImageNet Classification with Deep Convolutional Neural Networks</p>
-<p>链接：<a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf" target="_blank" rel="external">https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf</a></p>
-<p>AlexNet是发表在NIPS 2012的一篇文章，可以称作是深度学习的经典之作，获得了ImageNet LSVRC-2010的冠军，达到了15.3%的top-5 error。</p>
-<p><strong>模型结构：</strong></p>
-<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fndsfv7yy4j31a80fu0y3.jpg" alt=""></p>
-<p>下面是模型的具体描述：</p>
-<p>$[227\times227\times3]$ 输入<br>$[55\times55\times96]$ CONV1: 96 $11\times11$ filters at stride 4, pad 0   <u>(227-11)/4+1 = 55</u><br>$[27\times27\times96]$  MAX POOL1: $3\times3$ filters at stride 2   <u>(55-3)/2+1=27</u><br>$[27\times27\times96]$ NORM1: Normalization layer<br>$[27\times27\times256]$ CONV2: 256 $5\times5$ filters at stride 1, pad 2   <u>(27+2*2-5)/1 + 1=27</u><br>$[13\times13\times256]$ MAX POOL2: $3\times3$ filters at stride 2   <u>(27-3)/2+1=13</u><br>$[13\times13\times256]$ NORM2: Normalization layer<br>$[13\times13\times384]$ CONV3: 384 $3\times3$ filters at stride 1, pad 1<br>$[13\times13\times384]$ CONV4: 384 $3\times3$ filters at stride 1, pad 1<br>$[13\times13\times256]$ CONV5: 256 $3\times3$ filters at stride 1, pad 1<br>$[6\times6\times256]$ MAX POOL3: $3\times3$ filters at stride 2    <u>(13-3)/2+1=6</u><br>$[4096]$ FC6: 4096 neurons<br>$[4096]$ FC7: 4096 neurons<br>$[1000]$ FC8: 1000 neurons (class scores)</p>
-<p>包含了5层卷积层和3层全连接层。</p>
-<p><strong>创新点：</strong></p>
-<ol>
-<li><p>第一次使用了ReLU激活函数。传统的sigmoid和tanh激活函数的问题在于梯度容易饱和，造成训练困难，下图是sigmoid函数的梯度。而$f(x)=\max(0,x)$看出，ReLU是一个非线性激活函数，而且它的梯度不会饱和，当x&gt;0的时候，梯度一直是1，这样和sigmoid和tanh函数相比，加快了训练的速度。</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnhlvvatogj30my0egtbr.jpg" alt=""></p>
-</li>
-<li><p>使用了Norm Layer，对局部区域进行归一化，对相同空间位置上相邻深度的卷积做归一化。$b_{x,y}^i=\frac{a_{x,y}^i}{(k+\alpha\sum_{j=\max(0,i-n/2)}^{min(N-1,i+n/2)}(a_{i,j})^2)^\beta}$,其中$a_{x,y}^i$表示的是第i个通道的卷积核在$(x,y)$位置处的输出结果，随后经过ReLU激活函数作用。a是每一个神经元的激活值，n是kernel的大小，N是kernel总数，k,alpha,beta都是预设的hyper-parameters.，$k=2,n=5,\alpha=1e-4,\beta=0.75$。从公式可以看出，给原来的激活值$a$加了一个权重，生成了新的激活值b,也就是在不同map的同一空间位置进行了归一化，提高了计算效率。但是这些值为什么这么设置就不得而知了。</p>
-</li>
-<li><p>大量的数据增强，水平翻转，镜像等。调整RGB channel的值，对数据集所有图像的RGB值做PCA变换，完成去噪功能，同时为了保证图像的多样性，在特征值上加了一个随机的尺度因子，每一轮重新生成一个尺度因子，起到了正则化的作用。</p>
-</li>
-<li><p>Dropout, hidden layer的输出有0.5的几率会被置为0，那些被droped的点不会参与forward pass和backprogation，这样起到了正则化的作用。需要注意的是，在测试过程中，需要将输出乘上0.5。这是因为在训练的过程中，我们只选择了其中的一半，训练出来的结果相当于原来方法的两倍，所以当测试的时候需要乘上0.5来消除这个影响。</p>
-</li>
-</ol>
-<p><strong>训练细节：</strong></p>
+	  <p>论文 ：Identity Mappings in Deep Residual Networks, ECCV 2016</p>
+<p>链接：<a href="https://arxiv.org/pdf/1603.05027.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1603.05027.pdf</a></p>
+<p>作者: Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun</p>
+<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>ResNet的每个unit可以表示为：<br>$$<br>y_l = h(x_l)+F(x_l,W_l) \ x_{l+1} = f(y_l)<br>$$<br>$x_l$是第l个unit的输入，$x_{l+1}$是l个单元的输出。在ResNet v1中，$h(x_l)=x_l$，表示identity mapping(做了3种尝试，选择了这种)，f是ReLU函数，F包含2-3个卷积层，中间还有BN和ReLU（见Figure 1(a))。如果h和f都是identity mapping的时候，<strong>信号可以直接从一个unit到另一个unit，无论是forward还是backward，这样可以使训练更加容易</strong>。</p>
+<p>Forward:<br>$$<br>x_{l+1}=x_l+F(x_l,W_l)… \ x_L = x_l + \sum_{i=l}^{L+1}F(x_i,W_i)<br>$$</p>
 <ul>
-<li>batch size为128，momentum为0.9，weight decay为0.0005，其实weight decay是l2正则是有区别的，详细可见：<a href="https://arxiv.org/pdf/1711.05101.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1711.05101.pdf</a></li>
-<li>初始的learning rate设为1e-2, 当验证集的正确率停止的时候乘0.1</li>
+<li>第L层的特征$x_L$可以表示成$x_l+\sum_{i=l}^{L-1}F(x_i,W_i)$</li>
+<li>$x_L=x_o+\sum_{i=0}^{L-1}F(x_i,W_i)$，可以由所有的残差函数相加得到，再加上$x_o$</li>
 </ul>
-<p><strong>实验结果：</strong></p>
-<p>最终的实验结果见Table 1。可以发现，CNN的结果在Top-1 error和Top-5上都超出了传统方法一大截。</p>
-<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fndtpbwzn9j30ke0bcabv.jpg" alt=""></p>
-<p>Table 2就是模型ensemble的结果。Averaging the predictions of five similar CNNs gives an error rate of 16.4%。Averaging the predictions of two CNNs that were pre-trained on the entire Fall 2011 release with the aforementioned five CNNs gives an error rate of 15.3%</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fndtpewjn8j30te0egq6a.jpg" alt=""></p>
+<p>Backward:</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fo5tv0mjxdj30my03mjrs.jpg" alt=""></p>
+<p>从梯度计算来看，$x_l$的梯度与l+1到L的layer都有关，$\frac{\partial \epsilon}{\partial x_L}$保证梯度会从L穿回到l，而且梯度不会消失，因为$\frac{\partial}{\partial x_l}\sum_{i=l}^{L-1}F(x_i, W_i)$很少为-1。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fo5n89qljvj318e0v4tjb.jpg" alt=""></p>
+<p><strong>Identity Skip Connection</strong></p>
+<p>主要是印证当shortcut不取identity mapping时，效果为什么不好</p>
+<ul>
+<li>Scaling, $h(x)=\lambda x$</li>
+</ul>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fo5yn3n5gsj30eo03o0sw.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo5ynmkwmyj30k803uwev.jpg" alt=""></p>
+<p>和原来的梯度相比，从1变成了$\prod_{i=l}^{L-1}\lambda_i$，分类讨论，如果$\lambda_i$都大于1，那么如果层数深，梯度爆炸！如果$\lambda_i$都小于1，那么那项就会很小，梯度弥散！堵塞了shortcut。结果见Table 1，容易发现，结果反而变差了！</p>
+<ul>
+<li><p>Exclusive gating</p>
+<p>gating函数， $g(x)=\sigma(W_gx+b_g)$, $(1-g(x)) \times x + g(x)\times F(x)$,在卷积网络中，g(x)是1x1的卷积。</p>
+<p>结果依然不如baseline，结果见Table 1。当g(x)=0的时候，近似于identity，但是又抑制了F(x)</p>
+</li>
+</ul>
+<ul>
+<li>Shortcut-only gating</li>
+</ul>
+<p>$(1-g(x))\times x+F(x)$，当$b_g$负的特别多的时候，例如-6，g(x)非常接近0的时候，近似于identity mapping，结果也比exclusive gating更好，更接近baseline，见Table 1。</p>
+<ul>
+<li>1x1 conv shortcut</li>
+</ul>
+<p>用1x1的conv代替identity，当深度加深的时候，效果会变差，见Table 1。</p>
+<ul>
+<li>Dropout shortcut</li>
+</ul>
+<p>对identity做dropout，类似于做scale，结果也不理想。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fo5yt8ozenj30ye0iy0x5.jpg" alt=""></p>
+<p>总结一下：</p>
+<p>上述4种对shortcuts的修改，在实验结果上看，都不如identity mapping，可能的原因是影响了梯度的回传！</p>
+<p><strong>The impact of f</strong></p>
+<p>在原始的ResNet是ReLU，作者探讨了激活函数可能放置的各种方案，见Figure 4</p>
+<ol>
+<li>f = ReLU</li>
+<li>f = BN + ReLU，在CIFAR-10上的训练曲线见Figure 6，加了BN反而结果变差了！。</li>
+<li>ReLU放在加前，会导致F(x)的输入都大于等于0，而残差应该是在负无穷和正无穷之间</li>
+<li>非对称化，$x_{l+1}=x_l+F(\hat{f}(x_l),W_l)$，训练曲线见Figure 6，体现在训练时，收敛率更高，测试的错误率也更低。</li>
+</ol>
+<p>在CIFAR-10数据集上的对比结果见Table 2，可以发现，Figure 4(e)的方法错误率最低！</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fo76e6t07mj30ys0kawic.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fo76u1vr05j30yi0i20yf.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fo776l9s7hj31kw0hytdr.jpg" alt=""></p>
+<h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p>在ImageNet,CIFAR-10,CIFAR-100这3个数据集上做了对比试验，都取得了state-of-the-art的结果，见Table 4,5。</p>
+<p>在深层网络中，体现出了pre-act的作用！</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fo77epwjbgj31900ss10h.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fo76t0q108j30ym0gagqg.jpg" alt=""></p>
 	  
 	</div>
 
@@ -175,13 +204,12 @@ var _hmt = _hmt || [];
 
     
     
-    <a href="/2018/01/18/Network-In-Network算法笔记/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2018/01/18/VGGNet算法笔记/" type="button" class="btn btn-default ">Next<i
+    <a href="/2018/02/01/Deep-Residual-Learning-for-Image-Recognition笔记/" type="button" class="btn btn-default ">Next<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -210,7 +238,7 @@ var _hmt = _hmt || [];
 	
 	<div class="meta-widget">
 	<i class="fa fa-clock-o"></i>
-	2018-01-18 
+	2018-02-01 
 	</div>
 	
 
@@ -234,7 +262,7 @@ var _hmt = _hmt || [];
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/deep-learning/">deep learning<span>15</span></a></li> <li><a href="/tags/classfication/">classfication<span>3</span></a></li>
+  <li><a href="/tags/deep-learning/">deep learning<span>15</span></a></li> <li><a href="/tags/classifcation/">classifcation<span>5</span></a></li>
     </ul>
 	</div>
 		

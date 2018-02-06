@@ -3,6 +3,157 @@
   
     
     <entry>
+      <title><![CDATA[Identity Mappings in Deep Residual Networks笔记]]></title>
+      <url>/2018/02/01/Identity-Mappings-in-Deep-Residual-Networks%E7%AC%94%E8%AE%B0/</url>
+      <content type="html"><![CDATA[<p>论文 ：Identity Mappings in Deep Residual Networks, ECCV 2016</p>
+<p>链接：<a href="https://arxiv.org/pdf/1603.05027.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1603.05027.pdf</a></p>
+<p>作者: Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun</p>
+<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>ResNet的每个unit可以表示为：<br>$$<br>y_l = h(x_l)+F(x_l,W_l) \ x_{l+1} = f(y_l)<br>$$<br>$x_l$是第l个unit的输入，$x_{l+1}$是l个单元的输出。在ResNet v1中，$h(x_l)=x_l$，表示identity mapping(做了3种尝试，选择了这种)，f是ReLU函数，F包含2-3个卷积层，中间还有BN和ReLU（见Figure 1(a))。如果h和f都是identity mapping的时候，<strong>信号可以直接从一个unit到另一个unit，无论是forward还是backward，这样可以使训练更加容易</strong>。</p>
+<p>Forward:<br>$$<br>x_{l+1}=x_l+F(x_l,W_l)… \ x_L = x_l + \sum_{i=l}^{L+1}F(x_i,W_i)<br>$$</p>
+<ul>
+<li>第L层的特征$x_L$可以表示成$x_l+\sum_{i=l}^{L-1}F(x_i,W_i)$</li>
+<li>$x_L=x_o+\sum_{i=0}^{L-1}F(x_i,W_i)$，可以由所有的残差函数相加得到，再加上$x_o$</li>
+</ul>
+<p>Backward:</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fo5tv0mjxdj30my03mjrs.jpg" alt=""></p>
+<p>从梯度计算来看，$x_l$的梯度与l+1到L的layer都有关，$\frac{\partial \epsilon}{\partial x_L}$保证梯度会从L穿回到l，而且梯度不会消失，因为$\frac{\partial}{\partial x_l}\sum_{i=l}^{L-1}F(x_i, W_i)$很少为-1。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fo5n89qljvj318e0v4tjb.jpg" alt=""></p>
+<p><strong>Identity Skip Connection</strong></p>
+<p>主要是印证当shortcut不取identity mapping时，效果为什么不好</p>
+<ul>
+<li>Scaling, $h(x)=\lambda x$</li>
+</ul>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fo5yn3n5gsj30eo03o0sw.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo5ynmkwmyj30k803uwev.jpg" alt=""></p>
+<p>和原来的梯度相比，从1变成了$\prod_{i=l}^{L-1}\lambda_i$，分类讨论，如果$\lambda_i$都大于1，那么如果层数深，梯度爆炸！如果$\lambda_i$都小于1，那么那项就会很小，梯度弥散！堵塞了shortcut。结果见Table 1，容易发现，结果反而变差了！</p>
+<ul>
+<li><p>Exclusive gating</p>
+<p>gating函数， $g(x)=\sigma(W_gx+b_g)$, $(1-g(x)) \times x + g(x)\times F(x)$,在卷积网络中，g(x)是1x1的卷积。</p>
+<p>结果依然不如baseline，结果见Table 1。当g(x)=0的时候，近似于identity，但是又抑制了F(x)</p>
+</li>
+</ul>
+<ul>
+<li>Shortcut-only gating</li>
+</ul>
+<p>$(1-g(x))\times x+F(x)$，当$b_g$负的特别多的时候，例如-6，g(x)非常接近0的时候，近似于identity mapping，结果也比exclusive gating更好，更接近baseline，见Table 1。</p>
+<ul>
+<li>1x1 conv shortcut</li>
+</ul>
+<p>用1x1的conv代替identity，当深度加深的时候，效果会变差，见Table 1。</p>
+<ul>
+<li>Dropout shortcut</li>
+</ul>
+<p>对identity做dropout，类似于做scale，结果也不理想。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fo5yt8ozenj30ye0iy0x5.jpg" alt=""></p>
+<p>总结一下：</p>
+<p>上述4种对shortcuts的修改，在实验结果上看，都不如identity mapping，可能的原因是影响了梯度的回传！</p>
+<p><strong>The impact of f</strong></p>
+<p>在原始的ResNet是ReLU，作者探讨了激活函数可能放置的各种方案，见Figure 4</p>
+<ol>
+<li>f = ReLU</li>
+<li>f = BN + ReLU，在CIFAR-10上的训练曲线见Figure 6，加了BN反而结果变差了！。</li>
+<li>ReLU放在加前，会导致F(x)的输入都大于等于0，而残差应该是在负无穷和正无穷之间</li>
+<li>非对称化，$x_{l+1}=x_l+F(\hat{f}(x_l),W_l)$，训练曲线见Figure 6，体现在训练时，收敛率更高，测试的错误率也更低。</li>
+</ol>
+<p>在CIFAR-10数据集上的对比结果见Table 2，可以发现，Figure 4(e)的方法错误率最低！</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fo76e6t07mj30ys0kawic.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fo76u1vr05j30yi0i20yf.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fo776l9s7hj31kw0hytdr.jpg" alt=""></p>
+<h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p>在ImageNet,CIFAR-10,CIFAR-100这3个数据集上做了对比试验，都取得了state-of-the-art的结果，见Table 4,5。</p>
+<p>在深层网络中，体现出了pre-act的作用！</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fo77epwjbgj31900ss10h.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fo76t0q108j30ym0gagqg.jpg" alt=""></p>
+]]></content>
+      
+        <categories>
+            
+            <category> algorithms </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> deep learning </tag>
+            
+            <tag> classifcation </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[Deep Residual Learning for Image Recognition笔记]]></title>
+      <url>/2018/02/01/Deep-Residual-Learning-for-Image-Recognition%E7%AC%94%E8%AE%B0/</url>
+      <content type="html"><![CDATA[<p>论文 ：Deep Residual Learning for Image Recognition, CVPR 2016</p>
+<p>链接：<a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf" target="_blank" rel="external">https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf</a></p>
+<p>作者: Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun</p>
+<ul>
+<li>提出ResNet(Residual Net)</li>
+<li>ILSVRC 2015的classfication task的冠军，达到3.57%的top-5 error rate(152层的模型)</li>
+<li>在ILSVRC 2015和MS-COCO 2015中，横扫一切对手夺冠</li>
+<li>和VGG相比，深度更深，准确率更高，计算复杂度更小！</li>
+</ul>
+<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>随着网络深度的增加，随之而来的就是网络的<strong>退化(degradation)</strong>，也就是训练和测试的error比浅层的网络还高，见Fig 1。这个问题并不是由overfitting造成的，但是从直觉上讲，更深的模型应该和浅层的模型表现相当，因为我们可以将浅层网络的参数拷贝，然后其余的层就是做identity mapping，但是为什么效果会更差呢？这是因为这是因为深度网络比浅层网络更难训，<strong>很难用多层的非线性层去优化近似identity mapping</strong>。因此，通过将问题转化为学习残差函数来解决网络退化的问题。x是输入，H(x)是底层的映射函数，也就是网络中堆叠的非线性层，$f(x)=H(x)-x$，等价于$H(x)=f(x)+x$。如果最优函数是identity mapping，那么整个学到的参数就会驱使$f(x)=0$(或者尽可能接近于0)。identity mapping不一定是最优的，但是可以帮助预处理问题，可以简化问题。<strong>作者也对此做了一个假设：优化残差映射比优化一个原始映射容易的多。</strong></p>
+<blockquote>
+<p>If the optimal function is closer to an identity mapping than to a zero mapping, it should be easier for the solver to find the perturbations with reference to an identity mapping, than to learn the function as a new one.</p>
+</blockquote>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fo2bil5j4xj30ts0foq6o.jpg" alt=""></p>
+<p>#####模型结构</p>
+<p><strong>short connection</strong><br>$$<br>y = \mathbf{F}(x,{W_i})+x<br>$$<br>$\mathbf{F}(x,{W_i})$表示待学习的残差mapping。而后面+x这个运算可以通过shortcuts进行element-wise的加法。优点是不需要额外的参数，当维度不统一的时候，可以进行zero padding或者线性投影（虽然会引入少量的参数）使得两者的维度一致。<br>$$<br>y = \mathbf{F}(x,{W_i})+W_sx<br>$$<br><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo2br70niwj30za0g0gnk.jpg" alt=""></p>
+<p><strong>Bottleneck design</strong></p>
+<p>在3x3卷积前后加入1x1卷积来降低和提高feature map的深度，实现feature map之间的线性组合，提高模型的非线性能力，同时还可以使得输入输出的维度保持一致，具体见Figure 5。</p>
+<p>Bottleneck的结构也被应用到了50-layer,101-layer,152-layer的网络中。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fo2c143x8uj30sk0fg0vd.jpg" alt=""></p>
+<p>Table 1是各个ResNet的模型参数结构，可以发现18-layer和34-layer最终输出的feature map的深度是512，而其余的都是2048，这个由expansion ratio决定。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo2bwdncg2j31kw0lhwkk.jpg" alt=""></p>
+<h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p><strong>ImageNet</strong></p>
+<p>首先分别比较了18-layer和34-layer的plain network和residual network，见Figure 4和Table 2。总结如下：</p>
+<ul>
+<li>在plain network中发现网络退化的问题，18层的网络比34层的网络错误率更低，优化的困难不是由梯度弥散造成的，作者推测是因为<strong><em>深层网络的收敛率更低</em></strong></li>
+<li>在ResNet中，情况正好相反</li>
+</ul>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fo5lhucus7j31kw0jldmq.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo2c4ar19tj30t20aqdhw.jpg" alt=""></p>
+<p>然后，作者比较了identity shortcuts和projection shortcuts，结果见Table 4。A是zero-padding。B是维度不同用projection，相同用identity，而C则是所有都用projection</p>
+<p>可以发现：</p>
+<ul>
+<li>B略好于A，可以理解就是通过zero-padding加到相同的维度并不是残差学习！</li>
+<li>C好于B，但是C引入了大量的需要学习的参数</li>
+<li>考虑到模型复杂度和计算复杂度，选择option B</li>
+<li>ResNet 50, 101, 151中，随着深度变大，错误率越来越低</li>
+</ul>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fo5lpzvxb1j30rw0m0432.jpg" alt=""></p>
+<p>与其他state-of-the-art的方法相比，ResNet提升非常明显，见Table 4, 5！</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fo5lyc0rknj30s00jcn1h.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fo5lwnnsklj30sk0ecq63.jpg" alt=""></p>
+<p><strong>CIFAR-10</strong></p>
+<p>分析每一层的响应，响应值是通过卷积以后，在经过BN，ReLU以后的值，见Figure 7。可以发现，ResNet的响应值都会偏小，也基本印证了残差函数比非残差函数更偏向于0。除此之外，对于ResNet来说，深度越深，响应值也越小。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fo5m7fmpbnj30sc0jidl2.jpg" alt=""></p>
+<p><strong>PASCAL VOC 2007/2012 &amp;&amp;COCO</strong></p>
+<p>将faster rcnn和ResNet结合，用于做detection，结果见Table 7,8。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fo5mbkcg6tj30tm0aumzn.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo5mbgcfvaj30sq0860uk.jpg" alt=""></p>
+]]></content>
+      
+        <categories>
+            
+            <category> algorithms </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> deep learning </tag>
+            
+            <tag> classifcation </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift笔记]]></title>
       <url>/2018/01/25/Batch-Normalization-Accelerating-Deep-Network-Training-by-Reducing-Internal-Covariate-Shift%E7%AC%94%E8%AE%B0/</url>
       <content type="html"><![CDATA[<p>论文 ：Batch Normalization: Accelerating Deep Network Training by Reducing Internal<br>  Covariate Shift, ICML 2015</p>
@@ -102,13 +253,13 @@
     <entry>
       <title><![CDATA[Going Deeper with Convolutions笔记]]></title>
       <url>/2018/01/25/Going-Deeper-with-Convolutions%E7%AC%94%E8%AE%B0/</url>
-      <content type="html"><![CDATA[<p>论文 ：Going Deeper with Convolutions,CVPR 2015</p>
-<p>链接：https://www.cs.unc.edu/~wliu/papers/GoogLeNet.pdf</p>
-<p>作者: Christian Szegedy, Wei Liu, Yangqing Jia, Pierre Sermanet, Scott Reed,Dragomir Anguelov, Dumitru Erhan, Vincent Vanhoucke, Andrew Rabinovich</p>
+      <content type="html"><![CDATA[<p>论文 ：Going Deeper with Convolutions,CVPR 2015 </p>
+<p>链接：<a href="https://www.cs.unc.edu/~wliu/papers/GoogLeNet.pdf" target="_blank" rel="external">https://www.cs.unc.edu/~wliu/papers/GoogLeNet.pdf</a></p>
+<p>作者: Christian Szegedy, Wei Liu, Yangqing Jia, Pierre Sermanet, Scott Reed,Dragomir Anguelov, Dumitru Erhan, Vincent Vanhoucke, Andrew Rabinovich </p>
 <p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fnsrwl5iuuj31040kc1dy.jpg" alt=""></p>
-<p><strong>Contribution</strong></p>
+<p><strong>Contribution</strong> </p>
 <ul>
-<li>提出了GoogleNet的网络结构，由若干Inception Module堆叠而成。</li>
+<li>提出了GoogleNet的网络结构，由若干Inception Module堆叠而成。 </li>
 <li>在ILSVRC 2014上拿到了classification task和detection task的冠军。</li>
 </ul>
 <p><strong>Motivation</strong></p>
@@ -119,13 +270,11 @@
 <li>需要大量的喂大量的标签数据，而数据是很昂贵的！</li>
 <li>模型越大，所需要的计算资源也越多</li>
 </ol>
-<p>所以，本着<em>Occam's Razor</em>，简洁才是王道的思想，需要更加精细地优化网络结构。</p>
+<p>所以，本着<em>Occam’s Razor</em>，简洁才是王道的思想，需要更加精细地优化网络结构。</p>
 <p>作者也引用了一些理论依据：</p>
 <blockquote>
 <p>if the probability distribution of the dataset is representable by a large, very sparse deep neural network, then the optimal network topology can be constructed layer after layer by analyzing the correlation statistics of the preceding layer activations and clustering neurons with highly correlated outputs.</p>
-</blockquote>
-<blockquote>
-<p>Hebbian principle – neurons that fire together, wire together</p>
+<p> Hebbian principle – neurons that fire together, wire together</p>
 </blockquote>
 <p>还有一些客观事实：</p>
 <blockquote>
@@ -147,19 +296,12 @@
 <p>以下图为例： 输入大小是$28\times28\times256$，输出分别是$28\times28\times128$，$28\times28\times192$，$28\times28\times96$，$28\times28\times256$，filter concatenation以后，输出是$28\times28\times672$!!!</p>
 <p>再看一下计算量:</p>
 <p>$[1\times1 conv, 128]$  $28\times28\times128\times1\times1\times256$</p>
-<p>$[3\times3 conv, 192]$ $28\times28\times192\times3\times3\times256$
-$[5\times5 conv, 96]$ $28\times28\times96\times5\times5\times256$</p>
+<p>$[3\times3 conv, 192]$ $28\times28\times192\times3\times3\times256$<br>$[5\times5 conv, 96]$ $28\times28\times96\times5\times5\times256$</p>
 <p>总共大概有854M ops。</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fnss7rs69gj30qg0gijtb.jpg" alt=""></p>
 <p>优化：通过$1\times 1$卷积进行降维（保留空间信息，降低深度），其实可以等价成做embedding，将高维的信息映射到低维，同时保证低维的embeddings包含高维数据的大部分信息。</p>
 <p>下图是经过优化后的结构，再统计一下卷积计算量：</p>
-<p>$[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
-$[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
-$[1\times1 conv, 128]$ $28\times28\times128\times1\times1\times256$
-$[3\times3 conv, 192]$ $28\times28\times192\times3\times3\times64$
-$[5\times5 conv, 96]$ $28\times28\times96\times5\times5\times64$
-$[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
-总共358M ops</p>
+<p>$[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$<br>$[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$<br>$[1\times1 conv, 128]$ $28\times28\times128\times1\times1\times256$<br>$[3\times3 conv, 192]$ $28\times28\times192\times3\times3\times64$<br>$[5\times5 conv, 96]$ $28\times28\times96\times5\times5\times64$<br>$[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$<br>总共358M ops</p>
 <p>和naive的版本比较，可以说少了一半！</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fnsshqu6hij30qg0kowhs.jpg" alt=""></p>
 <p>Fig 3是模型的全图，可以发现，整个模型基本上是由多个inception module堆叠而成，同时模型也利用多multi-scale的特征建立auxiliary classifiers，也可以帮助梯度的回传。Table 1是模型可视化的另一个形式。可以发现，随着深度的增加，inception module里面，1x1卷积的fitlers的数量和3x3卷积或5x5卷积的比率逐渐升高。<strong><em>其实深度越深，空间信息对特征抽象的重要性在逐渐降低（as features of higher abstraction are captured by higher layers, their spatial concentration is expected to decrease.。</em></strong></p>
