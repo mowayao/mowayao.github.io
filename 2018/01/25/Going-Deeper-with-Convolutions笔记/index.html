@@ -9,9 +9,9 @@
   <title>Going Deeper with Convolutions笔记 | Mowayao&#39;s Blog</title>
   <meta name="author" content="Mowayao">
   
-  <meta name="description" content="论文 ：Going Deeper with Convolutions,CVPR 2015 
+  <meta name="description" content="论文 ：Going Deeper with Convolutions,CVPR 2015
 链接：https://www.cs.unc.edu/~wliu/papers/GoogLeNet.pdf
-作者: Christian Szegedy, Wei Liu, Yangqing Jia, Pierr">
+作者: Christian Szegedy, Wei Liu, Yangqing Jia, Pierre">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -137,13 +137,13 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  		
 
-	  <p>论文 ：Going Deeper with Convolutions,CVPR 2015 </p>
-<p>链接：<a href="https://www.cs.unc.edu/~wliu/papers/GoogLeNet.pdf" target="_blank" rel="external">https://www.cs.unc.edu/~wliu/papers/GoogLeNet.pdf</a></p>
-<p>作者: Christian Szegedy, Wei Liu, Yangqing Jia, Pierre Sermanet, Scott Reed,Dragomir Anguelov, Dumitru Erhan, Vincent Vanhoucke, Andrew Rabinovich </p>
+	  <p>论文 ：Going Deeper with Convolutions,CVPR 2015</p>
+<p>链接：https://www.cs.unc.edu/~wliu/papers/GoogLeNet.pdf</p>
+<p>作者: Christian Szegedy, Wei Liu, Yangqing Jia, Pierre Sermanet, Scott Reed,Dragomir Anguelov, Dumitru Erhan, Vincent Vanhoucke, Andrew Rabinovich</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fnsrwl5iuuj31040kc1dy.jpg" alt=""></p>
-<p><strong>Contribution</strong> </p>
+<p><strong>Contribution</strong></p>
 <ul>
-<li>提出了GoogleNet的网络结构，由若干Inception Module堆叠而成。 </li>
+<li>提出了GoogleNet的网络结构，由若干Inception Module堆叠而成。</li>
 <li>在ILSVRC 2014上拿到了classification task和detection task的冠军。</li>
 </ul>
 <p><strong>Motivation</strong></p>
@@ -154,11 +154,13 @@ var _hmt = _hmt || [];
 <li>需要大量的喂大量的标签数据，而数据是很昂贵的！</li>
 <li>模型越大，所需要的计算资源也越多</li>
 </ol>
-<p>所以，本着<em>Occam’s Razor</em>，简洁才是王道的思想，需要更加精细地优化网络结构。</p>
+<p>所以，本着<em>Occam's Razor</em>，简洁才是王道的思想，需要更加精细地优化网络结构。</p>
 <p>作者也引用了一些理论依据：</p>
 <blockquote>
 <p>if the probability distribution of the dataset is representable by a large, very sparse deep neural network, then the optimal network topology can be constructed layer after layer by analyzing the correlation statistics of the preceding layer activations and clustering neurons with highly correlated outputs.</p>
-<p> Hebbian principle – neurons that fire together, wire together</p>
+</blockquote>
+<blockquote>
+<p>Hebbian principle – neurons that fire together, wire together</p>
 </blockquote>
 <p>还有一些客观事实：</p>
 <blockquote>
@@ -180,12 +182,19 @@ var _hmt = _hmt || [];
 <p>以下图为例： 输入大小是$28\times28\times256$，输出分别是$28\times28\times128$，$28\times28\times192$，$28\times28\times96$，$28\times28\times256$，filter concatenation以后，输出是$28\times28\times672$!!!</p>
 <p>再看一下计算量:</p>
 <p>$[1\times1 conv, 128]$  $28\times28\times128\times1\times1\times256$</p>
-<p>$[3\times3 conv, 192]$ $28\times28\times192\times3\times3\times256$<br>$[5\times5 conv, 96]$ $28\times28\times96\times5\times5\times256$</p>
+<p>$[3\times3 conv, 192]$ $28\times28\times192\times3\times3\times256$
+$[5\times5 conv, 96]$ $28\times28\times96\times5\times5\times256$</p>
 <p>总共大概有854M ops。</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fnss7rs69gj30qg0gijtb.jpg" alt=""></p>
 <p>优化：通过$1\times 1$卷积进行降维（保留空间信息，降低深度），其实可以等价成做embedding，将高维的信息映射到低维，同时保证低维的embeddings包含高维数据的大部分信息。</p>
 <p>下图是经过优化后的结构，再统计一下卷积计算量：</p>
-<p>$[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$<br>$[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$<br>$[1\times1 conv, 128]$ $28\times28\times128\times1\times1\times256$<br>$[3\times3 conv, 192]$ $28\times28\times192\times3\times3\times64$<br>$[5\times5 conv, 96]$ $28\times28\times96\times5\times5\times64$<br>$[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$<br>总共358M ops</p>
+<p>$[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
+$[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
+$[1\times1 conv, 128]$ $28\times28\times128\times1\times1\times256$
+$[3\times3 conv, 192]$ $28\times28\times192\times3\times3\times64$
+$[5\times5 conv, 96]$ $28\times28\times96\times5\times5\times64$
+$[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
+总共358M ops</p>
 <p>和naive的版本比较，可以说少了一半！</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fnsshqu6hij30qg0kowhs.jpg" alt=""></p>
 <p>Fig 3是模型的全图，可以发现，整个模型基本上是由多个inception module堆叠而成，同时模型也利用多multi-scale的特征建立auxiliary classifiers，也可以帮助梯度的回传。Table 1是模型可视化的另一个形式。可以发现，随着深度的增加，inception module里面，1x1卷积的fitlers的数量和3x3卷积或5x5卷积的比率逐渐升高。<strong><em>其实深度越深，空间信息对特征抽象的重要性在逐渐降低（as features of higher abstraction are captured by higher layers, their spatial concentration is expected to decrease.。</em></strong></p>
@@ -259,7 +268,7 @@ var _hmt = _hmt || [];
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    <li><a href="/categories/algorithms/">algorithms<span>10</span></a></li>
+    <li><a href="/categories/algorithms/">algorithms<span>12</span></a></li>
   </li>
 
     </ul>
@@ -272,7 +281,7 @@ var _hmt = _hmt || [];
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/deep-learning/">deep learning<span>15</span></a></li> <li><a href="/tags/classifcation/">classifcation<span>5</span></a></li>
+  <li><a href="/tags/deep-learning/">deep learning<span>18</span></a></li> <li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
     </ul>
 	</div>
 		
