@@ -171,7 +171,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2018/02/09/Kaggle比赛小结-Camera-Model-Identification/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2018/02/09/Kaggle比赛小结-Camera-Model-Identification/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -195,10 +195,41 @@ var _hmt = _hmt || [];
   <div class="row">
 	
 	
-		
+		<p>论文 ：Inception-v4, Inception-ResNet and the Impact of Residual Connections on Learning, AAAI 2017</p>
+<p>链接：<a href="https://arxiv.org/abs/1602.07261" target="_blank" rel="external">https://arxiv.org/abs/1602.07261</a></p>
+<p>作者: Christian Szegedy, Sergey Ioffe, Vincent Vanhoucke, Alex Alemi</p>
+<p>呃。。。这篇文章的主要贡献是了尝试了ResNet和Inception结合的多种可能性。。。。对Inception block进行修改和优化，提出了Inception v4（Figure 9），Inception-ResNet-v1和Inception-ResNet-v2（Figure 15），将ImageNet classification task的top-5 error刷到了3.08%。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fobembpr0rj30ee0rcwhc.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fobdqhuy1oj30eo0de3zr.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fobdr5dh4pj30ek0c6myf.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fobdrmnbfwj30es0fitab.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fobdroxsyfj30fi0h2jt6.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fobdsgyknpj30eg0m8wg5.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fobdss6xhkj30f40femyk.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fobdsvxatrj30fg0j6dhi.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fobdt1ggqpj30ew0cc75o.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fobdtqs6ylj30g00jsdhj.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fobdu21ayyj30cw0kkgnb.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fobdvixvgxj30ek0lewgk.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fobdvwhgcdj30ek0fe3zx.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fobdvyzlfvj30ek0j0myu.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fobdw3cijkj30fi0c20u5.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fobdw6e7fqj30f20iiwg6.jpg" alt=""></p>
+<p>实验发现：如果feature map的数量超过1000，网络会不work，训练的时候会不稳定，而且在早期就会“die”。所以在residual加个scaling，使得数值偏小，见Figure 20。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fobe052il4j30s00o4q62.jpg" alt=""></p>
+<h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p>single crop和single model的比较结果见Table 2，可以发现Inception-ResNet-v2略胜一筹，但是和Inception-v4差距不大。</p>
+<p>小数量的crop和single model的比较结果见Table 3，和Table 2的结果类似。</p>
+<p>dense crop和single model的比较结果见Table 4，结果依然类似。</p>
+<p>以及，crop的数量对结果影响还是很大的！</p>
+<p>144 crop的模型ensemble后的比较结果见Table 5。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fobe29be8mj30t60e6q5l.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fobe24s4gmj30sq0e80vm.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fobe25u8vpj30tq0dmju6.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fobe291a2tj30uw0gu0wt.jpg" alt=""></p>
+
 	
 	</div>
-  <a type="button" href="/2018/02/07/Inception-v4-Inception-ResNet-and-Inception-v4-笔记/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2018/02/07/Inception-v4-Inception-ResNet-and-Inception-v4-笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -249,8 +280,11 @@ var _hmt = _hmt || [];
 <p>实际上，这样的分解在浅层效果并不好，只有在中层的时候效果不错，对于nxn的feature map来说，n一般从12到20，对于这些尺寸，7x1和1x7的小贵最好，见Figure 6。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fo7ytt7rq5j30p60i2tab.jpg" alt=""></p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fo7ytqofwjj30tc0mkjtw.jpg" alt=""></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">InceptionA</span><span class="params">(nn.Module)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, in_channels, pool_features)</span>:</span></div><div class="line">        super(InceptionA, self).__init__()</div><div class="line">        self.branch1x1 = BasicConv2d(in_channels, <span class="number">64</span>, kernel_size=<span class="number">1</span>)</div><div class="line"></div><div class="line">        self.branch5x5_1 = BasicConv2d(in_channels, <span class="number">48</span>, kernel_size=<span class="number">1</span>)</div><div class="line">        self.branch5x5_2 = BasicConv2d(<span class="number">48</span>, <span class="number">64</span>, kernel_size=<span class="number">5</span>, padding=<span class="number">2</span>)</div><div class="line"></div><div class="line">        self.branch3x3dbl_1 = BasicConv2d(in_channels, <span class="number">64</span>, kernel_size=<span class="number">1</span>)</div><div class="line">        self.branch3x3dbl_2 = BasicConv2d(<span class="number">64</span>, <span class="number">96</span>, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</div><div class="line">        self.branch3x3dbl_3 = BasicConv2d(<span class="number">96</span>, <span class="number">96</span>, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</div><div class="line"></div><div class="line">        self.branch_pool = BasicConv2d(in_channels, pool_features, kernel_size=<span class="number">1</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></div><div class="line">        branch1x1 = self.branch1x1(x)</div><div class="line"></div><div class="line">        branch5x5 = self.branch5x5_1(x)</div><div class="line">        branch5x5 = self.branch5x5_2(branch5x5)</div><div class="line"></div><div class="line">        branch3x3dbl = self.branch3x3dbl_1(x)</div><div class="line">        branch3x3dbl = self.branch3x3dbl_2(branch3x3dbl)</div><div class="line">        branch3x3dbl = self.branch3x3dbl_3(branch3x3dbl)</div><div class="line"></div><div class="line">        branch_pool = F.avg_pool2d(x, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>)</div><div class="line">        branch_pool = self.branch_pool(branch_pool)</div><div class="line"></div><div class="line">        outputs = [branch1x1, branch5x5, branch3x3dbl, branch_pool]</div><div class="line">        <span class="keyword">return</span> torch.cat(outputs, <span class="number">1</span>)</div></pre></td></tr></table></figure>
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fo7zsanjwbj30sq0t8dj2.jpg" alt=""></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">InceptionC</span><span class="params">(nn.Module)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, in_channels, channels_7x7)</span>:</span></div><div class="line">        super(InceptionC, self).__init__()</div><div class="line">        self.branch1x1 = BasicConv2d(in_channels, <span class="number">192</span>, kernel_size=<span class="number">1</span>)</div><div class="line"></div><div class="line">        c7 = channels_7x7</div><div class="line">        self.branch7x7_1 = BasicConv2d(in_channels, c7, kernel_size=<span class="number">1</span>)</div><div class="line">        self.branch7x7_2 = BasicConv2d(c7, c7, kernel_size=(<span class="number">1</span>, <span class="number">7</span>), padding=(<span class="number">0</span>, <span class="number">3</span>))</div><div class="line">        self.branch7x7_3 = BasicConv2d(c7, <span class="number">192</span>, kernel_size=(<span class="number">7</span>, <span class="number">1</span>), padding=(<span class="number">3</span>, <span class="number">0</span>))</div><div class="line"></div><div class="line">        self.branch7x7dbl_1 = BasicConv2d(in_channels, c7, kernel_size=<span class="number">1</span>)</div><div class="line">        self.branch7x7dbl_2 = BasicConv2d(c7, c7, kernel_size=(<span class="number">7</span>, <span class="number">1</span>), padding=(<span class="number">3</span>, <span class="number">0</span>))</div><div class="line">        self.branch7x7dbl_3 = BasicConv2d(c7, c7, kernel_size=(<span class="number">1</span>, <span class="number">7</span>), padding=(<span class="number">0</span>, <span class="number">3</span>))</div><div class="line">        self.branch7x7dbl_4 = BasicConv2d(c7, c7, kernel_size=(<span class="number">7</span>, <span class="number">1</span>), padding=(<span class="number">3</span>, <span class="number">0</span>))</div><div class="line">        self.branch7x7dbl_5 = BasicConv2d(c7, <span class="number">192</span>, kernel_size=(<span class="number">1</span>, <span class="number">7</span>), padding=(<span class="number">0</span>, <span class="number">3</span>))</div><div class="line"></div><div class="line">        self.branch_pool = BasicConv2d(in_channels, <span class="number">192</span>, kernel_size=<span class="number">1</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></div><div class="line">        branch1x1 = self.branch1x1(x)</div><div class="line"></div><div class="line">        branch7x7 = self.branch7x7_1(x)</div><div class="line">        branch7x7 = self.branch7x7_2(branch7x7)</div><div class="line">        branch7x7 = self.branch7x7_3(branch7x7)</div><div class="line"></div><div class="line">        branch7x7dbl = self.branch7x7dbl_1(x)</div><div class="line">        branch7x7dbl = self.branch7x7dbl_2(branch7x7dbl)</div><div class="line">        branch7x7dbl = self.branch7x7dbl_3(branch7x7dbl)</div><div class="line">        branch7x7dbl = self.branch7x7dbl_4(branch7x7dbl)</div><div class="line">        branch7x7dbl = self.branch7x7dbl_5(branch7x7dbl)</div><div class="line"></div><div class="line">        branch_pool = F.avg_pool2d(x, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>)</div><div class="line">        branch_pool = self.branch_pool(branch_pool)</div><div class="line"></div><div class="line">        outputs = [branch1x1, branch7x7, branch7x7dbl, branch_pool]</div><div class="line">        <span class="keyword">return</span> torch.cat(outputs, <span class="number">1</span>)</div></pre></td></tr></table></figure>
 <p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fo80dcq1fhj30ri0q8dk2.jpg" alt=""></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">InceptionE</span><span class="params">(nn.Module)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, in_channels)</span>:</span></div><div class="line">        super(InceptionE, self).__init__()</div><div class="line">        self.branch1x1 = BasicConv2d(in_channels, <span class="number">320</span>, kernel_size=<span class="number">1</span>)</div><div class="line"></div><div class="line">        self.branch3x3_1 = BasicConv2d(in_channels, <span class="number">384</span>, kernel_size=<span class="number">1</span>)</div><div class="line">        self.branch3x3_2a = BasicConv2d(<span class="number">384</span>, <span class="number">384</span>, kernel_size=(<span class="number">1</span>, <span class="number">3</span>), padding=(<span class="number">0</span>, <span class="number">1</span>))</div><div class="line">        self.branch3x3_2b = BasicConv2d(<span class="number">384</span>, <span class="number">384</span>, kernel_size=(<span class="number">3</span>, <span class="number">1</span>), padding=(<span class="number">1</span>, <span class="number">0</span>))</div><div class="line"></div><div class="line">        self.branch3x3dbl_1 = BasicConv2d(in_channels, <span class="number">448</span>, kernel_size=<span class="number">1</span>)</div><div class="line">        self.branch3x3dbl_2 = BasicConv2d(<span class="number">448</span>, <span class="number">384</span>, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</div><div class="line">        self.branch3x3dbl_3a = BasicConv2d(<span class="number">384</span>, <span class="number">384</span>, kernel_size=(<span class="number">1</span>, <span class="number">3</span>), padding=(<span class="number">0</span>, <span class="number">1</span>))</div><div class="line">        self.branch3x3dbl_3b = BasicConv2d(<span class="number">384</span>, <span class="number">384</span>, kernel_size=(<span class="number">3</span>, <span class="number">1</span>), padding=(<span class="number">1</span>, <span class="number">0</span>))</div><div class="line"></div><div class="line">        self.branch_pool = BasicConv2d(in_channels, <span class="number">192</span>, kernel_size=<span class="number">1</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></div><div class="line">        branch1x1 = self.branch1x1(x)</div><div class="line"></div><div class="line">        branch3x3 = self.branch3x3_1(x)</div><div class="line">        branch3x3 = [</div><div class="line">            self.branch3x3_2a(branch3x3),</div><div class="line">            self.branch3x3_2b(branch3x3),</div><div class="line">        ]</div><div class="line">        branch3x3 = torch.cat(branch3x3, <span class="number">1</span>)</div><div class="line"></div><div class="line">        branch3x3dbl = self.branch3x3dbl_1(x)</div><div class="line">        branch3x3dbl = self.branch3x3dbl_2(branch3x3dbl)</div><div class="line">        branch3x3dbl = [</div><div class="line">            self.branch3x3dbl_3a(branch3x3dbl),</div><div class="line">            self.branch3x3dbl_3b(branch3x3dbl),</div><div class="line">        ]</div><div class="line">        branch3x3dbl = torch.cat(branch3x3dbl, <span class="number">1</span>)</div><div class="line"></div><div class="line">        branch_pool = F.avg_pool2d(x, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>)</div><div class="line">        branch_pool = self.branch_pool(branch_pool)</div><div class="line"></div><div class="line">        outputs = [branch1x1, branch3x3, branch3x3dbl, branch_pool]</div><div class="line">        <span class="keyword">return</span> torch.cat(outputs, <span class="number">1</span>)</div></pre></td></tr></table></figure>
 <h5 id="Auxiliary-Classifiers"><a href="#Auxiliary-Classifiers" class="headerlink" title="Auxiliary Classifiers"></a>Auxiliary Classifiers</h5><p>目的是为了让梯度回传更加有效，从而加快训练，而事实是辅助分类器在训练初期的时候对结果并没有特别大的帮助，在训练后期的时候会超上没有使用辅助分类器的模型。额外辅助器可以作为一个regularizer。</p>
 <h5 id="Efficient-Grid-Size-Reduction"><a href="#Efficient-Grid-Size-Reduction" class="headerlink" title="Efficient Grid Size Reduction"></a>Efficient Grid Size Reduction</h5><p>在feature map深度加倍的时候，空间维度需要减半。对于一个k个dxd的feature map，主要有两种选项：</p>
 <ol>
@@ -272,7 +306,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2018/02/07/Rethinking-the-Inception-Architecture-for-Computer-Vision-Inception-V3-笔记/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2018/02/07/Rethinking-the-Inception-Architecture-for-Computer-Vision-Inception-V3-笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -367,7 +401,7 @@ $$</p>
 
 	
 	</div>
-  <a type="button" href="/2018/02/01/Identity-Mappings-in-Deep-Residual-Networks笔记/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2018/02/01/Identity-Mappings-in-Deep-Residual-Networks笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -453,7 +487,7 @@ $$
 
 	
 	</div>
-  <a type="button" href="/2018/02/01/Deep-Residual-Learning-for-Image-Recognition笔记/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2018/02/01/Deep-Residual-Learning-for-Image-Recognition笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -566,7 +600,7 @@ Internal Covariate Shift表示的是在神经网络发生的convariate shift，�
 
 	
 	</div>
-  <a type="button" href="/2018/01/25/Batch-Normalization-Accelerating-Deep-Network-Training-by-Reducing-Internal-Covariate-Shift笔记/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2018/01/25/Batch-Normalization-Accelerating-Deep-Network-Training-by-Reducing-Internal-Covariate-Shift笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -669,7 +703,7 @@ $[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
 
 	
 	</div>
-  <a type="button" href="/2018/01/25/Going-Deeper-with-Convolutions笔记/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2018/01/25/Going-Deeper-with-Convolutions笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -750,7 +784,7 @@ $$
 
 	
 	</div>
-  <a type="button" href="/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -839,7 +873,7 @@ $$</p>
 
 	
 	</div>
-  <a type="button" href="/2018/01/18/Network-In-Network算法笔记/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2018/01/18/Network-In-Network算法笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -913,7 +947,7 @@ $[1000]$ FC8: 1000 neurons (class scores)</p>
 
 	
 	</div>
-  <a type="button" href="/2018/01/18/AlexNet算法笔记/#more" class="btn btn-default more">Leia Mais</a>
+  <a type="button" href="/2018/01/18/AlexNet算法笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -927,12 +961,12 @@ $[1000]$ FC8: 1000 neurons (class scores)</p>
 
    
     
-           <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Anterior</a>
+           <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
         
 
         <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
  
-       <a href="/page/2/" type="button" class="btn btn-default ">Próximo<i class="fa fa-arrow-circle-o-right"></i></a>     
+       <a href="/page/2/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>     
         
 
   
@@ -952,7 +986,7 @@ $[1000]$ FC8: 1000 neurons (class scores)</p>
 			
   <div id="site_search">
    <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="Busca" class="st-search-input st-default-search-input form-control"/>
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
    </div>  
   <div id="local-search-result"></div>
   </div>
@@ -961,7 +995,7 @@ $[1000]$ FC8: 1000 neurons (class scores)</p>
 		
 			
 	<div class="widget">
-		<h4>Categorias</h4>
+		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
 			<li><a href="/categories/algorithms/">algorithms<span>12</span></a></li>
@@ -977,37 +1011,37 @@ $[1000]$ FC8: 1000 neurons (class scores)</p>
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/math/">math<span>2</span></a></li>
-		
-			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
-		
-			<li><a href="/tags/summary/">summary<span>2</span></a></li>
-		
-			<li><a href="/tags/notes/">notes<span>6</span></a></li>
-		
-			<li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
+			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
 		
 			<li><a href="/tags/deep-learning/">deep learning<span>18</span></a></li>
 		
-			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
-		
-			<li><a href="/tags/杂/">杂<span>1</span></a></li>
-		
-			<li><a href="/tags/paper/">paper<span>1</span></a></li>
-		
-			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
+			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
 		
 			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
 		
-			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
-		
-			<li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
+			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
 		
 			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
 		
+			<li><a href="/tags/杂/">杂<span>1</span></a></li>
+		
+			<li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
+		
+			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
+		
+			<li><a href="/tags/notes/">notes<span>6</span></a></li>
+		
 			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
 		
-			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
+			<li><a href="/tags/math/">math<span>2</span></a></li>
+		
+			<li><a href="/tags/summary/">summary<span>2</span></a></li>
+		
+			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
+		
+			<li><a href="/tags/paper/">paper<span>1</span></a></li>
+		
+			<li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
 		
 		 
 		</ul>
@@ -1017,7 +1051,7 @@ $[1000]$ FC8: 1000 neurons (class scores)</p>
 		
 			
 <div class="widget">
-  <h4>Posts recentes</h4>
+  <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
     
       <li>
