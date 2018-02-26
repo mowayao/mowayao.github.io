@@ -1,0 +1,383 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>SegNet笔记 | Mowayao&#39;s Blog</title>
+  <meta name="author" content="Mowayao">
+  
+  <meta name="description" content="论文 ：SegNet: Identity Mappings in Deep Residual Networks, ECCV 2016
+链接：http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;amp;arnumber=7803544
+作者: Vijay Ba">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="SegNet笔记"/>
+  <meta property="og:site_name" content="Mowayao&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-110229492-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</head>
+
+ <body>  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">Mowayao&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> SegNet笔记</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>论文 ：SegNet: Identity Mappings in Deep Residual Networks, ECCV 2016</p>
+<p>链接：http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=7803544</p>
+<p>作者: Vijay Badrinarayanan, Alex Kendall , and Roberto Cipolla</p>
+<p><strong>Idea</strong></p>
+<ul>
+<li>SegNet基于FCN，包含encoder和decoder两个部分，encoder使用VGGNet，decoder则使用skip architecture将相同分辨率的feature map结合再做后续的预测。</li>
+<li>上采样的方法不同于transposed convolution和双线性插值等方法，使用un maxpooling的方法做上采样，得到稀疏的feature map，再做卷积得到稠密的feature map。</li>
+</ul>
+<p><strong>Architecture</strong></p>
+<p>具体的框架结构件Fig.2，主要由两部分组成，encoder和decoder。</p>
+<p>encoder的部分包含VGGNet在全连接层前的所有卷积层，这样共有13个卷积层，并且参数是直接从在imagenet预训练过的VGGNet直接拷贝过来，进行初始化。通过移除全连接层，可以大大地减少参数量和提高运算效率，参数量从134M减少到了14.7M。</p>
+<p>文章的重点部分在于decoder的设计，decoder部分包含和encoder一样的卷积层数量，并且参数配置一一对应。在VGGNet中，max pooling的stride是2，kernel size是2，所以它的下采样是没有重叠的。在升采样上，和其他类似U-Net等不同的是，SegNet使用的是unmaxpooling的方法，也就是利用保存的max pooling的元素下标，将feature map恢复到原来的大小，再利用可训练的卷积层得到稠密的feature map。具体的过程见Fig.3。</p>
+<p>因为使用max pooling可以提高特征的translation invariance，同时提高分类的鲁棒性，但是同时也损失了很多边缘信息，因为我们把边缘的位置信息丢弃了。通常来说，响应比较强的都是一些纹理边缘，而max pooling本质上是一个滤波器，将局部最大值保留下来，舍去其他值。通过将max pooling的下标保留下来，可以帮助我们尽可能的恢复边缘位置信息。</p>
+<p>使用上述上采样的方法有以下的好处：</p>
+<ul>
+<li>可以得到更加细致的轮廓</li>
+<li>减少训练参数，同时能够end-to-end的训练</li>
+<li>可以将其融入到任何encoder-decoder的结构中，具有普适性。</li>
+</ul>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fotu08o3s4j312u0e4ajm.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fotuej8g3gj313a0eo429.jpg" alt=""></p>
+<p>Pytorch代码实现：</p>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">segnet</span><span class="params">(nn.Module)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n_classes=<span class="number">21</span>, in_channels=<span class="number">3</span>, is_unpooling=True)</span>:</span></div><div class="line">        super(segnet, self).__init__()</div><div class="line"></div><div class="line">        self.in_channels = in_channels</div><div class="line">        self.is_unpooling = is_unpooling</div><div class="line"></div><div class="line">        self.down1 = segnetDown2(self.in_channels, <span class="number">64</span>)</div><div class="line">        self.down2 = segnetDown2(<span class="number">64</span>, <span class="number">128</span>)</div><div class="line">        self.down3 = segnetDown3(<span class="number">128</span>, <span class="number">256</span>)</div><div class="line">        self.down4 = segnetDown3(<span class="number">256</span>, <span class="number">512</span>)</div><div class="line">        self.down5 = segnetDown3(<span class="number">512</span>, <span class="number">512</span>)</div><div class="line"></div><div class="line">        self.up5 = segnetUp3(<span class="number">512</span>, <span class="number">512</span>)</div><div class="line">        self.up4 = segnetUp3(<span class="number">512</span>, <span class="number">256</span>)</div><div class="line">        self.up3 = segnetUp3(<span class="number">256</span>, <span class="number">128</span>)</div><div class="line">        self.up2 = segnetUp2(<span class="number">128</span>, <span class="number">64</span>)</div><div class="line">        self.up1 = segnetUp2(<span class="number">64</span>, n_classes)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, inputs)</span>:</span></div><div class="line"></div><div class="line">        down1, indices_1, unpool_shape1 = self.down1(inputs)</div><div class="line">        down2, indices_2, unpool_shape2 = self.down2(down1)</div><div class="line">        down3, indices_3, unpool_shape3 = self.down3(down2)</div><div class="line">        down4, indices_4, unpool_shape4 = self.down4(down3)</div><div class="line">        down5, indices_5, unpool_shape5 = self.down5(down4)</div><div class="line"></div><div class="line">        up5 = self.up5(down5, indices_5, unpool_shape5)</div><div class="line">        up4 = self.up4(up5, indices_4, unpool_shape4)</div><div class="line">        up3 = self.up3(up4, indices_3, unpool_shape3)</div><div class="line">        up2 = self.up2(up3, indices_2, unpool_shape2)</div><div class="line">        up1 = self.up1(up2, indices_1, unpool_shape1)</div><div class="line"></div><div class="line">        <span class="keyword">return</span> up1</div></pre></td></tr></table></figure></p>
+<p><strong>实验</strong></p>
+<p>首先针对deocder做了以下几种变形：</p>
+<ul>
+<li>SegNet-basic: 4个编码块和4个解码块，编码块由conv,bn,relu组成，然后加max pooling，解码器由conv，bn组成，并且没有bias。所有的卷积核的大小都是7x7。</li>
+<li>SegNet-Basic-SingleChannelDecoder：卷积是单通道的，分别和对应的feature map层做卷积，这样可以减少训练参数，同时提高inference的速度。</li>
+<li>FCN-basic：和SegNet-basic类似，不同的是使用FCN的上采样方法。</li>
+<li>FCN-basic-NoAddition：不进行feature map相加，只通过deconv上采样。</li>
+<li>Bilinear-Interpolation：使用双线性插值上采样。</li>
+<li>SegNet-Basic-EncoderAddition：和FCN的方法类似，比较消耗显存，将几个feature map相加得到最终的feature map</li>
+<li>FCN-Basic-NoDimReduction：再输出最终的结果之间不进行降维，FCN-basic会将维度降低到64，然后在做1x1的卷积。</li>
+</ul>
+<p>比较结果见TABLE 1。参数数量上，FCN-Basic和FCN-Basic-NoAddition最少，inference time则是FCN-Basic-NoAddition最少。</p>
+<ul>
+<li>在性能上，bilinear-interpolation表现最差，说明了decoder需要学习，而不是简单粗暴的直接上采样！</li>
+<li>SegNet-Basic和FCN-Basic相比，精度相近，区别在于后者的显存消耗更大因为后者需要存储多个feature map，而前者只需要存储max pooling的下标。除此之外，后者的forward时间更短，因为它在做预测前对feature map做了降维。</li>
+<li>FCN-Basic-NoAddition和SegNet-Basic：两者的decoder最为相似，因为都是直接学上采样，没有feature map的相加，在精度上，SegNet-Basic较好，说明了利用低层次的feature map的重要性，也就是将高层次语义信息和低层次位置信息结合的重要性。</li>
+<li>FCN-Basic-NoAddition-NoDimReduction和SegNet-Basic：前者的模型要大于后者，因为没有做降维。在性能上，前者也不如后者。说明并不是模型越大，表现越好，重要的是需要capture更多的边缘信息。</li>
+<li>FCN-Basic-NoAddition 和SegNet-Basic-SingleChannelDecoder：证明了当面临存储消耗，精度和inference时间的妥协的时候，我们可以选择SegNet!</li>
+<li>当内存和inference时间不受限的时候，模型越大，表现越好。因为FCN-Basic-NoDimReduction和SegNet-EncoderAddition比其他变种要好。</li>
+<li>class balance的影响：在class average accuracy和mIoU指标上，可以发现没有class weighted的时候比经过class weighted的要差，而在global accuracy上，情况则相反，这是因为绝大部分的像素都是天空，道路和建筑。</li>
+</ul>
+<p>总结一下：</p>
+<ul>
+<li>内存受限的时候，可以用过降维，存储max pooling下标来提升表现。</li>
+<li>编码器一定，解码越大，性能越好</li>
+<li>编码器的feature map被完整保留下来时，效果最好，毕竟是空间换性能！</li>
+</ul>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fotvqp2uqsj313y0g2agk.jpg" alt=""></p>
+<p>模型在CamVid数据集上的比较结果见TABLE 3，CamVid是一个用于自动驾驶的室外场景，可以发现在迭代次数较少的时候，SegNet要好于其他方法其他方法，但是当迭代次数较高的时候，整体上SegNet还是表现最优，但是在BF指标上不如DeconvNet。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fotwygav2aj313c0a8tc7.jpg" alt=""></p>
+<p>模型在SUNRGB-D数据集上的比较结果见TABLE 4，可以发现，所有方法的表现都比较差，在G，C，BF指标上，SegNet好于其他模型，但是mIoU比DeepLab-LargeFOV要差。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fotx37mf6nj31360c642m.jpg" alt=""></p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2018/02/26/Fully-Convolutional-Networks-for-Semantic-Segmentation-FCN-笔记/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2018-02-26 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/algorithms/">algorithms<span>14</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/deep-learning/">deep learning<span>20</span></a></li> <li><a href="/tags/segmentation/">segmentation<span>2</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 Mowayao
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ['\\(','\\)'] ],
+      displayMath: [ ['$$','$$'], ['\[','\]'] ], 
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+</body>
+   </html>

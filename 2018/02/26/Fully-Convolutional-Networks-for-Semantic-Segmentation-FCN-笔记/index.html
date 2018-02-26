@@ -1,0 +1,355 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  <meta http-equiv="pragma" content="no-cache">
+  <meta http-equiv="cache-control" content="no-cache">
+  <meta http-equiv="expires" content="0">
+  
+  <title>Fully Convolutional Networks for Semantic Segmentation(FCN)笔记 | Mowayao&#39;s Blog</title>
+  <meta name="author" content="Mowayao">
+  
+  <meta name="description" content="论文：Fully Convolutional Networks for Semantic Segmentation，CVPR 2015
+链接：https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf
+作者：Jonathan Lo">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="Fully Convolutional Networks for Semantic Segmentation(FCN)笔记"/>
+  <meta property="og:site_name" content="Mowayao&#39;s Blog"/>
+
+  
+    <meta property="og:image" content=""/>
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+  
+  <link rel="stylesheet" href="/css/bootstrap.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+
+  <!-- analytics -->
+  
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-110229492-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?cb5448498d7169c668b07c2b255d62c1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+</head>
+
+ <body>  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><nav id="main-nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+		<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+	  <a class="navbar-brand" href="/">Mowayao&#39;s Blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/about" title="About me.">
+			  <i class="fa fa-user"></i>About
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/atom.xml" title="Subscribe me.">
+			  <i class="fa fa-user"></i>RSS
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header">
+			<h1> Fully Convolutional Networks for Semantic Segmentation(FCN)笔记</h1>
+		</div>
+	
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>论文：Fully Convolutional Networks for Semantic Segmentation，CVPR 2015</p>
+<p>链接：https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf</p>
+<p>作者：Jonathan Long, Evan Shelhamer, Trevor Darrell</p>
+<p><strong>Idea</strong></p>
+<p>传统的图像分割算法主要依赖于：</p>
+<ol>
+<li>图像patch的训练，使得效率和准确率都不够。</li>
+<li>后处理</li>
+<li>multi-scale pyramid的预处理</li>
+<li>ensemble</li>
+</ol>
+<p>…</p>
+<p>这篇文章的主要贡献就是建立构造了全卷积神经网络，在显存足够的前提下可以接受任意大小的输入，然后得到对应大小的输出。作者将VGGNet,GoogleNet用于物体分类并预训练好的网络改造成全卷积神经网络，能够实现end-to-end的训练，并将其finetune，用来做图像的语义分割。除此之外，在升采样的过程中，由于之前的降采样丢失了大量的位置信息，所以作者采用了skip architecture将低层的输出传给高层，实现浅层的位置信息和高层的语义信息的融合。</p>
+<p><strong>网络结构</strong></p>
+<p>以VGGNet为例，见Figure3，最后的全连接层的维度是4096，为了将其改造成全卷积，将全连接层改成1x1的卷积，这样它的输出变成了4096x1x1。然后，通过deconvotion的操作对feature map进行升采样，恢复到和原图一样的大小，所以最终的输出的大小为WxHxC，其中W,H是原图的大小，而C是像素的种类数，每个空间位置表示的是各个类别的概率。降采样会提高感受野，同时也会包含越来越多的语义信息，但是也会丢失位置信息，所以，为了做出更好的像素分类结果，需要将高层的语义信息(what)和底层的位置信息(where)结合起来，使用skip architecture的结构，用低层信息对结果进行修正，提高模型的性能。除此之外，作者还提供了3个变种，即FCN-32s，FCN-16s，FCN-8s。顾名思义，FCN-32s就是通过deconvolution进行32倍的升采样直接输出。FCN-16s则是联合pool4和2倍升采样的conv7，再做16倍的升采样。FCN-8s是pool3，2倍升采样的pool4和4倍升采样的conv7，结合以后再做8倍的升采样。</p>
+<p>升采样的方法有多种，可以采用双线性插值等非学习性方法，也可以采用transposed convolution，通过设定步长等参数进行升采样。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fotrxkpssoj31j20tw113.jpg" alt=""></p>
+<p>下面是FCN-8的pytorch实现。</p>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">fcn_8s</span><span class="params">(nn.Module)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, num_classes)</span>:</span></div><div class="line">        super(fcn, self).__init__()</div><div class="line">        self.stage1 = nn.Sequential(*list(pretrained_net.children())[:<span class="number">-4</span>])</div><div class="line">        self.stage2 = list(pretrained_net.children())[<span class="number">-4</span>]</div><div class="line">        self.stage3 = list(pretrained_net.children())[<span class="number">-3</span>] </div><div class="line">        </div><div class="line">        self.scores1 = nn.Conv2d(<span class="number">512</span>, num_classes, <span class="number">1</span>)</div><div class="line">        self.scores2 = nn.Conv2d(<span class="number">256</span>, num_classes, <span class="number">1</span>)</div><div class="line">        self.scores3 = nn.Conv2d(<span class="number">128</span>, num_classes, <span class="number">1</span>)</div><div class="line">        </div><div class="line">        self.upsample_8x = nn.ConvTranspose2d(num_classes, num_classes, <span class="number">16</span>, <span class="number">8</span>, <span class="number">4</span>, bias=<span class="keyword">False</span>)</div><div class="line">        self.upsample_4x = nn.ConvTranspose2d(num_classes, num_classes, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>, bias=<span class="keyword">False</span>)</div><div class="line">        self.upsample_2x = nn.ConvTranspose2d(num_classes, num_classes, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>, bias=<span class="keyword">False</span>)   </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></div><div class="line">        x = self.stage1(x)</div><div class="line">        s1 = x <span class="comment"># 1/8</span></div><div class="line">        </div><div class="line">        x = self.stage2(x)</div><div class="line">        s2 = x <span class="comment"># 1/16</span></div><div class="line">    </div><div class="line">        x = self.stage3(x)</div><div class="line">        s3 = x <span class="comment"># 1/32</span></div><div class="line">        </div><div class="line">        s3 = self.scores1(s3)</div><div class="line">        s3 = self.upsample_2x(s3)</div><div class="line">        s2 = self.scores2(s2)</div><div class="line">        s2 = s2 + s3</div><div class="line">        </div><div class="line">        s1 = self.scores3(s1)</div><div class="line">        s2 = self.upsample_4x(s2)</div><div class="line">        s = s1 + s2</div><div class="line">        s = self.upsample_8x(s2)</div><div class="line">        <span class="keyword">return</span> s</div></pre></td></tr></table></figure></p>
+<p><strong>实验</strong></p>
+<p>3个变种的效果在PASCAL VOS数据集上的比较，见Table 2和Figure 4，可以发现都是FCN-8s更胜一筹。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fotswcnw1kj30q60dw76m.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fotsvv8zbuj30rw0h4win.jpg" alt=""></p>
+<p>3种分类模型在PASCAL VOC 2011数据集的比较：AlexNet，VGGNet，GoogleNet，见Table1，可以发现VGGNet超出其他两个模型很多。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fotsyeuufij30q60me42k.jpg" alt=""></p>
+<p>同时，FCN在PASCAL-S，NYUDv2，SIFT FLOW数据集也取得了state-of-the-art的结果。</p>
+	  
+	</div>
+
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a href="/2018/02/26/SegNet笔记/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2018/02/09/Kaggle比赛小结-Camera-Model-Identification/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
+	</div>
+	
+	<!-- comment -->
+	
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2018-02-26 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/algorithms/">algorithms<span>14</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/deep-learning/">deep learning<span>20</span></a></li> <li><a href="/tags/segmentation/">segmentation<span>2</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 Mowayao
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a>,<a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>,<a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a> and <a href="http://getbootstrap.com/" target="_blank">BOOTSTRA.386</a>. 
+     <br> Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind.386</a>.    
+</p>
+ </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>⬆︎TOP</span>
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ['\\(','\\)'] ],
+      displayMath: [ ['$$','$$'], ['\[','\]'] ], 
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+
+</body>
+   </html>
