@@ -151,17 +151,17 @@ var _hmt = _hmt || [];
 	
 	
 		<p>论文 ：SegNet: Identity Mappings in Deep Residual Networks, ECCV 2016</p>
-<p>链接：http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=7803544</p>
+<p>链接：<a href="http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=7803544" target="_blank" rel="external">http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=7803544</a></p>
 <p>作者: Vijay Badrinarayanan, Alex Kendall , and Roberto Cipolla</p>
 <p><strong>Idea</strong></p>
 <ul>
 <li>SegNet基于FCN，包含encoder和decoder两个部分，encoder使用VGGNet，decoder则使用skip architecture将相同分辨率的feature map结合再做后续的预测。</li>
-<li>上采样的方法不同于transposed convolution和双线性插值等方法，使用un maxpooling的方法做上采样，得到稀疏的feature map，再做卷积得到稠密的feature map。</li>
+<li>上采样的方法不同于transposed convolution和双线性插值等方法，使用maxpooling的逆运算的方法做上采样，得到稀疏的feature map，再做卷积得到稠密的feature map。</li>
 </ul>
 <p><strong>Architecture</strong></p>
 <p>具体的框架结构件Fig.2，主要由两部分组成，encoder和decoder。</p>
 <p>encoder的部分包含VGGNet在全连接层前的所有卷积层，这样共有13个卷积层，并且参数是直接从在imagenet预训练过的VGGNet直接拷贝过来，进行初始化。通过移除全连接层，可以大大地减少参数量和提高运算效率，参数量从134M减少到了14.7M。</p>
-<p>文章的重点部分在于decoder的设计，decoder部分包含和encoder一样的卷积层数量，并且参数配置一一对应。在VGGNet中，max pooling的stride是2，kernel size是2，所以它的下采样是没有重叠的。在升采样上，和其他类似U-Net等不同的是，SegNet使用的是unmaxpooling的方法，也就是利用保存的max pooling的元素下标，将feature map恢复到原来的大小，再利用可训练的卷积层得到稠密的feature map。具体的过程见Fig.3。</p>
+<p>文章的重点部分在于decoder的设计，decoder部分包含和encoder一样的卷积层数量，并且参数配置一一对应。在VGGNet中，max pooling的stride是2，kernel size是2，所以它的下采样是没有重叠的。在升采样上，和其他类似U-Net等不同的是，SegNet使用的是maxpooling逆运算，也就是利用保存的max pooling的元素下标，将feature map恢复到原来的大小，再利用可训练的卷积层得到稠密的feature map。具体的过程见Fig.3。</p>
 <p>因为使用max pooling可以提高特征的translation invariance，同时提高分类的鲁棒性，但是同时也损失了很多边缘信息，因为我们把边缘的位置信息丢弃了。通常来说，响应比较强的都是一些纹理边缘，而max pooling本质上是一个滤波器，将局部最大值保留下来，舍去其他值。通过将max pooling的下标保留下来，可以帮助我们尽可能的恢复边缘位置信息。</p>
 <p>使用上述上采样的方法有以下的好处：</p>
 <ul>
@@ -172,7 +172,7 @@ var _hmt = _hmt || [];
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fotu08o3s4j312u0e4ajm.jpg" alt=""></p>
 <p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fotuej8g3gj313a0eo429.jpg" alt=""></p>
 <p>Pytorch代码实现：</p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">segnet</span><span class="params">(nn.Module)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n_classes=<span class="number">21</span>, in_channels=<span class="number">3</span>, is_unpooling=True)</span>:</span></div><div class="line">        super(segnet, self).__init__()</div><div class="line"></div><div class="line">        self.in_channels = in_channels</div><div class="line">        self.is_unpooling = is_unpooling</div><div class="line"></div><div class="line">        self.down1 = segnetDown2(self.in_channels, <span class="number">64</span>)</div><div class="line">        self.down2 = segnetDown2(<span class="number">64</span>, <span class="number">128</span>)</div><div class="line">        self.down3 = segnetDown3(<span class="number">128</span>, <span class="number">256</span>)</div><div class="line">        self.down4 = segnetDown3(<span class="number">256</span>, <span class="number">512</span>)</div><div class="line">        self.down5 = segnetDown3(<span class="number">512</span>, <span class="number">512</span>)</div><div class="line"></div><div class="line">        self.up5 = segnetUp3(<span class="number">512</span>, <span class="number">512</span>)</div><div class="line">        self.up4 = segnetUp3(<span class="number">512</span>, <span class="number">256</span>)</div><div class="line">        self.up3 = segnetUp3(<span class="number">256</span>, <span class="number">128</span>)</div><div class="line">        self.up2 = segnetUp2(<span class="number">128</span>, <span class="number">64</span>)</div><div class="line">        self.up1 = segnetUp2(<span class="number">64</span>, n_classes)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, inputs)</span>:</span></div><div class="line"></div><div class="line">        down1, indices_1, unpool_shape1 = self.down1(inputs)</div><div class="line">        down2, indices_2, unpool_shape2 = self.down2(down1)</div><div class="line">        down3, indices_3, unpool_shape3 = self.down3(down2)</div><div class="line">        down4, indices_4, unpool_shape4 = self.down4(down3)</div><div class="line">        down5, indices_5, unpool_shape5 = self.down5(down4)</div><div class="line"></div><div class="line">        up5 = self.up5(down5, indices_5, unpool_shape5)</div><div class="line">        up4 = self.up4(up5, indices_4, unpool_shape4)</div><div class="line">        up3 = self.up3(up4, indices_3, unpool_shape3)</div><div class="line">        up2 = self.up2(up3, indices_2, unpool_shape2)</div><div class="line">        up1 = self.up1(up2, indices_1, unpool_shape1)</div><div class="line"></div><div class="line">        <span class="keyword">return</span> up1</div></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">segnet</span><span class="params">(nn.Module)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n_classes=<span class="number">21</span>, in_channels=<span class="number">3</span>, is_unpooling=True)</span>:</span></div><div class="line">        super(segnet, self).__init__()</div><div class="line"></div><div class="line">        self.in_channels = in_channels</div><div class="line">        self.is_unpooling = is_unpooling</div><div class="line"></div><div class="line">        self.down1 = segnetDown2(self.in_channels, <span class="number">64</span>)</div><div class="line">        self.down2 = segnetDown2(<span class="number">64</span>, <span class="number">128</span>)</div><div class="line">        self.down3 = segnetDown3(<span class="number">128</span>, <span class="number">256</span>)</div><div class="line">        self.down4 = segnetDown3(<span class="number">256</span>, <span class="number">512</span>)</div><div class="line">        self.down5 = segnetDown3(<span class="number">512</span>, <span class="number">512</span>)</div><div class="line"></div><div class="line">        self.up5 = segnetUp3(<span class="number">512</span>, <span class="number">512</span>)</div><div class="line">        self.up4 = segnetUp3(<span class="number">512</span>, <span class="number">256</span>)</div><div class="line">        self.up3 = segnetUp3(<span class="number">256</span>, <span class="number">128</span>)</div><div class="line">        self.up2 = segnetUp2(<span class="number">128</span>, <span class="number">64</span>)</div><div class="line">        self.up1 = segnetUp2(<span class="number">64</span>, n_classes)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, inputs)</span>:</span></div><div class="line"></div><div class="line">        down1, indices_1, unpool_shape1 = self.down1(inputs)</div><div class="line">        down2, indices_2, unpool_shape2 = self.down2(down1)</div><div class="line">        down3, indices_3, unpool_shape3 = self.down3(down2)</div><div class="line">        down4, indices_4, unpool_shape4 = self.down4(down3)</div><div class="line">        down5, indices_5, unpool_shape5 = self.down5(down4)</div><div class="line"></div><div class="line">        up5 = self.up5(down5, indices_5, unpool_shape5)</div><div class="line">        up4 = self.up4(up5, indices_4, unpool_shape4)</div><div class="line">        up3 = self.up3(up4, indices_3, unpool_shape3)</div><div class="line">        up2 = self.up2(up3, indices_2, unpool_shape2)</div><div class="line">        up1 = self.up1(up2, indices_1, unpool_shape1)</div><div class="line"></div><div class="line">        <span class="keyword">return</span> up1</div></pre></td></tr></table></figure>
 <p><strong>实验</strong></p>
 <p>首先针对deocder做了以下几种变形：</p>
 <ul>
@@ -208,7 +208,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2018/02/26/SegNet笔记/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2018/02/26/SegNet笔记/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -261,7 +261,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2018/02/26/Fully-Convolutional-Networks-for-Semantic-Segmentation-FCN-笔记/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2018/02/26/Fully-Convolutional-Networks-for-Semantic-Segmentation-FCN-笔记/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -306,7 +306,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2018/02/09/Kaggle比赛小结-Camera-Model-Identification/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2018/02/09/Kaggle比赛小结-Camera-Model-Identification/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -365,7 +365,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2018/02/07/Inception-v4-Inception-ResNet-and-Inception-v4-笔记/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2018/02/07/Inception-v4-Inception-ResNet-and-Inception-v4-笔记/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -449,7 +449,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2018/02/07/Rethinking-the-Inception-Architecture-for-Computer-Vision-Inception-V3-笔记/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2018/02/07/Rethinking-the-Inception-Architecture-for-Computer-Vision-Inception-V3-笔记/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -544,7 +544,7 @@ $$</p>
 
 	
 	</div>
-  <a type="button" href="/2018/02/01/Identity-Mappings-in-Deep-Residual-Networks笔记/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2018/02/01/Identity-Mappings-in-Deep-Residual-Networks笔记/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -630,7 +630,7 @@ $$
 
 	
 	</div>
-  <a type="button" href="/2018/02/01/Deep-Residual-Learning-for-Image-Recognition笔记/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2018/02/01/Deep-Residual-Learning-for-Image-Recognition笔记/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -743,7 +743,7 @@ Internal Covariate Shift表示的是在神经网络发生的convariate shift，�
 
 	
 	</div>
-  <a type="button" href="/2018/01/25/Batch-Normalization-Accelerating-Deep-Network-Training-by-Reducing-Internal-Covariate-Shift笔记/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2018/01/25/Batch-Normalization-Accelerating-Deep-Network-Training-by-Reducing-Internal-Covariate-Shift笔记/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -846,7 +846,7 @@ $[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
 
 	
 	</div>
-  <a type="button" href="/2018/01/25/Going-Deeper-with-Convolutions笔记/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2018/01/25/Going-Deeper-with-Convolutions笔记/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -927,7 +927,7 @@ $$
 
 	
 	</div>
-  <a type="button" href="/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -941,12 +941,12 @@ $$
 
    
     
-           <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+           <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>上一页</a>
         
 
         <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
  
-       <a href="/page/2/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>     
+       <a href="/page/2/" type="button" class="btn btn-default ">下一页<i class="fa fa-arrow-circle-o-right"></i></a>     
         
 
   
@@ -966,7 +966,7 @@ $$
 			
   <div id="site_search">
    <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="搜索" class="st-search-input st-default-search-input form-control"/>
    </div>  
   <div id="local-search-result"></div>
   </div>
@@ -975,7 +975,7 @@ $$
 		
 			
 	<div class="widget">
-		<h4>Categories</h4>
+		<h4>分类</h4>
 		<ul class="tag_box inline list-unstyled">
 		
 			<li><a href="/categories/algorithms/">algorithms<span>14</span></a></li>
@@ -988,12 +988,10 @@ $$
 		
 			
 	<div class="widget">
-		<h4>Tag Cloud</h4>
+		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
-		
-			<li><a href="/tags/deep-learning/">deep learning<span>20</span></a></li>
+			<li><a href="/tags/杂/">杂<span>1</span></a></li>
 		
 			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
 		
@@ -1001,27 +999,29 @@ $$
 		
 			<li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
 		
+			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
+		
 			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
 		
-			<li><a href="/tags/杂/">杂<span>1</span></a></li>
+			<li><a href="/tags/deep-learning/">deep learning<span>20</span></a></li>
 		
-			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
+			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
+		
+			<li><a href="/tags/summary/">summary<span>2</span></a></li>
+		
+			<li><a href="/tags/segmentation/">segmentation<span>2</span></a></li>
 		
 			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
 		
 			<li><a href="/tags/notes/">notes<span>6</span></a></li>
 		
-			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
+			<li><a href="/tags/paper/">paper<span>1</span></a></li>
 		
 			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
 		
-			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
+			<li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
 		
-			<li><a href="/tags/summary/">summary<span>2</span></a></li>
-		
-			<li><a href="/tags/paper/">paper<span>1</span></a></li>
-		
-			<li><a href="/tags/segmentation/">segmentation<span>2</span></a></li>
+			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
 		
 			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
 		
@@ -1033,7 +1033,7 @@ $$
 		
 			
 <div class="widget">
-  <h4>Recent Posts</h4>
+  <h4>最新文章</h4>
   <ul class="entry list-unstyled">
     
       <li>
@@ -1062,7 +1062,7 @@ $$
 		
 			
 <div class="widget">
-	<h4>Links</h4>
+	<h4>链接</h4>
 	<ul class="blogroll list-unstyled">
 	
 		<li><i class="fa fa-github"></i><a href="http://www.github.com/mowayao" title="My Github account." target="_blank"]);">My Github</a></li>
