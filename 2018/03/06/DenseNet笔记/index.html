@@ -6,16 +6,16 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>Network Architecture of Deblurring | Mowayao&#39;s Blog</title>
+  <title>DenseNet笔记 | Mowayao&#39;s Blog</title>
   <meta name="author" content="Mowayao">
   
-  <meta name="description" content="Wieschollek P, Hirsch M, Schölkopf B, et al. Learning Blind Motion Deblurring. arXiv preprint arXiv:1708.04208, 2017. Codes, Paper
-这篇文章主要是针对视频的去噪，利用前几">
+  <meta name="description" content="论文 ：Densely Connected Convolutional Networks, CVPR 2017
+链接：http://openaccess.thecvf.com/content_cvpr_2017/papers/Huang_Densely_Connected_Convolutional">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Network Architecture of Deblurring"/>
+  <meta property="og:title" content="DenseNet笔记"/>
   <meta property="og:site_name" content="Mowayao&#39;s Blog"/>
 
   
@@ -119,7 +119,7 @@ var _hmt = _hmt || [];
 
 	
 		<div class="page-header">
-			<h1> Network Architecture of Deblurring</h1>
+			<h1> DenseNet笔记</h1>
 		</div>
 	
 
@@ -136,21 +136,47 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  		
 
-	  <p>Wieschollek P, Hirsch M, Schölkopf B, et al. Learning Blind Motion Deblurring. arXiv preprint arXiv:1708.04208, 2017. <a href="https://github.com/cgtuebingen/learning-blind-motion-deblurring" target="_blank" rel="external">Codes</a>, <a href="http://openaccess.thecvf.com/content_ICCV_2017/papers/Wieschollek_Learning_Blind_Motion_ICCV_2017_paper.pdf" target="_blank" rel="external">Paper</a></p>
-<p>这篇文章主要是针对视频的去噪，利用前几帧的信息来帮助预测当前帧，用到一些常用的skip-connection的结构来结合low-level and high resolution的feature map。</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-09%20%E4%B8%8B%E5%8D%885.07.49.png" alt=""></p>
-<p>Wang L, Li Y, Wang S. DeepDeblur: Fast one-step blurry face images restoration. arXiv preprint arXiv:1711.09515, 2017.</p>
-<p>这篇文章主要针对的是人脸的运动噪声去模糊，其中kernel是人工模拟的，利用高斯过程生成，网络结构的话就是利用多个inception module和resnet的结构。</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-09%20%E4%B8%8B%E5%8D%885.15.21.png" alt=""></p>
-<p>Kupyn O, Budzan V, Mykhailych M, et al. DeblurGAN: Blind Motion Deblurring Using Conditional Adversarial Networks. arXiv preprint arXiv:1711.07064, 2017. </p>
-<p>这篇文章的结构比较接单，就是利用多个ResBlocks来作为generater，然后在discriminator loss中加入critic loss（用Wasserstein GAN）和perceptual loss(features dissimilarity)。</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-09%20%E4%B8%8B%E5%8D%885.18.01.png" alt=""></p>
-<p>Noroozi M, Chandramouli P, Favaro P. Motion Deblurring in the Wild. arXiv preprint arXiv:1701.01486, 2017. </p>
-<p>主要利用了mutli-scale和skip-connection</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-09%20%E4%B8%8B%E5%8D%885.57.08.png" alt=""></p>
-<p>Nah S, Kim T H, Lee K M. Deep multi-scale convolutional neural network for dynamic scene deblurring. arXiv preprint arXiv:1612.02177, 2016. </p>
-<p>这篇文章主要用到了一些残差学习的方法，不仅用了ResBlock，还将小尺度的结果作为残差传给大尺度，简化学习的难度。</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-09%20%E4%B8%8B%E5%8D%886.00.27.png" alt=""></p>
+	  <p>论文 ：Densely Connected Convolutional Networks, CVPR 2017</p>
+<p>链接：<a href="http://openaccess.thecvf.com/content_cvpr_2017/papers/Huang_Densely_Connected_Convolutional_CVPR_2017_paper.pdf" target="_blank" rel="external">http://openaccess.thecvf.com/content_cvpr_2017/papers/Huang_Densely_Connected_Convolutional_CVPR_2017_paper.pdf</a></p>
+<p>作者: Huang Gao, Liu Zhuang, Weinberger, K. Q., &amp; van der Maaten, L. </p>
+<p>源码：<a href="https://github.com/liuzhuang13/DenseNet" target="_blank" rel="external">https://github.com/liuzhuang13/DenseNet</a>.</p>
+<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>DenseNet的idea和ResNet有点相近，既然ResNet可以通过一个skip connection就提高模型的性能，那为什么不多几个呢？</p>
+<p>这样的话就可以使得梯度信息的回传更加有效（ResNet通过identity mapping进行另一条路径的梯度回传,而DenseNet的每一层梯度都可以直接回传回它前面的层），可以充分利用各个level的特征，也可以减少参数等。</p>
+<ul>
+<li>alleviate the vanishing-gradient problem，利用dense connection有效回传梯度</li>
+<li>strengthen feature propagation，利用dense connection融合(concat)不同level的特征，使得浅层的特征更容易传播到高层，同时也可以让浅层的conv学一些discriminative features。</li>
+<li>encourage feature reuse</li>
+<li>substantially reduce the number of parameters，通过控制growth rate减少参数量</li>
+</ul>
+<p>假设有L层网络，那么如果将网络视为DAG，那么如果实行全连接，并且保证网络前向传播，共有$\frac{L\times(L+1)}{2}$条边。</p>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fp33t32d1mj31kw0bt0xv.jpg" alt=""></p>
+<p><strong>Dense Block</strong></p>
+<p>首先，将其公式化，我们考虑第l层网络的输入和输出，$x_l$表示为第l层的输出，那么有:<br>$$<br>x_l = H_l([x_0,x_1,…,x_{l-1}])<br>$$<br>这里，$[x_0,x_1,…,x_{l-1}]$表示feature map的按通道拼接，形成新的tensor。</p>
+<p>$H_l$是一个组合函数，BN-ReLU-Conv(3x3)。</p>
+<p>为了将模型简化，将预想中的DenseNet分拆成若干个dense block，见Figure 2。</p>
+<p><strong>Growth Rate</strong></p>
+<p>$H_l$的输出是k个feature maps，也被叫做是growth rate。</p>
+<p>对于每个dense block来说，假设输入的深度是$k_0$，对于第l个层的输出，则有$k\times(l-1)+k_0$的深度，从Figure 2就可以简单得出。作者将这种dense connection解释为collective knowledge，获取前面层的输出，growth rate则是起到限制knowledge容量的作用，使得knowledge精简化!</p>
+<p><strong>Transition Layer</strong></p>
+<p>每个block之间用transition layer，包括1x1的conv和pooling层。transition layer起到压缩网络模型的作用，如果每个block包括m个feature maps，那么经过压缩后，就变成$\theta m, 0\le \theta \le 1$，同时利用pooling降采样。我们把$\theta =0.5$的结构（将feature maps的数量降为原来的一般）记作DenseNet-C。</p>
+<p><strong>Bottleneck Layer</strong></p>
+<p>因为每个block的输出都是k，但是它的输入往往比k更大，所以引入bottleneck layer起到降维的作用，同时保留尽可能多的信息。这样$H_l$就变成了BN-ReLU-Conv(1x1)-BN-ReLU-Conv(3x3)，我们将使用bottleneck layer的版本记作DenseNet-B。</p>
+<p>Table 1是模型的参数结构。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fp3b35pbwqj31kw0qqair.jpg" alt=""></p>
+<h5 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h5><p><strong>训练细节</strong></p>
+<p>对于CIFAR和SVHN,初始lr设为0.1，在训练50%和75%的epochs时，除以10。</p>
+<p>对于IMAGENET,初始lr设为0.1，在30和60个epochs后，除以10。</p>
+<p>SGD，weight decay $10^{-4}$</p>
+<p>因为CIFAR和SVHN数据集较小，所以在conv后（除第一个）都加了dropout，ratio为0.2。</p>
+<p>Tabel 2是各个模型在CIFAR-10，CIFAR-100，SVHN三个数据集上的结果，+号表示做数据增强，将用了Bottleneck layer和feature maps compression的记做DenseNet-BC。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fp3bafnkxmj314u0pwgtx.jpg" alt=""></p>
+<p>总的来说，数据增强可以提升表现！</p>
+<ul>
+<li>可以发现，和ResNet相比，参数更少，错误率更低，模型参数利用率高！</li>
+<li>在C10和C100上，DenseNet-BC(L=190,k=40)达到最优的结果。</li>
+<li>观察原始的DenseNet（没有BC），可以发现，随着L和k的增大，模型性能在提升（参数量上升，模型容量提升，表达能力提升），说明dense block有较强的抗过拟合的能力。</li>
+<li>在SVHN上，DenseNet-BC结果要比没有原始的DenseNet，这可能是数据集过小，模型过拟合了。</li>
+</ul>
 	  
 	</div>
 
@@ -160,13 +186,13 @@ var _hmt = _hmt || [];
 
     
     
-    <a href="/2017/12/18/CS224n-assignment1/" type="button" class="btn btn-default"><i
+    <a href="/2018/03/06/ResNeXt笔记/" type="button" class="btn btn-default"><i
                 class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2017/12/05/Generate-Motion-Blur/" type="button" class="btn btn-default ">Next<i
+    <a href="/2018/02/26/SegNet笔记/" type="button" class="btn btn-default ">Next<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -195,12 +221,23 @@ var _hmt = _hmt || [];
 	
 	<div class="meta-widget">
 	<i class="fa fa-clock-o"></i>
-	2017-12-09 
+	2018-03-06 
 	</div>
 	
 
 	<!-- categories -->
     
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/algorithms/">algorithms<span>16</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
 
 	<!-- tags -->
 	
@@ -208,7 +245,7 @@ var _hmt = _hmt || [];
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/deep-learning/">deep learning<span>22</span></a></li> <li><a href="/tags/summary/">summary<span>2</span></a></li> <li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
+  <li><a href="/tags/deep-learning/">deep learning<span>22</span></a></li> <li><a href="/tags/classification/">classification<span>2</span></a></li>
     </ul>
 	</div>
 		

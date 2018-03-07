@@ -136,6 +136,133 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2018/03/06/ResNeXt笔记/" >ResNeXt笔记</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2018-03-06  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>论文 :Aggregated Residual Transformations for Deep Neural Networks, CVPR 2017</p>
+<p>链接：<a href="https://arxiv.org/pdf/1611.05431.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1611.05431.pdf</a></p>
+<p>作者:  Saining Xie, Ross Girshick, Piotr Dollár, Zhuowen Tu, Kaiming He</p>
+<p>源码：<a href="https://github.com/facebookresearch/ResNeXt" target="_blank" rel="external">https://github.com/facebookresearch/ResNeXt</a></p>
+<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>提出ResNeXt网络，基于ResNet和GoogleNet。</p>
+<p>提出cardinality的概念，对于每个conv block，对输入做多种不同的（结构相同，参数不同）transformations，然后再aggregation，而transformations的数量就是cardinality。</p>
+<p>结构启发于inception module，同样是split-transform-merge的策略，这里的merge和transform都和inception不一样。split-transform-merge的策略主要是<strong><em>通过在一个尽可能小的计算复杂度的前提下，提高模型的表达能力</em></strong>（approach the representational power of large and dense layers, but at a considerably lower computational complexity）！ Inception的问题在于每个block都需要定制，导致了模型的灵活性较差，这些block的定制化设计相当于引入了一堆的超参，大量的超参对模型来讲无疑是不利的。而这篇文章就是基于这点进行改进！</p>
+<ul>
+<li>模块化</li>
+<li>超参少</li>
+<li>表达能力强</li>
+</ul>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>首先，总结了两点block设计的原则：</p>
+<ol>
+<li>对于相同大小的feature map，block的超参要相同，也就是conv的filter参数要一样。【if producing spatial maps of the same size, the blocks share the same hyper-parameters (width and filter sizes)】</li>
+<li>如果空间维度减半，那么feature maps的数量要加倍。【each time when the spatial map is downsampled by a factor of 2, the width of the blocks is multiplied by a factor of 2】</li>
+</ol>
+<p>Figure 1是ResNet和ResNeXt的block结构比较，重点看ResNeXt，可以看到这里将256维的输入做32个不同的transformations，每个transformation先通过1x1的conv做降维(information embedding)，然后再经过几个conv，最后将这32个输出做aggregation。</p>
+<p>将其公式化:<br>$$<br>F(x) = \sum_{i=1}^C \tau_i(x)<br>$$<br>$\tau_i$的作用就是将x投影到低维空间（embeeding），然后做transform。C就是做transformation的数量，也就是cardinaty。aggregation后，再用short connection做identity mapping。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fp3f3tppr3j30te0i0jur.jpg" alt=""></p>
+<p>Figure 3是异构的三种结构，（a）是初始版本，（b）concat，（c）group conv，这三者可以说是等价的。那么在实现上，可以利用group conv，更加方便！</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fp4d6cqzx8j31cq0i2q8m.jpg" alt=""></p>
+<p>​    Table 1是ResNet-50和ResNeXt-50的参数对比</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fp4fhovd49j30nw0uaq8x.jpg" alt=""></p>
+<h5 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h5><p>Table 3是各个版本的ResNeXt以及ResNet在ImageNet-1K数据集上的表现，可以发现随着Cardinaty增加，模型总体上是变好的，体现在top-1 error逐渐在降低。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fp4fegkbv6j30oc0jqn0j.jpg" alt=""></p>
+<p>Table 6是ResNet和ResNeXt在ImageNet-5K上的比较，可以可发现后者都要好于前者。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fp4fkycmlxj30pi0eotbv.jpg" alt=""></p>
+<p>Table 5则是各个state-of-the-art的模型在ImageNet-1K数据集上表现，可以发现模型达到了最好的结果。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fp4fmo7mobj30ow0gaacv.jpg" alt=""></p>
+<p>从Table 7可以发现，相同的参数，ResNeXt比Wide ResNet表现更好。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fp4fojev6aj30pc09sgn0.jpg" alt=""></p>
+
+	
+	</div>
+  <a type="button" href="/2018/03/06/ResNeXt笔记/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2018/03/06/DenseNet笔记/" >DenseNet笔记</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2018-03-06  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>论文 ：Densely Connected Convolutional Networks, CVPR 2017</p>
+<p>链接：<a href="http://openaccess.thecvf.com/content_cvpr_2017/papers/Huang_Densely_Connected_Convolutional_CVPR_2017_paper.pdf" target="_blank" rel="external">http://openaccess.thecvf.com/content_cvpr_2017/papers/Huang_Densely_Connected_Convolutional_CVPR_2017_paper.pdf</a></p>
+<p>作者: Huang Gao, Liu Zhuang, Weinberger, K. Q., &amp; van der Maaten, L. </p>
+<p>源码：<a href="https://github.com/liuzhuang13/DenseNet" target="_blank" rel="external">https://github.com/liuzhuang13/DenseNet</a>.</p>
+<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>DenseNet的idea和ResNet有点相近，既然ResNet可以通过一个skip connection就提高模型的性能，那为什么不多几个呢？</p>
+<p>这样的话就可以使得梯度信息的回传更加有效（ResNet通过identity mapping进行另一条路径的梯度回传,而DenseNet的每一层梯度都可以直接回传回它前面的层），可以充分利用各个level的特征，也可以减少参数等。</p>
+<ul>
+<li>alleviate the vanishing-gradient problem，利用dense connection有效回传梯度</li>
+<li>strengthen feature propagation，利用dense connection融合(concat)不同level的特征，使得浅层的特征更容易传播到高层，同时也可以让浅层的conv学一些discriminative features。</li>
+<li>encourage feature reuse</li>
+<li>substantially reduce the number of parameters，通过控制growth rate减少参数量</li>
+</ul>
+<p>假设有L层网络，那么如果将网络视为DAG，那么如果实行全连接，并且保证网络前向传播，共有$\frac{L\times(L+1)}{2}$条边。</p>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fp33t32d1mj31kw0bt0xv.jpg" alt=""></p>
+<p><strong>Dense Block</strong></p>
+<p>首先，将其公式化，我们考虑第l层网络的输入和输出，$x_l$表示为第l层的输出，那么有:<br>$$<br>x_l = H_l([x_0,x_1,…,x_{l-1}])<br>$$<br>这里，$[x_0,x_1,…,x_{l-1}]$表示feature map的按通道拼接，形成新的tensor。</p>
+<p>$H_l$是一个组合函数，BN-ReLU-Conv(3x3)。</p>
+<p>为了将模型简化，将预想中的DenseNet分拆成若干个dense block，见Figure 2。</p>
+<p><strong>Growth Rate</strong></p>
+<p>$H_l$的输出是k个feature maps，也被叫做是growth rate。</p>
+<p>对于每个dense block来说，假设输入的深度是$k_0$，对于第l个层的输出，则有$k\times(l-1)+k_0$的深度，从Figure 2就可以简单得出。作者将这种dense connection解释为collective knowledge，获取前面层的输出，growth rate则是起到限制knowledge容量的作用，使得knowledge精简化!</p>
+<p><strong>Transition Layer</strong></p>
+<p>每个block之间用transition layer，包括1x1的conv和pooling层。transition layer起到压缩网络模型的作用，如果每个block包括m个feature maps，那么经过压缩后，就变成$\theta m, 0\le \theta \le 1$，同时利用pooling降采样。我们把$\theta =0.5$的结构（将feature maps的数量降为原来的一般）记作DenseNet-C。</p>
+<p><strong>Bottleneck Layer</strong></p>
+<p>因为每个block的输出都是k，但是它的输入往往比k更大，所以引入bottleneck layer起到降维的作用，同时保留尽可能多的信息。这样$H_l$就变成了BN-ReLU-Conv(1x1)-BN-ReLU-Conv(3x3)，我们将使用bottleneck layer的版本记作DenseNet-B。</p>
+<p>Table 1是模型的参数结构。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fp3b35pbwqj31kw0qqair.jpg" alt=""></p>
+<h5 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h5><p><strong>训练细节</strong></p>
+<p>对于CIFAR和SVHN,初始lr设为0.1，在训练50%和75%的epochs时，除以10。</p>
+<p>对于IMAGENET,初始lr设为0.1，在30和60个epochs后，除以10。</p>
+<p>SGD，weight decay $10^{-4}$</p>
+<p>因为CIFAR和SVHN数据集较小，所以在conv后（除第一个）都加了dropout，ratio为0.2。</p>
+<p>Tabel 2是各个模型在CIFAR-10，CIFAR-100，SVHN三个数据集上的结果，+号表示做数据增强，将用了Bottleneck layer和feature maps compression的记做DenseNet-BC。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fp3bafnkxmj314u0pwgtx.jpg" alt=""></p>
+<p>总的来说，数据增强可以提升表现！</p>
+<ul>
+<li>可以发现，和ResNet相比，参数更少，错误率更低，模型参数利用率高！</li>
+<li>在C10和C100上，DenseNet-BC(L=190,k=40)达到最优的结果。</li>
+<li>观察原始的DenseNet（没有BC），可以发现，随着L和k的增大，模型性能在提升（参数量上升，模型容量提升，表达能力提升），说明dense block有较强的抗过拟合的能力。</li>
+<li>在SVHN上，DenseNet-BC结果要比没有原始的DenseNet，这可能是数据集过小，模型过拟合了。</li>
+</ul>
+
+	
+	</div>
+  <a type="button" href="/2018/03/06/DenseNet笔记/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2018/02/26/SegNet笔记/" >SegNet笔记</a>
 		</h3>
 		</div>
@@ -208,7 +335,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2018/02/26/SegNet笔记/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2018/02/26/SegNet笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -233,7 +360,7 @@ var _hmt = _hmt || [];
 	
 	
 		<p>论文：Fully Convolutional Networks for Semantic Segmentation，CVPR 2015</p>
-<p>链接：https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf</p>
+<p>链接：<a href="https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf" target="_blank" rel="external">https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf</a></p>
 <p>作者：Jonathan Long, Evan Shelhamer, Trevor Darrell</p>
 <p><strong>Idea</strong></p>
 <p>传统的图像分割算法主要依赖于：</p>
@@ -250,7 +377,7 @@ var _hmt = _hmt || [];
 <p>升采样的方法有多种，可以采用双线性插值等非学习性方法，也可以采用transposed convolution，通过设定步长等参数进行升采样。</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fotrxkpssoj31j20tw113.jpg" alt=""></p>
 <p>下面是FCN-8的pytorch实现。</p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">fcn_8s</span><span class="params">(nn.Module)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, num_classes)</span>:</span></div><div class="line">        super(fcn, self).__init__()</div><div class="line">        self.stage1 = nn.Sequential(*list(pretrained_net.children())[:<span class="number">-4</span>])</div><div class="line">        self.stage2 = list(pretrained_net.children())[<span class="number">-4</span>]</div><div class="line">        self.stage3 = list(pretrained_net.children())[<span class="number">-3</span>] </div><div class="line">        </div><div class="line">        self.scores1 = nn.Conv2d(<span class="number">512</span>, num_classes, <span class="number">1</span>)</div><div class="line">        self.scores2 = nn.Conv2d(<span class="number">256</span>, num_classes, <span class="number">1</span>)</div><div class="line">        self.scores3 = nn.Conv2d(<span class="number">128</span>, num_classes, <span class="number">1</span>)</div><div class="line">        </div><div class="line">        self.upsample_8x = nn.ConvTranspose2d(num_classes, num_classes, <span class="number">16</span>, <span class="number">8</span>, <span class="number">4</span>, bias=<span class="keyword">False</span>)</div><div class="line">        self.upsample_4x = nn.ConvTranspose2d(num_classes, num_classes, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>, bias=<span class="keyword">False</span>)</div><div class="line">        self.upsample_2x = nn.ConvTranspose2d(num_classes, num_classes, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>, bias=<span class="keyword">False</span>)   </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></div><div class="line">        x = self.stage1(x)</div><div class="line">        s1 = x <span class="comment"># 1/8</span></div><div class="line">        </div><div class="line">        x = self.stage2(x)</div><div class="line">        s2 = x <span class="comment"># 1/16</span></div><div class="line">    </div><div class="line">        x = self.stage3(x)</div><div class="line">        s3 = x <span class="comment"># 1/32</span></div><div class="line">        </div><div class="line">        s3 = self.scores1(s3)</div><div class="line">        s3 = self.upsample_2x(s3)</div><div class="line">        s2 = self.scores2(s2)</div><div class="line">        s2 = s2 + s3</div><div class="line">        </div><div class="line">        s1 = self.scores3(s1)</div><div class="line">        s2 = self.upsample_4x(s2)</div><div class="line">        s = s1 + s2</div><div class="line">        s = self.upsample_8x(s2)</div><div class="line">        <span class="keyword">return</span> s</div></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">fcn_8s</span><span class="params">(nn.Module)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, num_classes)</span>:</span></div><div class="line">        super(fcn, self).__init__()</div><div class="line">        self.stage1 = nn.Sequential(*list(pretrained_net.children())[:<span class="number">-4</span>])</div><div class="line">        self.stage2 = list(pretrained_net.children())[<span class="number">-4</span>]</div><div class="line">        self.stage3 = list(pretrained_net.children())[<span class="number">-3</span>] </div><div class="line">        </div><div class="line">        self.scores1 = nn.Conv2d(<span class="number">512</span>, num_classes, <span class="number">1</span>)</div><div class="line">        self.scores2 = nn.Conv2d(<span class="number">256</span>, num_classes, <span class="number">1</span>)</div><div class="line">        self.scores3 = nn.Conv2d(<span class="number">128</span>, num_classes, <span class="number">1</span>)</div><div class="line">        </div><div class="line">        self.upsample_8x = nn.ConvTranspose2d(num_classes, num_classes, <span class="number">16</span>, <span class="number">8</span>, <span class="number">4</span>, bias=<span class="keyword">False</span>)</div><div class="line">        self.upsample_4x = nn.ConvTranspose2d(num_classes, num_classes, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>, bias=<span class="keyword">False</span>)</div><div class="line">        self.upsample_2x = nn.ConvTranspose2d(num_classes, num_classes, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>, bias=<span class="keyword">False</span>)   </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></div><div class="line">        x = self.stage1(x)</div><div class="line">        s1 = x <span class="comment"># 1/8</span></div><div class="line">        </div><div class="line">        x = self.stage2(x)</div><div class="line">        s2 = x <span class="comment"># 1/16</span></div><div class="line">    </div><div class="line">        x = self.stage3(x)</div><div class="line">        s3 = x <span class="comment"># 1/32</span></div><div class="line">        </div><div class="line">        s3 = self.scores1(s3)</div><div class="line">        s3 = self.upsample_2x(s3)</div><div class="line">        s2 = self.scores2(s2)</div><div class="line">        s2 = s2 + s3</div><div class="line">        </div><div class="line">        s1 = self.scores3(s1)</div><div class="line">        s2 = self.upsample_4x(s2)</div><div class="line">        s = s1 + s2</div><div class="line">        s = self.upsample_8x(s2)</div><div class="line">        <span class="keyword">return</span> s</div></pre></td></tr></table></figure>
 <p><strong>实验</strong></p>
 <p>3个变种的效果在PASCAL VOS数据集上的比较，见Table 2和Figure 4，可以发现都是FCN-8s更胜一筹。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fotswcnw1kj30q60dw76m.jpg" alt=""></p>
@@ -261,7 +388,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2018/02/26/Fully-Convolutional-Networks-for-Semantic-Segmentation-FCN-笔记/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2018/02/26/Fully-Convolutional-Networks-for-Semantic-Segmentation-FCN-笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -285,7 +412,7 @@ var _hmt = _hmt || [];
   <div class="row">
 	
 	
-		<p>https://www.kaggle.com/c/sp-society-camera-model-identification</p>
+		<p><a href="https://www.kaggle.com/c/sp-society-camera-model-identification" target="_blank" rel="external">https://www.kaggle.com/c/sp-society-camera-model-identification</a></p>
 <p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1foa5fw8h19j31k20483yy.jpg" alt=""></p>
 <p>参加完比赛，做个简单的总结：</p>
 <ul>
@@ -294,19 +421,19 @@ var _hmt = _hmt || [];
 <li>Random Crop，尽可能大，取512的结果好于256，先crop 1024，做完数据增强后再crop 512</li>
 <li>网络模型，Dense201&gt;Dense161…..</li>
 <li>Focal Loss可以提高结果</li>
-<li>learning rate: 1e-4，optimizer: Adam，batch size: 16…...</li>
+<li>learning rate: 1e-4，optimizer: Adam，batch size: 16……</li>
 <li>ensemble</li>
 </ul>
 <p>可以考虑的点：</p>
 <ul>
 <li>因为验证集的结果还不错，可以将测试集用训练得到的模型做分类，再训练，做数据扩充</li>
 <li>可以人工地下载更多的数据。。。</li>
-<li>结合手工提取的特征做结果的修正，例如noise pattern:https://www.kaggle.com/zeemeen/i-have-a-clue-what-i-am-doing-noise-patterns</li>
+<li>结合手工提取的特征做结果的修正，例如noise pattern:<a href="https://www.kaggle.com/zeemeen/i-have-a-clue-what-i-am-doing-noise-patterns" target="_blank" rel="external">https://www.kaggle.com/zeemeen/i-have-a-clue-what-i-am-doing-noise-patterns</a></li>
 </ul>
 
 	
 	</div>
-  <a type="button" href="/2018/02/09/Kaggle比赛小结-Camera-Model-Identification/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2018/02/09/Kaggle比赛小结-Camera-Model-Identification/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -331,7 +458,7 @@ var _hmt = _hmt || [];
 	
 	
 		<p>论文 ：Inception-v4, Inception-ResNet and the Impact of Residual Connections on Learning, AAAI 2017</p>
-<p>链接：https://arxiv.org/abs/1602.07261</p>
+<p>链接：<a href="https://arxiv.org/abs/1602.07261" target="_blank" rel="external">https://arxiv.org/abs/1602.07261</a></p>
 <p>作者: Christian Szegedy, Sergey Ioffe, Vincent Vanhoucke, Alex Alemi</p>
 <p>呃。。。这篇文章的主要贡献是了尝试了ResNet和Inception结合的多种可能性。。。。对Inception block进行修改和优化，提出了Inception v4（Figure 9），Inception-ResNet-v1和Inception-ResNet-v2（Figure 15），将ImageNet classification task的top-5 error刷到了3.08%。</p>
 <p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fobembpr0rj30ee0rcwhc.jpg" alt=""></p>
@@ -352,8 +479,7 @@ var _hmt = _hmt || [];
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fobdw6e7fqj30f20iiwg6.jpg" alt=""></p>
 <p>实验发现：如果feature map的数量超过1000，网络会不work，训练的时候会不稳定，而且在早期就会“die”。所以在residual加个scaling，使得数值偏小，见Figure 20。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fobe052il4j30s00o4q62.jpg" alt=""></p>
-<h5>实验</h5>
-<p>single crop和single model的比较结果见Table 2，可以发现Inception-ResNet-v2略胜一筹，但是和Inception-v4差距不大。</p>
+<h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p>single crop和single model的比较结果见Table 2，可以发现Inception-ResNet-v2略胜一筹，但是和Inception-v4差距不大。</p>
 <p>小数量的crop和single model的比较结果见Table 3，和Table 2的结果类似。</p>
 <p>dense crop和single model的比较结果见Table 4，结果依然类似。</p>
 <p>以及，crop的数量对结果影响还是很大的！</p>
@@ -365,7 +491,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2018/02/07/Inception-v4-Inception-ResNet-and-Inception-v4-笔记/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2018/02/07/Inception-v4-Inception-ResNet-and-Inception-v4-笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -390,27 +516,24 @@ var _hmt = _hmt || [];
 	
 	
 		<p>论文 ：Rethinking the Inception Architecture for Computer Vision, CVPR 2016</p>
-<p>链接：https://arxiv.org/pdf/1512.00567.pdf</p>
+<p>链接：<a href="https://arxiv.org/pdf/1512.00567.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1512.00567.pdf</a></p>
 <p>作者: Christian Szegedy, Vincent Vanhoucke, Sergey Ioffe, Jon Shlens, Zbigniew Wojna</p>
 <ul>
 <li>优化了Inception的结构</li>
 <li>讨论了一些设计原则和可以优化的方向</li>
 </ul>
 <ul>
-<li>
-<p>在ILSVRC 2012 classification验证集上取得state-of-the-art的结果：21.2% top-1 error和5.6% top-5 error，ensemble后，取得3.5% top-5 error和17.3% top-1 error。</p>
+<li><p>在ILSVRC 2012 classification验证集上取得state-of-the-art的结果：21.2% top-1 error和5.6% top-5 error，ensemble后，取得3.5% top-5 error和17.3% top-1 error。</p>
 <p>​</p>
 </li>
 </ul>
-<h5>General Design Principles</h5>
-<ul>
+<h5 id="General-Design-Principles"><a href="#General-Design-Principles" class="headerlink" title="General Design Principles"></a>General Design Principles</h5><ul>
 <li>为了避免表示瓶颈(representational bottlenecks)，feature map应该缓慢减小！</li>
 <li>高维度的feature map能够更容易地处理局部信息（有更多的feature maps），在CNN中提高响应（融合不同感受野的卷积提取的特征）可以解耦更多特征，网络训练也更快</li>
 <li>用1x1卷积做embeeding，在没有大量或者一些表现能力损失的基础上降低维度(局部空间的高相关性)。在做完spatial aggregation后用1x1卷积降低维度</li>
 <li>网络的深度和宽度应该同时增加或者减少。这两者之间存在某种平衡</li>
 </ul>
-<h5>Factorizing Convolutions with Large Filter Size</h5>
-<p>为了提高计算效率，可以将大的卷积核分解。</p>
+<h5 id="Factorizing-Convolutions-with-Large-Filter-Size"><a href="#Factorizing-Convolutions-with-Large-Filter-Size" class="headerlink" title="Factorizing Convolutions with Large Filter Size"></a>Factorizing Convolutions with Large Filter Size</h5><p>为了提高计算效率，可以将大的卷积核分解。</p>
 <p><strong>Factorization into smaller convolutions</strong></p>
 <p>例如5x5的卷积和3x3的卷积在其他条件相同的情况下，前者的计算量是后者的$\frac{25}{9}$。</p>
 <p>用两个3x3的卷积代替5x5，两者具有相同的感受野，可以降低28%的计算量，而且经过实验证明，中间还是要有ReLU，而不是线性激活，见Figure 4和Figure 5</p>
@@ -419,15 +542,13 @@ var _hmt = _hmt || [];
 <p>实际上，这样的分解在浅层效果并不好，只有在中层的时候效果不错，对于nxn的feature map来说，n一般从12到20，对于这些尺寸，7x1和1x7的小贵最好，见Figure 6。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fo7ytt7rq5j30p60i2tab.jpg" alt=""></p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fo7ytqofwjj30tc0mkjtw.jpg" alt=""></p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">InceptionA</span><span class="params">(nn.Module)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, in_channels, pool_features)</span>:</span></div><div class="line">        super(InceptionA, self).__init__()</div><div class="line">        self.branch1x1 = BasicConv2d(in_channels, <span class="number">64</span>, kernel_size=<span class="number">1</span>)</div><div class="line"></div><div class="line">        self.branch5x5_1 = BasicConv2d(in_channels, <span class="number">48</span>, kernel_size=<span class="number">1</span>)</div><div class="line">        self.branch5x5_2 = BasicConv2d(<span class="number">48</span>, <span class="number">64</span>, kernel_size=<span class="number">5</span>, padding=<span class="number">2</span>)</div><div class="line"></div><div class="line">        self.branch3x3dbl_1 = BasicConv2d(in_channels, <span class="number">64</span>, kernel_size=<span class="number">1</span>)</div><div class="line">        self.branch3x3dbl_2 = BasicConv2d(<span class="number">64</span>, <span class="number">96</span>, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</div><div class="line">        self.branch3x3dbl_3 = BasicConv2d(<span class="number">96</span>, <span class="number">96</span>, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</div><div class="line"></div><div class="line">        self.branch_pool = BasicConv2d(in_channels, pool_features, kernel_size=<span class="number">1</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></div><div class="line">        branch1x1 = self.branch1x1(x)</div><div class="line"></div><div class="line">        branch5x5 = self.branch5x5_1(x)</div><div class="line">        branch5x5 = self.branch5x5_2(branch5x5)</div><div class="line"></div><div class="line">        branch3x3dbl = self.branch3x3dbl_1(x)</div><div class="line">        branch3x3dbl = self.branch3x3dbl_2(branch3x3dbl)</div><div class="line">        branch3x3dbl = self.branch3x3dbl_3(branch3x3dbl)</div><div class="line"></div><div class="line">        branch_pool = F.avg_pool2d(x, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>)</div><div class="line">        branch_pool = self.branch_pool(branch_pool)</div><div class="line"></div><div class="line">        outputs = [branch1x1, branch5x5, branch3x3dbl, branch_pool]</div><div class="line">        <span class="keyword">return</span> torch.cat(outputs, <span class="number">1</span>)</div></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">InceptionA</span><span class="params">(nn.Module)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, in_channels, pool_features)</span>:</span></div><div class="line">        super(InceptionA, self).__init__()</div><div class="line">        self.branch1x1 = BasicConv2d(in_channels, <span class="number">64</span>, kernel_size=<span class="number">1</span>)</div><div class="line"></div><div class="line">        self.branch5x5_1 = BasicConv2d(in_channels, <span class="number">48</span>, kernel_size=<span class="number">1</span>)</div><div class="line">        self.branch5x5_2 = BasicConv2d(<span class="number">48</span>, <span class="number">64</span>, kernel_size=<span class="number">5</span>, padding=<span class="number">2</span>)</div><div class="line"></div><div class="line">        self.branch3x3dbl_1 = BasicConv2d(in_channels, <span class="number">64</span>, kernel_size=<span class="number">1</span>)</div><div class="line">        self.branch3x3dbl_2 = BasicConv2d(<span class="number">64</span>, <span class="number">96</span>, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</div><div class="line">        self.branch3x3dbl_3 = BasicConv2d(<span class="number">96</span>, <span class="number">96</span>, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</div><div class="line"></div><div class="line">        self.branch_pool = BasicConv2d(in_channels, pool_features, kernel_size=<span class="number">1</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></div><div class="line">        branch1x1 = self.branch1x1(x)</div><div class="line"></div><div class="line">        branch5x5 = self.branch5x5_1(x)</div><div class="line">        branch5x5 = self.branch5x5_2(branch5x5)</div><div class="line"></div><div class="line">        branch3x3dbl = self.branch3x3dbl_1(x)</div><div class="line">        branch3x3dbl = self.branch3x3dbl_2(branch3x3dbl)</div><div class="line">        branch3x3dbl = self.branch3x3dbl_3(branch3x3dbl)</div><div class="line"></div><div class="line">        branch_pool = F.avg_pool2d(x, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>)</div><div class="line">        branch_pool = self.branch_pool(branch_pool)</div><div class="line"></div><div class="line">        outputs = [branch1x1, branch5x5, branch3x3dbl, branch_pool]</div><div class="line">        <span class="keyword">return</span> torch.cat(outputs, <span class="number">1</span>)</div></pre></td></tr></table></figure>
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fo7zsanjwbj30sq0t8dj2.jpg" alt=""></p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">InceptionC</span><span class="params">(nn.Module)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, in_channels, channels_7x7)</span>:</span></div><div class="line">        super(InceptionC, self).__init__()</div><div class="line">        self.branch1x1 = BasicConv2d(in_channels, <span class="number">192</span>, kernel_size=<span class="number">1</span>)</div><div class="line"></div><div class="line">        c7 = channels_7x7</div><div class="line">        self.branch7x7_1 = BasicConv2d(in_channels, c7, kernel_size=<span class="number">1</span>)</div><div class="line">        self.branch7x7_2 = BasicConv2d(c7, c7, kernel_size=(<span class="number">1</span>, <span class="number">7</span>), padding=(<span class="number">0</span>, <span class="number">3</span>))</div><div class="line">        self.branch7x7_3 = BasicConv2d(c7, <span class="number">192</span>, kernel_size=(<span class="number">7</span>, <span class="number">1</span>), padding=(<span class="number">3</span>, <span class="number">0</span>))</div><div class="line"></div><div class="line">        self.branch7x7dbl_1 = BasicConv2d(in_channels, c7, kernel_size=<span class="number">1</span>)</div><div class="line">        self.branch7x7dbl_2 = BasicConv2d(c7, c7, kernel_size=(<span class="number">7</span>, <span class="number">1</span>), padding=(<span class="number">3</span>, <span class="number">0</span>))</div><div class="line">        self.branch7x7dbl_3 = BasicConv2d(c7, c7, kernel_size=(<span class="number">1</span>, <span class="number">7</span>), padding=(<span class="number">0</span>, <span class="number">3</span>))</div><div class="line">        self.branch7x7dbl_4 = BasicConv2d(c7, c7, kernel_size=(<span class="number">7</span>, <span class="number">1</span>), padding=(<span class="number">3</span>, <span class="number">0</span>))</div><div class="line">        self.branch7x7dbl_5 = BasicConv2d(c7, <span class="number">192</span>, kernel_size=(<span class="number">1</span>, <span class="number">7</span>), padding=(<span class="number">0</span>, <span class="number">3</span>))</div><div class="line"></div><div class="line">        self.branch_pool = BasicConv2d(in_channels, <span class="number">192</span>, kernel_size=<span class="number">1</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></div><div class="line">        branch1x1 = self.branch1x1(x)</div><div class="line"></div><div class="line">        branch7x7 = self.branch7x7_1(x)</div><div class="line">        branch7x7 = self.branch7x7_2(branch7x7)</div><div class="line">        branch7x7 = self.branch7x7_3(branch7x7)</div><div class="line"></div><div class="line">        branch7x7dbl = self.branch7x7dbl_1(x)</div><div class="line">        branch7x7dbl = self.branch7x7dbl_2(branch7x7dbl)</div><div class="line">        branch7x7dbl = self.branch7x7dbl_3(branch7x7dbl)</div><div class="line">        branch7x7dbl = self.branch7x7dbl_4(branch7x7dbl)</div><div class="line">        branch7x7dbl = self.branch7x7dbl_5(branch7x7dbl)</div><div class="line"></div><div class="line">        branch_pool = F.avg_pool2d(x, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>)</div><div class="line">        branch_pool = self.branch_pool(branch_pool)</div><div class="line"></div><div class="line">        outputs = [branch1x1, branch7x7, branch7x7dbl, branch_pool]</div><div class="line">        <span class="keyword">return</span> torch.cat(outputs, <span class="number">1</span>)</div></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">InceptionC</span><span class="params">(nn.Module)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, in_channels, channels_7x7)</span>:</span></div><div class="line">        super(InceptionC, self).__init__()</div><div class="line">        self.branch1x1 = BasicConv2d(in_channels, <span class="number">192</span>, kernel_size=<span class="number">1</span>)</div><div class="line"></div><div class="line">        c7 = channels_7x7</div><div class="line">        self.branch7x7_1 = BasicConv2d(in_channels, c7, kernel_size=<span class="number">1</span>)</div><div class="line">        self.branch7x7_2 = BasicConv2d(c7, c7, kernel_size=(<span class="number">1</span>, <span class="number">7</span>), padding=(<span class="number">0</span>, <span class="number">3</span>))</div><div class="line">        self.branch7x7_3 = BasicConv2d(c7, <span class="number">192</span>, kernel_size=(<span class="number">7</span>, <span class="number">1</span>), padding=(<span class="number">3</span>, <span class="number">0</span>))</div><div class="line"></div><div class="line">        self.branch7x7dbl_1 = BasicConv2d(in_channels, c7, kernel_size=<span class="number">1</span>)</div><div class="line">        self.branch7x7dbl_2 = BasicConv2d(c7, c7, kernel_size=(<span class="number">7</span>, <span class="number">1</span>), padding=(<span class="number">3</span>, <span class="number">0</span>))</div><div class="line">        self.branch7x7dbl_3 = BasicConv2d(c7, c7, kernel_size=(<span class="number">1</span>, <span class="number">7</span>), padding=(<span class="number">0</span>, <span class="number">3</span>))</div><div class="line">        self.branch7x7dbl_4 = BasicConv2d(c7, c7, kernel_size=(<span class="number">7</span>, <span class="number">1</span>), padding=(<span class="number">3</span>, <span class="number">0</span>))</div><div class="line">        self.branch7x7dbl_5 = BasicConv2d(c7, <span class="number">192</span>, kernel_size=(<span class="number">1</span>, <span class="number">7</span>), padding=(<span class="number">0</span>, <span class="number">3</span>))</div><div class="line"></div><div class="line">        self.branch_pool = BasicConv2d(in_channels, <span class="number">192</span>, kernel_size=<span class="number">1</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></div><div class="line">        branch1x1 = self.branch1x1(x)</div><div class="line"></div><div class="line">        branch7x7 = self.branch7x7_1(x)</div><div class="line">        branch7x7 = self.branch7x7_2(branch7x7)</div><div class="line">        branch7x7 = self.branch7x7_3(branch7x7)</div><div class="line"></div><div class="line">        branch7x7dbl = self.branch7x7dbl_1(x)</div><div class="line">        branch7x7dbl = self.branch7x7dbl_2(branch7x7dbl)</div><div class="line">        branch7x7dbl = self.branch7x7dbl_3(branch7x7dbl)</div><div class="line">        branch7x7dbl = self.branch7x7dbl_4(branch7x7dbl)</div><div class="line">        branch7x7dbl = self.branch7x7dbl_5(branch7x7dbl)</div><div class="line"></div><div class="line">        branch_pool = F.avg_pool2d(x, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>)</div><div class="line">        branch_pool = self.branch_pool(branch_pool)</div><div class="line"></div><div class="line">        outputs = [branch1x1, branch7x7, branch7x7dbl, branch_pool]</div><div class="line">        <span class="keyword">return</span> torch.cat(outputs, <span class="number">1</span>)</div></pre></td></tr></table></figure>
 <p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fo80dcq1fhj30ri0q8dk2.jpg" alt=""></p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">InceptionE</span><span class="params">(nn.Module)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, in_channels)</span>:</span></div><div class="line">        super(InceptionE, self).__init__()</div><div class="line">        self.branch1x1 = BasicConv2d(in_channels, <span class="number">320</span>, kernel_size=<span class="number">1</span>)</div><div class="line"></div><div class="line">        self.branch3x3_1 = BasicConv2d(in_channels, <span class="number">384</span>, kernel_size=<span class="number">1</span>)</div><div class="line">        self.branch3x3_2a = BasicConv2d(<span class="number">384</span>, <span class="number">384</span>, kernel_size=(<span class="number">1</span>, <span class="number">3</span>), padding=(<span class="number">0</span>, <span class="number">1</span>))</div><div class="line">        self.branch3x3_2b = BasicConv2d(<span class="number">384</span>, <span class="number">384</span>, kernel_size=(<span class="number">3</span>, <span class="number">1</span>), padding=(<span class="number">1</span>, <span class="number">0</span>))</div><div class="line"></div><div class="line">        self.branch3x3dbl_1 = BasicConv2d(in_channels, <span class="number">448</span>, kernel_size=<span class="number">1</span>)</div><div class="line">        self.branch3x3dbl_2 = BasicConv2d(<span class="number">448</span>, <span class="number">384</span>, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</div><div class="line">        self.branch3x3dbl_3a = BasicConv2d(<span class="number">384</span>, <span class="number">384</span>, kernel_size=(<span class="number">1</span>, <span class="number">3</span>), padding=(<span class="number">0</span>, <span class="number">1</span>))</div><div class="line">        self.branch3x3dbl_3b = BasicConv2d(<span class="number">384</span>, <span class="number">384</span>, kernel_size=(<span class="number">3</span>, <span class="number">1</span>), padding=(<span class="number">1</span>, <span class="number">0</span>))</div><div class="line"></div><div class="line">        self.branch_pool = BasicConv2d(in_channels, <span class="number">192</span>, kernel_size=<span class="number">1</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></div><div class="line">        branch1x1 = self.branch1x1(x)</div><div class="line"></div><div class="line">        branch3x3 = self.branch3x3_1(x)</div><div class="line">        branch3x3 = [</div><div class="line">            self.branch3x3_2a(branch3x3),</div><div class="line">            self.branch3x3_2b(branch3x3),</div><div class="line">        ]</div><div class="line">        branch3x3 = torch.cat(branch3x3, <span class="number">1</span>)</div><div class="line"></div><div class="line">        branch3x3dbl = self.branch3x3dbl_1(x)</div><div class="line">        branch3x3dbl = self.branch3x3dbl_2(branch3x3dbl)</div><div class="line">        branch3x3dbl = [</div><div class="line">            self.branch3x3dbl_3a(branch3x3dbl),</div><div class="line">            self.branch3x3dbl_3b(branch3x3dbl),</div><div class="line">        ]</div><div class="line">        branch3x3dbl = torch.cat(branch3x3dbl, <span class="number">1</span>)</div><div class="line"></div><div class="line">        branch_pool = F.avg_pool2d(x, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>)</div><div class="line">        branch_pool = self.branch_pool(branch_pool)</div><div class="line"></div><div class="line">        outputs = [branch1x1, branch3x3, branch3x3dbl, branch_pool]</div><div class="line">        <span class="keyword">return</span> torch.cat(outputs, <span class="number">1</span>)</div></pre></td></tr></table></figure></p>
-<h5>Auxiliary Classifiers</h5>
-<p>目的是为了让梯度回传更加有效，从而加快训练，而事实是辅助分类器在训练初期的时候对结果并没有特别大的帮助，在训练后期的时候会超上没有使用辅助分类器的模型。额外辅助器可以作为一个regularizer。</p>
-<h5>Efficient Grid Size Reduction</h5>
-<p>在feature map深度加倍的时候，空间维度需要减半。对于一个k个dxd的feature map，主要有两种选项：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">InceptionE</span><span class="params">(nn.Module)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, in_channels)</span>:</span></div><div class="line">        super(InceptionE, self).__init__()</div><div class="line">        self.branch1x1 = BasicConv2d(in_channels, <span class="number">320</span>, kernel_size=<span class="number">1</span>)</div><div class="line"></div><div class="line">        self.branch3x3_1 = BasicConv2d(in_channels, <span class="number">384</span>, kernel_size=<span class="number">1</span>)</div><div class="line">        self.branch3x3_2a = BasicConv2d(<span class="number">384</span>, <span class="number">384</span>, kernel_size=(<span class="number">1</span>, <span class="number">3</span>), padding=(<span class="number">0</span>, <span class="number">1</span>))</div><div class="line">        self.branch3x3_2b = BasicConv2d(<span class="number">384</span>, <span class="number">384</span>, kernel_size=(<span class="number">3</span>, <span class="number">1</span>), padding=(<span class="number">1</span>, <span class="number">0</span>))</div><div class="line"></div><div class="line">        self.branch3x3dbl_1 = BasicConv2d(in_channels, <span class="number">448</span>, kernel_size=<span class="number">1</span>)</div><div class="line">        self.branch3x3dbl_2 = BasicConv2d(<span class="number">448</span>, <span class="number">384</span>, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</div><div class="line">        self.branch3x3dbl_3a = BasicConv2d(<span class="number">384</span>, <span class="number">384</span>, kernel_size=(<span class="number">1</span>, <span class="number">3</span>), padding=(<span class="number">0</span>, <span class="number">1</span>))</div><div class="line">        self.branch3x3dbl_3b = BasicConv2d(<span class="number">384</span>, <span class="number">384</span>, kernel_size=(<span class="number">3</span>, <span class="number">1</span>), padding=(<span class="number">1</span>, <span class="number">0</span>))</div><div class="line"></div><div class="line">        self.branch_pool = BasicConv2d(in_channels, <span class="number">192</span>, kernel_size=<span class="number">1</span>)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></div><div class="line">        branch1x1 = self.branch1x1(x)</div><div class="line"></div><div class="line">        branch3x3 = self.branch3x3_1(x)</div><div class="line">        branch3x3 = [</div><div class="line">            self.branch3x3_2a(branch3x3),</div><div class="line">            self.branch3x3_2b(branch3x3),</div><div class="line">        ]</div><div class="line">        branch3x3 = torch.cat(branch3x3, <span class="number">1</span>)</div><div class="line"></div><div class="line">        branch3x3dbl = self.branch3x3dbl_1(x)</div><div class="line">        branch3x3dbl = self.branch3x3dbl_2(branch3x3dbl)</div><div class="line">        branch3x3dbl = [</div><div class="line">            self.branch3x3dbl_3a(branch3x3dbl),</div><div class="line">            self.branch3x3dbl_3b(branch3x3dbl),</div><div class="line">        ]</div><div class="line">        branch3x3dbl = torch.cat(branch3x3dbl, <span class="number">1</span>)</div><div class="line"></div><div class="line">        branch_pool = F.avg_pool2d(x, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>)</div><div class="line">        branch_pool = self.branch_pool(branch_pool)</div><div class="line"></div><div class="line">        outputs = [branch1x1, branch3x3, branch3x3dbl, branch_pool]</div><div class="line">        <span class="keyword">return</span> torch.cat(outputs, <span class="number">1</span>)</div></pre></td></tr></table></figure>
+<h5 id="Auxiliary-Classifiers"><a href="#Auxiliary-Classifiers" class="headerlink" title="Auxiliary Classifiers"></a>Auxiliary Classifiers</h5><p>目的是为了让梯度回传更加有效，从而加快训练，而事实是辅助分类器在训练初期的时候对结果并没有特别大的帮助，在训练后期的时候会超上没有使用辅助分类器的模型。额外辅助器可以作为一个regularizer。</p>
+<h5 id="Efficient-Grid-Size-Reduction"><a href="#Efficient-Grid-Size-Reduction" class="headerlink" title="Efficient Grid Size Reduction"></a>Efficient Grid Size Reduction</h5><p>在feature map深度加倍的时候，空间维度需要减半。对于一个k个dxd的feature map，主要有两种选项：</p>
 <ol>
 <li>首先进行步长为1的卷积，将深度加倍，然后加个pooling，这样的复杂度是$2d^2k^2$，见Figure 9。</li>
 <li>扔掉pooling，也就是用一个卷积直接搞定，那么这样的复杂度是$2(\frac{d}{2})^2k^2$，变成了原来的四分之一，但是这样会有表达瓶颈。</li>
@@ -435,21 +556,19 @@ var _hmt = _hmt || [];
 </ol>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fo809hnvetj30sg0k6tbp.jpg" alt=""></p>
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fo809udzjvj30sc0mg42c.jpg" alt=""></p>
-<h5>Inception-v3</h5>
-<p>网络的配置见Table 1。</p>
+<h5 id="Inception-v3"><a href="#Inception-v3" class="headerlink" title="Inception-v3"></a>Inception-v3</h5><p>网络的配置见Table 1。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fo80da87wrj30ra0vcagv.jpg" alt=""></p>
 <p><strong>Label Smoothing</strong></p>
 <p>为了防止模型预测的时候over-confident，用label smoothing来做一个正则化。</p>
 <p>将label distribution从$q(k|x)=\delta_{k,y}$替换为$q(k|y)=(1-\epsilon)\delta_{k,y}+\epsilon\mu$</p>
-<h5>实验</h5>
-<p>首先针对不同的感受野做了实验，见Table2，299x299在保准计算效率的同时，有较高的准确率。</p>
+<h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p>首先针对不同的感受野做了实验，见Table2，299x299在保准计算效率的同时，有较高的准确率。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fobcl3nkrlj30ra0a0dhh.jpg" alt=""></p>
 <p>单模型比较结果见Table 3。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fobckztjttj30ra0sq7b3.jpg" alt=""></p>
 
 	
 	</div>
-  <a type="button" href="/2018/02/07/Rethinking-the-Inception-Architecture-for-Computer-Vision-Inception-V3-笔记/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2018/02/07/Rethinking-the-Inception-Architecture-for-Computer-Vision-Inception-V3-笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -474,18 +593,10 @@ var _hmt = _hmt || [];
 	
 	
 		<p>论文 ：Identity Mappings in Deep Residual Networks, ECCV 2016</p>
-<p>链接：https://arxiv.org/pdf/1603.05027.pdf</p>
+<p>链接：<a href="https://arxiv.org/pdf/1603.05027.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1603.05027.pdf</a></p>
 <p>作者: Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun</p>
-<h5>Idea</h5>
-<p>ResNet的每个unit可以表示为：
-$$
-y_l = h(x_l)+F(x_l,W_l) \ x_{l+1} = f(y_l)
-$$
-$x_l$是第l个unit的输入，$x_{l+1}$是l个单元的输出。在ResNet v1中，$h(x_l)=x_l$，表示identity mapping(做了3种尝试，选择了这种)，f是ReLU函数，F包含2-3个卷积层，中间还有BN和ReLU（见Figure 1(a))。如果h和f都是identity mapping的时候，<strong>信号可以直接从一个unit到另一个unit，无论是forward还是backward，这样可以使训练更加容易</strong>。</p>
-<p>Forward:
-$$
-x_{l+1}=x_l+F(x_l,W_l)... \ x_L = x_l + \sum_{i=l}^{L+1}F(x_i,W_i)
-$$</p>
+<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>ResNet的每个unit可以表示为：<br>$$<br>y_l = h(x_l)+F(x_l,W_l) \ x_{l+1} = f(y_l)<br>$$<br>$x_l$是第l个unit的输入，$x_{l+1}$是l个单元的输出。在ResNet v1中，$h(x_l)=x_l$，表示identity mapping(做了3种尝试，选择了这种)，f是ReLU函数，F包含2-3个卷积层，中间还有BN和ReLU（见Figure 1(a))。如果h和f都是identity mapping的时候，<strong>信号可以直接从一个unit到另一个unit，无论是forward还是backward，这样可以使训练更加容易</strong>。</p>
+<p>Forward:<br>$$<br>x_{l+1}=x_l+F(x_l,W_l)… \ x_L = x_l + \sum_{i=l}^{L+1}F(x_i,W_i)<br>$$</p>
 <ul>
 <li>第L层的特征$x_L$可以表示成$x_l+\sum_{i=l}^{L-1}F(x_i,W_i)$</li>
 <li>$x_L=x_o+\sum_{i=0}^{L-1}F(x_i,W_i)$，可以由所有的残差函数相加得到，再加上$x_o$</li>
@@ -503,8 +614,7 @@ $$</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo5ynmkwmyj30k803uwev.jpg" alt=""></p>
 <p>和原来的梯度相比，从1变成了$\prod_{i=l}^{L-1}\lambda_i$，分类讨论，如果$\lambda_i$都大于1，那么如果层数深，梯度爆炸！如果$\lambda_i$都小于1，那么那项就会很小，梯度弥散！堵塞了shortcut。结果见Table 1，容易发现，结果反而变差了！</p>
 <ul>
-<li>
-<p>Exclusive gating</p>
+<li><p>Exclusive gating</p>
 <p>gating函数， $g(x)=\sigma(W_gx+b_g)$, $(1-g(x)) \times x + g(x)\times F(x)$,在卷积网络中，g(x)是1x1的卷积。</p>
 <p>结果依然不如baseline，结果见Table 1。当g(x)=0的时候，近似于identity，但是又抑制了F(x)</p>
 </li>
@@ -536,15 +646,14 @@ $$</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fo76e6t07mj30ys0kawic.jpg" alt=""></p>
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fo76u1vr05j30yi0i20yf.jpg" alt=""></p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fo776l9s7hj31kw0hytdr.jpg" alt=""></p>
-<h5>实验</h5>
-<p>在ImageNet,CIFAR-10,CIFAR-100这3个数据集上做了对比试验，都取得了state-of-the-art的结果，见Table 4,5。</p>
+<h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p>在ImageNet,CIFAR-10,CIFAR-100这3个数据集上做了对比试验，都取得了state-of-the-art的结果，见Table 4,5。</p>
 <p>在深层网络中，体现出了pre-act的作用！</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fo77epwjbgj31900ss10h.jpg" alt=""></p>
 <p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fo76t0q108j30ym0gagqg.jpg" alt=""></p>
 
 	
 	</div>
-  <a type="button" href="/2018/02/01/Identity-Mappings-in-Deep-Residual-Networks笔记/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2018/02/01/Identity-Mappings-in-Deep-Residual-Networks笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -569,7 +678,7 @@ $$</p>
 	
 	
 		<p>论文 ：Deep Residual Learning for Image Recognition, CVPR 2016</p>
-<p>链接：https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf</p>
+<p>链接：<a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf" target="_blank" rel="external">https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf</a></p>
 <p>作者: Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun</p>
 <ul>
 <li>提出ResNet(Residual Net)</li>
@@ -577,30 +686,19 @@ $$</p>
 <li>在ILSVRC 2015和MS-COCO 2015中，横扫一切对手夺冠</li>
 <li>和VGG相比，深度更深，准确率更高，计算复杂度更小！</li>
 </ul>
-<h5>Idea</h5>
-<p>随着网络深度的增加，随之而来的就是网络的<strong>退化(degradation)</strong>，也就是训练和测试的error比浅层的网络还高，见Fig 1。这个问题并不是由overfitting造成的，但是从直觉上讲，更深的模型应该和浅层的模型表现相当，因为我们可以将浅层网络的参数拷贝，然后其余的层就是做identity mapping，但是为什么效果会更差呢？这是因为这是因为深度网络比浅层网络更难训，<strong>很难用多层的非线性层去优化近似identity mapping</strong>。因此，通过将问题转化为学习残差函数来解决网络退化的问题。x是输入，H(x)是底层的映射函数，也就是网络中堆叠的非线性层，$f(x)=H(x)-x$，等价于$H(x)=f(x)+x$。如果最优函数是identity mapping，那么整个学到的参数就会驱使$f(x)=0$(或者尽可能接近于0)。identity mapping不一定是最优的，但是可以帮助预处理问题，可以简化问题。<strong>作者也对此做了一个假设：优化残差映射比优化一个原始映射容易的多。</strong></p>
+<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>随着网络深度的增加，随之而来的就是网络的<strong>退化(degradation)</strong>，也就是训练和测试的error比浅层的网络还高，见Fig 1。这个问题并不是由overfitting造成的，但是从直觉上讲，更深的模型应该和浅层的模型表现相当，因为我们可以将浅层网络的参数拷贝，然后其余的层就是做identity mapping，但是为什么效果会更差呢？这是因为这是因为深度网络比浅层网络更难训，<strong>很难用多层的非线性层去优化近似identity mapping</strong>。因此，通过将问题转化为学习残差函数来解决网络退化的问题。x是输入，H(x)是底层的映射函数，也就是网络中堆叠的非线性层，$f(x)=H(x)-x$，等价于$H(x)=f(x)+x$。如果最优函数是identity mapping，那么整个学到的参数就会驱使$f(x)=0$(或者尽可能接近于0)。identity mapping不一定是最优的，但是可以帮助预处理问题，可以简化问题。<strong>作者也对此做了一个假设：优化残差映射比优化一个原始映射容易的多。</strong></p>
 <blockquote>
 <p>If the optimal function is closer to an identity mapping than to a zero mapping, it should be easier for the solver to find the perturbations with reference to an identity mapping, than to learn the function as a new one.</p>
 </blockquote>
 <p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fo2bil5j4xj30ts0foq6o.jpg" alt=""></p>
-<h5>模型结构</h5>
-<p><strong>short connection</strong>
-$$
-y = \mathbf{F}(x,{W_i})+x
-$$
-$\mathbf{F}(x,{W_i})$表示待学习的残差mapping。而后面+x这个运算可以通过shortcuts进行element-wise的加法。优点是不需要额外的参数，当维度不统一的时候，可以进行zero padding或者线性投影（虽然会引入少量的参数）使得两者的维度一致。
-$$
-y = \mathbf{F}(x,{W_i})+W_sx
-$$
-<img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo2br70niwj30za0g0gnk.jpg" alt=""></p>
+<h5 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h5><p><strong>short connection</strong><br>$$<br>y = \mathbf{F}(x,{W_i})+x<br>$$<br>$\mathbf{F}(x,{W_i})$表示待学习的残差mapping。而后面+x这个运算可以通过shortcuts进行element-wise的加法。优点是不需要额外的参数，当维度不统一的时候，可以进行zero padding或者线性投影（虽然会引入少量的参数）使得两者的维度一致。<br>$$<br>y = \mathbf{F}(x,{W_i})+W_sx<br>$$<br><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo2br70niwj30za0g0gnk.jpg" alt=""></p>
 <p><strong>Bottleneck design</strong></p>
 <p>在3x3卷积前后加入1x1卷积来降低和提高feature map的深度，实现feature map之间的线性组合，提高模型的非线性能力，同时还可以使得输入输出的维度保持一致，具体见Figure 5。</p>
 <p>Bottleneck的结构也被应用到了50-layer,101-layer,152-layer的网络中。</p>
 <p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fo2c143x8uj30sk0fg0vd.jpg" alt=""></p>
 <p>Table 1是各个ResNet的模型参数结构，可以发现18-layer和34-layer最终输出的feature map的深度是512，而其余的都是2048，这个由expansion ratio决定。</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo2bwdncg2j31kw0lhwkk.jpg" alt=""></p>
-<h5>实验</h5>
-<p><strong>ImageNet</strong></p>
+<h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p><strong>ImageNet</strong></p>
 <p>首先分别比较了18-layer和34-layer的plain network和residual network，见Figure 4和Table 2。总结如下：</p>
 <ul>
 <li>在plain network中发现网络退化的问题，18层的网络比34层的网络错误率更低，优化的困难不是由梯度弥散造成的，作者推测是因为<strong><em>深层网络的收敛率更低</em></strong></li>
@@ -630,7 +728,7 @@ $$
 
 	
 	</div>
-  <a type="button" href="/2018/02/01/Deep-Residual-Learning-for-Image-Recognition笔记/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2018/02/01/Deep-Residual-Learning-for-Image-Recognition笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -654,21 +752,15 @@ $$
   <div class="row">
 	
 	
-		<p>论文 ：Batch Normalization: Accelerating Deep Network Training by Reducing Internal
-Covariate Shift, ICML 2015</p>
-<p>链接：http://proceedings.mlr.press/v37/ioffe15.pdf</p>
+		<p>论文 ：Batch Normalization: Accelerating Deep Network Training by Reducing Internal<br>  Covariate Shift, ICML 2015</p>
+<p>链接：<a href="http://proceedings.mlr.press/v37/ioffe15.pdf" target="_blank" rel="external">http://proceedings.mlr.press/v37/ioffe15.pdf</a></p>
 <p>作者: Sergey Ioffe，Christian Szegedy</p>
-<h5>Idea</h5>
-<p><strong>Internal Covariate Shift</strong></p>
+<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p><strong>Internal Covariate Shift</strong></p>
 <p>什么是Covariate Shift？</p>
 <blockquote>
 <p>Another assumption one can make about the connection between the source and the target domains is that given the same observation$X=x$, the conditional distributions of Y are the same in the two domains. However, the marginal distributions of X may be different in the source and the target domains. Formally, we assume that $ P_s(Y \vert X = x) = P_t(Y \vert X = x)$ for all $ x \in \mathcal{X}$! but $ P_s(X) \ne P_t(X)$. This difference between the two domains is called <em>covariate shift</em></p>
 </blockquote>
-<p>covariates其实就是输入特征，记做X，假设对任意的$x\in \mathcal{X}$,$P_s(Y|X=x)=P_t(Y|X=x)$，表示Y关于X的条件分布在source domain（训练集）和target domain（测试集）是一样的，但是$P_s(X)\neq P_t(X) $，两者的边缘分布是不一样的！这个问题经常发生在transfer learning中。从表面上看，对于分类问题，只要两者的条件分布相同，即使边缘分布不同，也不会影响分类的结果，但是，当模型是有参数的时候，也就是$P(Y|X,\theta)$的时候，我们需要选择最优的参数$\theta^*$来使得loss($\theta$)最小。在这个时候，如果$P_s(X)\neq P_t(X) $，也就打破了传统机器学习中训练集和测试集的数据是i.i.d（独立同分布）的，那么在target domain的最优模型会和source domain的不一样，因为参数的求解依赖于X的分布（似然函数）！
-$$
-P(\theta|D)=\frac{P(D|\theta)\times P(\theta)}{P(D)}
-$$
-Internal Covariate Shift表示的是在神经网络发生的convariate shift，因为网络参数在更新，在神经网络的特定层的输出分布就发生了改变，这就导致它的后面层需要去适应它分布的变化，这就降低了训练速度，影响了模型的训练效果。</p>
+<p>covariates其实就是输入特征，记做X，假设对任意的$x\in \mathcal{X}$,$P_s(Y|X=x)=P_t(Y|X=x)$，表示Y关于X的条件分布在source domain（训练集）和target domain（测试集）是一样的，但是$P_s(X)\neq P_t(X) $，两者的边缘分布是不一样的！这个问题经常发生在transfer learning中。从表面上看，对于分类问题，只要两者的条件分布相同，即使边缘分布不同，也不会影响分类的结果，但是，当模型是有参数的时候，也就是$P(Y|X,\theta)$的时候，我们需要选择最优的参数$\theta^*$来使得loss($\theta$)最小。在这个时候，如果$P_s(X)\neq P_t(X) $，也就打破了传统机器学习中训练集和测试集的数据是i.i.d（独立同分布）的，那么在target domain的最优模型会和source domain的不一样，因为参数的求解依赖于X的分布（似然函数）！<br>$$<br>P(\theta|D)=\frac{P(D|\theta)\times P(\theta)}{P(D)}<br>$$<br>Internal Covariate Shift表示的是在神经网络发生的convariate shift，因为网络参数在更新，在神经网络的特定层的输出分布就发生了改变，这就导致它的后面层需要去适应它分布的变化，这就降低了训练速度，影响了模型的训练效果。</p>
 <p><strong>Vanishing Gradient</strong></p>
 <p>一些容易饱和的非线性激活函数(tanh, sigmoid等)当输入很大的时候，梯度容易饱和。这使得模型在加深的时候，梯度容易消失！以及，ReLU的使用使得部分神经元“死掉”后不再有梯度传回去，随着网络的不断迭代，越来越多的神经元会“死掉”！所以这需要我们：</p>
 <ul>
@@ -691,40 +783,35 @@ Internal Covariate Shift表示的是在神经网络发生的convariate shift，�
 <p>the model blows up when the normalization parameters are computed outside the gradient descent step</p>
 </blockquote>
 <p><strong>Batch Normalization</strong></p>
-<p>所以，作者将每一层的输出在激活函数前做归一化（假设数据都是i.i.d）。利用均值和方差去归一化以后，还对数据做了平移放缩。所有的步骤都是可微的，所以是可以用bp优化的。</p>
+<p>所以，作者将每一层的输出在激活函数前做归一化（假设数据都是i.i.d）。利用均值和方差去归一化以后，还对数据做了平移放缩。所有的步骤都是可微的，所以是可以用bp优化的。    </p>
 <p>对于卷积层的BN，做法是将每个各自feature map归一化，例如feature map的大小为pxq，batch size为n，就是计算nxpxq的平均值和方差。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fnsve61xlbj30sc0mg787.jpg" alt=""></p>
 <p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fnxqbppxzbj30ja0b4myf.jpg" alt=""></p>
 <p><strong>BN的好处</strong></p>
 <ul>
-<li>
-<p>减少internal covariant shift，梯度爆炸，梯度消失，从而减少训练时间</p>
+<li><p>减少internal covariant shift，梯度爆炸，梯度消失，从而减少训练时间</p>
 <ul>
 <li>将输入的分布固定</li>
 </ul>
 </li>
-<li>
-<p>可以减少正则化的使用，例如l2正则，dropout等</p>
+<li><p>可以减少正则化的使用，例如l2正则，dropout等</p>
 <ul>
 <li>实验证明</li>
 </ul>
 </li>
-<li>
-<p>可以使用一些饱和的非线性函数，sigmoid等, 例如ReLU激活函数，有些neuron在不加BN的情况下已经死掉了，但是经过BN以后，还是会有梯度回传回去</p>
+<li><p>可以使用一些饱和的非线性函数，sigmoid等, 例如ReLU激活函数，有些neuron在不加BN的情况下已经死掉了，但是经过BN以后，还是会有梯度回传回去</p>
 <ul>
 <li>平移和缩放</li>
 </ul>
 </li>
-<li>
-<p>可以使用更高的学习率</p>
-<p>BN(	Wu)=BN((aW)u),因为$\frac{\partial BN((aW)u)}{\partial u}=\frac{\partial BN(Wu)}{\partial u}$，以及$\frac{\partial BN((aW)u)}{\partial aW}=\frac{1}{a}\frac{\partial BN(Wu)}{\partial W}$。大的weight，反而是会让梯度更小，这样就可以使训练更加平稳。</p>
+<li><p>可以使用更高的学习率</p>
+<p>BN(    Wu)=BN((aW)u),因为$\frac{\partial BN((aW)u)}{\partial u}=\frac{\partial BN(Wu)}{\partial u}$，以及$\frac{\partial BN((aW)u)}{\partial aW}=\frac{1}{a}\frac{\partial BN(Wu)}{\partial W}$。大的weight，反而是会让梯度更小，这样就可以使训练更加平稳。</p>
 <p>​</p>
 </li>
 </ul>
 <p><strong>代码实现：</strong></p>
-<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchnorm_forward</span><span class="params">(x, gamma, beta, bn_param)</span>:</span></div><div class="line">  <span class="string">"""</span></div><div class="line"><span class="string">  Forward pass for batch normalization.</span></div><div class="line"><span class="string">  During training the sample mean and (uncorrected) sample variance are</span></div><div class="line"><span class="string">  computed from minibatch statistics and used to normalize the incoming data.</span></div><div class="line"><span class="string">  During training we also keep an exponentially decaying running mean of the mean</span></div><div class="line"><span class="string">  and variance of each feature, and these averages are used to normalize data</span></div><div class="line"><span class="string">  at test-time.</span></div><div class="line"><span class="string">  At each timestep we update the running averages for mean and variance using</span></div><div class="line"><span class="string">  an exponential decay based on the momentum parameter:</span></div><div class="line"><span class="string">  running_mean = momentum * running_mean + (1 - momentum) * sample_mean</span></div><div class="line"><span class="string">  running_var = momentum * running_var + (1 - momentum) * sample_var</span></div><div class="line"><span class="string">  Note that the batch normalization paper suggests a different test-time</span></div><div class="line"><span class="string">  behavior: they compute sample mean and variance for each feature using a</span></div><div class="line"><span class="string">  large number of training images rather than using a running average. For</span></div><div class="line"><span class="string">  this implementation we have chosen to use running averages instead since</span></div><div class="line"><span class="string">  they do not require an additional estimation step; the torch7 implementation</span></div><div class="line"><span class="string">  of batch normalization also uses running averages.</span></div><div class="line"><span class="string">  Input:</span></div><div class="line"><span class="string">  - x: Data of shape (N, D)</span></div><div class="line"><span class="string">  - gamma: Scale parameter of shape (D,)</span></div><div class="line"><span class="string">  - beta: Shift paremeter of shape (D,)</span></div><div class="line"><span class="string">  - bn_param: Dictionary with the following keys:</span></div><div class="line"><span class="string">    - mode: 'train' or 'test'; required</span></div><div class="line"><span class="string">    - eps: Constant for numeric stability</span></div><div class="line"><span class="string">    - momentum: Constant for running mean / variance.</span></div><div class="line"><span class="string">    - running_mean: Array of shape (D,) giving running mean of features</span></div><div class="line"><span class="string">    - running_var Array of shape (D,) giving running variance of features</span></div><div class="line"><span class="string">  Returns a tuple of:</span></div><div class="line"><span class="string">  - out: of shape (N, D)</span></div><div class="line"><span class="string">  - cache: A tuple of values needed in the backward pass</span></div><div class="line"><span class="string">  """</span></div><div class="line">  mode = bn_param[<span class="string">'mode'</span>]</div><div class="line">  eps = bn_param.get(<span class="string">'eps'</span>, <span class="number">1e-5</span>)</div><div class="line">  momentum = bn_param.get(<span class="string">'momentum'</span>, <span class="number">0.9</span>)</div><div class="line"></div><div class="line">  N, D = x.shape</div><div class="line">  running_mean = bn_param.get(<span class="string">'running_mean'</span>, np.zeros(D, dtype=x.dtype))</div><div class="line">  running_var = bn_param.get(<span class="string">'running_var'</span>, np.zeros(D, dtype=x.dtype))</div><div class="line"></div><div class="line">  out, cache = <span class="keyword">None</span>, <span class="keyword">None</span></div><div class="line">  <span class="keyword">if</span> mode == <span class="string">'train'</span>:</div><div class="line">    mean = np.sum(x,axis=<span class="number">0</span>)/float(N)</div><div class="line">    x_mean = (x - mean)</div><div class="line">    sqr_x_mean = x_mean**<span class="number">2</span></div><div class="line">    var = np.sum(sqr_x_mean, axis=<span class="number">0</span>)/float(N)</div><div class="line">    sqrt_var = np.sqrt(var+eps)</div><div class="line">    inv_sqrt_var = <span class="number">1.0</span>/sqrt_var</div><div class="line">    x_hat = x_mean*inv_sqrt_var</div><div class="line">    out = gamma * x_hat + beta</div><div class="line">    cache = (x_hat,gamma,sqr_x_mean,mean,var,sqrt_var,x_mean,inv_sqrt_var)</div><div class="line"></div><div class="line">    running_mean = momentum*running_mean + (<span class="number">1.0</span>-momentum)*mean</div><div class="line">    running_var = momentum*running_var + (<span class="number">1.0</span>-momentum)*var</div><div class="line">   </div><div class="line">  <span class="keyword">elif</span> mode == <span class="string">'test'</span>:</div><div class="line"></div><div class="line">    x_hat = (x - running_mean)/np.sqrt(running_var+eps)</div><div class="line">    out = gamma * x_hat + beta</div><div class="line">  <span class="keyword">else</span>:</div><div class="line">    <span class="keyword">raise</span> ValueError(<span class="string">'Invalid forward batchnorm mode "%s"'</span> % mode)</div><div class="line"></div><div class="line">  <span class="comment"># Store the updated running means back into bn_param</span></div><div class="line">  bn_param[<span class="string">'running_mean'</span>] = running_mean</div><div class="line">  bn_param[<span class="string">'running_var'</span>] = running_var</div><div class="line">  <span class="keyword">return</span> out, cache</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchnorm_backward</span><span class="params">(dout, cache)</span>:</span></div><div class="line">  <span class="string">"""</span></div><div class="line"><span class="string">  Backward pass for batch normalization.</span></div><div class="line"><span class="string">  For this implementation, you should write out a computation graph for</span></div><div class="line"><span class="string">  batch normalization on paper and propagate gradients backward through</span></div><div class="line"><span class="string">  intermediate nodes.</span></div><div class="line"><span class="string">  Inputs:</span></div><div class="line"><span class="string">  - dout: Upstream derivatives, of shape (N, D)</span></div><div class="line"><span class="string">  - cache: Variable of intermediates from batchnorm_forward.</span></div><div class="line"><span class="string">  Returns a tuple of:</span></div><div class="line"><span class="string">  - dx: Gradient with respect to inputs x, of shape (N, D)</span></div><div class="line"><span class="string">  - dgamma: Gradient with respect to scale parameter gamma, of shape (D,)</span></div><div class="line"><span class="string">  - dbeta: Gradient with respect to shift parameter beta, of shape (D,)</span></div><div class="line"><span class="string">  """</span></div><div class="line">  x_hat,gamma,sqr_x_mean,mean,var,sqrt_var,x_mean,inv_sqrt_var = cache</div><div class="line">  dx, dgamma, dbeta = <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span></div><div class="line"></div><div class="line">  N = x_hat.shape[<span class="number">0</span>]</div><div class="line">    </div><div class="line">  dx_hat = dout * gamma</div><div class="line">  dx_mean = dx_hat*inv_sqrt_var</div><div class="line">  dinv_sqrt_var = np.sum(dx_hat*x_mean,axis=<span class="number">0</span>)</div><div class="line">  dsqrt_var = <span class="number">-1.0</span>/(sqrt_var**<span class="number">2</span>)*dinv_sqrt_var</div><div class="line">  dvar = <span class="number">0.5</span>*inv_sqrt_var*dsqrt_var</div><div class="line">  dsqr_x_mean = <span class="number">1.0</span>/N*np.ones(sqr_x_mean.shape)*dvar</div><div class="line">  dx_mean += <span class="number">2</span>*x_mean*dsqr_x_mean</div><div class="line"></div><div class="line">  dmean = -np.sum(dx_mean,axis=<span class="number">0</span>)</div><div class="line">  dx1 = dx_mean</div><div class="line">  dx2 = <span class="number">1.0</span>/N*np.ones(mean.shape)*dmean</div><div class="line">  dx = dx1+dx2</div><div class="line">  dgamma = np.sum(x_hat*dout,axis=<span class="number">0</span>)</div><div class="line">  dbeta =  np.sum(dout,axis=<span class="number">0</span>)</div><div class="line"></div><div class="line">  <span class="keyword">return</span> dx, dgamma, dbeta</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchnorm_backward_alt</span><span class="params">(dout, cache)</span>:</span></div><div class="line">  <span class="string">"""</span></div><div class="line"><span class="string">  Alternative backward pass for batch normalization.</span></div><div class="line"><span class="string">  For this implementation you should work out the derivatives for the batch</span></div><div class="line"><span class="string">  normalizaton backward pass on paper and simplify as much as possible. You</span></div><div class="line"><span class="string">  should be able to derive a simple expression for the backward pass.</span></div><div class="line"><span class="string">  Note: This implementation should expect to receive the same cache variable</span></div><div class="line"><span class="string">  as batchnorm_backward, but might not use all of the values in the cache.</span></div><div class="line"><span class="string">  Inputs / outputs: Same as batchnorm_backward</span></div><div class="line"><span class="string">  """</span></div><div class="line">  dx, dgamma, dbeta = <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span></div><div class="line">  x_hat,gamma,sqr_x_mean,mean,var,sqrt_var,x_mean,inv_sqrt_var = cache</div><div class="line">  N = x_hat.shape[<span class="number">0</span>]</div><div class="line">  dbeta = np.sum(dout,axis=<span class="number">0</span>)</div><div class="line">  dgamma = np.sum(dout*x_hat,axis=<span class="number">0</span>)</div><div class="line"></div><div class="line">  dx = <span class="number">1.0</span>/N*inv_sqrt_var*gamma*(</div><div class="line">   N*dout</div><div class="line">   -np.sum(dout,axis=<span class="number">0</span>)</div><div class="line">   -x_mean*(inv_sqrt_var**<span class="number">2</span>)*np.sum(dout*x_mean,axis=<span class="number">0</span>)</div><div class="line">  )</div><div class="line"></div><div class="line">  <span class="keyword">return</span> dx, dgamma, dbeta</div></pre></td></tr></table></figure></p>
-<h5>实验</h5>
-<p><strong>MNIST</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchnorm_forward</span><span class="params">(x, gamma, beta, bn_param)</span>:</span></div><div class="line">  <span class="string">"""</span></div><div class="line"><span class="string">  Forward pass for batch normalization.</span></div><div class="line"><span class="string">  During training the sample mean and (uncorrected) sample variance are</span></div><div class="line"><span class="string">  computed from minibatch statistics and used to normalize the incoming data.</span></div><div class="line"><span class="string">  During training we also keep an exponentially decaying running mean of the mean</span></div><div class="line"><span class="string">  and variance of each feature, and these averages are used to normalize data</span></div><div class="line"><span class="string">  at test-time.</span></div><div class="line"><span class="string">  At each timestep we update the running averages for mean and variance using</span></div><div class="line"><span class="string">  an exponential decay based on the momentum parameter:</span></div><div class="line"><span class="string">  running_mean = momentum * running_mean + (1 - momentum) * sample_mean</span></div><div class="line"><span class="string">  running_var = momentum * running_var + (1 - momentum) * sample_var</span></div><div class="line"><span class="string">  Note that the batch normalization paper suggests a different test-time</span></div><div class="line"><span class="string">  behavior: they compute sample mean and variance for each feature using a</span></div><div class="line"><span class="string">  large number of training images rather than using a running average. For</span></div><div class="line"><span class="string">  this implementation we have chosen to use running averages instead since</span></div><div class="line"><span class="string">  they do not require an additional estimation step; the torch7 implementation</span></div><div class="line"><span class="string">  of batch normalization also uses running averages.</span></div><div class="line"><span class="string">  Input:</span></div><div class="line"><span class="string">  - x: Data of shape (N, D)</span></div><div class="line"><span class="string">  - gamma: Scale parameter of shape (D,)</span></div><div class="line"><span class="string">  - beta: Shift paremeter of shape (D,)</span></div><div class="line"><span class="string">  - bn_param: Dictionary with the following keys:</span></div><div class="line"><span class="string">    - mode: 'train' or 'test'; required</span></div><div class="line"><span class="string">    - eps: Constant for numeric stability</span></div><div class="line"><span class="string">    - momentum: Constant for running mean / variance.</span></div><div class="line"><span class="string">    - running_mean: Array of shape (D,) giving running mean of features</span></div><div class="line"><span class="string">    - running_var Array of shape (D,) giving running variance of features</span></div><div class="line"><span class="string">  Returns a tuple of:</span></div><div class="line"><span class="string">  - out: of shape (N, D)</span></div><div class="line"><span class="string">  - cache: A tuple of values needed in the backward pass</span></div><div class="line"><span class="string">  """</span></div><div class="line">  mode = bn_param[<span class="string">'mode'</span>]</div><div class="line">  eps = bn_param.get(<span class="string">'eps'</span>, <span class="number">1e-5</span>)</div><div class="line">  momentum = bn_param.get(<span class="string">'momentum'</span>, <span class="number">0.9</span>)</div><div class="line"></div><div class="line">  N, D = x.shape</div><div class="line">  running_mean = bn_param.get(<span class="string">'running_mean'</span>, np.zeros(D, dtype=x.dtype))</div><div class="line">  running_var = bn_param.get(<span class="string">'running_var'</span>, np.zeros(D, dtype=x.dtype))</div><div class="line"></div><div class="line">  out, cache = <span class="keyword">None</span>, <span class="keyword">None</span></div><div class="line">  <span class="keyword">if</span> mode == <span class="string">'train'</span>:</div><div class="line">    mean = np.sum(x,axis=<span class="number">0</span>)/float(N)</div><div class="line">    x_mean = (x - mean)</div><div class="line">    sqr_x_mean = x_mean**<span class="number">2</span></div><div class="line">    var = np.sum(sqr_x_mean, axis=<span class="number">0</span>)/float(N)</div><div class="line">    sqrt_var = np.sqrt(var+eps)</div><div class="line">    inv_sqrt_var = <span class="number">1.0</span>/sqrt_var</div><div class="line">    x_hat = x_mean*inv_sqrt_var</div><div class="line">    out = gamma * x_hat + beta</div><div class="line">    cache = (x_hat,gamma,sqr_x_mean,mean,var,sqrt_var,x_mean,inv_sqrt_var)</div><div class="line"></div><div class="line">    running_mean = momentum*running_mean + (<span class="number">1.0</span>-momentum)*mean</div><div class="line">    running_var = momentum*running_var + (<span class="number">1.0</span>-momentum)*var</div><div class="line">   </div><div class="line">  <span class="keyword">elif</span> mode == <span class="string">'test'</span>:</div><div class="line"></div><div class="line">    x_hat = (x - running_mean)/np.sqrt(running_var+eps)</div><div class="line">    out = gamma * x_hat + beta</div><div class="line">  <span class="keyword">else</span>:</div><div class="line">    <span class="keyword">raise</span> ValueError(<span class="string">'Invalid forward batchnorm mode "%s"'</span> % mode)</div><div class="line"></div><div class="line">  <span class="comment"># Store the updated running means back into bn_param</span></div><div class="line">  bn_param[<span class="string">'running_mean'</span>] = running_mean</div><div class="line">  bn_param[<span class="string">'running_var'</span>] = running_var</div><div class="line">  <span class="keyword">return</span> out, cache</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchnorm_backward</span><span class="params">(dout, cache)</span>:</span></div><div class="line">  <span class="string">"""</span></div><div class="line"><span class="string">  Backward pass for batch normalization.</span></div><div class="line"><span class="string">  For this implementation, you should write out a computation graph for</span></div><div class="line"><span class="string">  batch normalization on paper and propagate gradients backward through</span></div><div class="line"><span class="string">  intermediate nodes.</span></div><div class="line"><span class="string">  Inputs:</span></div><div class="line"><span class="string">  - dout: Upstream derivatives, of shape (N, D)</span></div><div class="line"><span class="string">  - cache: Variable of intermediates from batchnorm_forward.</span></div><div class="line"><span class="string">  Returns a tuple of:</span></div><div class="line"><span class="string">  - dx: Gradient with respect to inputs x, of shape (N, D)</span></div><div class="line"><span class="string">  - dgamma: Gradient with respect to scale parameter gamma, of shape (D,)</span></div><div class="line"><span class="string">  - dbeta: Gradient with respect to shift parameter beta, of shape (D,)</span></div><div class="line"><span class="string">  """</span></div><div class="line">  x_hat,gamma,sqr_x_mean,mean,var,sqrt_var,x_mean,inv_sqrt_var = cache</div><div class="line">  dx, dgamma, dbeta = <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span></div><div class="line"></div><div class="line">  N = x_hat.shape[<span class="number">0</span>]</div><div class="line">    </div><div class="line">  dx_hat = dout * gamma</div><div class="line">  dx_mean = dx_hat*inv_sqrt_var</div><div class="line">  dinv_sqrt_var = np.sum(dx_hat*x_mean,axis=<span class="number">0</span>)</div><div class="line">  dsqrt_var = <span class="number">-1.0</span>/(sqrt_var**<span class="number">2</span>)*dinv_sqrt_var</div><div class="line">  dvar = <span class="number">0.5</span>*inv_sqrt_var*dsqrt_var</div><div class="line">  dsqr_x_mean = <span class="number">1.0</span>/N*np.ones(sqr_x_mean.shape)*dvar</div><div class="line">  dx_mean += <span class="number">2</span>*x_mean*dsqr_x_mean</div><div class="line"></div><div class="line">  dmean = -np.sum(dx_mean,axis=<span class="number">0</span>)</div><div class="line">  dx1 = dx_mean</div><div class="line">  dx2 = <span class="number">1.0</span>/N*np.ones(mean.shape)*dmean</div><div class="line">  dx = dx1+dx2</div><div class="line">  dgamma = np.sum(x_hat*dout,axis=<span class="number">0</span>)</div><div class="line">  dbeta =  np.sum(dout,axis=<span class="number">0</span>)</div><div class="line"></div><div class="line">  <span class="keyword">return</span> dx, dgamma, dbeta</div><div class="line"></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">batchnorm_backward_alt</span><span class="params">(dout, cache)</span>:</span></div><div class="line">  <span class="string">"""</span></div><div class="line"><span class="string">  Alternative backward pass for batch normalization.</span></div><div class="line"><span class="string">  For this implementation you should work out the derivatives for the batch</span></div><div class="line"><span class="string">  normalizaton backward pass on paper and simplify as much as possible. You</span></div><div class="line"><span class="string">  should be able to derive a simple expression for the backward pass.</span></div><div class="line"><span class="string">  Note: This implementation should expect to receive the same cache variable</span></div><div class="line"><span class="string">  as batchnorm_backward, but might not use all of the values in the cache.</span></div><div class="line"><span class="string">  Inputs / outputs: Same as batchnorm_backward</span></div><div class="line"><span class="string">  """</span></div><div class="line">  dx, dgamma, dbeta = <span class="keyword">None</span>, <span class="keyword">None</span>, <span class="keyword">None</span></div><div class="line">  x_hat,gamma,sqr_x_mean,mean,var,sqrt_var,x_mean,inv_sqrt_var = cache</div><div class="line">  N = x_hat.shape[<span class="number">0</span>]</div><div class="line">  dbeta = np.sum(dout,axis=<span class="number">0</span>)</div><div class="line">  dgamma = np.sum(dout*x_hat,axis=<span class="number">0</span>)</div><div class="line"></div><div class="line">  dx = <span class="number">1.0</span>/N*inv_sqrt_var*gamma*(</div><div class="line">   N*dout</div><div class="line">   -np.sum(dout,axis=<span class="number">0</span>)</div><div class="line">   -x_mean*(inv_sqrt_var**<span class="number">2</span>)*np.sum(dout*x_mean,axis=<span class="number">0</span>)</div><div class="line">  )</div><div class="line"></div><div class="line">  <span class="keyword">return</span> dx, dgamma, dbeta</div></pre></td></tr></table></figure>
+<h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p><strong>MNIST</strong></p>
 <p>Fig 1(a)是一个小网络在MNIST数据集上的表现，可以看出加了BN整个训练过程更加平稳。Fig 1(b,c)是输入分布的变化，三条线分别是15，50，85，可以发现BN的数值更加分开，更有区分度，分布更加稳定。</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fnxqqs6d9sj30m40eewhn.jpg" alt=""></p>
 <p><strong>IMAGENET</strong></p>
@@ -743,191 +830,7 @@ Internal Covariate Shift表示的是在神经网络发生的convariate shift，�
 
 	
 	</div>
-  <a type="button" href="/2018/01/25/Batch-Normalization-Accelerating-Deep-Network-Training-by-Reducing-Internal-Covariate-Shift笔记/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2018/01/25/Going-Deeper-with-Convolutions笔记/" >Going Deeper with Convolutions笔记</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2018-01-25  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>论文 ：Going Deeper with Convolutions,CVPR 2015</p>
-<p>链接：https://www.cs.unc.edu/~wliu/papers/GoogLeNet.pdf</p>
-<p>作者: Christian Szegedy, Wei Liu, Yangqing Jia, Pierre Sermanet, Scott Reed,Dragomir Anguelov, Dumitru Erhan, Vincent Vanhoucke, Andrew Rabinovich</p>
-<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fnsrwl5iuuj31040kc1dy.jpg" alt=""></p>
-<p><strong>Contribution</strong></p>
-<ul>
-<li>提出了GoogleNet的网络结构，由若干Inception Module堆叠而成。</li>
-<li>在ILSVRC 2014上拿到了classification task和detection task的冠军。</li>
-</ul>
-<p><strong>Motivation</strong></p>
-<p>对于DCNN来说，增大网络的大小是一个直接提升网络性能的方法，增大网络大小包括增加网络的深度，增大网络的宽度，也就是每个level的神经元数量。 但是增大网络也伴随着问题：</p>
-<ol>
-<li>大量的参数需要优化</li>
-<li>容易过拟合</li>
-<li>需要大量的喂大量的标签数据，而数据是很昂贵的！</li>
-<li>模型越大，所需要的计算资源也越多</li>
-</ol>
-<p>所以，本着<em>Occam's Razor</em>，简洁才是王道的思想，需要更加精细地优化网络结构。</p>
-<p>作者也引用了一些理论依据：</p>
-<blockquote>
-<p>if the probability distribution of the dataset is representable by a large, very sparse deep neural network, then the optimal network topology can be constructed layer after layer by analyzing the correlation statistics of the preceding layer activations and clustering neurons with highly correlated outputs.</p>
-</blockquote>
-<blockquote>
-<p>Hebbian principle – neurons that fire together, wire together</p>
-</blockquote>
-<p>还有一些客观事实：</p>
-<blockquote>
-<p>Steadily improving and highly tuned numerical libraries that allow for extremely fast dense matrix multiplication</p>
-</blockquote>
-<p>所以，作者想到的是用一些readily avaliable dense blocks去模拟近似构造local sparse structure。</p>
-<p><strong>Inception Module:</strong></p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fnsryufma2j30o20titbv.jpg" alt=""></p>
-<p>Fig 2是Inception Module的图示，从Fig 2(a)可以看出主要有5个部分：</p>
-<ol>
-<li>$1\times 1$ convolution</li>
-<li>$3\times 3$ convolution</li>
-<li>$5\times 5$ convolution</li>
-<li>$3\times 3$ max pooling</li>
-<li>filter concatenation</li>
-</ol>
-<p>运用了不同感受野的卷积，1x1的卷积可以capture dense information clusters，3x3 and 5x5的卷积可以capture more spatially spread out clusters</p>
-<p>但是容易发现，这样的结构会导致channel的数量增长很快！</p>
-<p>以下图为例： 输入大小是$28\times28\times256$，输出分别是$28\times28\times128$，$28\times28\times192$，$28\times28\times96$，$28\times28\times256$，filter concatenation以后，输出是$28\times28\times672$!!!</p>
-<p>再看一下计算量:</p>
-<p>$[1\times1 conv, 128]$  $28\times28\times128\times1\times1\times256$</p>
-<p>$[3\times3 conv, 192]$ $28\times28\times192\times3\times3\times256$
-$[5\times5 conv, 96]$ $28\times28\times96\times5\times5\times256$</p>
-<p>总共大概有854M ops。</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fnss7rs69gj30qg0gijtb.jpg" alt=""></p>
-<p>优化：通过$1\times 1$卷积进行降维（保留空间信息，降低深度），其实可以等价成做embedding，将高维的信息映射到低维，同时保证低维的embeddings包含高维数据的大部分信息。</p>
-<p>下图是经过优化后的结构，再统计一下卷积计算量：</p>
-<p>$[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
-$[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
-$[1\times1 conv, 128]$ $28\times28\times128\times1\times1\times256$
-$[3\times3 conv, 192]$ $28\times28\times192\times3\times3\times64$
-$[5\times5 conv, 96]$ $28\times28\times96\times5\times5\times64$
-$[1\times1 conv, 64]$ $28\times28\times64\times1\times1\times256$
-总共358M ops</p>
-<p>和naive的版本比较，可以说少了一半！</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fnsshqu6hij30qg0kowhs.jpg" alt=""></p>
-<p>Fig 3是模型的全图，可以发现，整个模型基本上是由多个inception module堆叠而成，同时模型也利用多multi-scale的特征建立auxiliary classifiers，也可以帮助梯度的回传。Table 1是模型可视化的另一个形式。可以发现，随着深度的增加，inception module里面，1x1卷积的fitlers的数量和3x3卷积或5x5卷积的比率逐渐升高。<strong><em>其实深度越深，空间信息对特征抽象的重要性在逐渐降低（as features of higher abstraction are captured by higher layers, their spatial concentration is expected to decrease.。</em></strong></p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fnssmysygpj30ba0r8go0.jpg" alt=""></p>
-<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fnssrbjv00j312i0qm0zf.jpg" alt=""></p>
-<p><strong>训练细节：</strong></p>
-<ul>
-<li>没有使用额外数据</li>
-<li>独立训练7个相同结构的模型</li>
-<li>将每个图像resize到四个不同的scale(256,288,320,352)，然后拿到left,center,right的square image，在对每个square image取四个角落，中间，以及resized这6个图像，然后再对它们做镜像，所以每张图像一共有4x3x6x2=144张！</li>
-<li>将每个crop的softmax加起来取平均</li>
-</ul>
-<p><strong>实验：</strong></p>
-<p>Table 2-5都是实验对比结果,Table 2中，可以发现GoogLeNet在ILSVRC 2014分类比赛中，拿到第一，并取得了Error(top-5) 6.67%的成绩。Table 4是在detection任务上的表现，获得了第一。Table 5是单模型在detection任务上的表现，也非常不错。Table 3是在预测图像时选用不同模型数量ensemble和crop的数量的表现对比，可以发现，多模型和尽可能多的crop对表现提升最大。</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fnst7i0modj30py0hoq5r.jpg" alt=""></p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fnst7k1klyj30q80foacb.jpg" alt=""></p>
-<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fnst7ottrsj313q0by415.jpg" alt=""></p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fnst7mjw0hj30oo0newhg.jpg" alt=""></p>
-
-	
-	</div>
-  <a type="button" href="/2018/01/25/Going-Deeper-with-Convolutions笔记/#more" class="btn btn-default more">阅读此文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/" >Visualizing and UnderstandingConvolutional Networks笔记</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2018-01-18  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>​论文：Visualizing and UnderstandingConvolutional Networks</p>
-<p>作者：Matthew D Zeiler, Rob Fergus, ECCV, 2014</p>
-<p>链接：https://cs.nyu.edu/~fergus/papers/zeilerECCV2014.pdf</p>
-<p>博客链接：http://wulimengmeng.top/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks%E7%AC%94%E8%AE%B0/</p>
-<p>代码实现： https://github.com/mowayao/Deconvnet</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkxf4e7rcj318g0dgdke.jpg" alt=""></p>
-<p><strong>Idea:</strong> 模型的可视化对模型的优化非常重要，更好的理解模型可以帮助我们更好地改进模型。作者将网络的任一层输出的feature maps通过Deconvnet反馈到最终的输入（input pixel space）上（reveals the input stimuli that excite individual feature maps at any layer in the model）。</p>
-<h5>Deconvnet</h5>
-<p>Deconvnet，顾名思义，就是将卷积，pooling，ReLU等运算做逆运算，将feature maps映射回pixels，可视化该feature map被原图哪部分特征激活，从而理解该feature map从原图像学习了何种特征。</p>
-<p>随机选择一些不同层的feature maps，经过“反向运算”，<strong><em>unpooling-&gt;ReLU-&gt;Transposed Conv</em></strong>，映射到输入，具体可以见Fig. 1。左边为Deconvnet，右边是Convnet，Unpooling层和pooling层一一对应。convnet是输入图像提取特征，而deconvnet是从特征映射到输入图像。</p>
-<p><strong>Unpooling:</strong> 通过记录每个pooling region的最大值的位置，在运算的时候将最大值复制到原来的位置，其他位置的值设为0。</p>
-<p><strong>ReLU</strong>：和forward时的ReLU运算相同</p>
-<p><strong>Filtering</strong>: 就是卷积的逆运算，卷积核的转置。</p>
-<p>考虑一个简单的卷积层运算，其参数为(feature map dim=4, kernel size=3, stride=1, padding=0, output dim=2)</p>
-<p>我们可以将$3\times3$ kernel转换成等价的稀疏矩阵C：</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fnqehkh9h4j30kc02hweb.jpg" alt=""></p>
-<p>再将$[4\times 4]$的输入转换成等价的16维的向量，那么$y=Cx$的输出就是一个4维向量，再将其转换成$2\times2$的矩阵，得到最终的结果。</p>
-<p>而Deconv也称Transposed conv，就是变成$C^Ty$。</p>
-<p>其实整个过程和convolution的back-propagation是很像的。
-$$
-\frac{\partial L}{\partial x_i} = \sum_j\frac{\partial y_j}{\partial  x_i}\cdot\frac{\partial L}{\partial y_j} \ = \sum_{j}C_{i,j}\cdot \frac{\partial L}{\partial y_j} \ = C^T_{*,i} \frac{\partial L}{\partial y}
-$$
-还有一个很重要的概念需要厘清：为什么用这种类似back-propogation的方法将feature map映射回输入图像，可以反应出feature map在原图中学到的东西？</p>
-<p>我们假设CNN是一个high level的非线性函数$f(X)$，输出是feature map。我们这里把所有的参数看成一个整体，做一个近似:
-$$
-f(X) \approx  W_iX
-$$
-这里的$W_i$表示的是第i个pattern，那么$f(X)$求关于X的梯度其实就是pattern W。</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkv3ckslgj30us0qowkv.jpg" alt=""></p>
-<h5>Model</h5>
-<p>基于AlexNet修改，将第一层$11\times 11$的大小减小到$7\times 7$, 并将步长从4减少到2， 并ImageNet 2012数据集上训练，具体见Fig. 3。</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkzcp3ebcj30uy0i2791.jpg" alt=""></p>
-<h5>实验</h5>
-<p><strong>可视化：</strong></p>
-<p>结果见Fig. 2。</p>
-<p>Layer 1: 可以看到基本上是一些图像最基本的元素，例如，edge，corner等。</p>
-<p>Layer 2-5： 随着深度的加深，其特征越来越具体，variance也越来越大！具有越来越强的辨别能力。</p>
-<p>说明CNN学习到的特征是层次化的！</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkzpsayskj30ji0sc1kx.jpg" alt=""></p>
-<p><strong>遮挡实验：</strong></p>
-<p>将图片中的一些区域进行遮挡，将其换成灰色方块，结果见Fig 6。具体以第一行为例，可以发现，当狗的身体一部分被遮挡时，网络还是显示亮蓝色，表示预测的是网球。说明，网络已经学会根据图像的context信息去剔除与目标无关的区域或者物体。</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fnl01ru982j30q40s84hp.jpg" alt=""></p>
-<p><strong>Varying ImageNet Model Sizes：</strong></p>
-<p>对AlextNet进行模型调优，结果见Table 2。主要有几个发现：</p>
-<ul>
-<li>去掉全连接层反而降低了错误率</li>
-<li>增大中间层的卷积的数量可以大大提升模型性能</li>
-</ul>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fnl14d4h7dj30zu0m2q8s.jpg" alt=""></p>
-<p><strong>Feature Generalization:</strong></p>
-<p>测试模型的泛化能力，在Caltech-101, Caltech-256，PASCAL VOC 2012这三个数据集上测试模型提取特征的泛化性。 具体的做法就是1-7层的参数不动，然后训练一个新的softmax分类器。具体结果见Table 3, 4, 5，显示出了很强的泛化能力。</p>
-<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fnl1hi1a55j30z20b8tav.jpg" alt=""></p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnl1hwfrjwj30rs0ay40f.jpg" alt=""></p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnl1hydlkcj30zm0iy0yg.jpg" alt=""></p>
-
-	
-	</div>
-  <a type="button" href="/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/#more" class="btn btn-default more">阅读此文</a>
+  <a type="button" href="/2018/01/25/Batch-Normalization-Accelerating-Deep-Network-Training-by-Reducing-Internal-Covariate-Shift笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -941,12 +844,12 @@ $$
 
    
     
-           <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>上一页</a>
+           <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
         
 
         <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
  
-       <a href="/page/2/" type="button" class="btn btn-default ">下一页<i class="fa fa-arrow-circle-o-right"></i></a>     
+       <a href="/page/2/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>     
         
 
   
@@ -966,7 +869,7 @@ $$
 			
   <div id="site_search">
    <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="搜索" class="st-search-input st-default-search-input form-control"/>
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
    </div>  
   <div id="local-search-result"></div>
   </div>
@@ -975,10 +878,10 @@ $$
 		
 			
 	<div class="widget">
-		<h4>分类</h4>
+		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/algorithms/">algorithms<span>14</span></a></li>
+			<li><a href="/categories/algorithms/">algorithms<span>16</span></a></li>
 		
 			<li><a href="/categories/competition/">competition<span>1</span></a></li>
 		
@@ -988,42 +891,44 @@ $$
 		
 			
 	<div class="widget">
-		<h4>标签云</h4>
+		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
+		
+			<li><a href="/tags/paper/">paper<span>1</span></a></li>
+		
+			<li><a href="/tags/notes/">notes<span>6</span></a></li>
 		
 			<li><a href="/tags/杂/">杂<span>1</span></a></li>
 		
-			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
+			<li><a href="/tags/deep-learning/">deep learning<span>22</span></a></li>
 		
 			<li><a href="/tags/math/">math<span>2</span></a></li>
+		
+			<li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
 		
 			<li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
 		
 			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
 		
-			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
-		
-			<li><a href="/tags/deep-learning/">deep learning<span>20</span></a></li>
-		
 			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
+		
+			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
+		
+			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
+		
+			<li><a href="/tags/classification/">classification<span>2</span></a></li>
+		
+			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
 		
 			<li><a href="/tags/summary/">summary<span>2</span></a></li>
 		
 			<li><a href="/tags/segmentation/">segmentation<span>2</span></a></li>
 		
-			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
-		
-			<li><a href="/tags/notes/">notes<span>6</span></a></li>
-		
-			<li><a href="/tags/paper/">paper<span>1</span></a></li>
-		
-			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
-		
-			<li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
-		
-			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
+			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
 		
 			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
+		
+			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -1033,8 +938,16 @@ $$
 		
 			
 <div class="widget">
-  <h4>最新文章</h4>
+  <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2018/03/06/ResNeXt笔记/" ><i class="fa fa-file-o"></i>ResNeXt笔记</a>
+      </li>
+    
+      <li>
+        <a href="/2018/03/06/DenseNet笔记/" ><i class="fa fa-file-o"></i>DenseNet笔记</a>
+      </li>
     
       <li>
         <a href="/2018/02/26/SegNet笔记/" ><i class="fa fa-file-o"></i>SegNet笔记</a>
@@ -1048,21 +961,13 @@ $$
         <a href="/2018/02/09/Kaggle比赛小结-Camera-Model-Identification/" ><i class="fa fa-file-o"></i>Kaggle比赛小结-Camera Model Ide...</a>
       </li>
     
-      <li>
-        <a href="/2018/02/07/Inception-v4-Inception-ResNet-and-Inception-v4-笔记/" ><i class="fa fa-file-o"></i>Inception-v4, Inception-Res...</a>
-      </li>
-    
-      <li>
-        <a href="/2018/02/07/Rethinking-the-Inception-Architecture-for-Computer-Vision-Inception-V3-笔记/" ><i class="fa fa-file-o"></i>Rethinking the Inception Ar...</a>
-      </li>
-    
   </ul>
 </div>
 
 		
 			
 <div class="widget">
-	<h4>链接</h4>
+	<h4>Links</h4>
 	<ul class="blogroll list-unstyled">
 	
 		<li><i class="fa fa-github"></i><a href="http://www.github.com/mowayao" title="My Github account." target="_blank"]);">My Github</a></li>

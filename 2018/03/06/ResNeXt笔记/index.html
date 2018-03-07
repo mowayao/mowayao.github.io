@@ -6,16 +6,17 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>Network Architecture of Deblurring | Mowayao&#39;s Blog</title>
+  <title>ResNeXt笔记 | Mowayao&#39;s Blog</title>
   <meta name="author" content="Mowayao">
   
-  <meta name="description" content="Wieschollek P, Hirsch M, Schölkopf B, et al. Learning Blind Motion Deblurring. arXiv preprint arXiv:1708.04208, 2017. Codes, Paper
-这篇文章主要是针对视频的去噪，利用前几">
+  <meta name="description" content="论文 :Aggregated Residual Transformations for Deep Neural Networks, CVPR 2017
+链接：https://arxiv.org/pdf/1611.05431.pdf
+作者:  Saining Xie, Ross Girshick, P">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Network Architecture of Deblurring"/>
+  <meta property="og:title" content="ResNeXt笔记"/>
   <meta property="og:site_name" content="Mowayao&#39;s Blog"/>
 
   
@@ -119,7 +120,7 @@ var _hmt = _hmt || [];
 
 	
 		<div class="page-header">
-			<h1> Network Architecture of Deblurring</h1>
+			<h1> ResNeXt笔记</h1>
 		</div>
 	
 
@@ -136,21 +137,38 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  		
 
-	  <p>Wieschollek P, Hirsch M, Schölkopf B, et al. Learning Blind Motion Deblurring. arXiv preprint arXiv:1708.04208, 2017. <a href="https://github.com/cgtuebingen/learning-blind-motion-deblurring" target="_blank" rel="external">Codes</a>, <a href="http://openaccess.thecvf.com/content_ICCV_2017/papers/Wieschollek_Learning_Blind_Motion_ICCV_2017_paper.pdf" target="_blank" rel="external">Paper</a></p>
-<p>这篇文章主要是针对视频的去噪，利用前几帧的信息来帮助预测当前帧，用到一些常用的skip-connection的结构来结合low-level and high resolution的feature map。</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-09%20%E4%B8%8B%E5%8D%885.07.49.png" alt=""></p>
-<p>Wang L, Li Y, Wang S. DeepDeblur: Fast one-step blurry face images restoration. arXiv preprint arXiv:1711.09515, 2017.</p>
-<p>这篇文章主要针对的是人脸的运动噪声去模糊，其中kernel是人工模拟的，利用高斯过程生成，网络结构的话就是利用多个inception module和resnet的结构。</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-09%20%E4%B8%8B%E5%8D%885.15.21.png" alt=""></p>
-<p>Kupyn O, Budzan V, Mykhailych M, et al. DeblurGAN: Blind Motion Deblurring Using Conditional Adversarial Networks. arXiv preprint arXiv:1711.07064, 2017. </p>
-<p>这篇文章的结构比较接单，就是利用多个ResBlocks来作为generater，然后在discriminator loss中加入critic loss（用Wasserstein GAN）和perceptual loss(features dissimilarity)。</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-09%20%E4%B8%8B%E5%8D%885.18.01.png" alt=""></p>
-<p>Noroozi M, Chandramouli P, Favaro P. Motion Deblurring in the Wild. arXiv preprint arXiv:1701.01486, 2017. </p>
-<p>主要利用了mutli-scale和skip-connection</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-09%20%E4%B8%8B%E5%8D%885.57.08.png" alt=""></p>
-<p>Nah S, Kim T H, Lee K M. Deep multi-scale convolutional neural network for dynamic scene deblurring. arXiv preprint arXiv:1612.02177, 2016. </p>
-<p>这篇文章主要用到了一些残差学习的方法，不仅用了ResBlock，还将小尺度的结果作为残差传给大尺度，简化学习的难度。</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-12-09%20%E4%B8%8B%E5%8D%886.00.27.png" alt=""></p>
+	  <p>论文 :Aggregated Residual Transformations for Deep Neural Networks, CVPR 2017</p>
+<p>链接：<a href="https://arxiv.org/pdf/1611.05431.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1611.05431.pdf</a></p>
+<p>作者:  Saining Xie, Ross Girshick, Piotr Dollár, Zhuowen Tu, Kaiming He</p>
+<p>源码：<a href="https://github.com/facebookresearch/ResNeXt" target="_blank" rel="external">https://github.com/facebookresearch/ResNeXt</a></p>
+<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>提出ResNeXt网络，基于ResNet和GoogleNet。</p>
+<p>提出cardinality的概念，对于每个conv block，对输入做多种不同的（结构相同，参数不同）transformations，然后再aggregation，而transformations的数量就是cardinality。</p>
+<p>结构启发于inception module，同样是split-transform-merge的策略，这里的merge和transform都和inception不一样。split-transform-merge的策略主要是<strong><em>通过在一个尽可能小的计算复杂度的前提下，提高模型的表达能力</em></strong>（approach the representational power of large and dense layers, but at a considerably lower computational complexity）！ Inception的问题在于每个block都需要定制，导致了模型的灵活性较差，这些block的定制化设计相当于引入了一堆的超参，大量的超参对模型来讲无疑是不利的。而这篇文章就是基于这点进行改进！</p>
+<ul>
+<li>模块化</li>
+<li>超参少</li>
+<li>表达能力强</li>
+</ul>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>首先，总结了两点block设计的原则：</p>
+<ol>
+<li>对于相同大小的feature map，block的超参要相同，也就是conv的filter参数要一样。【if producing spatial maps of the same size, the blocks share the same hyper-parameters (width and filter sizes)】</li>
+<li>如果空间维度减半，那么feature maps的数量要加倍。【each time when the spatial map is downsampled by a factor of 2, the width of the blocks is multiplied by a factor of 2】</li>
+</ol>
+<p>Figure 1是ResNet和ResNeXt的block结构比较，重点看ResNeXt，可以看到这里将256维的输入做32个不同的transformations，每个transformation先通过1x1的conv做降维(information embedding)，然后再经过几个conv，最后将这32个输出做aggregation。</p>
+<p>将其公式化:<br>$$<br>F(x) = \sum_{i=1}^C \tau_i(x)<br>$$<br>$\tau_i$的作用就是将x投影到低维空间（embeeding），然后做transform。C就是做transformation的数量，也就是cardinaty。aggregation后，再用short connection做identity mapping。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fp3f3tppr3j30te0i0jur.jpg" alt=""></p>
+<p>Figure 3是异构的三种结构，（a）是初始版本，（b）concat，（c）group conv，这三者可以说是等价的。那么在实现上，可以利用group conv，更加方便！</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fp4d6cqzx8j31cq0i2q8m.jpg" alt=""></p>
+<p>​    Table 1是ResNet-50和ResNeXt-50的参数对比</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fp4fhovd49j30nw0uaq8x.jpg" alt=""></p>
+<h5 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h5><p>Table 3是各个版本的ResNeXt以及ResNet在ImageNet-1K数据集上的表现，可以发现随着Cardinaty增加，模型总体上是变好的，体现在top-1 error逐渐在降低。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fp4fegkbv6j30oc0jqn0j.jpg" alt=""></p>
+<p>Table 6是ResNet和ResNeXt在ImageNet-5K上的比较，可以可发现后者都要好于前者。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fp4fkycmlxj30pi0eotbv.jpg" alt=""></p>
+<p>Table 5则是各个state-of-the-art的模型在ImageNet-1K数据集上表现，可以发现模型达到了最好的结果。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fp4fmo7mobj30ow0gaacv.jpg" alt=""></p>
+<p>从Table 7可以发现，相同的参数，ResNeXt比Wide ResNet表现更好。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fp4fojev6aj30pc09sgn0.jpg" alt=""></p>
 	  
 	</div>
 
@@ -160,13 +178,12 @@ var _hmt = _hmt || [];
 
     
     
-    <a href="/2017/12/18/CS224n-assignment1/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2017/12/05/Generate-Motion-Blur/" type="button" class="btn btn-default ">Next<i
+    <a href="/2018/03/06/DenseNet笔记/" type="button" class="btn btn-default ">Next<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -195,12 +212,23 @@ var _hmt = _hmt || [];
 	
 	<div class="meta-widget">
 	<i class="fa fa-clock-o"></i>
-	2017-12-09 
+	2018-03-06 
 	</div>
 	
 
 	<!-- categories -->
     
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/algorithms/">algorithms<span>16</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
 
 	<!-- tags -->
 	
@@ -208,7 +236,7 @@ var _hmt = _hmt || [];
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/deep-learning/">deep learning<span>22</span></a></li> <li><a href="/tags/summary/">summary<span>2</span></a></li> <li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
+  <li><a href="/tags/deep-learning/">deep learning<span>22</span></a></li> <li><a href="/tags/classification/">classification<span>2</span></a></li>
     </ul>
 	</div>
 		
