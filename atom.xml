@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wulimengmeng.top/"/>
-  <updated>2018-03-07T10:40:16.056Z</updated>
+  <updated>2018-03-14T12:26:25.593Z</updated>
   <id>http://wulimengmeng.top/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>RCNN笔记</title>
+    <link href="http://wulimengmeng.top/2018/03/13/RCNN%E7%AC%94%E8%AE%B0/"/>
+    <id>http://wulimengmeng.top/2018/03/13/RCNN笔记/</id>
+    <published>2018-03-13T06:21:29.000Z</published>
+    <updated>2018-03-14T12:26:25.593Z</updated>
+    
+    <content type="html"><![CDATA[<p>论文：Rich feature hierarchies for accurate object detection and semantic segmentation，CVPR 2014</p><p>作者：Ross Girshick，Jeff Donahue，Trevor Darrell，Jitendra Malik</p><p>链接：<a href="https://arxiv.org/pdf/1311.2524.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1311.2524.pdf</a></p><p>代码：<a href="https://github.com/rbgirshick/rcnn" target="_blank" rel="external">https://github.com/rbgirshick/rcnn</a></p><h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><ul><li>之前的object detection算法都是用一些手工特征，例如SIFT或者HOG等，R-CNN使用pretrained的CNN提取region的特征，然后再用SVM分类做finetune（bridging the gap between image classification and object detection）</li><li>尝试不同层的feature作为分类的特征</li></ul><h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>R-CNN的模型见Figure 1，主要包括3个部分：</p><ol><li>提取region proposals</li><li>用CNN提取特征，得到一定长度的特征向量</li><li>对于提取到的特征，喂到若干个SVM，得到各个类别的概率</li><li>利用NMS优化结果</li></ol><p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fpbdwp017oj30tq0mq0wc.jpg" alt=""></p><p><strong>Region proposals</strong></p><p>对于region proposals的提取，主要利用selective search这个启发式搜索方法。</p><p>selective search的步骤为：</p><ul><li>使用<a href="http://cs.brown.edu/~pff/segment/" target="_blank" rel="external">Efficient Graph Based Image Segmentation</a>中的方法来得到region</li><li>得到所有region之间两两的相似度</li><li>合并最像的两个region</li><li>重新计算新合并region与其他region的相似度</li><li>重复上述过程直到整张图片都聚合成一个大的region</li><li>使用一种随机的计分方式给每个region打分，按照分数进行ranking，取出top k的子集，就是selective search的结果</li></ul><hr><p><strong>Feature extraction</strong></p><p>使用AlexNet提取特征，AlexNet现在ILSVRC 2012(IMAGENET)上做pre train。将图像的region patch warp到227x227，然后喂到网络，得到特征。</p><p><strong>Object category classifier</strong></p><p>对于每个类别，训练各自的SVM，这样就可以得到每个类的score，训练的时候将gt视为正样本，与gt的IoU &lt; 0.3视为负样本。因为负样本往往远远大于正样本，所以需要做hard negative mining，控制合理的比例，一般设置为1：3。</p><p><strong>Bounding box regression</strong></p><p>输入是n对${(P^i,G^i)}i=1,…,N$，其中$P^i=(P_x^i,P_y^i,P_w^i,P_h^i)$，对应bounding box的中心，长宽，$G^i=(G_x,G_y,G_w,G_h)$。将P进行映射（前两者是平移，后两个是缩放）：<br>$$<br>\hat{G}_x = P_wd_x(P)+P_x \ \hat{G}_y = P_hd_y(P)+P_y \ \hat{G}_x = P_w\exp (d_w(P))\ \hat{G}_h = P_h\exp(d_h(P)) \\d_\star(P)=w_\star^T\phi_5(P)<br>$$<br>训练的时候对gt的四个坐标进行转换（上面的逆运算，使得$t_x,t_y$）：<br>$$<br>t_x = (G_x-P_x)/P_w \ t_y =(G_y −P_y)/P_h \ t_w = \log(G_w/P_w)\\t_h = \log(G_h/P_h).<br>$$<br>经过这样的变换，$t_x,t_y$为需要学习的平移量，$t_w, t_h$为需要学习的缩放量。</p><p>其中，$G$表示的是ground truth，P表示的训练样本，我们的任务是求解$W_\star$，其实就是通过梯度下降或者最小二乘法求解ridge regression问题，:<br>$$<br>w_\star =  \arg\min_{\hat{w}_\star}(t^i_\star − \hat{w}^T_\star \phi_5(P^i))^2+\lambda ||\hat{w}_\star||^2<br>$$<br>其中$\phi_5(P^i)$表示的是第5个pooling的输出。需要注意的是，正则系数$\lambda=1000$，而且当G和P相差很大的时候，效果会不好，所以需要设置IoU阈值，将其设为0.6。</p><h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1是模型在VOC 2012 test上的表现，可以看出R-CNN BB远超其他baseline，证明了模型的性能。</p><p>Table 2是模型在VOC 2007 test上的表现，可以在上面做一些ablation study：</p><ul><li>对于不finetune的模型，第一行到第三行，可以发现fc6的结果最好，这样就可以移除fc7的参数，简化模型。</li><li>对于finetune的模型，第四行到第六行，可以发现fc7的结果最好，经过网络的同层比较，可以发现finetune可以大大提升模型的performance。</li><li>通过第七行与第六行比较，可以看出bounding box regression可以较为显著地提升模型性能。</li><li>跟其他手工特征相比，CNN提取的特征具有更强的表达能力。</li></ul><p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fpbidj661zj31kw0eeq6d.jpg" alt=""></p><p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fpbi5y3ykqj31kw0k9wjg.jpg" alt=""></p><p>​    </p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;论文：Rich feature hierarchies for accurate object detection and semantic segmentation，CVPR 2014&lt;/p&gt;
+&lt;p&gt;作者：Ross Girshick，Jeff Donahue，Trevor
+      
+    
+    </summary>
+    
+      <category term="algorithms" scheme="http://wulimengmeng.top/categories/algorithms/"/>
+    
+    
+      <category term="deep learning" scheme="http://wulimengmeng.top/tags/deep-learning/"/>
+    
+      <category term="object detection" scheme="http://wulimengmeng.top/tags/object-detection/"/>
+    
+  </entry>
   
   <entry>
     <title>ResNeXt笔记</title>
@@ -542,32 +570,6 @@
       <category term="summary" scheme="http://wulimengmeng.top/tags/summary/"/>
     
       <category term="computer vision" scheme="http://wulimengmeng.top/tags/computer-vision/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Introduction to Capsule Network</title>
-    <link href="http://wulimengmeng.top/2017/11/24/capsule/"/>
-    <id>http://wulimengmeng.top/2017/11/24/capsule/</id>
-    <published>2017-11-24T06:19:55.000Z</published>
-    <updated>2017-11-27T05:35:26.652Z</updated>
-    
-    <content type="html"><![CDATA[<p><a href="https://arxiv.org/abs/1710.09829" target="_blank" rel="external">Dynamic Routing Between Capsules</a></p><p>这是Hinton发表在NIPS2017的一篇文章，提出了capsule的概念。</p><p>其实可以把capsule看成是neuron的一个特殊形式，neuron的输出是一个scalar，而capsule则会输出vector。除此之外，neuron可以detect到一个特定的pattern，但是这又存在很大的局限性，会有pattern冗余，例如：</p><p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.11.12.png" alt=""></p><p>所以capsule输出vector就可以避免这样的情况，输出特征v的每个维度表示的是对应pattern的特性，以上图为例，可能某个表示鸟嘴方向的维度，分别对应1和-1。</p><p>再以人脸为例，传统的CNN可能可以detect到眼睛的pattern, 嘴巴的pattern等，只能表示它的存在，但是无法表示五官的属性，例如相对位置，大小，相对角度等等。而向量的大小表示的是整个pattern的概率，或者可以叫做confidence, 例如下图：</p><p><img src="https://jhui.github.io/assets/capsule/face4.jpg" alt=""><img src="https://jhui.github.io/assets/capsule/face5.jpg" alt=""></p><p>具体的计算过程见下图：</p><p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.15.27.png" alt=""></p><p>$$<br>u^1=W^1V^1, u^2=W^2v^2 \ s=c_1u^1 \ v=Squash(s) , v = \frac{|s|}{1+|s|^2}\frac{s}{|s|}<br>$$<br>接下来就是核心，dynamic routing:</p><p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.51.30.png" alt=""></p><p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.24.52.png" alt=""></p><p>和传统CNN简单粗暴的max pooling不同的是它动态地调整routing的系数，系数是在testing的时候online地决定的，调整的方法就是通过T次迭代，根据aggrement，其实就是提高越相关的v的系数。 上图中，如果$a^r$和$u^i$相关性较强的话，就可以得到更大的$b_i$。</p><p>也可以将dynamic routing的过程看成是一个不断排除outlier的一个过程，例如现在$u^1$,$u^2$很接近，而$u^3$与他们差距很大，他们两个队最终的$a^r$贡献很大，那么随着不断迭代，$u^3$就被消除了。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;&lt;a href=&quot;https://arxiv.org/abs/1710.09829&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Dynamic Routing Between Capsules&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;这是Hinton发表在NIPS2017
-      
-    
-    </summary>
-    
-    
-      <category term="deep learning" scheme="http://wulimengmeng.top/tags/deep-learning/"/>
-    
-      <category term="notes" scheme="http://wulimengmeng.top/tags/notes/"/>
     
   </entry>
   

@@ -6,7 +6,7 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>Page 4 | Mowayao&#39;s Blog</title>
+  <title>第 4 页 | Mowayao&#39;s Blog</title>
   <meta name="author" content="Mowayao">
   
   
@@ -136,6 +136,44 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2017/05/18/如何在圆内均匀采样/" >如何在圆内均匀采样</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2017-05-18  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>这个问题之前在面试网易游戏的时候碰到过，当时只想了一个很朴素(naive)的做法，现在有时间重新推导了一下：</p>
+<p>假设圆是一个单元圆，半径为1, 面积为$\pi$。</p>
+<p>当时面试的时候想的方法是用一个长度为1的外接正方形来代替采样，如果在圆内，则返回，不然继续采样，这样的采样方法明显是不稳定的，但是期望的采样步数很容易计算，是$\frac{4}{\pi}$。</p>
+<p>后来想到说可以先采样角度，每个角度确定一个半径，再在半径上均匀采样，面试官有提示说在半径上是均匀的吗？ 明显在半径上采样是不均匀的，因为在半径上的每一个点对应的周长是不一样的！！</p>
+<p>正确的姿势是这样的：</p>
+<p>我们计算长度为$r(0\le r\le1)$的概率为$p(r)$:</p>
+<p>首先我们需要计算落在$r\sim r+\Delta r$的概率，很直观，就是面积/$\pi$，然后因为均匀采样所以需要除以$\Delta r$求得$p(r)$也就是：<br>$$<br>p(r\sim r+\Delta r) = \lim_{\Delta r\rightarrow0}\frac{\pi(r+\Delta r)^2-\pi r^2}{\pi}<br>$$</p>
+<p>$$<br>p(r) = \lim_{\Delta r\rightarrow0}\frac{\pi(r+\Delta r)^2-\pi r^2}{\pi \Delta r}=2r<br>$$</p>
+<p>接下来就是求$p(r)$的CDF,$P(r)$，积分即可：<br>$$<br>P(r) = \int_0^r p(x) dx=r^2<br>$$<br>然后求得它的逆函数$P^{-1}(r)$:</p>
+<p>$$P^{-1}(r) = \sqrt r$$</p>
+<p>算到这里，答案呼之欲出，我们用一个随机变量$\zeta$ 在$[0,1]$均匀采样，然后在通过$r = \sqrt \zeta$求得r,为什么是均匀的呢，只要把$\sqrt \zeta$带入$P(r)$就可以发现$P(r)=\zeta$。</p>
+
+	
+	</div>
+  <a type="button" href="/2017/05/18/如何在圆内均匀采样/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2017/05/17/一个离散概率分布中采样/" >一个离散概率分布中采样</a>
 		</h3>
 		</div>
@@ -222,7 +260,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2017/05/17/一个离散概率分布中采样/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2017/05/17/一个离散概率分布中采样/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -319,7 +357,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2017/05/12/cnn-case-study/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2017/05/12/cnn-case-study/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -383,7 +421,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2017/05/11/机器学习中的向量化/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2017/05/11/机器学习中的向量化/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -414,7 +452,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2017/03/18/C-测试cache大小/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2017/03/18/C-测试cache大小/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -428,12 +466,12 @@ var _hmt = _hmt || [];
 
    
     
-     <a href="/page/3/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+     <a href="/page/3/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> 上一页</a>
       
 
         <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
  
-          <a type="button" class="btn btn-default disabled">Next<i class="fa fa-arrow-circle-o-right"></i></a>
+          <a type="button" class="btn btn-default disabled">下一页<i class="fa fa-arrow-circle-o-right"></i></a>
         
 
   
@@ -453,7 +491,7 @@ var _hmt = _hmt || [];
 			
   <div id="site_search">
    <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="搜索" class="st-search-input st-default-search-input form-control"/>
    </div>  
   <div id="local-search-result"></div>
   </div>
@@ -462,10 +500,10 @@ var _hmt = _hmt || [];
 		
 			
 	<div class="widget">
-		<h4>Categories</h4>
+		<h4>分类</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/algorithms/">algorithms<span>16</span></a></li>
+			<li><a href="/categories/algorithms/">algorithms<span>17</span></a></li>
 		
 			<li><a href="/categories/competition/">competition<span>1</span></a></li>
 		
@@ -475,44 +513,46 @@ var _hmt = _hmt || [];
 		
 			
 	<div class="widget">
-		<h4>Tag Cloud</h4>
+		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
-		
-			<li><a href="/tags/杂/">杂<span>1</span></a></li>
-		
-			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
-		
-			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
-		
-			<li><a href="/tags/classification/">classification<span>2</span></a></li>
-		
-			<li><a href="/tags/math/">math<span>2</span></a></li>
-		
-			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
 		
 			<li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
 		
-			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
+			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
 		
-			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
-		
-			<li><a href="/tags/paper/">paper<span>1</span></a></li>
-		
-			<li><a href="/tags/deep-learning/">deep learning<span>22</span></a></li>
-		
-			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
-		
-			<li><a href="/tags/summary/">summary<span>2</span></a></li>
-		
-			<li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
+			<li><a href="/tags/杂/">杂<span>1</span></a></li>
 		
 			<li><a href="/tags/segmentation/">segmentation<span>2</span></a></li>
 		
-			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
+			<li><a href="/tags/deep-learning/">deep learning<span>23</span></a></li>
+		
+			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
+		
+			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
+		
+			<li><a href="/tags/object-detection/">object detection<span>1</span></a></li>
+		
+			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
+		
+			<li><a href="/tags/summary/">summary<span>2</span></a></li>
+		
+			<li><a href="/tags/paper/">paper<span>1</span></a></li>
 		
 			<li><a href="/tags/notes/">notes<span>6</span></a></li>
 		
+			<li><a href="/tags/classification/">classification<span>2</span></a></li>
+		
+			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
+		
+			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
+		
 			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
+		
+			<li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
+		
+			<li><a href="/tags/math/">math<span>2</span></a></li>
+		
+			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
 		
 		 
 		</ul>
@@ -522,8 +562,12 @@ var _hmt = _hmt || [];
 		
 			
 <div class="widget">
-  <h4>Recent Posts</h4>
+  <h4>最新文章</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2018/03/13/RCNN笔记/" ><i class="fa fa-file-o"></i>RCNN笔记</a>
+      </li>
     
       <li>
         <a href="/2018/03/06/ResNeXt笔记/" ><i class="fa fa-file-o"></i>ResNeXt笔记</a>
@@ -541,17 +585,13 @@ var _hmt = _hmt || [];
         <a href="/2018/02/26/Fully-Convolutional-Networks-for-Semantic-Segmentation-FCN-笔记/" ><i class="fa fa-file-o"></i>Fully Convolutional Network...</a>
       </li>
     
-      <li>
-        <a href="/2018/02/09/Kaggle比赛小结-Camera-Model-Identification/" ><i class="fa fa-file-o"></i>Kaggle比赛小结-Camera Model Ide...</a>
-      </li>
-    
   </ul>
 </div>
 
 		
 			
 <div class="widget">
-	<h4>Links</h4>
+	<h4>链接</h4>
 	<ul class="blogroll list-unstyled">
 	
 		<li><i class="fa fa-github"></i><a href="http://www.github.com/mowayao" title="My Github account." target="_blank"]);">My Github</a></li>

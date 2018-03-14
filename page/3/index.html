@@ -6,7 +6,7 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>Page 3 | Mowayao&#39;s Blog</title>
+  <title>第 3 页 | Mowayao&#39;s Blog</title>
   <meta name="author" content="Mowayao">
   
   
@@ -136,6 +136,47 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2017/11/24/capsule/" >Introduction to Capsule Network</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2017-11-24  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p><a href="https://arxiv.org/abs/1710.09829" target="_blank" rel="external">Dynamic Routing Between Capsules</a></p>
+<p>这是Hinton发表在NIPS2017的一篇文章，提出了capsule的概念。</p>
+<p>其实可以把capsule看成是neuron的一个特殊形式，neuron的输出是一个scalar，而capsule则会输出vector。除此之外，neuron可以detect到一个特定的pattern，但是这又存在很大的局限性，会有pattern冗余，例如：</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.11.12.png" alt=""></p>
+<p>所以capsule输出vector就可以避免这样的情况，输出特征v的每个维度表示的是对应pattern的特性，以上图为例，可能某个表示鸟嘴方向的维度，分别对应1和-1。</p>
+<p>再以人脸为例，传统的CNN可能可以detect到眼睛的pattern, 嘴巴的pattern等，只能表示它的存在，但是无法表示五官的属性，例如相对位置，大小，相对角度等等。而向量的大小表示的是整个pattern的概率，或者可以叫做confidence, 例如下图：</p>
+<p><img src="https://jhui.github.io/assets/capsule/face4.jpg" alt=""><img src="https://jhui.github.io/assets/capsule/face5.jpg" alt=""></p>
+<p>具体的计算过程见下图：</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.15.27.png" alt=""></p>
+<p>$$<br>u^1=W^1V^1, u^2=W^2v^2 \ s=c_1u^1 \ v=Squash(s) , v = \frac{|s|}{1+|s|^2}\frac{s}{|s|}<br>$$<br>接下来就是核心，dynamic routing:</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.51.30.png" alt=""></p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.24.52.png" alt=""></p>
+<p>和传统CNN简单粗暴的max pooling不同的是它动态地调整routing的系数，系数是在testing的时候online地决定的，调整的方法就是通过T次迭代，根据aggrement，其实就是提高越相关的v的系数。 上图中，如果$a^r$和$u^i$相关性较强的话，就可以得到更大的$b_i$。</p>
+<p>也可以将dynamic routing的过程看成是一个不断排除outlier的一个过程，例如现在$u^1$,$u^2$很接近，而$u^3$与他们差距很大，他们两个队最终的$a^r$贡献很大，那么随着不断迭代，$u^3$就被消除了。</p>
+
+	
+	</div>
+  <a type="button" href="/2017/11/24/capsule/#more" class="btn btn-default more">阅读此文</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/" >Fixing  Weight Decay Regularization in Adam</a>
 		</h3>
 		</div>
@@ -175,7 +216,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -211,7 +252,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2017/11/14/Networks/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2017/11/14/Networks/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -274,7 +315,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2017/11/12/meet-in-the-middle的一些实例/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2017/11/12/meet-in-the-middle的一些实例/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -320,7 +361,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2017/11/12/GatedRNN/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2017/11/12/GatedRNN/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -363,7 +404,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2017/11/01/mixup/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2017/11/01/mixup/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -404,7 +445,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2017/11/01/Single-Shot-Scale-invariant-Face-Detector/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -450,7 +491,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2017/10/20/A-List-of-Saliency-Detection-Papers/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2017/10/20/A-List-of-Saliency-Detection-Papers/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -478,7 +519,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2017/09/05/图个新鲜/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2017/09/05/图个新鲜/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -550,45 +591,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2017/09/05/overview-of-object-detection/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2017/05/18/如何在圆内均匀采样/" >如何在圆内均匀采样</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2017-05-18  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>这个问题之前在面试网易游戏的时候碰到过，当时只想了一个很朴素(naive)的做法，现在有时间重新推导了一下：</p>
-<p>假设圆是一个单元圆，半径为1, 面积为$\pi$。</p>
-<p>当时面试的时候想的方法是用一个长度为1的外接正方形来代替采样，如果在圆内，则返回，不然继续采样，这样的采样方法明显是不稳定的，但是期望的采样步数很容易计算，是$\frac{4}{\pi}$。</p>
-<p>后来想到说可以先采样角度，每个角度确定一个半径，再在半径上均匀采样，面试官有提示说在半径上是均匀的吗？ 明显在半径上采样是不均匀的，因为在半径上的每一个点对应的周长是不一样的！！</p>
-<p>正确的姿势是这样的：</p>
-<p>我们计算长度为$r(0\le r\le1)$的概率为$p(r)$:</p>
-<p>首先我们需要计算落在$r\sim r+\Delta r$的概率，很直观，就是面积/$\pi$，然后因为均匀采样所以需要除以$\Delta r$求得$p(r)$也就是：<br>$$<br>p(r\sim r+\Delta r) = \lim_{\Delta r\rightarrow0}\frac{\pi(r+\Delta r)^2-\pi r^2}{\pi}<br>$$</p>
-<p>$$<br>p(r) = \lim_{\Delta r\rightarrow0}\frac{\pi(r+\Delta r)^2-\pi r^2}{\pi \Delta r}=2r<br>$$</p>
-<p>接下来就是求$p(r)$的CDF,$P(r)$，积分即可：<br>$$<br>P(r) = \int_0^r p(x) dx=r^2<br>$$<br>然后求得它的逆函数$P^{-1}(r)$:</p>
-<p>$$P^{-1}(r) = \sqrt r$$</p>
-<p>算到这里，答案呼之欲出，我们用一个随机变量$\zeta$ 在$[0,1]$均匀采样，然后在通过$r = \sqrt \zeta$求得r,为什么是均匀的呢，只要把$\sqrt \zeta$带入$P(r)$就可以发现$P(r)=\zeta$。</p>
-
-	
-	</div>
-  <a type="button" href="/2017/05/18/如何在圆内均匀采样/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2017/09/05/overview-of-object-detection/#more" class="btn btn-default more">阅读此文</a>
 </div>
 
 		
@@ -602,12 +605,12 @@ var _hmt = _hmt || [];
 
    
     
-     <a href="/page/2/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
+     <a href="/page/2/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> 上一页</a>
       
 
         <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
  
-       <a href="/page/4/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>     
+       <a href="/page/4/" type="button" class="btn btn-default ">下一页<i class="fa fa-arrow-circle-o-right"></i></a>     
         
 
   
@@ -627,7 +630,7 @@ var _hmt = _hmt || [];
 			
   <div id="site_search">
    <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="搜索" class="st-search-input st-default-search-input form-control"/>
    </div>  
   <div id="local-search-result"></div>
   </div>
@@ -636,10 +639,10 @@ var _hmt = _hmt || [];
 		
 			
 	<div class="widget">
-		<h4>Categories</h4>
+		<h4>分类</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/algorithms/">algorithms<span>16</span></a></li>
+			<li><a href="/categories/algorithms/">algorithms<span>17</span></a></li>
 		
 			<li><a href="/categories/competition/">competition<span>1</span></a></li>
 		
@@ -649,44 +652,46 @@ var _hmt = _hmt || [];
 		
 			
 	<div class="widget">
-		<h4>Tag Cloud</h4>
+		<h4>标签云</h4>
 		<ul class="tag_box inline list-unstyled">		
-		
-			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
-		
-			<li><a href="/tags/segmentation/">segmentation<span>2</span></a></li>
-		
-			<li><a href="/tags/deep-learning/">deep learning<span>22</span></a></li>
-		
-			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
-		
-			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
-		
-			<li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
-		
-			<li><a href="/tags/summary/">summary<span>2</span></a></li>
-		
-			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
-		
-			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
-		
-			<li><a href="/tags/classification/">classification<span>2</span></a></li>
-		
-			<li><a href="/tags/杂/">杂<span>1</span></a></li>
-		
-			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
-		
-			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
-		
-			<li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
 		
 			<li><a href="/tags/paper/">paper<span>1</span></a></li>
 		
-			<li><a href="/tags/math/">math<span>2</span></a></li>
+			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
 		
 			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
 		
+			<li><a href="/tags/object-detection/">object detection<span>1</span></a></li>
+		
+			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
+		
+			<li><a href="/tags/deep-learning/">deep learning<span>23</span></a></li>
+		
 			<li><a href="/tags/notes/">notes<span>6</span></a></li>
+		
+			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
+		
+			<li><a href="/tags/classification/">classification<span>2</span></a></li>
+		
+			<li><a href="/tags/math/">math<span>2</span></a></li>
+		
+			<li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
+		
+			<li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
+		
+			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
+		
+			<li><a href="/tags/segmentation/">segmentation<span>2</span></a></li>
+		
+			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
+		
+			<li><a href="/tags/杂/">杂<span>1</span></a></li>
+		
+			<li><a href="/tags/summary/">summary<span>2</span></a></li>
+		
+			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
+		
+			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
 		
 		 
 		</ul>
@@ -696,8 +701,12 @@ var _hmt = _hmt || [];
 		
 			
 <div class="widget">
-  <h4>Recent Posts</h4>
+  <h4>最新文章</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2018/03/13/RCNN笔记/" ><i class="fa fa-file-o"></i>RCNN笔记</a>
+      </li>
     
       <li>
         <a href="/2018/03/06/ResNeXt笔记/" ><i class="fa fa-file-o"></i>ResNeXt笔记</a>
@@ -715,17 +724,13 @@ var _hmt = _hmt || [];
         <a href="/2018/02/26/Fully-Convolutional-Networks-for-Semantic-Segmentation-FCN-笔记/" ><i class="fa fa-file-o"></i>Fully Convolutional Network...</a>
       </li>
     
-      <li>
-        <a href="/2018/02/09/Kaggle比赛小结-Camera-Model-Identification/" ><i class="fa fa-file-o"></i>Kaggle比赛小结-Camera Model Ide...</a>
-      </li>
-    
   </ul>
 </div>
 
 		
 			
 <div class="widget">
-	<h4>Links</h4>
+	<h4>链接</h4>
 	<ul class="blogroll list-unstyled">
 	
 		<li><i class="fa fa-github"></i><a href="http://www.github.com/mowayao" title="My Github account." target="_blank"]);">My Github</a></li>
