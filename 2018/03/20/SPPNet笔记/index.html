@@ -6,17 +6,17 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>Introduction to Capsule Network | Mowayao&#39;s Blog</title>
+  <title>SPPNet笔记 | Mowayao&#39;s Blog</title>
   <meta name="author" content="Mowayao">
   
-  <meta name="description" content="Dynamic Routing Between Capsules
-这是Hinton发表在NIPS2017的一篇文章，提出了capsule的概念。
-其实可以把capsule看成是neuron的一个特殊形式，neuron的输出是一个scalar，而capsule则会输出vector。除此之外，neuro">
+  <meta name="description" content="论文：Spatial Pyramid Pooling in Deep ConvolutionalNetworks for Visual Recognition，TPAMI 2015
+作者：Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun
+链接">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Introduction to Capsule Network"/>
+  <meta property="og:title" content="SPPNet笔记"/>
   <meta property="og:site_name" content="Mowayao&#39;s Blog"/>
 
   
@@ -120,7 +120,7 @@ var _hmt = _hmt || [];
 
 	
 		<div class="page-header">
-			<h1> Introduction to Capsule Network</h1>
+			<h1> SPPNet笔记</h1>
 		</div>
 	
 
@@ -137,23 +137,48 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  		
 
-	  <p><a href="https://arxiv.org/abs/1710.09829" target="_blank" rel="external">Dynamic Routing Between Capsules</a></p>
-<p>这是Hinton发表在NIPS2017的一篇文章，提出了capsule的概念。</p>
-<p>其实可以把capsule看成是neuron的一个特殊形式，neuron的输出是一个scalar，而capsule则会输出vector。除此之外，neuron可以detect到一个特定的pattern，但是这又存在很大的局限性，会有pattern冗余，例如：</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.11.12.png" alt=""></p>
-<p>所以capsule输出vector就可以避免这样的情况，输出特征v的每个维度表示的是对应pattern的特性，以上图为例，可能某个表示鸟嘴方向的维度，分别对应1和-1。</p>
-<p>再以人脸为例，传统的CNN可能可以detect到眼睛的pattern, 嘴巴的pattern等，只能表示它的存在，但是无法表示五官的属性，例如相对位置，大小，相对角度等等。而向量的大小表示的是整个pattern的概率，或者可以叫做confidence, 例如下图：</p>
-<p><img src="https://jhui.github.io/assets/capsule/face4.jpg" alt=""><img src="https://jhui.github.io/assets/capsule/face5.jpg" alt=""></p>
-<p>具体的计算过程见下图：</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.15.27.png" alt=""></p>
-<p>$$
-u^1=W^1V^1, u^2=W^2v^2 \ s=c_1u^1 \ v=Squash(s) , v = \frac{|s|}{1+|s|^2}\frac{s}{|s|}
-$$
-接下来就是核心，dynamic routing:</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.51.30.png" alt=""></p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-24%20%E4%B8%8B%E5%8D%883.24.52.png" alt=""></p>
-<p>和传统CNN简单粗暴的max pooling不同的是它动态地调整routing的系数，系数是在testing的时候online地决定的，调整的方法就是通过T次迭代，根据aggrement，其实就是提高越相关的v的系数。 上图中，如果$a^r$和$u^i$相关性较强的话，就可以得到更大的$b_i$。</p>
-<p>也可以将dynamic routing的过程看成是一个不断排除outlier的一个过程，例如现在$u^1$,$u^2$很接近，而$u^3$与他们差距很大，他们两个队最终的$a^r$贡献很大，那么随着不断迭代，$u^3$就被消除了。</p>
+	  <p>论文：Spatial Pyramid Pooling in Deep ConvolutionalNetworks for Visual Recognition，<strong>TPAMI</strong> 2015</p>
+<p>作者：Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun</p>
+<p>链接：https://arxiv.org/pdf/1406.4729.pdf</p>
+<p>代码：https://github.com/ShaoqingRen/SPP_net</p>
+<ul>
+<li>提出spatial pyramid pooling layer，使得网络能够接受任意大小的输入，同时利用multi-level的spatial bins做hierarchy information aggregation，提高模型的鲁棒性</li>
+<li>对image classification和object detection（针对RCNN的优化）都可以提升模型的表现</li>
+<li>在ILSVRC 2014 object detection中排名第2，image classification中排名第3</li>
+</ul>
+<p><img src="https://i.loli.net/2018/03/20/5ab1117af05d0.jpg" alt=""></p>
+<p>在RCNN中，我们提取各个region proposals，然后将其warp到指定的大小，再用CNN提特征，这样的问题是图像object经过warp以后，会变形严重并且影响分辨率，从而影响分类的结果，所以作者提出SPP layer，使得对于任何大小的输入图像，神经网络都可以输出固定长度的特征，同时提高分类的鲁棒性。</p>
+<h5>Architecture</h5>
+<p>见Figure 3，将卷积层的输出经过SPP layer以后，利用max pooling分成3种的spatial bins，第一种是4x4，第二种是2x2，第三种是1x1(global pooling)。在做完pooling以后，我们可以得到16x256,4x256,1x256这三种维度的特征，256是输入的feature map的深度，拼接以后得到21x256长度的特征，其实可以将SPP layer看成是特征层面的re-scaled。</p>
+<p><img src="https://i.loli.net/2018/03/20/5ab11464b1915.jpg" alt=""></p>
+<p>例如输入的feature map的大小是axa，需要产生3x3，2x2，1x1的特征向量，那么pooling的window size是ceil(a/n)，步长是floor(a/n)。将这些特征拼接得到固定长度的特征向量，再连接全连接层进行分类。</p>
+<p><img src="https://i.loli.net/2018/03/20/5ab11e065dffd.jpg" alt=""></p>
+<h5>Training Strategy</h5>
+<p><strong>Multi-size Training</strong></p>
+<p>在分类任务的模型训练过程中，采用多个size的输入可以提高模型的结果。对于有两个不同大小输入的训练策略，使用两个固定大小（框架所限）的相同参数的网络进行交替训练。</p>
+<p><strong>Full-image Representation</strong></p>
+<p>在分类任务的模型训练过程中，将图像resize到min(w,h)=256，保持长宽比不变。</p>
+<h5>Experiments</h5>
+<p><strong>Image Classifications</strong></p>
+<p>Table 1是三种base network的结构。</p>
+<p><img src="https://i.loli.net/2018/03/21/5ab207be83390.jpg" alt=""></p>
+<p>在分类任务中，作者通过实验证明，SPP layer，multi-size training，能够提高分类的精度（见Table 2）。SPP layer能够提高精度是因为利用spatial pyramid pooling可以提高鲁棒性。multi-size training中，有三种策略，一种是单个大小，第二种是180和224，还有一种是从[180,224]随机选择其中的一个size，实验证明，第二种精度最高。</p>
+<p><img src="https://i.loli.net/2018/03/21/5ab1f1020c16a.jpg" alt=""></p>
+<p>从Table 3看，full-image representation相比较于central crop，可以提高准确率。</p>
+<p><img src="https://i.loli.net/2018/03/21/5ab207fd048ad.jpg" alt=""></p>
+<p><img src="https://i.loli.net/2018/03/21/5ab20e00321c0.jpg" alt=""></p>
+<p><strong>Object Detection</strong></p>
+<p>下图是R-CNN和SPP-Net的对比，R-CNN的缺点是计算量大，包括了大量的重复计算。</p>
+<p><img src="http://img.blog.csdn.net/20170617102150673?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdjFfdml2aWFu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<p>其具体步骤和R-CNN类似：</p>
+<ol>
+<li>通过selective search得到2000个候选窗口</li>
+<li>将整张图像输入到CNN中，完成特征的提取，然后在feature map上找到候选框的区域，在对候选框进行spaital pyramid pooling，得到定长的特征向量,这样做可以大大提高效率。</li>
+<li>采用SVM模型，对物体进行分类。</li>
+</ol>
+<p>从Table 9看出，SPPNet相较于R-CNN计算效率有了较高的提升，同时准确率也有提高。</p>
+<p><img src="https://i.loli.net/2018/03/21/5ab211ca31555.jpg" alt=""></p>
+<p><img src="https://i.loli.net/2018/03/21/5ab21440a707b.jpg" alt=""></p>
 	  
 	</div>
 
@@ -163,13 +188,12 @@ $$
 
     
     
-    <a href="/2017/12/05/Generate-Motion-Blur/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Anterior</a>
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Anterior</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/" type="button" class="btn btn-default ">Próximo<i
+    <a href="/2018/03/13/RCNN笔记/" type="button" class="btn btn-default ">Próximo<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -198,12 +222,23 @@ $$
 	
 	<div class="meta-widget">
 	<i class="fa fa-clock-o"></i>
-	2017-11-24 
+	2018-03-20 
 	</div>
 	
 
 	<!-- categories -->
     
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/algorithms/">algorithms<span>18</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
 
 	<!-- tags -->
 	
@@ -211,7 +246,7 @@ $$
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/notes/">notes<span>6</span></a></li> <li><a href="/tags/deep-learning/">deep learning<span>24</span></a></li>
+  <li><a href="/tags/deep-learning/">deep learning<span>24</span></a></li> <li><a href="/tags/object-detection/">object detection<span>2</span></a></li>
     </ul>
 	</div>
 		
