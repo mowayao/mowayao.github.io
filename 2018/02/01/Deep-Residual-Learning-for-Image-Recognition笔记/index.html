@@ -137,7 +137,7 @@ var _hmt = _hmt || [];
 	  		
 
 	  <p>论文 ：Deep Residual Learning for Image Recognition, CVPR 2016</p>
-<p>链接：https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf</p>
+<p>链接：<a href="https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf" target="_blank" rel="external">https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/He_Deep_Residual_Learning_CVPR_2016_paper.pdf</a></p>
 <p>作者: Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun</p>
 <ul>
 <li>提出ResNet(Residual Net)</li>
@@ -145,30 +145,19 @@ var _hmt = _hmt || [];
 <li>在ILSVRC 2015和MS-COCO 2015中，横扫一切对手夺冠</li>
 <li>和VGG相比，深度更深，准确率更高，计算复杂度更小！</li>
 </ul>
-<h5>Idea</h5>
-<p>随着网络深度的增加，随之而来的就是网络的<strong>退化(degradation)</strong>，也就是训练和测试的error比浅层的网络还高，见Fig 1。这个问题并不是由overfitting造成的，但是从直觉上讲，更深的模型应该和浅层的模型表现相当，因为我们可以将浅层网络的参数拷贝，然后其余的层就是做identity mapping，但是为什么效果会更差呢？这是因为这是因为深度网络比浅层网络更难训，<strong>很难用多层的非线性层去优化近似identity mapping</strong>。因此，通过将问题转化为学习残差函数来解决网络退化的问题。x是输入，H(x)是底层的映射函数，也就是网络中堆叠的非线性层，$f(x)=H(x)-x$，等价于$H(x)=f(x)+x$。如果最优函数是identity mapping，那么整个学到的参数就会驱使$f(x)=0$(或者尽可能接近于0)。identity mapping不一定是最优的，但是可以帮助预处理问题，可以简化问题。<strong>作者也对此做了一个假设：优化残差映射比优化一个原始映射容易的多。</strong></p>
+<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>随着网络深度的增加，随之而来的就是网络的<strong>退化(degradation)</strong>，也就是训练和测试的error比浅层的网络还高，见Fig 1。这个问题并不是由overfitting造成的，但是从直觉上讲，更深的模型应该和浅层的模型表现相当，因为我们可以将浅层网络的参数拷贝，然后其余的层就是做identity mapping，但是为什么效果会更差呢？这是因为这是因为深度网络比浅层网络更难训，<strong>很难用多层的非线性层去优化近似identity mapping</strong>。因此，通过将问题转化为学习残差函数来解决网络退化的问题。x是输入，H(x)是底层的映射函数，也就是网络中堆叠的非线性层，$f(x)=H(x)-x$，等价于$H(x)=f(x)+x$。如果最优函数是identity mapping，那么整个学到的参数就会驱使$f(x)=0$(或者尽可能接近于0)。identity mapping不一定是最优的，但是可以帮助预处理问题，可以简化问题。<strong>作者也对此做了一个假设：优化残差映射比优化一个原始映射容易的多。</strong></p>
 <blockquote>
 <p>If the optimal function is closer to an identity mapping than to a zero mapping, it should be easier for the solver to find the perturbations with reference to an identity mapping, than to learn the function as a new one.</p>
 </blockquote>
 <p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fo2bil5j4xj30ts0foq6o.jpg" alt=""></p>
-<h5>模型结构</h5>
-<p><strong>short connection</strong>
-$$
-y = \mathbf{F}(x,{W_i})+x
-$$
-$\mathbf{F}(x,{W_i})$表示待学习的残差mapping。而后面+x这个运算可以通过shortcuts进行element-wise的加法。优点是不需要额外的参数，当维度不统一的时候，可以进行zero padding或者线性投影（虽然会引入少量的参数）使得两者的维度一致。
-$$
-y = \mathbf{F}(x,{W_i})+W_sx
-$$
-<img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo2br70niwj30za0g0gnk.jpg" alt=""></p>
+<h5 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h5><p><strong>short connection</strong><br>$$<br>y = \mathbf{F}(x,{W_i})+x<br>$$<br>$\mathbf{F}(x,{W_i})$表示待学习的残差mapping。而后面+x这个运算可以通过shortcuts进行element-wise的加法。优点是不需要额外的参数，当维度不统一的时候，可以进行zero padding或者线性投影（虽然会引入少量的参数）使得两者的维度一致。<br>$$<br>y = \mathbf{F}(x,{W_i})+W_sx<br>$$<br><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo2br70niwj30za0g0gnk.jpg" alt=""></p>
 <p><strong>Bottleneck design</strong></p>
 <p>在3x3卷积前后加入1x1卷积来降低和提高feature map的深度，实现feature map之间的线性组合，提高模型的非线性能力，同时还可以使得输入输出的维度保持一致，具体见Figure 5。</p>
 <p>Bottleneck的结构也被应用到了50-layer,101-layer,152-layer的网络中。</p>
 <p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fo2c143x8uj30sk0fg0vd.jpg" alt=""></p>
 <p>Table 1是各个ResNet的模型参数结构，可以发现18-layer和34-layer最终输出的feature map的深度是512，而其余的都是2048，这个由expansion ratio决定。</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo2bwdncg2j31kw0lhwkk.jpg" alt=""></p>
-<h5>实验</h5>
-<p><strong>ImageNet</strong></p>
+<h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p><strong>ImageNet</strong></p>
 <p>首先分别比较了18-layer和34-layer的plain network和residual network，见Figure 4和Table 2。总结如下：</p>
 <ul>
 <li>在plain network中发现网络退化的问题，18层的网络比34层的网络错误率更低，优化的困难不是由梯度弥散造成的，作者推测是因为<strong><em>深层网络的收敛率更低</em></strong></li>
@@ -205,12 +194,12 @@ $$
     
     
     <a href="/2018/02/01/Identity-Mappings-in-Deep-Residual-Networks笔记/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Anterior</a>
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2018/01/25/Batch-Normalization-Accelerating-Deep-Network-Training-by-Reducing-Internal-Covariate-Shift笔记/" type="button" class="btn btn-default ">Próximo<i
+    <a href="/2018/01/25/Batch-Normalization-Accelerating-Deep-Network-Training-by-Reducing-Internal-Covariate-Shift笔记/" type="button" class="btn btn-default ">Next<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -223,7 +212,7 @@ $$
 	<!-- comment -->
 	
 <section id="comment">
-    <h2 class="title">Comentários</h2>
+    <h2 class="title">Comments</h2>
 
     
 </section>
@@ -250,7 +239,7 @@ $$
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    <li><a href="/categories/algorithms/">algorithms<span>18</span></a></li>
+    <li><a href="/categories/algorithms/">algorithms<span>19</span></a></li>
   </li>
 
     </ul>
@@ -263,7 +252,7 @@ $$
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/deep-learning/">deep learning<span>24</span></a></li> <li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
+  <li><a href="/tags/deep-learning/">deep learning<span>25</span></a></li> <li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
     </ul>
 	</div>
 		
