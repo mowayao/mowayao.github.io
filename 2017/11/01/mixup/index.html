@@ -135,10 +135,10 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  		
 
-	  <p><strong>Gist</strong>: The authors propose a new training strategy  dubbed <strong>mixup</strong> that trains a neural network on convex combinations of pairs of examples and their labels and improves the generalization of state-of-the-art neural network architectures.    </p>
-<p>​    </p>
+	  <p><strong>Gist</strong>: The authors propose a new training strategy  dubbed <strong>mixup</strong> that trains a neural network on convex combinations of pairs of examples and their labels and improves the generalization of state-of-the-art neural network architectures.</p>
+<p>​</p>
 <p><strong>Pytorch Code</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (x1, y1), (x2, y2) <span class="keyword">in</span> zip(loader1, loader2): </div><div class="line">  	lam = numpy.random.beta(alpha, alpha)</div><div class="line">	x = Variable(lam * x1 + (<span class="number">1.</span> - lam) * x2)</div><div class="line">	y = Variable(lam * y1 + (<span class="number">1.</span> - lam) * y2) optimizer.zero_grad()</div><div class="line">    loss(net(x), y).backward()</div><div class="line">    optimizer.step()</div></pre></td></tr></table></figure>
+<p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (x1, y1), (x2, y2) <span class="keyword">in</span> zip(loader1, loader2): </div><div class="line">  	lam = numpy.random.beta(alpha, alpha)</div><div class="line">	x = Variable(lam * x1 + (<span class="number">1.</span> - lam) * x2)</div><div class="line">	y = Variable(lam * y1 + (<span class="number">1.</span> - lam) * y2) optimizer.zero_grad()</div><div class="line">    loss(net(x), y).backward()</div><div class="line">    optimizer.step()</div></pre></td></tr></table></figure></p>
 <p><strong>Empirical Risk Minimization</strong></p>
 <p>We need to minimize the <strong>expected risk</strong>, that is the average of the loss function $l$ over the data distribution $P$</p>
 <p>$$R(f ) = \int l(f (x), y)dP (x, y)$$</p>
@@ -148,9 +148,13 @@ var _hmt = _hmt || [];
 <p>where $\sigma(x = x_i, y = y_i)$ is a Dirac mass centered at $(x_i, y_i)$</p>
 <p>$$R_\sigma(f) = \frac{1}{n}\sum_{i=1}^nl(f(x_i), y_i)$$</p>
 <p><strong>Vicinal Risk Minimization</strong></p>
-<p>$$P_v (\widetilde{x}, \widetilde{y})=\frac{1}{n}\sum_{i=1}^nv(\widetilde{x}, \widetilde{y}|x_i,y_i)$$<br>where $v(\widetilde{x}, \widetilde{y}|x_i,y_i)$ is  a vicinity distribution that measures the probability of finding the virtual feature-target pair $(\widetilde{x}, \widetilde{y})$ in the vicinity of the training feature-target pair $(x_i,y_i)$</p>
+<p>$$P_v (\widetilde{x}, \widetilde{y})=\frac{1}{n}\sum_{i=1}^nv(\widetilde{x}, \widetilde{y}|x_i,y_i)$$
+where $v(\widetilde{x}, \widetilde{y}|x_i,y_i)$ is  a vicinity distribution that measures the probability of finding the virtual feature-target pair $(\widetilde{x}, \widetilde{y})$ in the vicinity of the training feature-target pair $(x_i,y_i)$</p>
 <p>This paper propose a generic vicinal distribution, <strong><em>mixup</em></strong>:</p>
-<p>$$\mu(\widetilde{x}, \widetilde{y}|x_i,y_i)=\frac{1}{n}\sum_j^n\mathbb{E}_\lambda[\sigma(\widetilde{x}=\lambda \cdot x_i+(1-\lambda)\cdot x_j,\widetilde{y} =\lambda \cdot y_i + (1-\lambda) \cdot y_j)]$$<br>where $\lambda \sim Beta(\alpha, \alpha)$ , for $\alpha \in (0, \infty)$Sampling from the mixup vicinal distribution:<br>$$\widetilde{x} = \lambda \cdot x_i + (1 − \lambda)\cdot x_j$$<br>$$\widetilde{y} = \lambda \cdot y_i + (1 − \lambda)\cdot y_j$$</p>
+<p>$$\mu(\widetilde{x}, \widetilde{y}|x_i,y_i)=\frac{1}{n}\sum_j^n\mathbb{E}_\lambda[\sigma(\widetilde{x}=\lambda \cdot x_i+(1-\lambda)\cdot x_j,\widetilde{y} =\lambda \cdot y_i + (1-\lambda) \cdot y_j)]$$
+where $\lambda \sim Beta(\alpha, \alpha)$ , for $\alpha \in (0, \infty)$Sampling from the mixup vicinal distribution:
+$$\widetilde{x} = \lambda \cdot x_i + (1 − \lambda)\cdot x_j$$
+$$\widetilde{y} = \lambda \cdot y_i + (1 − \lambda)\cdot y_j$$</p>
 	  
 	</div>
 
@@ -208,7 +212,7 @@ var _hmt = _hmt || [];
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/deep-learning/">deep learning<span>25</span></a></li> <li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
+  <li><a href="/tags/deep-learning/">deep learning<span>26</span></a></li> <li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
     </ul>
 	</div>
 		

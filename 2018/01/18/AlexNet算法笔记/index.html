@@ -137,28 +137,45 @@ var _hmt = _hmt || [];
 	  		
 
 	  <p>论文：ImageNet Classification with Deep Convolutional Neural Networks</p>
-<p>链接：<a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf" target="_blank" rel="external">https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf</a></p>
+<p>链接：https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf</p>
 <p>AlexNet是发表在NIPS 2012的一篇文章，可以称作是深度学习的经典之作，获得了ImageNet LSVRC-2010的冠军，达到了15.3%的top-5 error。</p>
 <p><strong>模型结构：</strong></p>
 <p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fndsfv7yy4j31a80fu0y3.jpg" alt=""></p>
 <p>下面是模型的具体描述：</p>
-<p>$[227\times227\times3]$ 输入<br>$[55\times55\times96]$ CONV1: 96 $11\times11$ filters at stride 4, pad 0   <u>(227-11)/4+1 = 55</u><br>$[27\times27\times96]$  MAX POOL1: $3\times3$ filters at stride 2   <u>(55-3)/2+1=27</u><br>$[27\times27\times96]$ NORM1: Normalization layer<br>$[27\times27\times256]$ CONV2: 256 $5\times5$ filters at stride 1, pad 2   <u>(27+2*2-5)/1 + 1=27</u><br>$[13\times13\times256]$ MAX POOL2: $3\times3$ filters at stride 2   <u>(27-3)/2+1=13</u><br>$[13\times13\times256]$ NORM2: Normalization layer<br>$[13\times13\times384]$ CONV3: 384 $3\times3$ filters at stride 1, pad 1<br>$[13\times13\times384]$ CONV4: 384 $3\times3$ filters at stride 1, pad 1<br>$[13\times13\times256]$ CONV5: 256 $3\times3$ filters at stride 1, pad 1<br>$[6\times6\times256]$ MAX POOL3: $3\times3$ filters at stride 2    <u>(13-3)/2+1=6</u><br>$[4096]$ FC6: 4096 neurons<br>$[4096]$ FC7: 4096 neurons<br>$[1000]$ FC8: 1000 neurons (class scores)</p>
+<p>$[227\times227\times3]$ 输入
+$[55\times55\times96]$ CONV1: 96 $11\times11$ filters at stride 4, pad 0   &lt;u&gt;(227-11)/4+1 = 55&lt;/u&gt;
+$[27\times27\times96]$  MAX POOL1: $3\times3$ filters at stride 2   &lt;u&gt;(55-3)/2+1=27&lt;/u&gt;
+$[27\times27\times96]$ NORM1: Normalization layer
+$[27\times27\times256]$ CONV2: 256 $5\times5$ filters at stride 1, pad 2   &lt;u&gt;(27+2*2-5)/1 + 1=27&lt;/u&gt;
+$[13\times13\times256]$ MAX POOL2: $3\times3$ filters at stride 2   &lt;u&gt;(27-3)/2+1=13&lt;/u&gt;
+$[13\times13\times256]$ NORM2: Normalization layer
+$[13\times13\times384]$ CONV3: 384 $3\times3$ filters at stride 1, pad 1
+$[13\times13\times384]$ CONV4: 384 $3\times3$ filters at stride 1, pad 1
+$[13\times13\times256]$ CONV5: 256 $3\times3$ filters at stride 1, pad 1
+$[6\times6\times256]$ MAX POOL3: $3\times3$ filters at stride 2    &lt;u&gt;(13-3)/2+1=6&lt;/u&gt;
+$[4096]$ FC6: 4096 neurons
+$[4096]$ FC7: 4096 neurons
+$[1000]$ FC8: 1000 neurons (class scores)</p>
 <p>包含了5层卷积层和3层全连接层。</p>
 <p><strong>创新点：</strong></p>
 <ol>
-<li><p>第一次使用了ReLU激活函数。传统的sigmoid和tanh激活函数的问题在于梯度容易饱和，造成训练困难，下图是sigmoid函数的梯度。而$f(x)=\max(0,x)$看出，ReLU是一个非线性激活函数，而且它的梯度不会饱和，当x&gt;0的时候，梯度一直是1，这样和sigmoid和tanh函数相比，加快了训练的速度。</p>
+<li>
+<p>第一次使用了ReLU激活函数。传统的sigmoid和tanh激活函数的问题在于梯度容易饱和，造成训练困难，下图是sigmoid函数的梯度。而$f(x)=\max(0,x)$看出，ReLU是一个非线性激活函数，而且它的梯度不会饱和，当x&gt;0的时候，梯度一直是1，这样和sigmoid和tanh函数相比，加快了训练的速度。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnhlvvatogj30my0egtbr.jpg" alt=""></p>
 </li>
-<li><p>使用了Norm Layer，对局部区域进行归一化，对相同空间位置上相邻深度的卷积做归一化。$b_{x,y}^i=\frac{a_{x,y}^i}{(k+\alpha\sum_{j=\max(0,i-n/2)}^{min(N-1,i+n/2)}(a_{i,j})^2)^\beta}$,其中$a_{x,y}^i$表示的是第i个通道的卷积核在$(x,y)$位置处的输出结果，随后经过ReLU激活函数作用。a是每一个神经元的激活值，n是kernel的大小，N是kernel总数，k,alpha,beta都是预设的hyper-parameters.，$k=2,n=5,\alpha=1e-4,\beta=0.75$。从公式可以看出，给原来的激活值$a$加了一个权重，生成了新的激活值b,也就是在不同map的同一空间位置进行了归一化，提高了计算效率。但是这些值为什么这么设置就不得而知了。</p>
+<li>
+<p>使用了Norm Layer，对局部区域进行归一化，对相同空间位置上相邻深度的卷积做归一化。$b_{x,y}^i=\frac{a_{x,y}^i}{(k+\alpha\sum_{j=\max(0,i-n/2)}^{min(N-1,i+n/2)}(a_{i,j})^2)^\beta}$,其中$a_{x,y}^i$表示的是第i个通道的卷积核在$(x,y)$位置处的输出结果，随后经过ReLU激活函数作用。a是每一个神经元的激活值，n是kernel的大小，N是kernel总数，k,alpha,beta都是预设的hyper-parameters.，$k=2,n=5,\alpha=1e-4,\beta=0.75$。从公式可以看出，给原来的激活值$a$加了一个权重，生成了新的激活值b,也就是在不同map的同一空间位置进行了归一化，提高了计算效率。但是这些值为什么这么设置就不得而知了。</p>
 </li>
-<li><p>大量的数据增强，水平翻转，镜像等。调整RGB channel的值，对数据集所有图像的RGB值做PCA变换，完成去噪功能，同时为了保证图像的多样性，在特征值上加了一个随机的尺度因子，每一轮重新生成一个尺度因子，起到了正则化的作用。</p>
+<li>
+<p>大量的数据增强，水平翻转，镜像等。调整RGB channel的值，对数据集所有图像的RGB值做PCA变换，完成去噪功能，同时为了保证图像的多样性，在特征值上加了一个随机的尺度因子，每一轮重新生成一个尺度因子，起到了正则化的作用。</p>
 </li>
-<li><p>Dropout, hidden layer的输出有0.5的几率会被置为0，那些被droped的点不会参与forward pass和backprogation，这样起到了正则化的作用。需要注意的是，在测试过程中，需要将输出乘上0.5。这是因为在训练的过程中，我们只选择了其中的一半，训练出来的结果相当于原来方法的两倍，所以当测试的时候需要乘上0.5来消除这个影响。</p>
+<li>
+<p>Dropout, hidden layer的输出有0.5的几率会被置为0，那些被droped的点不会参与forward pass和backprogation，这样起到了正则化的作用。需要注意的是，在测试过程中，需要将输出乘上0.5。这是因为在训练的过程中，我们只选择了其中的一半，训练出来的结果相当于原来方法的两倍，所以当测试的时候需要乘上0.5来消除这个影响。</p>
 </li>
 </ol>
 <p><strong>训练细节：</strong></p>
 <ul>
-<li>batch size为128，momentum为0.9，weight decay为0.0005，其实weight decay是l2正则是有区别的，详细可见：<a href="https://arxiv.org/pdf/1711.05101.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1711.05101.pdf</a></li>
+<li>batch size为128，momentum为0.9，weight decay为0.0005，其实weight decay是l2正则是有区别的，详细可见：https://arxiv.org/pdf/1711.05101.pdf</li>
 <li>初始的learning rate设为1e-2, 当验证集的正确率停止的时候乘0.1</li>
 </ul>
 <p><strong>实验结果：</strong></p>
@@ -221,7 +238,7 @@ var _hmt = _hmt || [];
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    <li><a href="/categories/algorithms/">algorithms<span>19</span></a></li>
+    <li><a href="/categories/algorithms/">algorithms<span>20</span></a></li>
   </li>
 
     </ul>
@@ -234,7 +251,7 @@ var _hmt = _hmt || [];
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/deep-learning/">deep learning<span>25</span></a></li> <li><a href="/tags/classfication/">classfication<span>3</span></a></li>
+  <li><a href="/tags/deep-learning/">deep learning<span>26</span></a></li> <li><a href="/tags/classfication/">classfication<span>3</span></a></li>
     </ul>
 	</div>
 		

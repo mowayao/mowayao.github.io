@@ -6,15 +6,17 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>Single Shot Scale-invariant Face Detector | Mowayao&#39;s Blog</title>
+  <title>Faster R-CNN笔记 | Mowayao&#39;s Blog</title>
   <meta name="author" content="Mowayao">
   
-  <meta name="description" content="The authors propose to tile anchors on a wide range of layers to ensure that all scales of faces have enough features for detection. Besides, they try">
+  <meta name="description" content="论文：Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks，TPAMI 2016
+作者：Shaoqing Ren, Kaiming He, Ross Girshick, and Jian Sun
+">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Single Shot Scale-invariant Face Detector"/>
+  <meta property="og:title" content="Faster R-CNN笔记"/>
   <meta property="og:site_name" content="Mowayao&#39;s Blog"/>
 
   
@@ -118,7 +120,7 @@ var _hmt = _hmt || [];
 
 	
 		<div class="page-header">
-			<h1> Single Shot Scale-invariant Face Detector</h1>
+			<h1> Faster R-CNN笔记</h1>
 		</div>
 	
 
@@ -135,18 +137,40 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  		
 
-	  <p>The authors propose to tile anchors on a wide range of layers to ensure that all scales of faces have enough features for detection. Besides, they try to improve the recall rate of small faces by a scale compensation anchor matching strategy. Max-out background label is used to reduce the false positive rate of small faces.</p>
-<p>Key points:</p>
+	  <p>论文：Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks，TPAMI 2016</p>
+<p>作者：Shaoqing Ren, Kaiming He, Ross Girshick, and Jian Sun</p>
+<p>链接：https://arxiv.org/pdf/1506.01497.pdf</p>
+<p>代码：https://github.com/rbgirshick/py-faster-rcnn</p>
 <ul>
-<li>VGG net (throgh Pool5 layer) and some extra convolutional layers</li>
-<li>Anchor  is 1:1 aspect ratio (face annotation)</li>
-<li>two stages to improve the anchor matching strategy</li>
-<li>stage one: decrese the jaccord overlap threshold from 0.5 to 0.35</li>
-<li>stage two: decrese the threshold to 0.1 and sort to select the top-N</li>
-<li>max-out operation is performed on the background label scores</li>
+<li>在Fast R-CNN的基础上进行优化，将Region Proposal Network（RPN）取代Selective Search，可以更加有效地检测object candidates，与Fast R-CNN共享参数</li>
+<li>在RPN的基础上，提出anchor的概念，每个anchor可以代表不同的scale和ratio，从而达到translation-invariant的效果</li>
 </ul>
-<p>model architecture:</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-01%20%E4%B8%8B%E5%8D%887.46.53.png" alt=""></p>
+<p>Figure 2的Faster R-CNN的结构图，主要要经过3个步骤：</p>
+<ol>
+<li>输入图像进入CNNs，得到相应的feature maps</li>
+<li>将feature maps输入到RPN中，得到region proposals</li>
+<li>将region proposals输入到Fast R-CNN中，得到detection的结果</li>
+</ol>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fpyjflds95j30ny0tcq81.jpg" alt=""></p>
+<h5>Architecture</h5>
+<p><strong>RPN</strong></p>
+<p>RPN的输入为任意形状的图像，输出是一堆proposals的坐标，以及对应的confidence score。为了生成一堆region proposals，对于nxn的feature maps来说，作者通过sliding window（其实也就是3x3的conv）将其映射到固定维度的特征空间，然后再对得到的特征向量做分类和回归（将全连接改造成1x1的卷积，可以接受任何大小的输入）。</p>
+<p><strong>anchors</strong></p>
+<p>对于每个滑动窗口来说，假设该窗口有k个对应的proposals。这样reg layer就有4k的输出，cls layer有2k个输出。Figure 3就是anchor的示例。anchor可以解释为sliding window的中心点，通过假设这个中心点来自不同原始区域池化得到，所以可以根据这个中心点(anchor)逆推得到这些区域坐标和种类。假设现在有3中scales和3种ratios，以及feature maps的大小是WxH，那么总共有9xWxH个anchors，也可以将其理解成先验的bounding box。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fpynk5f034j31d40k8nle.jpg" alt=""></p>
+<h5>Experiments</h5>
+<p>首先是坐标空间的转换，将其转到相对空间，这在R-CNN中已经介绍过。其实是Multi-task的训练：</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fpyo96peu1j30ke064t97.jpg" alt=""></p>
+<p>RPN就直接用end-to-end的方法进行训练，对于每张图像，采样256个anchors，正负比例为1：1，如果正样本不够则用负样本补足。</p>
+<p>两个网络的训练需要比较多的trick，作者采用4-Step Alternating Training:</p>
+<ol>
+<li>对网络初始化（pretrained model），end-to-end地训练RPN</li>
+<li>用RPN生成propals训练Fast R-CNN</li>
+<li>将共享的卷积层fix住，训练RPN相关的层</li>
+<li>将共享的卷积层fix住，训练Fast R-CNN相关的层</li>
+</ol>
+<p>Table 6和Table 7是Faster R-CNN在PASCAL VOC 2007和PASCAL VOC 2012两个数据集上的结果们也是RPN和SS的比较，可以看出RPN要好于SS</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fq0p3j4jrnj31580ictfx.jpg" alt=""></p>
 	  
 	</div>
 
@@ -156,13 +180,12 @@ var _hmt = _hmt || [];
 
     
     
-    <a href="/2017/11/01/mixup/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2017/10/20/A-List-of-Saliency-Detection-Papers/" type="button" class="btn btn-default ">Next<i
+    <a href="/2018/03/22/Fast-R-CNN笔记/" type="button" class="btn btn-default ">Next<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -191,12 +214,23 @@ var _hmt = _hmt || [];
 	
 	<div class="meta-widget">
 	<i class="fa fa-clock-o"></i>
-	2017-11-01 
+	2018-04-02 
 	</div>
 	
 
 	<!-- categories -->
     
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/algorithms/">algorithms<span>20</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
 
 	<!-- tags -->
 	
@@ -204,7 +238,7 @@ var _hmt = _hmt || [];
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li> <li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
+  <li><a href="/tags/deep-learning/">deep learning<span>26</span></a></li> <li><a href="/tags/object-detection/">object detection<span>4</span></a></li>
     </ul>
 	</div>
 		
