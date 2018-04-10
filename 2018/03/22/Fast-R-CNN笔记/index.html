@@ -140,31 +140,26 @@ var _hmt = _hmt || [];
 
 	  <p>论文：Fast R-CNN，<strong>ICCV</strong> 2015</p>
 <p>作者：Ross Girshick</p>
-<p>链接：https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Girshick_Fast_R-CNN_ICCV_2015_paper.pdf</p>
-<p>代码：https://github.com/rbgirshick/fast-rcnn</p>
+<p>链接：<a href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Girshick_Fast_R-CNN_ICCV_2015_paper.pdf" target="_blank" rel="external">https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Girshick_Fast_R-CNN_ICCV_2015_paper.pdf</a></p>
+<p>代码：<a href="https://github.com/rbgirshick/fast-rcnn" target="_blank" rel="external">https://github.com/rbgirshick/fast-rcnn</a></p>
 <ul>
-<li>
-<p>简化训练过程，实现end-to-end的训练方式</p>
+<li><p>简化训练过程，实现end-to-end的训练方式</p>
 <ul>
 <li>将SVM分类器换成softmax，整合到网络中，鼓励类间竞争</li>
 <li>将bounding box regression整合到网络中</li>
 </ul>
 </li>
-<li>
-<p>在Fast-RCNN中，region proposal的计算都是share的，避免重复计算</p>
+<li><p>在Fast-RCNN中，region proposal的计算都是share的，避免重复计算</p>
 </li>
-<li>
-<p>提出ROI pooling layer使得每个region proposal可以得到确定长度的特征向量</p>
+<li><p>提出ROI pooling layer使得每个region proposal可以得到确定长度的特征向量</p>
 </li>
-<li>
-<p>探索了一些训练的tricks，可以参考！</p>
+<li><p>探索了一些训练的tricks，可以参考！</p>
 <p>​</p>
 <p>Figure 1是Fast R-CNN的图示</p>
 </li>
 </ul>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/FuPCSWv0EUA2laIjMRDcJTU9oA0F" alt=""></p>
-<h5>Architecture</h5>
-<p>下图是R-CNN和Fast R-CNN的比较</p>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>下图是R-CNN和Fast R-CNN的比较</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/FurXilgjM6ixsxoU1HRAgilULtUt" alt=""></p>
 <p>回顾一下R-CNN：</p>
 <ol>
@@ -192,21 +187,15 @@ var _hmt = _hmt || [];
 <li>使用图像金字塔</li>
 </ol>
 <p><strong>Truncated SVD</strong></p>
-<p>在训练的时候，因为ROIs数量不多，所以大部分的时间花在卷积运算上，而在测试的时候，需要计算每个ROIs的后验概率，有一半的时间花在全连接上，所以文章提出truncated SVD优化计算，将两个全连接取代一个全连接。
-$$
-W \approx U\Sigma_tV^T
-$$
-U是一个$u\times t$的矩阵，$\Sigma_t$是$t\times t$的矩阵，V是$v\times t$的矩阵，所以参数从$uv$减少到了$t(v+u)$，如果t要远小于$\min(u,v)$。</p>
+<p>在训练的时候，因为ROIs数量不多，所以大部分的时间花在卷积运算上，而在测试的时候，需要计算每个ROIs的后验概率，有一半的时间花在全连接上，所以文章提出truncated SVD优化计算，将两个全连接取代一个全连接。<br>$$<br>W \approx U\Sigma_tV^T<br>$$<br>U是一个$u\times t$的矩阵，$\Sigma_t$是$t\times t$的矩阵，V是$v\times t$的矩阵，所以参数从$uv$减少到了$t(v+u)$，如果t要远小于$\min(u,v)$。</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/Frc5IQiqhfIQW8Z39bNmc8BF3-vM" alt=""></p>
 <p><strong>Mini-batch sampling</strong></p>
 <p>在训练的时候，每次mini-batch中，从中采样两张图像，每张图像采样64个ROIs，这样每个batch的大小就是128，正负样本比例为1：3。</p>
-<h5>Experiments</h5>
-<p>Table 1-3是Fast R-CNN在VOC 2007, 2010, 2012三个数据集上的表现，都是SOAT。</p>
+<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1-3是Fast R-CNN在VOC 2007, 2010, 2012三个数据集上的表现，都是SOAT。</p>
 <p>Table 4是Fast-RCNN,RCNN以及SPPnet在training和testing效率上的比较，可以发现效率提升非常明显。</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/FozRMPEXdJimmQmIloMArAEK4bjz" alt=""></p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/FkHrR24XRqVg4etaxtFh-t2IF5G3" alt=""></p>
-<h5>Design evaluation</h5>
-<ul>
+<h5 id="Design-evaluation"><a href="#Design-evaluation" class="headerlink" title="Design evaluation"></a>Design evaluation</h5><ul>
 <li>Multi-task训练可以提高分类结果</li>
 <li>Multi-scale detection可以帮助提高结果，但是提升不大，折中之下，选了single scale</li>
 <li>training data越多越好，数据增强，将VOC2012的数据加到VOC2007中，提升明显！</li>
@@ -223,12 +212,12 @@ U是一个$u\times t$的矩阵，$\Sigma_t$是$t\times t$的矩阵，V是$v\time
     
     
     <a href="/2018/04/02/Faster-R-CNN笔记/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2018/03/20/SPPNet笔记/" type="button" class="btn btn-default ">Next<i
+    <a href="/2018/03/20/SPPNet笔记/" type="button" class="btn btn-default ">下一页<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -241,7 +230,7 @@ U是一个$u\times t$的矩阵，$\Sigma_t$是$t\times t$的矩阵，V是$v\time
 	<!-- comment -->
 	
 <section id="comment">
-    <h2 class="title">Comments</h2>
+    <h2 class="title">留言</h2>
 
     
 </section>
@@ -268,7 +257,7 @@ U是一个$u\times t$的矩阵，$\Sigma_t$是$t\times t$的矩阵，V是$v\time
     <ul id="categorys" class="tag_box list-unstyled collapse in">
           
   <li>
-    <li><a href="/categories/algorithms/">algorithms<span>20</span></a></li>
+    <li><a href="/categories/algorithms/">algorithms<span>21</span></a></li>
   </li>
 
     </ul>
@@ -281,7 +270,7 @@ U是一个$u\times t$的矩阵，$\Sigma_t$是$t\times t$的矩阵，V是$v\time
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/deep-learning/">deep learning<span>26</span></a></li> <li><a href="/tags/object-detection/">object detection<span>4</span></a></li>
+  <li><a href="/tags/deep-learning/">deep learning<span>27</span></a></li> <li><a href="/tags/object-detection/">object detection<span>5</span></a></li>
     </ul>
 	</div>
 		
