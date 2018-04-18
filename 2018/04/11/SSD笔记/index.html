@@ -6,17 +6,16 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>Identity Mappings in Deep Residual Networks笔记 | Mowayao&#39;s Blog</title>
+  <title>SSD笔记 | Mowayao&#39;s Blog</title>
   <meta name="author" content="Mowayao">
   
-  <meta name="description" content="论文 ：Identity Mappings in Deep Residual Networks, ECCV 2016
-链接：https://arxiv.org/pdf/1603.05027.pdf
-作者: Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian S">
+  <meta name="description" content="论文：SSD: Single Shot MultiBox Detector，ECCV 2016
+作者：Wei Liu, Dragomir Anguelov, Dumitru Erhan, Christian Szegedy, Scott Reed, Cheng-Yang Fu, Alexander ">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Identity Mappings in Deep Residual Networks笔记"/>
+  <meta property="og:title" content="SSD笔记"/>
   <meta property="og:site_name" content="Mowayao&#39;s Blog"/>
 
   
@@ -120,7 +119,7 @@ var _hmt = _hmt || [];
 
 	
 		<div class="page-header">
-			<h1> Identity Mappings in Deep Residual Networks笔记</h1>
+			<h1> SSD笔记</h1>
 		</div>
 	
 
@@ -137,64 +136,55 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  		
 
-	  <p>论文 ：Identity Mappings in Deep Residual Networks, ECCV 2016</p>
-<p>链接：<a href="https://arxiv.org/pdf/1603.05027.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1603.05027.pdf</a></p>
-<p>作者: Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun</p>
-<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>ResNet的每个unit可以表示为：<br>$$<br>y_l = h(x_l)+F(x_l,W_l) \ x_{l+1} = f(y_l)<br>$$<br>$x_l$是第l个unit的输入，$x_{l+1}$是l个单元的输出。在ResNet v1中，$h(x_l)=x_l$，表示identity mapping(做了3种尝试，选择了这种)，f是ReLU函数，F包含2-3个卷积层，中间还有BN和ReLU（见Figure 1(a))。如果h和f都是identity mapping的时候，<strong>信号可以直接从一个unit到另一个unit，无论是forward还是backward，这样可以使训练更加容易</strong>。</p>
-<p>Forward:<br>$$<br>x_{l+1}=x_l+F(x_l,W_l)… \ x_L = x_l + \sum_{i=l}^{L+1}F(x_i,W_i)<br>$$</p>
+	  <p>论文：SSD: Single Shot MultiBox Detector，<strong>ECCV</strong> 2016</p>
+<p>作者：Wei Liu, Dragomir Anguelov, Dumitru Erhan, Christian Szegedy, Scott Reed, Cheng-Yang Fu, Alexander C. Berg</p>
+<p>链接：<a href="https://arxiv.org/pdf/1512.02325.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1512.02325.pdf</a>    </p>
+<p>代码：<a href="https://github.com/weiliu89/caffe/tree/ssd" target="_blank" rel="external">https://github.com/weiliu89/caffe/tree/ssd</a></p>
+<p>gluon实现：<a href="https://github.com/mowayao/gluon_SSD" target="_blank" rel="external">https://github.com/mowayao/gluon_SSD</a></p>
 <ul>
-<li>第L层的特征$x_L$可以表示成$x_l+\sum_{i=l}^{L-1}F(x_i,W_i)$</li>
-<li>$x_L=x_o+\sum_{i=0}^{L-1}F(x_i,W_i)$，可以由所有的残差函数相加得到，再加上$x_o$</li>
+<li>将bbox的输出空间离散化到一些默认的priors，也就是默认设定的anchors</li>
+<li>不同Faster R-CNN的two stage的方式，SSD采用的是one shot的方法，精度和faster r-cnn接近，但是效率更高</li>
+<li>将多尺度的feature maps应用到detection中，针对不同尺度的feature map，采用不同scale和ratio</li>
 </ul>
-<p>Backward:</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fo5tv0mjxdj30my03mjrs.jpg" alt=""></p>
-<p>从梯度计算来看，$x_l$的梯度与l+1到L的layer都有关，$\frac{\partial \epsilon}{\partial x_L}$保证梯度会从L穿回到l，而且梯度不会消失，因为$\frac{\partial}{\partial x_l}\sum_{i=l}^{L-1}F(x_i, W_i)$很少为-1。</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fo5n89qljvj318e0v4tjb.jpg" alt=""></p>
-<p><strong>Identity Skip Connection</strong></p>
-<p>主要是印证当shortcut不取identity mapping时，效果为什么不好</p>
+<p>#####The Single Shot Detector (SSD)</p>
+<p>将feature map分成nxn的cells，每个cell可以预测固定数量的box的conf和offset</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fqfue2u6o9j316a0taww0.jpg" alt=""></p>
+<p><strong>Model</strong></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgroawjivj315i0r0dnf.jpg" alt=""></p>
+<p>模型是基于pretrained的VGG-16进行修改和fine-tune</p>
 <ul>
-<li>Scaling, $h(x)=\lambda x$</li>
+<li>Multi-scale feature map for detection: 在base net后加了conv feature layers用来做detection，这些layer使得feature maps的size逐渐降低，这样就可以做多尺度的预测</li>
+<li>Convolutional predictors for detection：在添加的conv feature layer后加入输出层，即conv predictor，生成固定大小的输出，对于mxn，p个channel的feature map，使用3x3xp的卷积核，预测conf和loc。</li>
+<li>Default boxes and aspect ratios：每个cell预测k个boxes，以及类别的数量是c，那么最后的输出channel则是(c+4)*k</li>
 </ul>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fo5yn3n5gsj30eo03o0sw.jpg" alt=""></p>
-<p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo5ynmkwmyj30k803uwev.jpg" alt=""></p>
-<p>和原来的梯度相比，从1变成了$\prod_{i=l}^{L-1}\lambda_i$，分类讨论，如果$\lambda_i$都大于1，那么如果层数深，梯度爆炸！如果$\lambda_i$都小于1，那么那项就会很小，梯度弥散！堵塞了shortcut。结果见Table 1，容易发现，结果反而变差了！</p>
+<p><strong>Training</strong></p>
 <ul>
-<li><p>Exclusive gating</p>
-<p>gating函数， $g(x)=\sigma(W_gx+b_g)$, $(1-g(x)) \times x + g(x)\times F(x)$,在卷积网络中，g(x)是1x1的卷积。</p>
-<p>结果依然不如baseline，结果见Table 1。当g(x)=0的时候，近似于identity，但是又抑制了F(x)</p>
+<li>Matching strategy: 需要将default boxes做划分，将与gt与box的jaccard overlap大于0.5的定为gt，其他定为background</li>
+<li>Training objective:</li>
+</ul>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqgqb60zbdj30wo040q3a.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqgqb6a4gij30zg09wmyu.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgqb74a9zj315c04mdgq.jpg" alt=""></p>
+<ul>
+<li>Choosing scales and aspect ratios for default boxes: 为了针对不同scale的object，scale被定义为：</li>
+</ul>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqgrc1164dj30wa03q3yw.jpg" alt=""></p>
+<p>$s_{min}=0.2, s_{max}=0.9,$ratios $a_r\in {1,2,3,\frac{1}{2}, \frac{1}{3}}$，$w_k=s_k\sqrt a_r, h_k=s_k/\sqrt a_r$。另外对于 ratio = 1 的情况，再指定 scale 为$，s_k=\sqrt {s_ks_{k+1}}$也就是总共有 6 种不同的 default box</p>
+<ul>
+<li>Hard negative mining: 在做完matching后，大部分的box都是背景，所以需要做采样，选择loss最高的几个，并且保持3:1的比例</li>
+<li>Data augmentation：<ul>
+<li>使用全图作为输入，</li>
+<li>使用IOU和目标物体为0.1, 0.3，0.5, 0.7, 0.9的patch （这些 patch 在原图的大小的 [0.1,1] 之间， 相应的宽高比在[1/2,2]之间）</li>
+<li>随机采取一个patch</li>
+</ul>
 </li>
 </ul>
-<ul>
-<li>Shortcut-only gating</li>
-</ul>
-<p>$(1-g(x))\times x+F(x)$，当$b_g$负的特别多的时候，例如-6，g(x)非常接近0的时候，近似于identity mapping，结果也比exclusive gating更好，更接近baseline，见Table 1。</p>
-<ul>
-<li>1x1 conv shortcut</li>
-</ul>
-<p>用1x1的conv代替identity，当深度加深的时候，效果会变差，见Table 1。</p>
-<ul>
-<li>Dropout shortcut</li>
-</ul>
-<p>对identity做dropout，类似于做scale，结果也不理想。</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79gy1fo5yt8ozenj30ye0iy0x5.jpg" alt=""></p>
-<p>总结一下：</p>
-<p>上述4种对shortcuts的修改，在实验结果上看，都不如identity mapping，可能的原因是影响了梯度的回传！</p>
-<p><strong>The impact of f</strong></p>
-<p>在原始的ResNet是ReLU，作者探讨了激活函数可能放置的各种方案，见Figure 4</p>
-<ol>
-<li>f = ReLU</li>
-<li>f = BN + ReLU，在CIFAR-10上的训练曲线见Figure 6，加了BN反而结果变差了！。</li>
-<li>ReLU放在加前，会导致F(x)的输入都大于等于0，而残差应该是在负无穷和正无穷之间</li>
-<li>非对称化，$x_{l+1}=x_l+F(\hat{f}(x_l),W_l)$，训练曲线见Figure 6，体现在训练时，收敛率更高，测试的错误率也更低。</li>
-</ol>
-<p>在CIFAR-10数据集上的对比结果见Table 2，可以发现，Figure 4(e)的方法错误率最低！</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fo76e6t07mj30ys0kawic.jpg" alt=""></p>
-<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fo76u1vr05j30yi0i20yf.jpg" alt=""></p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fo776l9s7hj31kw0hytdr.jpg" alt=""></p>
-<h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p>在ImageNet,CIFAR-10,CIFAR-100这3个数据集上做了对比试验，都取得了state-of-the-art的结果，见Table 4,5。</p>
-<p>在深层网络中，体现出了pre-act的作用！</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fo77epwjbgj31900ss10h.jpg" alt=""></p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fo76t0q108j30ym0gagqg.jpg" alt=""></p>
+<h5 id="Experimental-Results"><a href="#Experimental-Results" class="headerlink" title="Experimental Results"></a>Experimental Results</h5><p>Table 1是SSD在PASCAL VOC2007上的表现，可以发现SSD512的表现优于Faster R-CNN，SSD300兼顾性能和效率</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgqghdz3lj31600k2wo1.jpg" alt=""></p>
+<p>Table 4是SSD在 PASCAL VOC2012上的表现，可以发现SSD512取得了SOTA的表现</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgrepc7k2j316w0es7b4.jpg" alt=""></p>
+<p>Table 5是在COCO上的表现，同样是SOTA</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgreqfglbj316i0dwtd9.jpg" alt=""></p>
 	  
 	</div>
 
@@ -204,13 +194,13 @@ var _hmt = _hmt || [];
 
     
     
-    <a href="/2018/02/07/Rethinking-the-Inception-Architecture-for-Computer-Vision-Inception-V3-笔记/" type="button" class="btn btn-default"><i
+    <a href="/2018/04/18/OHEM算法笔记/" type="button" class="btn btn-default"><i
                 class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2018/02/01/Deep-Residual-Learning-for-Image-Recognition笔记/" type="button" class="btn btn-default ">Next<i
+    <a href="/2018/04/07/YOLO&YOLOv2笔记/" type="button" class="btn btn-default ">Next<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -239,7 +229,7 @@ var _hmt = _hmt || [];
 	
 	<div class="meta-widget">
 	<i class="fa fa-clock-o"></i>
-	2018-02-01 
+	2018-04-11 
 	</div>
 	
 
@@ -263,7 +253,7 @@ var _hmt = _hmt || [];
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/deep-learning/">deep learning<span>29</span></a></li> <li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
+  <li><a href="/tags/deep-learning/">deep learning<span>29</span></a></li> <li><a href="/tags/object-detection/">object detection<span>7</span></a></li>
     </ul>
 	</div>
 		

@@ -3,6 +3,110 @@
   
     
     <entry>
+      <title><![CDATA[OHEM算法笔记]]></title>
+      <url>/2018/04/18/OHEM%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/</url>
+      <content type="html"><![CDATA[<p>论文：Training Region-based Object Detectors with Online Hard Example Mining，<strong>CVPR</strong> 2016</p>
+<p>作者：Abhinav Shrivastava, Abhinav Gupta, Ross Girshick</p>
+<p>链接：<a href="https://arxiv.org/pdf/1604.03540.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1604.03540.pdf</a></p>
+<p>代码：<a href="https://github.com/abhi2610/ohem" target="_blank" rel="external">https://github.com/abhi2610/ohem</a></p>
+<p>Hard example mining是机器学习模型训练经常会用的trick，顾名思义，就是sample目前对于模型比较难的example进行“强化”学习。在CNN中对于patch选择根据策略的不同，主要有sliding window和proposal。大部分的情况是根据loss来判断是否是hard，只是作为训练的一个trick。文章针对Fast R-CNN，提出online hard example mining的算法对其进行优化。在VOC2007, 2012都取得了SOTA，mAP分别是78.9%，76.3%。</p>
+<h5 id="Fast-R-CNN"><a href="#Fast-R-CNN" class="headerlink" title="Fast R-CNN"></a>Fast R-CNN</h5><p>FRCNN中，proposal的选择由它与gt的overlap决定，确定一个proposal为背景的阈值范围是：$[bg_{lo},0.5]$，这个范围的假设是这样的proposal是hard的可能性较大。作者认为这样得到的结果很可能是次优的，因为在其他位置可能存在更hard但是infrequent的样本，OHEM算法中移除了这个阈值</p>
+<h5 id="OHEM"><a href="#OHEM" class="headerlink" title="OHEM"></a>OHEM</h5><p>idea很简单，就是在forward的时候根据loss排序，然后选择loss最大的，也就是最worst的样本进行backward更新模型的参数。但是这样会存在一个问题，就是当两个ROI位置相近的时候，在feature map上对应的是同一个位置，loss是相近的，所以作者提出了对hard examples做NMS，选择B/N个ROI最backward，这里NMS的阈值为0.7。</p>
+<p>接下来就是工程上的优化，ROI进行backward的时候，空间和时间的消耗较大，如果直接做backward，那些没有选中的ROI还是会做backward，所以作者提出了Figure 2的网络结构，包含两个一样的的ROI network，其中一个是immutable的，用于计算forward的loss，只有在forward的时候分配内存，然后hard RoI sampling module使用刚才所说的方法进行采样，作为输入传到第二个ROI network，进行forward和backward，然后累积gradient，再backward。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgutzexflj31kw0v41kx.jpg" alt=""></p>
+<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 3和Table 4是模型在VOC 2007和VOC 2012的表现，都是SOTA，对FRCN提升明显。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqh3cawf16j31600radsm.jpg" alt=""></p>
+]]></content>
+      
+        <categories>
+            
+            <category> algorithms </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> deep learning </tag>
+            
+            <tag> object detection </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[SSD笔记]]></title>
+      <url>/2018/04/11/SSD%E7%AC%94%E8%AE%B0/</url>
+      <content type="html"><![CDATA[<p>论文：SSD: Single Shot MultiBox Detector，<strong>ECCV</strong> 2016</p>
+<p>作者：Wei Liu, Dragomir Anguelov, Dumitru Erhan, Christian Szegedy, Scott Reed, Cheng-Yang Fu, Alexander C. Berg</p>
+<p>链接：<a href="https://arxiv.org/pdf/1512.02325.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1512.02325.pdf</a>    </p>
+<p>代码：<a href="https://github.com/weiliu89/caffe/tree/ssd" target="_blank" rel="external">https://github.com/weiliu89/caffe/tree/ssd</a></p>
+<p>gluon实现：<a href="https://github.com/mowayao/gluon_SSD" target="_blank" rel="external">https://github.com/mowayao/gluon_SSD</a></p>
+<ul>
+<li>将bbox的输出空间离散化到一些默认的priors，也就是默认设定的anchors</li>
+<li>不同Faster R-CNN的two stage的方式，SSD采用的是one shot的方法，精度和faster r-cnn接近，但是效率更高</li>
+<li>将多尺度的feature maps应用到detection中，针对不同尺度的feature map，采用不同scale和ratio</li>
+</ul>
+<p>#####The Single Shot Detector (SSD)</p>
+<p>将feature map分成nxn的cells，每个cell可以预测固定数量的box的conf和offset</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fqfue2u6o9j316a0taww0.jpg" alt=""></p>
+<p><strong>Model</strong></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgroawjivj315i0r0dnf.jpg" alt=""></p>
+<p>模型是基于pretrained的VGG-16进行修改和fine-tune</p>
+<ul>
+<li>Multi-scale feature map for detection: 在base net后加了conv feature layers用来做detection，这些layer使得feature maps的size逐渐降低，这样就可以做多尺度的预测</li>
+<li>Convolutional predictors for detection：在添加的conv feature layer后加入输出层，即conv predictor，生成固定大小的输出，对于mxn，p个channel的feature map，使用3x3xp的卷积核，预测conf和loc。</li>
+<li>Default boxes and aspect ratios：每个cell预测k个boxes，以及类别的数量是c，那么最后的输出channel则是(c+4)*k</li>
+</ul>
+<p><strong>Training</strong></p>
+<ul>
+<li>Matching strategy: 需要将default boxes做划分，将与gt与box的jaccard overlap大于0.5的定为gt，其他定为background</li>
+<li>Training objective:</li>
+</ul>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqgqb60zbdj30wo040q3a.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqgqb6a4gij30zg09wmyu.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgqb74a9zj315c04mdgq.jpg" alt=""></p>
+<ul>
+<li>Choosing scales and aspect ratios for default boxes: 为了针对不同scale的object，scale被定义为：</li>
+</ul>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqgrc1164dj30wa03q3yw.jpg" alt=""></p>
+<p>$s_{min}=0.2, s_{max}=0.9,$ratios $a_r\in {1,2,3,\frac{1}{2}, \frac{1}{3}}$，$w_k=s_k\sqrt a_r, h_k=s_k/\sqrt a_r$。另外对于 ratio = 1 的情况，再指定 scale 为$，s_k=\sqrt {s_ks_{k+1}}$也就是总共有 6 种不同的 default box</p>
+<ul>
+<li>Hard negative mining: 在做完matching后，大部分的box都是背景，所以需要做采样，选择loss最高的几个，并且保持3:1的比例</li>
+<li>Data augmentation：<ul>
+<li>使用全图作为输入，</li>
+<li>使用IOU和目标物体为0.1, 0.3，0.5, 0.7, 0.9的patch （这些 patch 在原图的大小的 [0.1,1] 之间， 相应的宽高比在[1/2,2]之间）</li>
+<li>随机采取一个patch</li>
+</ul>
+</li>
+</ul>
+<h5 id="Experimental-Results"><a href="#Experimental-Results" class="headerlink" title="Experimental Results"></a>Experimental Results</h5><p>Table 1是SSD在PASCAL VOC2007上的表现，可以发现SSD512的表现优于Faster R-CNN，SSD300兼顾性能和效率</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgqghdz3lj31600k2wo1.jpg" alt=""></p>
+<p>Table 4是SSD在 PASCAL VOC2012上的表现，可以发现SSD512取得了SOTA的表现</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgrepc7k2j316w0es7b4.jpg" alt=""></p>
+<p>Table 5是在COCO上的表现，同样是SOTA</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgreqfglbj316i0dwtd9.jpg" alt=""></p>
+]]></content>
+      
+        <categories>
+            
+            <category> algorithms </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> deep learning </tag>
+            
+            <tag> object detection </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[YOLO&YOLOv2笔记]]></title>
       <url>/2018/04/07/YOLO&amp;YOLOv2%E7%AC%94%E8%AE%B0/</url>
       <content type="html"><![CDATA[<h3 id="YOLO"><a href="#YOLO" class="headerlink" title="YOLO"></a>YOLO</h3><p>论文：You Only Look Once: Unified, Real-Time Object Detection，<strong>CVPR</strong> 2016</p>
@@ -61,7 +165,8 @@
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fq7vdy6vauj30ty0skjya.jpg" alt=""></p>
 <p>Table 2是ablation studies的结果</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fq7vx9xa1aj31kw0nwjy5.jpg" alt=""></p>
-<h5 id="Faster"><a href="#Faster" class="headerlink" title="Faster"></a>Faster</h5><p>提出darknet-19，效率相较于VGG 16有了较大的提升</p>
+<h5 id="Faster"><a href="#Faster" class="headerlink" title="Faster"></a>Faster</h5><p>提出darknet-19，效率相较于VGG 16有了较大的提升。</p>
+<p>VGG-16对于224x224的图像做一次forward，卷积层的浮点数计算为30.69 billion。而darknet-19的卷积层浮点数计算为8.52 billion，但是在分类的准确性上略有降低。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fq7x1hlp1vj30jm0pujve.jpg" alt=""></p>
 <h5 id="Stronger"><a href="#Stronger" class="headerlink" title="Stronger"></a>Stronger</h5><p>这里作者提出了一个非常fancy的idea，WordNet，解决不同数据集之间label mutually exclusive的问题。WordNet通过构建hierarchical tree来简化问题，并且选择最短的到达root的路径，Figure 6为图示。利用有向图对条件概率计算进行优化，分层地计算概率，然后做出预测。</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fq7wy9z9kxj30pc0wkqaw.jpg" alt=""></p>
