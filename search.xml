@@ -76,7 +76,7 @@
 <li>Hard negative mining: 在做完matching后，大部分的box都是背景，所以需要做采样，选择loss最高的几个，并且保持3:1的比例</li>
 <li>Data augmentation：<ul>
 <li>使用全图作为输入，</li>
-<li>使用IOU和目标物体为0.1, 0.3，0.5, 0.7, 0.9的patch （这些 patch 在原图的大小的 [0.1,1] 之间， 相应的宽高比在[1/2,2]之间）</li>
+<li>使用IOU和目标物体为0.1, 0.3，0.5, 0.7, 0.9的patch （这些 patch 在原图的大小的 $[0.1,1]$ 之间， 相应的宽高比在$[1/2,2]$之间）</li>
 <li>随机采取一个patch</li>
 </ul>
 </li>
