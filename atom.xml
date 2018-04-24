@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wulimengmeng.top/"/>
-  <updated>2018-04-18T12:45:28.778Z</updated>
+  <updated>2018-04-24T07:04:44.351Z</updated>
   <id>http://wulimengmeng.top/</id>
   
   <author>
@@ -15,6 +15,62 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>FPN论文笔记</title>
+    <link href="http://wulimengmeng.top/2018/04/21/FPN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/"/>
+    <id>http://wulimengmeng.top/2018/04/21/FPN论文笔记/</id>
+    <published>2018-04-21T03:50:20.000Z</published>
+    <updated>2018-04-24T07:04:44.351Z</updated>
+    
+    <content type="html"><![CDATA[<p>论文：Feature Pyramid Networks for Object Detection，<strong>CVPR</strong> 2017</p><p>作者：Tsung-Yi Lin, Piotr Doll´ar, Ross Girshick, Kaiming He, Bharath Hariharan, and Serge Belongie</p><p>链接：<a href="https://arxiv.org/pdf/1612.03144.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1612.03144.pdf</a></p><p>代码(unofficial)：<a href="https://github.com/unsky/FPN" target="_blank" rel="external">https://github.com/unsky/FPN</a></p><ul><li>feature pyramid在物体识别中比较常用，作者将其应用到object detection中</li><li>不同于SSD，作者使用top-down的结构将来自更高pyramid level的semantically stronger的feature map和higher resolution features相结合，使得detection的结构更加准确</li></ul><p>Figure 1是不同类型的feature map的使用方法，作者使用的是(d)的结构，SSD使用的是(c)的结构</p><p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqnpdczxhuj30w20usgvn.jpg" alt=""></p><h5 id="Feature-Pyramid-Networks"><a href="#Feature-Pyramid-Networks" class="headerlink" title="Feature Pyramid Networks"></a>Feature Pyramid Networks</h5><p>Figure 3是top-down pathway的示意结构，现将来自higher pyramid的feature maps升采样，再将该层的feature map做1x1的conv，减少channel dimension（固定为256d），再用element-wise addtion做merge，然后再用3x3的conv去消除上采样aliasing的影响。在C5上（最高层），先用1x1 conv产生粗糙的特征图。</p><p>${C2, C3, C4, C5}$层对应的融合特征层为${P2, P3, P4, P5}$</p><p>通过这样的操作来加强特征，即<strong>保留空间信息并增强语义信息</strong>。</p><p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqnpkyj02ej30tk0jcn00.jpg" alt=""></p><h5 id="Applications"><a href="#Applications" class="headerlink" title="Applications"></a>Applications</h5><p><strong>Feature Pyramid Networks for RPN</strong></p><p>RPN的参数配置和Faster R-CNN类似，作者提到了一点就是在feature pyramid的detection head参数是可以共享的，结果和不共享接近，这说明了<strong>不同level的pyramid的semantic level是相似的</strong>！</p><p><strong>Feature Pyramid Networks for Fast R-CNN</strong></p><p>这里的重点是ROI的分配：</p><p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqnqq1o4irj30m2034dg3.jpg" alt=""></p><p>w,h是ROI的宽和高，$k_0$=4，表示的是大小为224x224的ROI的target level，利用这个式子进行转换，分配到相应的pyramid level。</p><h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p><strong>Ablation Study</strong></p><p>Table 1，2，3是ablation study的表格</p><p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fqnqwou2qwj315g0uc7ef.jpg" alt=""></p><p>Table 4是单模型在COCO detection benchmark上的表现，FPN取得SOTA的表现</p><p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqnr7se6qpj31kw0iatgv.jpg" alt=""></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;论文：Feature Pyramid Networks for Object Detection，&lt;strong&gt;CVPR&lt;/strong&gt; 2017&lt;/p&gt;
+&lt;p&gt;作者：Tsung-Yi Lin, Piotr Doll´ar, Ross Girshick, Kaiming
+      
+    
+    </summary>
+    
+      <category term="algorithms" scheme="http://wulimengmeng.top/categories/algorithms/"/>
+    
+    
+      <category term="deep learning" scheme="http://wulimengmeng.top/tags/deep-learning/"/>
+    
+      <category term="object detection" scheme="http://wulimengmeng.top/tags/object-detection/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>RON论文笔记</title>
+    <link href="http://wulimengmeng.top/2018/04/21/RON%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/"/>
+    <id>http://wulimengmeng.top/2018/04/21/RON论文笔记/</id>
+    <published>2018-04-21T03:50:01.000Z</published>
+    <updated>2018-04-23T07:44:01.506Z</updated>
+    
+    <content type="html"><![CDATA[<p>论文：RON: Reverse Connection with Objectness Prior Networks for Object Detection，<strong>CVPR</strong> 2017</p><p>作者：Tao Kong，Fuchun Sun，Anbang Yao，Huaping Liu，Ming Lu，Yurong Chen</p><p>链接：<a href="https://arxiv.org/pdf/1707.01691.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1707.01691.pdf</a></p><p>代码：<a href="https://github.com/taokong/RON" target="_blank" rel="external">https://github.com/taokong/RON</a></p><p><strong>objective：</strong></p><ul><li>bridge the gap between the region-based and region-free methodologies </li></ul><p><strong>solution</strong>：</p><ul><li>Multi-scale object localization，利用多个scale的feature map做detection<ul><li>建立reverse connection，为前面的层提供highly semantic的information</li></ul></li><li>Negative space mining<ul><li>通过建立objectness prior减少objects的搜索空间</li></ul></li></ul><p>384x384的输入，PASCAL VOC 2007 81.3% mAP，PASCAL VOC 2012 80.7% mAP，COCO 27.4%</p><p>效率较高，1.5G的 GPU内存，forward的速度是15FPS</p><p>Figure 2是RON的网络模型，有4个scales feature map做detection。</p><p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqk5dydd50j30t20tcqde.jpg" alt=""></p><h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>网络以VGG 16为backbone，将FC6和FC7改造为conv layer，在FC7处降采样。</p><p>所以每个用于detection的feature map大小为：1/8 (conv 4 3), 1/16 (conv 5 3), 1/32 (conv 6) and 1/64 (conv 7)</p><p><strong>Reverse Connection</strong></p><p>reverse connection的结构见Figure 3，将后一层的输出经过deconv做upsampling，deconv的通道是512，当前层经过conv，再用summation的方式做merge。</p><p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqk5exvqeej30io0g6my5.jpg" alt=""></p><p><strong>Reference Boxes</strong></p><p>不同层的网络对应不同的receptive field，所以需要设计对应层的ref box的scale和ratio，下面是scale的设计：</p><p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqmjznn3cij30rc02umxf.jpg" alt=""></p><p>这里$s_{min}$设为$\frac{1}{10}$,不同的对应ratios是${\frac{1}{3},\frac{1}{2}, 1, 2, 3}$</p><p><strong>Objectness Prior</strong></p><p>针对正负样本比例严重失调， 这里使用 Objectness Prior 来过滤大部分负样本，具体的做法就是利用conv通道的设计，因为每个cell有10个default boxes，所以通道数是10，然后就是做二分类。这里需要设定阈值，将objectness score大于$o_p$的选为样本，这里$o_p$设为0.03，可以过滤掉大部分的样本。</p><p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqmmemlca0j30s00fwduh.jpg" alt=""></p><p><strong>Detection and Bounding Box Regression</strong></p><p>Figure 5是detection bbox reg head的结构，可以发现在分类的module中，作者加入了两个inception module来提高分类的精度</p><p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqk5fg7sxbj30tg0dimz5.jpg" alt=""></p><h5 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h5><p><strong>Loss</strong></p><p>相似的，也是multi-task loss</p><p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqmmnkgq8jj30so04igm3.jpg" alt=""></p><h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1-3是模型在PASCAL VOC 2007, 2012和COCO上的结果。</p><ul><li>可以发现RON对小物体的检测提升比较明显，例如boat和bottle。</li></ul><p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqmmqfxmthj31ko0dqq9a.jpg" alt=""></p><p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqmmraplo7j31kw0g2gt8.jpg" alt=""></p><p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqmmvqkb0xj30tg0hydjk.jpg" alt=""></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;论文：RON: Reverse Connection with Objectness Prior Networks for Object Detection，&lt;strong&gt;CVPR&lt;/strong&gt; 2017&lt;/p&gt;
+&lt;p&gt;作者：Tao Kong，Fuchun Sun，A
+      
+    
+    </summary>
+    
+      <category term="algorithms" scheme="http://wulimengmeng.top/categories/algorithms/"/>
+    
+    
+      <category term="deep learning" scheme="http://wulimengmeng.top/tags/deep-learning/"/>
+    
+      <category term="object detection" scheme="http://wulimengmeng.top/tags/object-detection/"/>
+    
+  </entry>
   
   <entry>
     <title>OHEM算法笔记</title>
@@ -518,64 +574,6 @@
       <category term="deep learning" scheme="http://wulimengmeng.top/tags/deep-learning/"/>
     
       <category term="classifcation" scheme="http://wulimengmeng.top/tags/classifcation/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Visualizing and UnderstandingConvolutional Networks笔记</title>
-    <link href="http://wulimengmeng.top/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks%E7%AC%94%E8%AE%B0/"/>
-    <id>http://wulimengmeng.top/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/</id>
-    <published>2018-01-18T07:19:00.000Z</published>
-    <updated>2018-01-24T06:31:31.678Z</updated>
-    
-    <content type="html"><![CDATA[<p>​论文：Visualizing and UnderstandingConvolutional Networks</p><p>作者：Matthew D Zeiler, Rob Fergus, ECCV, 2014</p><p>链接：<a href="https://cs.nyu.edu/~fergus/papers/zeilerECCV2014.pdf" target="_blank" rel="external">https://cs.nyu.edu/~fergus/papers/zeilerECCV2014.pdf</a></p><p>博客链接：<a href="http://wulimengmeng.top/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks%E7%AC%94%E8%AE%B0/">http://wulimengmeng.top/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks%E7%AC%94%E8%AE%B0/</a></p><p>代码实现： <a href="https://github.com/mowayao/Deconvnet" target="_blank" rel="external">https://github.com/mowayao/Deconvnet</a></p><p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkxf4e7rcj318g0dgdke.jpg" alt=""></p><p><strong>Idea:</strong> 模型的可视化对模型的优化非常重要，更好的理解模型可以帮助我们更好地改进模型。作者将网络的任一层输出的feature maps通过Deconvnet反馈到最终的输入（input pixel space）上（reveals the input stimuli that excite individual feature maps at any layer in the model）。</p><h5 id="Deconvnet"><a href="#Deconvnet" class="headerlink" title="Deconvnet"></a>Deconvnet</h5><p>Deconvnet，顾名思义，就是将卷积，pooling，ReLU等运算做逆运算，将feature maps映射回pixels，可视化该feature map被原图哪部分特征激活，从而理解该feature map从原图像学习了何种特征。</p><p>随机选择一些不同层的feature maps，经过“反向运算”，<strong><em>unpooling-&gt;ReLU-&gt;Transposed Conv</em></strong>，映射到输入，具体可以见Fig. 1。左边为Deconvnet，右边是Convnet，Unpooling层和pooling层一一对应。convnet是输入图像提取特征，而deconvnet是从特征映射到输入图像。</p><p><strong>Unpooling:</strong> 通过记录每个pooling region的最大值的位置，在运算的时候将最大值复制到原来的位置，其他位置的值设为0。</p><p><strong>ReLU</strong>：和forward时的ReLU运算相同</p><p><strong>Filtering</strong>: 就是卷积的逆运算，卷积核的转置。</p><p>考虑一个简单的卷积层运算，其参数为(feature map dim=4, kernel size=3, stride=1, padding=0, output dim=2)</p><p>我们可以将$3\times3$ kernel转换成等价的稀疏矩阵C：</p><p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fnqehkh9h4j30kc02hweb.jpg" alt=""></p><p>再将$[4\times 4]$的输入转换成等价的16维的向量，那么$y=Cx$的输出就是一个4维向量，再将其转换成$2\times2$的矩阵，得到最终的结果。</p><p>而Deconv也称Transposed conv，就是变成$C^Ty$。</p><p>其实整个过程和convolution的back-propagation是很像的。<br>$$<br>\frac{\partial L}{\partial x_i} = \sum_j\frac{\partial y_j}{\partial  x_i}\cdot\frac{\partial L}{\partial y_j} \ = \sum_{j}C_{i,j}\cdot \frac{\partial L}{\partial y_j} \ = C^T_{*,i} \frac{\partial L}{\partial y}<br>$$<br>还有一个很重要的概念需要厘清：为什么用这种类似back-propogation的方法将feature map映射回输入图像，可以反应出feature map在原图中学到的东西？</p><p>我们假设CNN是一个high level的非线性函数$f(X)$，输出是feature map。我们这里把所有的参数看成一个整体，做一个近似:<br>$$<br>f(X) \approx  W_iX<br>$$<br>这里的$W_i$表示的是第i个pattern，那么$f(X)$求关于X的梯度其实就是pattern W。</p><p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkv3ckslgj30us0qowkv.jpg" alt=""></p><h5 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h5><p>基于AlexNet修改，将第一层$11\times 11$的大小减小到$7\times 7$, 并将步长从4减少到2， 并ImageNet 2012数据集上训练，具体见Fig. 3。</p><p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkzcp3ebcj30uy0i2791.jpg" alt=""></p><h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p><strong>可视化：</strong></p><p>结果见Fig. 2。 </p><p>Layer 1: 可以看到基本上是一些图像最基本的元素，例如，edge，corner等。</p><p>Layer 2-5： 随着深度的加深，其特征越来越具体，variance也越来越大！具有越来越强的辨别能力。</p><p>说明CNN学习到的特征是层次化的！</p><p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkzpsayskj30ji0sc1kx.jpg" alt=""></p><p><strong>遮挡实验：</strong></p><p>将图片中的一些区域进行遮挡，将其换成灰色方块，结果见Fig 6。具体以第一行为例，可以发现，当狗的身体一部分被遮挡时，网络还是显示亮蓝色，表示预测的是网球。说明，网络已经学会根据图像的context信息去剔除与目标无关的区域或者物体。</p><p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fnl01ru982j30q40s84hp.jpg" alt=""></p><p><strong>Varying ImageNet Model Sizes：</strong></p><p>对AlextNet进行模型调优，结果见Table 2。主要有几个发现：</p><ul><li>去掉全连接层反而降低了错误率</li><li>增大中间层的卷积的数量可以大大提升模型性能</li></ul><p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fnl14d4h7dj30zu0m2q8s.jpg" alt=""></p><p><strong>Feature Generalization:</strong></p><p>测试模型的泛化能力，在Caltech-101, Caltech-256，PASCAL VOC 2012这三个数据集上测试模型提取特征的泛化性。 具体的做法就是1-7层的参数不动，然后训练一个新的softmax分类器。具体结果见Table 3, 4, 5，显示出了很强的泛化能力。</p><p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fnl1hi1a55j30z20b8tav.jpg" alt=""></p><p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnl1hwfrjwj30rs0ay40f.jpg" alt=""></p><p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnl1hydlkcj30zm0iy0yg.jpg" alt=""></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;​论文：Visualizing and UnderstandingConvolutional Networks&lt;/p&gt;
-&lt;p&gt;作者：Matthew D Zeiler, Rob Fergus, ECCV, 2014&lt;/p&gt;
-&lt;p&gt;链接：&lt;a href=&quot;https://cs.
-      
-    
-    </summary>
-    
-      <category term="algorithms" scheme="http://wulimengmeng.top/categories/algorithms/"/>
-    
-    
-      <category term="deep learning" scheme="http://wulimengmeng.top/tags/deep-learning/"/>
-    
-      <category term="classfication" scheme="http://wulimengmeng.top/tags/classfication/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Network In Network算法笔记</title>
-    <link href="http://wulimengmeng.top/2018/01/18/Network-In-Network%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/"/>
-    <id>http://wulimengmeng.top/2018/01/18/Network-In-Network算法笔记/</id>
-    <published>2018-01-18T05:38:31.000Z</published>
-    <updated>2018-01-24T07:45:17.151Z</updated>
-    
-    <content type="html"><![CDATA[<p>论文：Network In Network</p><p>作者：Min Lin, Qiang Chen, Shuicheng Yan  ICLR 2014</p><p>链接：<a href="https://arxiv.org/pdf/1312.4400.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1312.4400.pdf</a></p><p><strong>Idea:</strong> 传统的CNN一般就是通过linear filter和输入的每个和filter大小相同的local patches做内积，然后再跟一个非线性激活函数。CNN的linear filter对于输入的每个local patch，是一个GLM（generalized linear model）。作者argue：GLM的抽象层次比较低(the level of abstraction of GLM is low)，这里的level of abstrction可以理解成不变性的抽象层次（invariant to the variants of some concepts）。GLM依赖于data或者concept线性可分的assumption，当data或者concept线性不可分的时候抽象能力就大大下降，而实际上现实中图像数据往往是low-dim manifold in high-dim space，所以往往是线性不可分的。因此作者提出用一些非线性的函数逼近器(nonlinear function approximator)来代替GLM，从而能够提取local patches更抽象的特征，提高模型对于local patch的判别能力（discrimminability）。Figure 1就是传统的CNN和NIN的比较。</p><p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkplf4900j319g0kigpu.jpg" alt=""></p><h5 id="模型细节"><a href="#模型细节" class="headerlink" title="模型细节"></a>模型细节</h5><p>本质上是将convolution -&gt; relu替换为convolution -&gt; relu -&gt; convolution (1x1 filter) -&gt; relu</p><p>对于$1\times 1$的卷积，在二维的情况下只是起到scale的作用，例如输入是$[32×32]$做1×1的卷积，只是对输入的每个元素做放大或者缩小，而如果输入是$[32×32×3]$，再做1×1的卷积，那么它其实就是对该位置的所有通道的线性组合，也可以叫做feature pooling或coordinate-dependent transformation。</p><p>最大的贡献是:</p><ol><li>$1\times 1$ 卷积的用法</li><li>Global average pooling的应用</li></ol><p>优点：</p><ol><li>local patch的抽象能力强</li><li>通过global average pooling减少overfitting</li><li>参数少,用GAP代替全连接层</li></ol><p><strong>MLP Convolution Layers</strong></p><p>作者选择多层的感知机(其实也就是 $1\times1$  的卷积层)作为function approximator，并列举了两个理由：</p><ol><li>和CNN兼容，可以用BP训练</li><li>自身可以作为一个deep model，可以用 $1\times 1$ 的卷积替代</li></ol><p>传统的CNN的feature maps的计算如下,ReLU为激活函数：<br>$$<br>f_{i,j,k} = \max(w_k^Tx_{i,j},0)<br>$$<br>maxout层feature maps的计算如下：<br>$$<br>f_{i,j,k}=\max_m(w_{k_m}^Tx_{i,j})<br>$$<br>maxout其实就是ReLU和Leaky ReLU的扩展，提升非线性能力，弥补了两者的缺点，例如应用ReLU激活函数，训练到后面，大部分neron会“挂掉”，因为已经死掉的neuron不会再有梯度了！除此之外，maxout的拟合能力是非常强的，它可以拟合任意的的凸函数。最直观的解释就是任意的凸函数都可以由分段线性函数以任意精度拟合。</p><p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fnlus4z8aaj30e904d74l.jpg" alt=""></p><p>mlpconv layer的计算如下：<br>$$<br>f_{i,j,k_1}^1=\max({w_{k_1}^1}^Tx_{i,j}+b_{k_1},0) \ … \ f_{i,j,k_n}^n=\max({w_{k_n}^n}^Tx_{i,j}+b_{k_n},0)<br>$$</p><p>n是多层感知机的层数。Figure 2是NIN的整体结构。</p><p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fnkq60369mj31780gsn1j.jpg" alt=""></p><p><strong>Global Average Pooling</strong></p><p>传统的CNN网络在做完所有卷积运算后，会把feature maps拉成一条向量，然后再接几层全连接层做分类。这样的问题是，多层的全连接经常会overfitting，当然也可以加Dropout来作为regularizer提高泛化性。作者提出global average pooling来取代全连接层，顾名思义，就是对每个feature map求全局平均，这样整个输出就变成了长度为feature maps深度的向量，这样能够有更好的空间不变形。除此之外，因为减少了待优化的参数避免了过拟合的发生。</p><h5 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h5><p><strong>Pytorch</strong></p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Net</span><span class="params">(nn.Module)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, num_classes)</span>:</span></div><div class="line">        super(Net, self).__init__()</div><div class="line">        self.num_classes = num_classes</div><div class="line">        self.classifer = nn.Sequential(</div><div class="line">                nn.Conv2d(<span class="number">3</span>, <span class="number">192</span>, kernel_size=<span class="number">5</span>, stride=<span class="number">1</span>, padding=<span class="number">2</span>),</div><div class="line">                nn.ReLU(inplace=<span class="keyword">True</span>),</div><div class="line">                nn.Conv2d(<span class="number">192</span>, <span class="number">160</span>, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span>),</div><div class="line">                nn.ReLU(inplace=<span class="keyword">True</span>),</div><div class="line">                nn.Conv2d(<span class="number">160</span>,  <span class="number">96</span>, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span>),</div><div class="line">                nn.ReLU(inplace=<span class="keyword">True</span>),</div><div class="line">                nn.MaxPool2d(kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">1</span>),</div><div class="line">                nn.Dropout(<span class="number">0.5</span>),</div><div class="line"></div><div class="line">                nn.Conv2d(<span class="number">96</span>, <span class="number">192</span>, kernel_size=<span class="number">5</span>, stride=<span class="number">1</span>, padding=<span class="number">2</span>),</div><div class="line">                nn.ReLU(inplace=<span class="keyword">True</span>),</div><div class="line">                nn.Conv2d(<span class="number">192</span>, <span class="number">192</span>, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span>),</div><div class="line">                nn.ReLU(inplace=<span class="keyword">True</span>),</div><div class="line">                nn.Conv2d(<span class="number">192</span>, <span class="number">192</span>, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span>),</div><div class="line">                nn.ReLU(inplace=<span class="keyword">True</span>),</div><div class="line">                nn.AvgPool2d(kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">1</span>),</div><div class="line">                nn.Dropout(<span class="number">0.5</span>),</div><div class="line"></div><div class="line">                nn.Conv2d(<span class="number">192</span>, <span class="number">192</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>),</div><div class="line">                nn.ReLU(inplace=<span class="keyword">True</span>),</div><div class="line">                nn.Conv2d(<span class="number">192</span>, <span class="number">192</span>, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span>),</div><div class="line">                nn.ReLU(inplace=<span class="keyword">True</span>),</div><div class="line">                nn.Conv2d(<span class="number">192</span>,  num_classes, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span>),</div><div class="line">                nn.ReLU(inplace=<span class="keyword">True</span>),</div><div class="line">                nn.AvgPool2d(kernel_size=<span class="number">8</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span>),</div><div class="line">                )</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></div><div class="line">        x = self.classifer(x)</div><div class="line">        x = x.view(<span class="number">-1</span>, self.num_classes)</div><div class="line">        <span class="keyword">return</span> x</div></pre></td></tr></table></figure><h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p>作者在CIFAR-10, CIFAR-100, SVHN和MNIST上进行测试。</p><p><strong>CIFAR-10</strong>: 50,000个训练样本，10,000个测试样本，图像大小为 $32\times32$ ，实验结果见Table 1。Dropout和data augmentation对结果提升明显。It turns out in our experiment that using dropout in between the mlpconv layers in NIN boosts the performance  of  the  network  by  improving  the  generalization  ability  of  the  model. </p><p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fnkr9b10ylj30xk0fe0wc.jpg" alt=""></p><p><strong>CIFAR-100</strong>: 数据规模和图像大小和cifar-10一样，不同的是它有100类，结果见Table 2。</p><p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fnkrewcgz6j30fc066aaq.jpg" alt=""></p><p><strong>SVHN</strong>：包含630,420张 $32\times32$ 的图像，将其分类训练集，验证集，测试集。具体结果见Table 3。</p><p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fnkrhat3qrj30fy07wt9o.jpg" alt=""></p><p><strong>MNIST</strong>：包含60,000张$28\times 28$的训练图像，和10,000张测试图像，具体结果见Table 4。</p><p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fnkrjy6lgqj30ey05ejrx.jpg" alt=""></p><p><strong>Global Average Pooling</strong></p><p>通过控制变量，发现GAP对结果的提升还是比较明显的，可以作为regularizer，具体见Table 5。</p><p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fnkrld8nt8j30g8056mxo.jpg" alt=""></p><p><strong>Visualization</strong></p><p>Figure 4 展示了一些样例图片采样自cifar-10和它们对应类别的features maps。</p><p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fnkrpb3zc7j30nu0f80y5.jpg" alt=""></p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;论文：Network In Network&lt;/p&gt;
-&lt;p&gt;作者：Min Lin, Qiang Chen, Shuicheng Yan  ICLR 2014&lt;/p&gt;
-&lt;p&gt;链接：&lt;a href=&quot;https://arxiv.org/pdf/1312.4400.pdf&quot; tar
-      
-    
-    </summary>
-    
-      <category term="algorithms" scheme="http://wulimengmeng.top/categories/algorithms/"/>
-    
-    
-      <category term="deep learning" scheme="http://wulimengmeng.top/tags/deep-learning/"/>
-    
-      <category term="classfication" scheme="http://wulimengmeng.top/tags/classfication/"/>
     
   </entry>
   

@@ -3,6 +3,123 @@
   
     
     <entry>
+      <title><![CDATA[FPN论文笔记]]></title>
+      <url>/2018/04/21/FPN%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</url>
+      <content type="html"><![CDATA[<p>论文：Feature Pyramid Networks for Object Detection，<strong>CVPR</strong> 2017</p>
+<p>作者：Tsung-Yi Lin, Piotr Doll´ar, Ross Girshick, Kaiming He, Bharath Hariharan, and Serge Belongie</p>
+<p>链接：<a href="https://arxiv.org/pdf/1612.03144.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1612.03144.pdf</a></p>
+<p>代码(unofficial)：<a href="https://github.com/unsky/FPN" target="_blank" rel="external">https://github.com/unsky/FPN</a></p>
+<ul>
+<li>feature pyramid在物体识别中比较常用，作者将其应用到object detection中</li>
+<li>不同于SSD，作者使用top-down的结构将来自更高pyramid level的semantically stronger的feature map和higher resolution features相结合，使得detection的结构更加准确</li>
+</ul>
+<p>Figure 1是不同类型的feature map的使用方法，作者使用的是(d)的结构，SSD使用的是(c)的结构</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqnpdczxhuj30w20usgvn.jpg" alt=""></p>
+<h5 id="Feature-Pyramid-Networks"><a href="#Feature-Pyramid-Networks" class="headerlink" title="Feature Pyramid Networks"></a>Feature Pyramid Networks</h5><p>Figure 3是top-down pathway的示意结构，现将来自higher pyramid的feature maps升采样，再将该层的feature map做1x1的conv，减少channel dimension（固定为256d），再用element-wise addtion做merge，然后再用3x3的conv去消除上采样aliasing的影响。在C5上（最高层），先用1x1 conv产生粗糙的特征图。</p>
+<p>${C2, C3, C4, C5}$层对应的融合特征层为${P2, P3, P4, P5}$</p>
+<p>通过这样的操作来加强特征，即<strong>保留空间信息并增强语义信息</strong>。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqnpkyj02ej30tk0jcn00.jpg" alt=""></p>
+<h5 id="Applications"><a href="#Applications" class="headerlink" title="Applications"></a>Applications</h5><p><strong>Feature Pyramid Networks for RPN</strong></p>
+<p>RPN的参数配置和Faster R-CNN类似，作者提到了一点就是在feature pyramid的detection head参数是可以共享的，结果和不共享接近，这说明了<strong>不同level的pyramid的semantic level是相似的</strong>！</p>
+<p><strong>Feature Pyramid Networks for Fast R-CNN</strong></p>
+<p>这里的重点是ROI的分配：</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqnqq1o4irj30m2034dg3.jpg" alt=""></p>
+<p>w,h是ROI的宽和高，$k_0$=4，表示的是大小为224x224的ROI的target level，利用这个式子进行转换，分配到相应的pyramid level。</p>
+<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p><strong>Ablation Study</strong></p>
+<p>Table 1，2，3是ablation study的表格</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fqnqwou2qwj315g0uc7ef.jpg" alt=""></p>
+<p>Table 4是单模型在COCO detection benchmark上的表现，FPN取得SOTA的表现</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqnr7se6qpj31kw0iatgv.jpg" alt=""></p>
+]]></content>
+      
+        <categories>
+            
+            <category> algorithms </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> deep learning </tag>
+            
+            <tag> object detection </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[RON论文笔记]]></title>
+      <url>/2018/04/21/RON%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/</url>
+      <content type="html"><![CDATA[<p>论文：RON: Reverse Connection with Objectness Prior Networks for Object Detection，<strong>CVPR</strong> 2017</p>
+<p>作者：Tao Kong，Fuchun Sun，Anbang Yao，Huaping Liu，Ming Lu，Yurong Chen</p>
+<p>链接：<a href="https://arxiv.org/pdf/1707.01691.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1707.01691.pdf</a></p>
+<p>代码：<a href="https://github.com/taokong/RON" target="_blank" rel="external">https://github.com/taokong/RON</a></p>
+<p><strong>objective：</strong></p>
+<ul>
+<li>bridge the gap between the region-based and region-free methodologies </li>
+</ul>
+<p><strong>solution</strong>：</p>
+<ul>
+<li>Multi-scale object localization，利用多个scale的feature map做detection<ul>
+<li>建立reverse connection，为前面的层提供highly semantic的information</li>
+</ul>
+</li>
+<li>Negative space mining<ul>
+<li>通过建立objectness prior减少objects的搜索空间</li>
+</ul>
+</li>
+</ul>
+<p>384x384的输入，PASCAL VOC 2007 81.3% mAP，PASCAL VOC 2012 80.7% mAP，COCO 27.4%</p>
+<p>效率较高，1.5G的 GPU内存，forward的速度是15FPS</p>
+<p>Figure 2是RON的网络模型，有4个scales feature map做detection。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqk5dydd50j30t20tcqde.jpg" alt=""></p>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>网络以VGG 16为backbone，将FC6和FC7改造为conv layer，在FC7处降采样。</p>
+<p>所以每个用于detection的feature map大小为：1/8 (conv 4 3), 1/16 (conv 5 3), 1/32 (conv 6) and 1/64 (conv 7)</p>
+<p><strong>Reverse Connection</strong></p>
+<p>reverse connection的结构见Figure 3，将后一层的输出经过deconv做upsampling，deconv的通道是512，当前层经过conv，再用summation的方式做merge。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqk5exvqeej30io0g6my5.jpg" alt=""></p>
+<p><strong>Reference Boxes</strong></p>
+<p>不同层的网络对应不同的receptive field，所以需要设计对应层的ref box的scale和ratio，下面是scale的设计：</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqmjznn3cij30rc02umxf.jpg" alt=""></p>
+<p>这里$s_{min}$设为$\frac{1}{10}$,不同的对应ratios是${\frac{1}{3},\frac{1}{2}, 1, 2, 3}$</p>
+<p><strong>Objectness Prior</strong></p>
+<p>针对正负样本比例严重失调， 这里使用 Objectness Prior 来过滤大部分负样本，具体的做法就是利用conv通道的设计，因为每个cell有10个default boxes，所以通道数是10，然后就是做二分类。这里需要设定阈值，将objectness score大于$o_p$的选为样本，这里$o_p$设为0.03，可以过滤掉大部分的样本。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqmmemlca0j30s00fwduh.jpg" alt=""></p>
+<p><strong>Detection and Bounding Box Regression</strong></p>
+<p>Figure 5是detection bbox reg head的结构，可以发现在分类的module中，作者加入了两个inception module来提高分类的精度</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqk5fg7sxbj30tg0dimz5.jpg" alt=""></p>
+<h5 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h5><p><strong>Loss</strong></p>
+<p>相似的，也是multi-task loss</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqmmnkgq8jj30so04igm3.jpg" alt=""></p>
+<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1-3是模型在PASCAL VOC 2007, 2012和COCO上的结果。</p>
+<ul>
+<li>可以发现RON对小物体的检测提升比较明显，例如boat和bottle。</li>
+</ul>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqmmqfxmthj31ko0dqq9a.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqmmraplo7j31kw0g2gt8.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqmmvqkb0xj30tg0hydjk.jpg" alt=""></p>
+]]></content>
+      
+        <categories>
+            
+            <category> algorithms </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> deep learning </tag>
+            
+            <tag> object detection </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
       <title><![CDATA[OHEM算法笔记]]></title>
       <url>/2018/04/18/OHEM%E7%AE%97%E6%B3%95%E7%AC%94%E8%AE%B0/</url>
       <content type="html"><![CDATA[<p>论文：Training Region-based Object Detectors with Online Hard Example Mining，<strong>CVPR</strong> 2016</p>

@@ -6,7 +6,7 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>第 3 頁 | Mowayao&#39;s Blog</title>
+  <title>Page 3 | Mowayao&#39;s Blog</title>
   <meta name="author" content="Mowayao">
   
   
@@ -136,6 +136,151 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/" >Visualizing and UnderstandingConvolutional Networks笔记</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2018-01-18  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>​论文：Visualizing and UnderstandingConvolutional Networks</p>
+<p>作者：Matthew D Zeiler, Rob Fergus, ECCV, 2014</p>
+<p>链接：<a href="https://cs.nyu.edu/~fergus/papers/zeilerECCV2014.pdf" target="_blank" rel="external">https://cs.nyu.edu/~fergus/papers/zeilerECCV2014.pdf</a></p>
+<p>博客链接：<a href="http://wulimengmeng.top/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks%E7%AC%94%E8%AE%B0/">http://wulimengmeng.top/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks%E7%AC%94%E8%AE%B0/</a></p>
+<p>代码实现： <a href="https://github.com/mowayao/Deconvnet" target="_blank" rel="external">https://github.com/mowayao/Deconvnet</a></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkxf4e7rcj318g0dgdke.jpg" alt=""></p>
+<p><strong>Idea:</strong> 模型的可视化对模型的优化非常重要，更好的理解模型可以帮助我们更好地改进模型。作者将网络的任一层输出的feature maps通过Deconvnet反馈到最终的输入（input pixel space）上（reveals the input stimuli that excite individual feature maps at any layer in the model）。</p>
+<h5 id="Deconvnet"><a href="#Deconvnet" class="headerlink" title="Deconvnet"></a>Deconvnet</h5><p>Deconvnet，顾名思义，就是将卷积，pooling，ReLU等运算做逆运算，将feature maps映射回pixels，可视化该feature map被原图哪部分特征激活，从而理解该feature map从原图像学习了何种特征。</p>
+<p>随机选择一些不同层的feature maps，经过“反向运算”，<strong><em>unpooling-&gt;ReLU-&gt;Transposed Conv</em></strong>，映射到输入，具体可以见Fig. 1。左边为Deconvnet，右边是Convnet，Unpooling层和pooling层一一对应。convnet是输入图像提取特征，而deconvnet是从特征映射到输入图像。</p>
+<p><strong>Unpooling:</strong> 通过记录每个pooling region的最大值的位置，在运算的时候将最大值复制到原来的位置，其他位置的值设为0。</p>
+<p><strong>ReLU</strong>：和forward时的ReLU运算相同</p>
+<p><strong>Filtering</strong>: 就是卷积的逆运算，卷积核的转置。</p>
+<p>考虑一个简单的卷积层运算，其参数为(feature map dim=4, kernel size=3, stride=1, padding=0, output dim=2)</p>
+<p>我们可以将$3\times3$ kernel转换成等价的稀疏矩阵C：</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fnqehkh9h4j30kc02hweb.jpg" alt=""></p>
+<p>再将$[4\times 4]$的输入转换成等价的16维的向量，那么$y=Cx$的输出就是一个4维向量，再将其转换成$2\times2$的矩阵，得到最终的结果。</p>
+<p>而Deconv也称Transposed conv，就是变成$C^Ty$。</p>
+<p>其实整个过程和convolution的back-propagation是很像的。<br>$$<br>\frac{\partial L}{\partial x_i} = \sum_j\frac{\partial y_j}{\partial  x_i}\cdot\frac{\partial L}{\partial y_j} \ = \sum_{j}C_{i,j}\cdot \frac{\partial L}{\partial y_j} \ = C^T_{*,i} \frac{\partial L}{\partial y}<br>$$<br>还有一个很重要的概念需要厘清：为什么用这种类似back-propogation的方法将feature map映射回输入图像，可以反应出feature map在原图中学到的东西？</p>
+<p>我们假设CNN是一个high level的非线性函数$f(X)$，输出是feature map。我们这里把所有的参数看成一个整体，做一个近似:<br>$$<br>f(X) \approx  W_iX<br>$$<br>这里的$W_i$表示的是第i个pattern，那么$f(X)$求关于X的梯度其实就是pattern W。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkv3ckslgj30us0qowkv.jpg" alt=""></p>
+<h5 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h5><p>基于AlexNet修改，将第一层$11\times 11$的大小减小到$7\times 7$, 并将步长从4减少到2， 并ImageNet 2012数据集上训练，具体见Fig. 3。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkzcp3ebcj30uy0i2791.jpg" alt=""></p>
+<h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p><strong>可视化：</strong></p>
+<p>结果见Fig. 2。 </p>
+<p>Layer 1: 可以看到基本上是一些图像最基本的元素，例如，edge，corner等。</p>
+<p>Layer 2-5： 随着深度的加深，其特征越来越具体，variance也越来越大！具有越来越强的辨别能力。</p>
+<p>说明CNN学习到的特征是层次化的！</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkzpsayskj30ji0sc1kx.jpg" alt=""></p>
+<p><strong>遮挡实验：</strong></p>
+<p>将图片中的一些区域进行遮挡，将其换成灰色方块，结果见Fig 6。具体以第一行为例，可以发现，当狗的身体一部分被遮挡时，网络还是显示亮蓝色，表示预测的是网球。说明，网络已经学会根据图像的context信息去剔除与目标无关的区域或者物体。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fnl01ru982j30q40s84hp.jpg" alt=""></p>
+<p><strong>Varying ImageNet Model Sizes：</strong></p>
+<p>对AlextNet进行模型调优，结果见Table 2。主要有几个发现：</p>
+<ul>
+<li>去掉全连接层反而降低了错误率</li>
+<li>增大中间层的卷积的数量可以大大提升模型性能</li>
+</ul>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fnl14d4h7dj30zu0m2q8s.jpg" alt=""></p>
+<p><strong>Feature Generalization:</strong></p>
+<p>测试模型的泛化能力，在Caltech-101, Caltech-256，PASCAL VOC 2012这三个数据集上测试模型提取特征的泛化性。 具体的做法就是1-7层的参数不动，然后训练一个新的softmax分类器。具体结果见Table 3, 4, 5，显示出了很强的泛化能力。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fnl1hi1a55j30z20b8tav.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnl1hwfrjwj30rs0ay40f.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnl1hydlkcj30zm0iy0yg.jpg" alt=""></p>
+
+	
+	</div>
+  <a type="button" href="/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2018/01/18/Network-In-Network算法笔记/" >Network In Network算法笔记</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2018-01-18  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>论文：Network In Network</p>
+<p>作者：Min Lin, Qiang Chen, Shuicheng Yan  ICLR 2014</p>
+<p>链接：<a href="https://arxiv.org/pdf/1312.4400.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1312.4400.pdf</a></p>
+<p><strong>Idea:</strong> 传统的CNN一般就是通过linear filter和输入的每个和filter大小相同的local patches做内积，然后再跟一个非线性激活函数。CNN的linear filter对于输入的每个local patch，是一个GLM（generalized linear model）。作者argue：GLM的抽象层次比较低(the level of abstraction of GLM is low)，这里的level of abstrction可以理解成不变性的抽象层次（invariant to the variants of some concepts）。GLM依赖于data或者concept线性可分的assumption，当data或者concept线性不可分的时候抽象能力就大大下降，而实际上现实中图像数据往往是low-dim manifold in high-dim space，所以往往是线性不可分的。因此作者提出用一些非线性的函数逼近器(nonlinear function approximator)来代替GLM，从而能够提取local patches更抽象的特征，提高模型对于local patch的判别能力（discrimminability）。Figure 1就是传统的CNN和NIN的比较。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkplf4900j319g0kigpu.jpg" alt=""></p>
+<h5 id="模型细节"><a href="#模型细节" class="headerlink" title="模型细节"></a>模型细节</h5><p>本质上是将convolution -&gt; relu替换为convolution -&gt; relu -&gt; convolution (1x1 filter) -&gt; relu</p>
+<p>对于$1\times 1$的卷积，在二维的情况下只是起到scale的作用，例如输入是$[32×32]$做1×1的卷积，只是对输入的每个元素做放大或者缩小，而如果输入是$[32×32×3]$，再做1×1的卷积，那么它其实就是对该位置的所有通道的线性组合，也可以叫做feature pooling或coordinate-dependent transformation。</p>
+<p>最大的贡献是:</p>
+<ol>
+<li>$1\times 1$ 卷积的用法</li>
+<li>Global average pooling的应用</li>
+</ol>
+<p>优点：</p>
+<ol>
+<li>local patch的抽象能力强</li>
+<li>通过global average pooling减少overfitting</li>
+<li>参数少,用GAP代替全连接层</li>
+</ol>
+<p><strong>MLP Convolution Layers</strong></p>
+<p>作者选择多层的感知机(其实也就是 $1\times1$  的卷积层)作为function approximator，并列举了两个理由：</p>
+<ol>
+<li>和CNN兼容，可以用BP训练</li>
+<li>自身可以作为一个deep model，可以用 $1\times 1$ 的卷积替代</li>
+</ol>
+<p>传统的CNN的feature maps的计算如下,ReLU为激活函数：<br>$$<br>f_{i,j,k} = \max(w_k^Tx_{i,j},0)<br>$$<br>maxout层feature maps的计算如下：<br>$$<br>f_{i,j,k}=\max_m(w_{k_m}^Tx_{i,j})<br>$$<br>maxout其实就是ReLU和Leaky ReLU的扩展，提升非线性能力，弥补了两者的缺点，例如应用ReLU激活函数，训练到后面，大部分neron会“挂掉”，因为已经死掉的neuron不会再有梯度了！除此之外，maxout的拟合能力是非常强的，它可以拟合任意的的凸函数。最直观的解释就是任意的凸函数都可以由分段线性函数以任意精度拟合。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fnlus4z8aaj30e904d74l.jpg" alt=""></p>
+<p>mlpconv layer的计算如下：<br>$$<br>f_{i,j,k_1}^1=\max({w_{k_1}^1}^Tx_{i,j}+b_{k_1},0) \ … \ f_{i,j,k_n}^n=\max({w_{k_n}^n}^Tx_{i,j}+b_{k_n},0)<br>$$</p>
+<p>n是多层感知机的层数。Figure 2是NIN的整体结构。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fnkq60369mj31780gsn1j.jpg" alt=""></p>
+<p><strong>Global Average Pooling</strong></p>
+<p>传统的CNN网络在做完所有卷积运算后，会把feature maps拉成一条向量，然后再接几层全连接层做分类。这样的问题是，多层的全连接经常会overfitting，当然也可以加Dropout来作为regularizer提高泛化性。作者提出global average pooling来取代全连接层，顾名思义，就是对每个feature map求全局平均，这样整个输出就变成了长度为feature maps深度的向量，这样能够有更好的空间不变形。除此之外，因为减少了待优化的参数避免了过拟合的发生。</p>
+<h5 id="实现"><a href="#实现" class="headerlink" title="实现"></a>实现</h5><p><strong>Pytorch</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Net</span><span class="params">(nn.Module)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, num_classes)</span>:</span></div><div class="line">        super(Net, self).__init__()</div><div class="line">        self.num_classes = num_classes</div><div class="line">        self.classifer = nn.Sequential(</div><div class="line">                nn.Conv2d(<span class="number">3</span>, <span class="number">192</span>, kernel_size=<span class="number">5</span>, stride=<span class="number">1</span>, padding=<span class="number">2</span>),</div><div class="line">                nn.ReLU(inplace=<span class="keyword">True</span>),</div><div class="line">                nn.Conv2d(<span class="number">192</span>, <span class="number">160</span>, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span>),</div><div class="line">                nn.ReLU(inplace=<span class="keyword">True</span>),</div><div class="line">                nn.Conv2d(<span class="number">160</span>,  <span class="number">96</span>, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span>),</div><div class="line">                nn.ReLU(inplace=<span class="keyword">True</span>),</div><div class="line">                nn.MaxPool2d(kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">1</span>),</div><div class="line">                nn.Dropout(<span class="number">0.5</span>),</div><div class="line"></div><div class="line">                nn.Conv2d(<span class="number">96</span>, <span class="number">192</span>, kernel_size=<span class="number">5</span>, stride=<span class="number">1</span>, padding=<span class="number">2</span>),</div><div class="line">                nn.ReLU(inplace=<span class="keyword">True</span>),</div><div class="line">                nn.Conv2d(<span class="number">192</span>, <span class="number">192</span>, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span>),</div><div class="line">                nn.ReLU(inplace=<span class="keyword">True</span>),</div><div class="line">                nn.Conv2d(<span class="number">192</span>, <span class="number">192</span>, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span>),</div><div class="line">                nn.ReLU(inplace=<span class="keyword">True</span>),</div><div class="line">                nn.AvgPool2d(kernel_size=<span class="number">3</span>, stride=<span class="number">2</span>, padding=<span class="number">1</span>),</div><div class="line">                nn.Dropout(<span class="number">0.5</span>),</div><div class="line"></div><div class="line">                nn.Conv2d(<span class="number">192</span>, <span class="number">192</span>, kernel_size=<span class="number">3</span>, stride=<span class="number">1</span>, padding=<span class="number">1</span>),</div><div class="line">                nn.ReLU(inplace=<span class="keyword">True</span>),</div><div class="line">                nn.Conv2d(<span class="number">192</span>, <span class="number">192</span>, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span>),</div><div class="line">                nn.ReLU(inplace=<span class="keyword">True</span>),</div><div class="line">                nn.Conv2d(<span class="number">192</span>,  num_classes, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span>),</div><div class="line">                nn.ReLU(inplace=<span class="keyword">True</span>),</div><div class="line">                nn.AvgPool2d(kernel_size=<span class="number">8</span>, stride=<span class="number">1</span>, padding=<span class="number">0</span>),</div><div class="line">                )</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></div><div class="line">        x = self.classifer(x)</div><div class="line">        x = x.view(<span class="number">-1</span>, self.num_classes)</div><div class="line">        <span class="keyword">return</span> x</div></pre></td></tr></table></figure>
+<h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p>作者在CIFAR-10, CIFAR-100, SVHN和MNIST上进行测试。</p>
+<p><strong>CIFAR-10</strong>: 50,000个训练样本，10,000个测试样本，图像大小为 $32\times32$ ，实验结果见Table 1。Dropout和data augmentation对结果提升明显。It turns out in our experiment that using dropout in between the mlpconv layers in NIN boosts the performance  of  the  network  by  improving  the  generalization  ability  of  the  model. </p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fnkr9b10ylj30xk0fe0wc.jpg" alt=""></p>
+<p><strong>CIFAR-100</strong>: 数据规模和图像大小和cifar-10一样，不同的是它有100类，结果见Table 2。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fnkrewcgz6j30fc066aaq.jpg" alt=""></p>
+<p><strong>SVHN</strong>：包含630,420张 $32\times32$ 的图像，将其分类训练集，验证集，测试集。具体结果见Table 3。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fnkrhat3qrj30fy07wt9o.jpg" alt=""></p>
+<p><strong>MNIST</strong>：包含60,000张$28\times 28$的训练图像，和10,000张测试图像，具体结果见Table 4。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fnkrjy6lgqj30ey05ejrx.jpg" alt=""></p>
+<p><strong>Global Average Pooling</strong></p>
+<p>通过控制变量，发现GAP对结果的提升还是比较明显的，可以作为regularizer，具体见Table 5。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fnkrld8nt8j30g8056mxo.jpg" alt=""></p>
+<p><strong>Visualization</strong></p>
+<p>Figure 4 展示了一些样例图片采样自cifar-10和它们对应类别的features maps。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fnkrpb3zc7j30nu0f80y5.jpg" alt=""></p>
+
+	
+	</div>
+  <a type="button" href="/2018/01/18/Network-In-Network算法笔记/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2018/01/18/AlexNet算法笔记/" >AlexNet算法笔记</a>
 		</h3>
 		</div>
@@ -183,7 +328,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2018/01/18/AlexNet算法笔记/#more" class="btn btn-default more">閱讀本文</a>
+  <a type="button" href="/2018/01/18/AlexNet算法笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -359,7 +504,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2018/01/18/VGGNet算法笔记/#more" class="btn btn-default more">閱讀本文</a>
+  <a type="button" href="/2018/01/18/VGGNet算法笔记/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -434,7 +579,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2018/01/05/Comic-Generation/#more" class="btn btn-default more">閱讀本文</a>
+  <a type="button" href="/2018/01/05/Comic-Generation/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -528,7 +673,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2017/12/18/CS224n-assignment1/#more" class="btn btn-default more">閱讀本文</a>
+  <a type="button" href="/2017/12/18/CS224n-assignment1/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -570,7 +715,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2017/12/09/Network-Architecture-of-Deblurring/#more" class="btn btn-default more">閱讀本文</a>
+  <a type="button" href="/2017/12/09/Network-Architecture-of-Deblurring/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -608,7 +753,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2017/12/05/Generate-Motion-Blur/#more" class="btn btn-default more">閱讀本文</a>
+  <a type="button" href="/2017/12/05/Generate-Motion-Blur/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -649,7 +794,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2017/11/24/capsule/#more" class="btn btn-default more">閱讀本文</a>
+  <a type="button" href="/2017/11/24/capsule/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -698,106 +843,7 @@ var _hmt = _hmt || [];
 
 	
 	</div>
-  <a type="button" href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/#more" class="btn btn-default more">閱讀本文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2017/11/14/Networks/" >Dual Path Networks</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2017-11-14  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>This paper propose a novel deep CNN architecture called <strong>Dual Path Networks(DPN)</strong>. This idea is  based on the fact that the ResNet enables feature re-usage while DenseNet enable new features exploration which are both important for learning good feature representation.  </p>
-<p><img src="http://ovshqtujw.bkt.clouddn.com/image.png" alt=""></p>
-<blockquote>
-<p>Basically, the ResNet and DenseNet differ in the way of “wiring”. ResNet provides a path with which a layer can get access to both the output and the input of the immediately previous layer. The DenseNet provides a path that can access the outputs of multiple previous layers. </p>
-</blockquote>
-<p><img src="http://ovshqtujw.bkt.clouddn.com/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-11-14%20%E4%B8%8B%E5%8D%886.25.45.png" alt="Architecture comparison of different networks"></p>
-<p>The DPN balance ResNet and DenseNet in a tricky way, and can be formulated as:<br>$$<br>x^k = \sum_{t=1}^{k-1} f_t^k (h^t),\ y^k = \sum_{t=1}^{k-1} v_t(h^t) = y^{k-1} +\phi^{k-1}(y^{k-1}),\\r^k=x^k+y^k,\\h^k=g^k(r^k)<br>$$<br>where $x_k$ and $y_k$ denote the extracted information at k-th step from individual path, $v_t(\cdot)$is a feature learning function as $f_k^t(\cdot)$, $\phi_k(\cdot) = f_k(g_k(\cdot))$.  The dual path means the left side is ResNet, the right side is DenseNet. The block parameters are shared between them. The outputs of two sides will be concated as next block’s input.</p>
-<p>This is the implementation of dual path block</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">DualPathBlock</span><span class="params">(nn.Module)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, in_chs, num_1x1_a, num_3x3_b, num_1x1_c, inc, G, _type=<span class="string">'normal'</span>)</span>:</span></div><div class="line">        super(DualPathBlock, self).__init__()</div><div class="line">        self.num_1x1_c = num_1x1_c</div><div class="line"></div><div class="line">        <span class="keyword">if</span> _type <span class="keyword">is</span> <span class="string">'proj'</span>:</div><div class="line">            key_stride = <span class="number">1</span></div><div class="line">            self.has_proj = <span class="keyword">True</span></div><div class="line">        <span class="keyword">if</span> _type <span class="keyword">is</span> <span class="string">'down'</span>:</div><div class="line">            key_stride = <span class="number">2</span></div><div class="line">            self.has_proj = <span class="keyword">True</span></div><div class="line">        <span class="keyword">if</span> _type <span class="keyword">is</span> <span class="string">'normal'</span>:</div><div class="line">            key_stride = <span class="number">1</span></div><div class="line">            self.has_proj = <span class="keyword">False</span></div><div class="line"></div><div class="line">        <span class="keyword">if</span> self.has_proj:</div><div class="line">            self.c1x1_w = self.BN_ReLU_Conv(in_chs=in_chs, out_chs=num_1x1_c+<span class="number">2</span>*inc, kernel_size=<span class="number">1</span>, stride=key_stride)</div><div class="line"></div><div class="line">        self.layers = nn.Sequential(OrderedDict([</div><div class="line">            (<span class="string">'c1x1_a'</span>, self.BN_ReLU_Conv(in_chs=in_chs, out_chs=num_1x1_a, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>)),</div><div class="line">            (<span class="string">'c3x3_b'</span>, self.BN_ReLU_Conv(in_chs=num_1x1_a, out_chs=num_3x3_b, kernel_size=<span class="number">3</span>, stride=key_stride, padding=<span class="number">1</span>, groups=G)),</div><div class="line">            (<span class="string">'c1x1_c'</span>, self.BN_ReLU_Conv(in_chs=num_3x3_b, out_chs=num_1x1_c+inc, kernel_size=<span class="number">1</span>, stride=<span class="number">1</span>)),</div><div class="line">        ]))</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">BN_ReLU_Conv</span><span class="params">(self, in_chs, out_chs, kernel_size, stride, padding=<span class="number">0</span>, groups=<span class="number">1</span>)</span>:</span></div><div class="line">        <span class="keyword">return</span> nn.Sequential(OrderedDict([</div><div class="line">            (<span class="string">'norm'</span>, nn.BatchNorm2d(in_chs)),</div><div class="line">            (<span class="string">'relu'</span>, nn.ReLU(inplace=<span class="keyword">True</span>)),</div><div class="line">            (<span class="string">'conv'</span>, nn.Conv2d(in_chs, out_chs, kernel_size, stride, padding, groups=groups, bias=<span class="keyword">False</span>)),</div><div class="line">        ]))</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></div><div class="line">        data_in = torch.cat(x, dim=<span class="number">1</span>) <span class="keyword">if</span> isinstance(x, list) <span class="keyword">else</span> x</div><div class="line">        <span class="keyword">if</span> self.has_proj:</div><div class="line">            data_o = self.c1x1_w(data_in)</div><div class="line">            data_o1 = data_o[:,:self.num_1x1_c,:,:]</div><div class="line">            data_o2 = data_o[:,self.num_1x1_c:,:,:]</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            data_o1 = x[<span class="number">0</span>]</div><div class="line">            data_o2 = x[<span class="number">1</span>]</div><div class="line"></div><div class="line">        out = self.layers(data_in)</div><div class="line"></div><div class="line">        summ = data_o1 + out[:,:self.num_1x1_c,:,:]</div><div class="line">        dense = torch.cat([data_o2, out[:,self.num_1x1_c:,:,:]], dim=<span class="number">1</span>)</div><div class="line">        <span class="keyword">return</span> [summ, dense]</div></pre></td></tr></table></figure>
-
-	
-	</div>
-  <a type="button" href="/2017/11/14/Networks/#more" class="btn btn-default more">閱讀本文</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2017/11/12/meet-in-the-middle的一些实例/" >Meet in the middle的一些实例</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2017-11-12  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>Meet in the Middle是在搜索问题经常会用到的一个技巧，其核心思想就是解决一个A&lt;-&gt;B的问题，分别从A端和B端出发，向对方进发，当他们在中点相遇的时候，就找到了A&lt;-&gt;B的一个解。</p>
-<h3 id="先看一道简单题："><a href="#先看一道简单题：" class="headerlink" title="先看一道简单题："></a>先看一道简单题：</h3><p><a href="http://codeforces.com/contest/888/problem/E" target="_blank" rel="external">CF888E Maximum Subsequence</a></p>
-<p>You are given an array <em>a</em> consisting of <em>n</em> integers, and additionally an integer <em>m</em>. You have to choose some sequence of indices $b_1, b_2, …, b_k (1 \le b_1 \lt b_2 \lt … \lt b_k\le n)$ in such a way that the value of <img src="http://codeforces.com/predownloaded/db/28/db283c0794aac433c817bad7534d99cc6287207c.png" alt="img"> is maximized. Chosen sequence can be empty.</p>
-<p>Print the maximum possible value of <img src="http://codeforces.com/predownloaded/db/28/db283c0794aac433c817bad7534d99cc6287207c.png" alt="img">.</p>
-<p><strong>Input</strong></p>
-<p>The first line contains two integers <em>n</em> and <em>m</em> ($1 \le n\le 35$, $1 \le m \le 10^9$).</p>
-<p>The second line contains <em>n</em> integers $a_1, a_2, …, a_n$ ($1 \le a_i \le10^9$).</p>
-<p><strong>Output</strong></p>
-<p>Print the maximum possible value of <img src="http://codeforces.com/predownloaded/db/28/db283c0794aac433c817bad7534d99cc6287207c.png" alt="img">.</p>
-<p>题目意思很简单，就是从一个大小为n的数组中挑选k个，使他们的和对m求余最大。</p>
-<p>如果直接枚举a的所有子集，大小为$2^{35}$， 明显会超时。</p>
-<p>如果利用meet in the middle的思路： 先枚举左边17，右边17，再让他们meet in the middle，然后利用求余的性质，左边和右边的和都小于m，进行排序，二分即可： $L_i+R_i \lt m$   or  $ m \lt L_i + R_i \lt 2*m$</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;algorithm&gt;</span></span></div><div class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> maxn = <span class="number">40</span>;</div><div class="line"></div><div class="line"><span class="keyword">int</span> a[maxn];</div><div class="line"></div><div class="line"><span class="keyword">int</span> L[<span class="number">1</span>&lt;&lt;<span class="number">18</span>], R[<span class="number">1</span>&lt;&lt;<span class="number">18</span>];</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">	<span class="comment">//freopen("in", "r", stdin);</span></div><div class="line">	<span class="keyword">int</span> n, m;</div><div class="line">	<span class="built_in">cin</span> &gt;&gt; n &gt;&gt; m;</div><div class="line"></div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">		<span class="built_in">cin</span> &gt;&gt; a[i];</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">int</span> ans = <span class="number">0</span>;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> mask = <span class="number">0</span>; mask &lt; (<span class="number">1</span>&lt;&lt;<span class="number">18</span>); mask++) &#123;</div><div class="line">		<span class="keyword">int</span> res = <span class="number">0</span>;</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">18</span>; j++) &#123;</div><div class="line">			<span class="keyword">if</span> ((mask &gt;&gt; j) &amp; <span class="number">1</span>) &#123;</div><div class="line">				res = (res+a[j]) % m;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		L[mask] = res;</div><div class="line">		ans = max(ans, res);</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">if</span> (n &lt;= <span class="number">18</span>) &#123;</div><div class="line">		<span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">		<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> mask = <span class="number">0</span>; mask &lt; (<span class="number">1</span>&lt;&lt;(n<span class="number">-18</span>)); mask++) &#123;</div><div class="line">		<span class="keyword">int</span> res = <span class="number">0</span>;</div><div class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">18</span>; j &lt; n; j++) &#123;</div><div class="line">			<span class="keyword">if</span> ((mask &gt;&gt; (j<span class="number">-18</span>)) &amp; <span class="number">1</span>) &#123;</div><div class="line">				res = (res+a[j]) % m;</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">		R[mask] = res;</div><div class="line">		ans = max(ans, res);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">int</span> Lsz = (<span class="number">1</span>&lt;&lt;<span class="number">18</span>);</div><div class="line">	<span class="keyword">int</span> Rsz = (<span class="number">1</span>&lt;&lt;(n<span class="number">-18</span>));</div><div class="line">	sort(R, R+Rsz);</div><div class="line"></div><div class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; Lsz; i++) &#123;</div><div class="line">		<span class="keyword">int</span> res = L[i];</div><div class="line">		<span class="keyword">int</span> *t1 = upper_bound(R, R+Rsz, m<span class="number">-1</span>-res);</div><div class="line">		<span class="keyword">if</span> (t1 != R) &#123;</div><div class="line">			t1--;</div><div class="line">			ans = max(ans, (res+(*t1))%m);</div><div class="line">		&#125;</div><div class="line">		<span class="keyword">int</span> *t2 = upper_bound(R, R+Rsz, <span class="number">2</span>*m<span class="number">-1</span>-res);</div><div class="line">		<span class="keyword">if</span> (t2 != R) &#123;</div><div class="line">			t2--;</div><div class="line">			ans = max(ans, (res+(*t2))%m);</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">	<span class="built_in">cout</span> &lt;&lt; ans &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">	<span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="进阶一点"><a href="#进阶一点" class="headerlink" title="进阶一点"></a>进阶一点</h3><p><a href="https://community.topcoder.com/stat?c=problem_statement&amp;pm=11644&amp;rd=14548" target="_blank" rel="external">topcoder srm 523 AlphabetPath</a></p>
-<p><strong>Problem Statement</strong></p>
-<p>The original Latin alphabet contained the following 21 letters: </p>
-<p>A B C D E F Z H I K L M N O P Q R S T V X</p>
-<p>You are given a 2-dimensional matrix of characters represented by the String[] letterMaze. The i-th character of the j-th element of letterMaze will represent the character at row i and column j. The matrix will contain each of the 21 letters at least once. It may also contain empty cells marked as ‘.’ (quotes for clarity).</p>
-<p>A path is a sequence of matrix elements such that the second element is (horizontally or vertically) adjacent to the first one, the third element is adjacent to the second one, and so on. No element may be repeated on a path. A Latin alphabet path is a path consisting of exactly 21 elements, each containing a different letter of the Latin alphabet. The letters are not required to be in any particular order.</p>
-<p>Return the total number of Latin alphabet paths in the matrix described by letterMaze.</p>
-<p>题目意思就是给定一个$R\times C$的矩阵，格子里要么是空，要么包含0~20的整数，长度为21的路径，每个整数恰出现一次， $R,C\le 21$</p>
-<p>那么，我们枚举middle点，这样有$R\times C$种选择，假设Middle点为x，从Middle点出发DFS10步，令$S(P)$为不包含Middle点的10个格子的数值的集合。那么$S(P_1)\cup S(P_2)….\cup {x}$ = {0,1…20},那么整个时间复杂度就变成了$O(RC\times 4 \times 3^9)$</p>
-<h3 id="密码学中的应用"><a href="#密码学中的应用" class="headerlink" title="密码学中的应用"></a>密码学中的应用</h3><h4 id="DES"><a href="#DES" class="headerlink" title="DES"></a>DES</h4><p>首先介绍一下DES（Data Encryption Standard），DES是一种分组的对称加密技术，具体见下图（coursera crypto stanford笔记）：</p>
-<p><img src="http://ovshqtujw.bkt.clouddn.com/WechatIMG11.jpeg" alt="DES"></p>
-<p>那么如何attack DES呢？</p>
-<p>Lemma: Suppose that DES is an ideal cipher ($2^{56}$ random invertible functions, key是56位)</p>
-<p>为什么不能用double DES呢？因为我们可以用meet in the middle attack来攻击：</p>
-<p>对于double DES来说：</p>
-<ol>
-<li>我们需要找到这样的$k_1$和$k_2$：$E(k_1, E(k_2, M))=C$,这和$E(k_2, M) = D(k_1, C)$一个意思</li>
-<li>首先，我们用表M记录$k_2$和$C^\prime=DES(k_2, M)$的所有值，时间复杂度为$O(2^{56})$</li>
-<li>然后我们就可以暴力枚举$k_1$，计算$C^{\prime\prime} =DES^{-1}(k_1, C)$, 看是否有对应的值在表中</li>
-<li>这样attack的时间复杂度就变成了$O(2^{56}+2^{56}) \lt O(2^{63})$ ,这比期望的$2^{112}$要小很多，以及空间复杂度为$O(2^{56})$。</li>
-</ol>
-<p>而换成3DES就没有这样的问题了！</p>
-<p>$C = E(K_3, D(K_2, E(K_1,P) ) ) $</p>
-
-	
-	</div>
-  <a type="button" href="/2017/11/12/meet-in-the-middle的一些实例/#more" class="btn btn-default more">閱讀本文</a>
+  <a type="button" href="/2017/11/21/FIXING-WEIGHT-DECAY-REGULARIZATION-IN-ADAM/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -811,12 +857,12 @@ var _hmt = _hmt || [];
 
    
     
-     <a href="/page/2/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> 上一頁</a>
+     <a href="/page/2/" type="button" class="btn btn-default"><i class="fa fa-arrow-circle-o-left"></i> Prev</a>
       
 
         <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
  
-       <a href="/page/4/" type="button" class="btn btn-default ">下一頁<i class="fa fa-arrow-circle-o-right"></i></a>     
+       <a href="/page/4/" type="button" class="btn btn-default ">Next<i class="fa fa-arrow-circle-o-right"></i></a>     
         
 
   
@@ -836,7 +882,7 @@ var _hmt = _hmt || [];
 			
   <div id="site_search">
    <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="搜尋" class="st-search-input st-default-search-input form-control"/>
+    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
    </div>  
   <div id="local-search-result"></div>
   </div>
@@ -845,10 +891,10 @@ var _hmt = _hmt || [];
 		
 			
 	<div class="widget">
-		<h4>分類</h4>
+		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/algorithms/">algorithms<span>23</span></a></li>
+			<li><a href="/categories/algorithms/">algorithms<span>25</span></a></li>
 		
 			<li><a href="/categories/competition/">competition<span>1</span></a></li>
 		
@@ -858,46 +904,46 @@ var _hmt = _hmt || [];
 		
 			
 	<div class="widget">
-		<h4>標籤雲</h4>
+		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
-		
-			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
-		
-			<li><a href="/tags/summary/">summary<span>2</span></a></li>
-		
-			<li><a href="/tags/segmentation/">segmentation<span>2</span></a></li>
 		
 			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
 		
-			<li><a href="/tags/object-detection/">object detection<span>7</span></a></li>
-		
-			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
-		
-			<li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
-		
-			<li><a href="/tags/classification/">classification<span>2</span></a></li>
-		
-			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
+			<li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
 		
 			<li><a href="/tags/paper/">paper<span>1</span></a></li>
 		
-			<li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
+			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
 		
-			<li><a href="/tags/notes/">notes<span>6</span></a></li>
+			<li><a href="/tags/classification/">classification<span>2</span></a></li>
 		
-			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
-		
-			<li><a href="/tags/math/">math<span>2</span></a></li>
-		
-			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
+			<li><a href="/tags/segmentation/">segmentation<span>2</span></a></li>
 		
 			<li><a href="/tags/杂/">杂<span>1</span></a></li>
 		
 			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
 		
-			<li><a href="/tags/deep-learning/">deep learning<span>29</span></a></li>
+			<li><a href="/tags/object-detection/">object detection<span>9</span></a></li>
+		
+			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
+		
+			<li><a href="/tags/deep-learning/">deep learning<span>31</span></a></li>
 		
 			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
+		
+			<li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
+		
+			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
+		
+			<li><a href="/tags/math/">math<span>2</span></a></li>
+		
+			<li><a href="/tags/summary/">summary<span>2</span></a></li>
+		
+			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
+		
+			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
+		
+			<li><a href="/tags/notes/">notes<span>6</span></a></li>
 		
 		 
 		</ul>
@@ -907,8 +953,16 @@ var _hmt = _hmt || [];
 		
 			
 <div class="widget">
-  <h4>最新文章</h4>
+  <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2018/04/21/FPN论文笔记/" ><i class="fa fa-file-o"></i>FPN论文笔记</a>
+      </li>
+    
+      <li>
+        <a href="/2018/04/21/RON论文笔记/" ><i class="fa fa-file-o"></i>RON论文笔记</a>
+      </li>
     
       <li>
         <a href="/2018/04/18/OHEM算法笔记/" ><i class="fa fa-file-o"></i>OHEM算法笔记</a>
@@ -922,21 +976,13 @@ var _hmt = _hmt || [];
         <a href="/2018/04/07/YOLO&amp;YOLOv2笔记/" ><i class="fa fa-file-o"></i>YOLO&amp;YOLOv2笔记</a>
       </li>
     
-      <li>
-        <a href="/2018/04/02/Faster-R-CNN笔记/" ><i class="fa fa-file-o"></i>Faster R-CNN笔记</a>
-      </li>
-    
-      <li>
-        <a href="/2018/03/22/Fast-R-CNN笔记/" ><i class="fa fa-file-o"></i>Fast R-CNN笔记</a>
-      </li>
-    
   </ul>
 </div>
 
 		
 			
 <div class="widget">
-	<h4>鏈接</h4>
+	<h4>Links</h4>
 	<ul class="blogroll list-unstyled">
 	
 		<li><i class="fa fa-github"></i><a href="http://www.github.com/mowayao" title="My Github account." target="_blank"]);">My Github</a></li>

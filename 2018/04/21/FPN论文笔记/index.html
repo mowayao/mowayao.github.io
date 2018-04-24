@@ -6,16 +6,16 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>SSD笔记 | Mowayao&#39;s Blog</title>
+  <title>FPN论文笔记 | Mowayao&#39;s Blog</title>
   <meta name="author" content="Mowayao">
   
-  <meta name="description" content="论文：SSD: Single Shot MultiBox Detector，ECCV 2016
-作者：Wei Liu, Dragomir Anguelov, Dumitru Erhan, Christian Szegedy, Scott Reed, Cheng-Yang Fu, Alexander ">
+  <meta name="description" content="论文：Feature Pyramid Networks for Object Detection，CVPR 2017
+作者：Tsung-Yi Lin, Piotr Doll´ar, Ross Girshick, Kaiming He, Bharath Hariharan, and Serge Bel">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="SSD笔记"/>
+  <meta property="og:title" content="FPN论文笔记"/>
   <meta property="og:site_name" content="Mowayao&#39;s Blog"/>
 
   
@@ -119,7 +119,7 @@ var _hmt = _hmt || [];
 
 	
 		<div class="page-header">
-			<h1> SSD笔记</h1>
+			<h1> FPN论文笔记</h1>
 		</div>
 	
 
@@ -136,55 +136,31 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  		
 
-	  <p>论文：SSD: Single Shot MultiBox Detector，<strong>ECCV</strong> 2016</p>
-<p>作者：Wei Liu, Dragomir Anguelov, Dumitru Erhan, Christian Szegedy, Scott Reed, Cheng-Yang Fu, Alexander C. Berg</p>
-<p>链接：<a href="https://arxiv.org/pdf/1512.02325.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1512.02325.pdf</a>    </p>
-<p>代码：<a href="https://github.com/weiliu89/caffe/tree/ssd" target="_blank" rel="external">https://github.com/weiliu89/caffe/tree/ssd</a></p>
-<p>gluon实现：<a href="https://github.com/mowayao/gluon_SSD" target="_blank" rel="external">https://github.com/mowayao/gluon_SSD</a></p>
+	  <p>论文：Feature Pyramid Networks for Object Detection，<strong>CVPR</strong> 2017</p>
+<p>作者：Tsung-Yi Lin, Piotr Doll´ar, Ross Girshick, Kaiming He, Bharath Hariharan, and Serge Belongie</p>
+<p>链接：<a href="https://arxiv.org/pdf/1612.03144.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1612.03144.pdf</a></p>
+<p>代码(unofficial)：<a href="https://github.com/unsky/FPN" target="_blank" rel="external">https://github.com/unsky/FPN</a></p>
 <ul>
-<li>将bbox的输出空间离散化到一些默认的priors，也就是默认设定的anchors</li>
-<li>不同Faster R-CNN的two stage的方式，SSD采用的是one shot的方法，精度和faster r-cnn接近，但是效率更高</li>
-<li>将多尺度的feature maps应用到detection中，针对不同尺度的feature map，采用不同scale和ratio</li>
+<li>feature pyramid在物体识别中比较常用，作者将其应用到object detection中</li>
+<li>不同于SSD，作者使用top-down的结构将来自更高pyramid level的semantically stronger的feature map和higher resolution features相结合，使得detection的结构更加准确</li>
 </ul>
-<p>#####The Single Shot Detector (SSD)</p>
-<p>将feature map分成nxn的cells，每个cell可以预测固定数量的box的conf和offset</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fqfue2u6o9j316a0taww0.jpg" alt=""></p>
-<p><strong>Model</strong></p>
-<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgroawjivj315i0r0dnf.jpg" alt=""></p>
-<p>模型是基于pretrained的VGG-16进行修改和fine-tune</p>
-<ul>
-<li>Multi-scale feature map for detection: 在base net后加了conv feature layers用来做detection，这些layer使得feature maps的size逐渐降低，这样就可以做多尺度的预测</li>
-<li>Convolutional predictors for detection：在添加的conv feature layer后加入输出层，即conv predictor，生成固定大小的输出，对于mxn，p个channel的feature map，使用3x3xp的卷积核，预测conf和loc。</li>
-<li>Default boxes and aspect ratios：每个cell预测k个boxes，以及类别的数量是c，那么最后的输出channel则是(c+4)*k</li>
-</ul>
-<p><strong>Training</strong></p>
-<ul>
-<li>Matching strategy: 需要将default boxes做划分，将与gt与box的jaccard overlap大于0.5的定为gt，其他定为background</li>
-<li>Training objective:</li>
-</ul>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqgqb60zbdj30wo040q3a.jpg" alt=""></p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqgqb6a4gij30zg09wmyu.jpg" alt=""></p>
-<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgqb74a9zj315c04mdgq.jpg" alt=""></p>
-<ul>
-<li>Choosing scales and aspect ratios for default boxes: 为了针对不同scale的object，scale被定义为：</li>
-</ul>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqgrc1164dj30wa03q3yw.jpg" alt=""></p>
-<p>$s_{min}=0.2, s_{max}=0.9,$ratios $a_r\in {1,2,3,\frac{1}{2}, \frac{1}{3}}$，$w_k=s_k\sqrt a_r, h_k=s_k/\sqrt a_r$。另外对于 ratio = 1 的情况，再指定 scale 为$，s_k=\sqrt {s_ks_{k+1}}$也就是总共有 6 种不同的 default box</p>
-<ul>
-<li>Hard negative mining: 在做完matching后，大部分的box都是背景，所以需要做采样，选择loss最高的几个，并且保持3:1的比例</li>
-<li>Data augmentation：<ul>
-<li>使用全图作为输入，</li>
-<li>使用IOU和目标物体为0.1, 0.3，0.5, 0.7, 0.9的patch （这些 patch 在原图的大小的 $[0.1,1]$ 之间， 相应的宽高比在$[1/2,2]$之间）</li>
-<li>随机采取一个patch</li>
-</ul>
-</li>
-</ul>
-<h5 id="Experimental-Results"><a href="#Experimental-Results" class="headerlink" title="Experimental Results"></a>Experimental Results</h5><p>Table 1是SSD在PASCAL VOC2007上的表现，可以发现SSD512的表现优于Faster R-CNN，SSD300兼顾性能和效率</p>
-<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgqghdz3lj31600k2wo1.jpg" alt=""></p>
-<p>Table 4是SSD在 PASCAL VOC2012上的表现，可以发现SSD512取得了SOTA的表现</p>
-<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgrepc7k2j316w0es7b4.jpg" alt=""></p>
-<p>Table 5是在COCO上的表现，同样是SOTA</p>
-<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgreqfglbj316i0dwtd9.jpg" alt=""></p>
+<p>Figure 1是不同类型的feature map的使用方法，作者使用的是(d)的结构，SSD使用的是(c)的结构</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqnpdczxhuj30w20usgvn.jpg" alt=""></p>
+<h5 id="Feature-Pyramid-Networks"><a href="#Feature-Pyramid-Networks" class="headerlink" title="Feature Pyramid Networks"></a>Feature Pyramid Networks</h5><p>Figure 3是top-down pathway的示意结构，现将来自higher pyramid的feature maps升采样，再将该层的feature map做1x1的conv，减少channel dimension（固定为256d），再用element-wise addtion做merge，然后再用3x3的conv去消除上采样aliasing的影响。在C5上（最高层），先用1x1 conv产生粗糙的特征图。</p>
+<p>${C2, C3, C4, C5}$层对应的融合特征层为${P2, P3, P4, P5}$</p>
+<p>通过这样的操作来加强特征，即<strong>保留空间信息并增强语义信息</strong>。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqnpkyj02ej30tk0jcn00.jpg" alt=""></p>
+<h5 id="Applications"><a href="#Applications" class="headerlink" title="Applications"></a>Applications</h5><p><strong>Feature Pyramid Networks for RPN</strong></p>
+<p>RPN的参数配置和Faster R-CNN类似，作者提到了一点就是在feature pyramid的detection head参数是可以共享的，结果和不共享接近，这说明了<strong>不同level的pyramid的semantic level是相似的</strong>！</p>
+<p><strong>Feature Pyramid Networks for Fast R-CNN</strong></p>
+<p>这里的重点是ROI的分配：</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqnqq1o4irj30m2034dg3.jpg" alt=""></p>
+<p>w,h是ROI的宽和高，$k_0$=4，表示的是大小为224x224的ROI的target level，利用这个式子进行转换，分配到相应的pyramid level。</p>
+<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p><strong>Ablation Study</strong></p>
+<p>Table 1，2，3是ablation study的表格</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fqnqwou2qwj315g0uc7ef.jpg" alt=""></p>
+<p>Table 4是单模型在COCO detection benchmark上的表现，FPN取得SOTA的表现</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqnr7se6qpj31kw0iatgv.jpg" alt=""></p>
 	  
 	</div>
 
@@ -194,13 +170,12 @@ var _hmt = _hmt || [];
 
     
     
-    <a href="/2018/04/18/OHEM算法笔记/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2018/04/07/YOLO&YOLOv2笔记/" type="button" class="btn btn-default ">Next<i
+    <a href="/2018/04/21/RON论文笔记/" type="button" class="btn btn-default ">Next<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -229,7 +204,7 @@ var _hmt = _hmt || [];
 	
 	<div class="meta-widget">
 	<i class="fa fa-clock-o"></i>
-	2018-04-11 
+	2018-04-21 
 	</div>
 	
 
