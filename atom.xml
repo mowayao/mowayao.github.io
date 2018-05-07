@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wulimengmeng.top/"/>
-  <updated>2018-05-07T07:14:48.654Z</updated>
+  <updated>2018-05-07T09:02:06.108Z</updated>
   <id>http://wulimengmeng.top/</id>
   
   <author>
@@ -21,12 +21,27 @@
     <link href="http://wulimengmeng.top/2018/05/07/detection-algorithms-overview/"/>
     <id>http://wulimengmeng.top/2018/05/07/detection-algorithms-overview/</id>
     <published>2018-05-07T07:14:48.000Z</published>
-    <updated>2018-05-07T07:14:48.654Z</updated>
+    <updated>2018-05-07T09:02:06.108Z</updated>
+    
+    <content type="html"><![CDATA[<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2ug64gnvj31jk0n3dny.jpg" alt=""></p><p>###Two Stage</p><p>将detection的任务分成两个步骤，第一个是寻找candidate，第二个是对candidate进行分类</p><h4>Region-based Convolutional Network (R-CNN)</h4><p>具体见<a href="http://wulimengmeng.top/2018/03/13/RCNN%E7%AC%94%E8%AE%B0/">这里</a></p><p>R-CNN模型通过selective search得到candidate box，然后再结合deep learning model对box进行分类</p><p><strong>selective search</strong></p><p>大概的思路就是先将图片分成若干个较多的region，然后再逐步地根据region的相似性进行合并，即各种颜色空间（RGB，HSV，Lab），纹理相似度(HOG-like feature)，大小相似度，形状相似度，然后将这些相似度加权。</p><p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fr2uoyhrynj30d208djvk.jpg" alt=""></p><p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fr2v030gn8j30ht0brwg8.jpg" alt=""></p><h4>SPP Net</h4><h4>Fast R-CNN</h4><h4>Faster R-CNN</h4><h4>R-FCN</h4><p>####R-FCN-3000</p><p>####OHEM</p><p>####MASK R-CNN</p><p>####SNIP</p><h3>One State</h3><h4>SSD</h4><h4>YOLO</h4><h4>RON</h4><h4>FPN</h4>]]></content>
     
     <summary type="html">
     
+      
+      
+        &lt;p&gt;&lt;img src=&quot;https://ws1.sinaimg.cn/large/006tKfTcly1fr2ug64gnvj31jk0n3dny.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;###Two Stage&lt;/p&gt;
+&lt;p&gt;将detection的任务分成两个步骤，第一个是寻
+      
+    
     </summary>
     
+      <category term="summary" scheme="http://wulimengmeng.top/categories/summary/"/>
+    
+    
+      <category term="deep learning" scheme="http://wulimengmeng.top/tags/deep-learning/"/>
+    
+      <category term="object detection" scheme="http://wulimengmeng.top/tags/object-detection/"/>
     
   </entry>
   

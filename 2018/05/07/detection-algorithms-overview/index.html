@@ -9,6 +9,12 @@
   <title>detection algorithms overview | Mowayao&#39;s Blog</title>
   <meta name="author" content="Mowayao">
   
+  <meta name="description" content="###Two Stage
+将detection的任务分成两个步骤，第一个是寻找candidate，第二个是对candidate进行分类
+Region-based Convolutional Network (R-CNN)
+具体见这里
+R-CNN模型通过selective search得到candid">
+  
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -133,7 +139,30 @@ var _hmt = _hmt || [];
 	<div class="mypage">		
 	  		
 
-	  	  
+	  <p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2ug64gnvj31jk0n3dny.jpg" alt=""></p>
+<p>###Two Stage</p>
+<p>将detection的任务分成两个步骤，第一个是寻找candidate，第二个是对candidate进行分类</p>
+<h4>Region-based Convolutional Network (R-CNN)</h4>
+<p>具体见<a href="http://wulimengmeng.top/2018/03/13/RCNN%E7%AC%94%E8%AE%B0/">这里</a></p>
+<p>R-CNN模型通过selective search得到candidate box，然后再结合deep learning model对box进行分类</p>
+<p><strong>selective search</strong></p>
+<p>大概的思路就是先将图片分成若干个较多的region，然后再逐步地根据region的相似性进行合并，即各种颜色空间（RGB，HSV，Lab），纹理相似度(HOG-like feature)，大小相似度，形状相似度，然后将这些相似度加权。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fr2uoyhrynj30d208djvk.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fr2v030gn8j30ht0brwg8.jpg" alt=""></p>
+<h4>SPP Net</h4>
+<h4>Fast R-CNN</h4>
+<h4>Faster R-CNN</h4>
+<h4>R-FCN</h4>
+<p>####R-FCN-3000</p>
+<p>####OHEM</p>
+<p>####MASK R-CNN</p>
+<p>####SNIP</p>
+<h3>One State</h3>
+<h4>SSD</h4>
+<h4>YOLO</h4>
+<h4>RON</h4>
+<h4>FPN</h4>
+	  
 	</div>
 
 	<div>
@@ -182,8 +211,27 @@ var _hmt = _hmt || [];
 
 	<!-- categories -->
     
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/summary/">summary<span>1</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
 
 	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/deep-learning/">deep learning<span>33</span></a></li> <li><a href="/tags/object-detection/">object detection<span>11</span></a></li>
+    </ul>
+	</div>
 		
 
 	<!-- toc -->

@@ -150,7 +150,30 @@ var _hmt = _hmt || [];
   <div class="row">
 	
 	
-		
+		<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2ug64gnvj31jk0n3dny.jpg" alt=""></p>
+<p>###Two Stage</p>
+<p>将detection的任务分成两个步骤，第一个是寻找candidate，第二个是对candidate进行分类</p>
+<h4>Region-based Convolutional Network (R-CNN)</h4>
+<p>具体见<a href="http://wulimengmeng.top/2018/03/13/RCNN%E7%AC%94%E8%AE%B0/">这里</a></p>
+<p>R-CNN模型通过selective search得到candidate box，然后再结合deep learning model对box进行分类</p>
+<p><strong>selective search</strong></p>
+<p>大概的思路就是先将图片分成若干个较多的region，然后再逐步地根据region的相似性进行合并，即各种颜色空间（RGB，HSV，Lab），纹理相似度(HOG-like feature)，大小相似度，形状相似度，然后将这些相似度加权。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fr2uoyhrynj30d208djvk.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fr2v030gn8j30ht0brwg8.jpg" alt=""></p>
+<h4>SPP Net</h4>
+<h4>Fast R-CNN</h4>
+<h4>Faster R-CNN</h4>
+<h4>R-FCN</h4>
+<p>####R-FCN-3000</p>
+<p>####OHEM</p>
+<p>####MASK R-CNN</p>
+<p>####SNIP</p>
+<h3>One State</h3>
+<h4>SSD</h4>
+<h4>YOLO</h4>
+<h4>RON</h4>
+<h4>FPN</h4>
+
 	
 	</div>
   <a type="button" href="/2018/05/07/detection-algorithms-overview/#more" class="btn btn-default more">Read More</a>
@@ -766,6 +789,8 @@ var _hmt = _hmt || [];
 		
 			<li><a href="/categories/competition/">competition<span>1</span></a></li>
 		
+			<li><a href="/categories/summary/">summary<span>1</span></a></li>
+		
 		</ul>
 	</div>
 
@@ -775,43 +800,43 @@ var _hmt = _hmt || [];
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/math/">math<span>2</span></a></li>
-		
-			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
-		
-			<li><a href="/tags/summary/">summary<span>2</span></a></li>
-		
-			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
-		
 			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
-		
-			<li><a href="/tags/notes/">notes<span>6</span></a></li>
-		
-			<li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
 		
 			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
 		
-			<li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
-		
-			<li><a href="/tags/deep-learning/">deep learning<span>32</span></a></li>
-		
-			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
+			<li><a href="/tags/notes/">notes<span>6</span></a></li>
 		
 			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
 		
+			<li><a href="/tags/deep-learning/">deep learning<span>33</span></a></li>
+		
+			<li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
+		
 			<li><a href="/tags/paper/">paper<span>1</span></a></li>
+		
+			<li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
 		
 			<li><a href="/tags/classification/">classification<span>2</span></a></li>
 		
-			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
+			<li><a href="/tags/segmentation/">segmentation<span>2</span></a></li>
+		
+			<li><a href="/tags/math/">math<span>2</span></a></li>
 		
 			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
 		
-			<li><a href="/tags/segmentation/">segmentation<span>2</span></a></li>
+			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
 		
-			<li><a href="/tags/object-detection/">object detection<span>10</span></a></li>
+			<li><a href="/tags/object-detection/">object detection<span>11</span></a></li>
 		
 			<li><a href="/tags/杂/">杂<span>1</span></a></li>
+		
+			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
+		
+			<li><a href="/tags/summary/">summary<span>2</span></a></li>
+		
+			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
+		
+			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
 		
 		 
 		</ul>

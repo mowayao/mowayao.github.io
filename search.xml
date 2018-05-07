@@ -5,8 +5,45 @@
     <entry>
       <title><![CDATA[detection algorithms overview]]></title>
       <url>/2018/05/07/detection-algorithms-overview/</url>
-      <content type="html"></content>
+      <content type="html"><![CDATA[<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2ug64gnvj31jk0n3dny.jpg" alt=""></p>
+<p>###Two Stage</p>
+<p>将detection的任务分成两个步骤，第一个是寻找candidate，第二个是对candidate进行分类</p>
+<h4>Region-based Convolutional Network (R-CNN)</h4>
+<p>具体见<a href="http://wulimengmeng.top/2018/03/13/RCNN%E7%AC%94%E8%AE%B0/">这里</a></p>
+<p>R-CNN模型通过selective search得到candidate box，然后再结合deep learning model对box进行分类</p>
+<p><strong>selective search</strong></p>
+<p>大概的思路就是先将图片分成若干个较多的region，然后再逐步地根据region的相似性进行合并，即各种颜色空间（RGB，HSV，Lab），纹理相似度(HOG-like feature)，大小相似度，形状相似度，然后将这些相似度加权。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fr2uoyhrynj30d208djvk.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fr2v030gn8j30ht0brwg8.jpg" alt=""></p>
+<h4>SPP Net</h4>
+<h4>Fast R-CNN</h4>
+<h4>Faster R-CNN</h4>
+<h4>R-FCN</h4>
+<p>####R-FCN-3000</p>
+<p>####OHEM</p>
+<p>####MASK R-CNN</p>
+<p>####SNIP</p>
+<h3>One State</h3>
+<h4>SSD</h4>
+<h4>YOLO</h4>
+<h4>RON</h4>
+<h4>FPN</h4>
+]]></content>
       
+        <categories>
+            
+            <category> summary </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> deep learning </tag>
+            
+            <tag> object detection </tag>
+            
+        </tags>
         
     </entry>
     
@@ -2316,11 +2353,28 @@
 <p>后来想到说可以先采样角度，每个角度确定一个半径，再在半径上均匀采样，面试官有提示说在半径上是均匀的吗？ 明显在半径上采样是不均匀的，因为在半径上的每一个点对应的周长是不一样的！！</p>
 <p>正确的姿势是这样的：</p>
 <p>我们计算长度为$r(0\le r\le1)$的概率为$p(r)$:</p>
-<p>首先我们需要计算落在$r\sim r+\Delta r$的概率，很直观，就是面积/$\pi$，然后因为均匀采样所以需要除以$\Delta r$求得$p(r)$也就是：<br>$$<br>p(r\sim r+\Delta r) = \lim_{\Delta r\rightarrow0}\frac{\pi(r+\Delta r)^2-\pi r^2}{\pi}<br>$$</p>
-<p>$$<br>p(r) = \lim_{\Delta r\rightarrow0}\frac{\pi(r+\Delta r)^2-\pi r^2}{\pi \Delta r}=2r<br>$$</p>
-<p>接下来就是求$p(r)$的CDF,$P(r)$，积分即可：<br>$$<br>P(r) = \int_0^r p(x) dx=r^2<br>$$<br>然后求得它的逆函数$P^{-1}(r)$:</p>
+<p>首先我们需要计算落在$r\sim r+\Delta r$的概率，很直观，就是除以面积$\pi$，然后因为均匀采样所以需要除以$\Delta r$求得$p(r)$也就是：
+$$
+p(r\sim r+\Delta r) = \lim_{\Delta r\rightarrow0}\frac{\pi(r+\Delta r)^2-\pi r^2}{\pi}
+$$</p>
+<p>$$
+p(r) = \lim_{\Delta r\rightarrow0}\frac{\pi(r+\Delta r)^2-\pi r^2}{\pi \Delta r}=2r
+$$</p>
+<p>接下来就是求$p(r)$的CDF,$P(r)$，积分即可：
+$$
+P(r) = \int_0^r p(x) dx=r^2
+$$
+然后求得它的逆函数$P^{-1}(r)$:</p>
 <p>$$P^{-1}(r) = \sqrt r$$</p>
 <p>算到这里，答案呼之欲出，我们用一个随机变量$\zeta$ 在$[0,1]$均匀采样，然后在通过$r = \sqrt \zeta$求得r,为什么是均匀的呢，只要把$\sqrt \zeta$带入$P(r)$就可以发现$P(r)=\zeta$。</p>
+<p>如果面积变成3维，也就是单位球呢？做法还是一样的，首先还是对方向进行采样，这个自然是均匀的，然后就是在半径上采样，同样地，计算p(r)：
+$$
+p(r\sim r+\Delta r) = \lim_{\Delta r\rightarrow0}\frac{\frac{4}{3}\pi(r+\Delta r)^3-\frac{4}{3}\pi r^3}{\frac{4}{3}\pi}
+$$</p>
+<p>$$
+p(r) = \lim_{\Delta r\rightarrow0}\frac{\frac{4}{3}\pi(r+\Delta r)^3-\frac{4}{3}\pi r^3}{\frac{4}{3}\pi\Delta r}=3r^2
+$$</p>
+<p>还是求CDF，后面就不继续了。。。依葫芦画瓢</p>
 ]]></content>
       
         
