@@ -6,13 +6,17 @@
   <meta http-equiv="cache-control" content="no-cache">
   <meta http-equiv="expires" content="0">
   
-  <title>Deep Learning | Mowayao&#39;s Blog</title>
+  <title>R-FCN笔记 | Mowayao&#39;s Blog</title>
   <meta name="author" content="Mowayao">
+  
+  <meta name="description" content="论文：R-FCN: Object Detection via Region-based Fully Convolutional Networks，NIPS 2017
+作者：Jifeng Dai, Yi Li, Kaiming He, Jian Sun
+链接：https://arxiv.org/pdf">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  
+  <meta property="og:title" content="R-FCN笔记"/>
   <meta property="og:site_name" content="Mowayao&#39;s Blog"/>
 
   
@@ -113,163 +117,135 @@ var _hmt = _hmt || [];
   	<div class="content">
     	 
 
-<!-- title -->
-<div class="page-header">
-  <h1 class="archive-title-tag"><i class="fa fa-archive"></i> Deep Learning</h1>
-</div>
 
-<div class="row page">
-  <!-- cols -->
-  
-  <div class="col-md-9">
 	
-
-	  <div id="top_search"></div>
-
-	  <div class="archive">
-		
-		
-		
-			
-			
-			<h4 class="archive-ul" data-toggle="collapse" data-target="#2017">2017<b class="caret"></b></h4>
-			<ul id="2017" class="collapse in">
-			
-		
-		<li class="listing-item">
-		<span class="date_class"> 2017-11-12 </span> &raquo;
-		
-		   <span class="title"><a href="/2017/11/12/GatedRNN/" >GatedRNN</a></span>
-		
-		</li>			
-		
-		</ul>
+		<div class="page-header">
+			<h1> R-FCN笔记</h1>
 		</div>
-
-</div> <!-- col-md-9/col-md-12 -->
-
-
-<div class="col-md-3">
-	<div id="sidebar">
 	
-			
-  <div id="site_search">
-   <div class="form-group">
-    <input type="text" id="local-search-input" name="q" results="0" placeholder="Search" class="st-search-input st-default-search-input form-control"/>
-   </div>  
-  <div id="local-search-result"></div>
-  </div>
 
 
-		
-			
-	<div class="widget">
-		<h4>Categories</h4>
-		<ul class="tag_box inline list-unstyled">
-		
-			<li><a href="/categories/algorithms/">algorithms<span>26</span></a></li>
-		
-			<li><a href="/categories/competition/">competition<span>1</span></a></li>
-		
-		</ul>
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <p>论文：R-FCN: Object Detection via Region-based Fully Convolutional Networks，<strong>NIPS</strong> 2017</p>
+<p>作者：Jifeng Dai, Yi Li, Kaiming He, Jian Sun</p>
+<p>链接：<a href="https://arxiv.org/pdf/1605.06409.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1605.06409.pdf</a></p>
+<p>代码：<a href="https://github.com/daijifeng001/r-fcn" target="_blank" rel="external">https://github.com/daijifeng001/r-fcn</a></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fr2thjx8v0j31ce0oa0zb.jpg" alt=""></p>
+<p><strong>objective:</strong> address a dilemma between translation-invariance in image classification and translation-variance in object detection</p>
+<p><strong>solution:</strong> position-sensitive score maps</p>
+<ul>
+<li>83.6% mAP on the 2007 set, 82.0% the 2012 set</li>
+<li>a test-time speed of 170ms per image, 2.5-20× faster than the Faster R-CNN counterpart</li>
+</ul>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2ttte6q5j30wo0vy1kx.jpg" alt=""></p>
+<p>模型的backbone是ResNet-101，并将最后的fc层改成1024d的1x1的conv layer。</p>
+<p>在image classification中，网络需要较好的translation invariance，但是在detection中，因为需要准确地定位object的位置，这需要网络具有定位的representation，有一定的translation-variant，例如在candidate box中，网络最好能够对在box中的object的一些translation，例如旋转，平移等有一定的响应。所以为了引入translation invariance，作者提出了Region-based Fully Convolutional Network (R-FCN)。</p>
+<p>R-FCN通过构造position-sensitive的score map，每个score map都会对object的相对空间信息进行编码（encode），例如在object的左边还是右边。</p>
+<p>对于最后一层的conv layer，它会输出每个类别的$k^2$个position-sensitive score maps，所以一共有$k^2(C+1)$个channel，$k^2$个score maps分别对应$k\times k$的格子，例如k=3，就可以对相对位置进行了编码：{top-left, top-center, top-right, …, bottom-right}，然后再用一个position-sensitive ROI pooling进行信息的整合，文中的做法就是相加</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2sgoe0jtj31cc0omth7.jpg" alt=""></p>
+<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 2是与其他模型的比较，对于R-FCN来说，去k=7要优于k=3</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2tw517esj313u0dadij.jpg" alt=""></p>
+<p>Table 3是R-FCN和faster r-cnn在训练和测试的效率比较，可以发现R-FCN的效率要高于Faster r-cnn，同时准确率也要高于faster r-cnn。</p>
+<p>Table 4-6是R-FCN和其他模型在PASCAL VOC2007，PASCAL VOC2012，COCO数据集上的比较 </p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2u19dx60j30zg0twdne.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fr2u6dkj5nj30xm0bkn08.jpg" alt=""></p>
+	  
 	</div>
 
-		
-			
-	<div class="widget">
-		<h4>Tag Cloud</h4>
-		<ul class="tag_box inline list-unstyled">		
-		
-			<li><a href="/tags/notes/">notes<span>6</span></a></li>
-		
-			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
-		
-			<li><a href="/tags/classification/">classification<span>2</span></a></li>
-		
-			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
-		
-			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
-		
-			<li><a href="/tags/math/">math<span>2</span></a></li>
-		
-			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
-		
-			<li><a href="/tags/paper/">paper<span>1</span></a></li>
-		
-			<li><a href="/tags/杂/">杂<span>1</span></a></li>
-		
-			<li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
-		
-			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
-		
-			<li><a href="/tags/segmentation/">segmentation<span>2</span></a></li>
-		
-			<li><a href="/tags/deep-learning/">deep learning<span>32</span></a></li>
-		
-			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
-		
-			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
-		
-			<li><a href="/tags/summary/">summary<span>2</span></a></li>
-		
-			<li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
-		
-			<li><a href="/tags/object-detection/">object detection<span>10</span></a></li>
-		
-			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
-		
-		 
-		</ul>
+	<div>
+  	<center>
+	<div class="pagination">
+
+    
+    
+    <a href="/2018/05/07/减小模型复杂度的原理/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+    
+
+    <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
+    
+    <a href="/2018/04/21/FPN论文笔记/" type="button" class="btn btn-default ">Next<i
+                class="fa fa-arrow-circle-o-right"></i></a>
+    
+
+    
+</div>
+
+    </center>
 	</div>
-
-
-		
-			
-<div class="widget">
-  <h4>Recent Posts</h4>
-  <ul class="entry list-unstyled">
-    
-      <li>
-        <a href="/2018/05/07/detection-algorithms-overview/" ><i class="fa fa-file-o"></i>detection algorithms overview</a>
-      </li>
-    
-      <li>
-        <a href="/2018/05/07/减小模型复杂度的原理/" ><i class="fa fa-file-o"></i>减小模型复杂度的原理</a>
-      </li>
-    
-      <li>
-        <a href="/2018/05/02/R-FCN笔记/" ><i class="fa fa-file-o"></i>R-FCN笔记</a>
-      </li>
-    
-      <li>
-        <a href="/2018/04/21/FPN论文笔记/" ><i class="fa fa-file-o"></i>FPN论文笔记</a>
-      </li>
-    
-      <li>
-        <a href="/2018/04/21/RON论文笔记/" ><i class="fa fa-file-o"></i>RON论文笔记</a>
-      </li>
-    
-  </ul>
-</div>
-
-		
-			
-<div class="widget">
-	<h4>Links</h4>
-	<ul class="blogroll list-unstyled">
 	
-		<li><i class="fa fa-github"></i><a href="http://www.github.com/mowayao" title="My Github account." target="_blank"]);">My Github</a></li>
+	<!-- comment -->
 	
-		<li><i class="fa fa-linkedin"></i><a href="http://www.weibo.com/mowayao" title="My weibo account." target="_blank"]);">My Weibo</a></li>
-	
-	</ul>
-</div>
+<section id="comment">
+    <h2 class="title">Comments</h2>
+
+    
+</section>
 
 
+	</div> <!-- col-md-9/col-md-12 -->
 		
-	</div> <!-- sidebar -->
-</div> <!-- col-md-3 -->
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
 
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2018-05-02 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    <li><a href="/categories/algorithms/">algorithms<span>26</span></a></li>
+  </li>
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/deep-learning/">deep learning<span>32</span></a></li> <li><a href="/tags/object-detection/">object detection<span>10</span></a></li>
+    </ul>
+	</div>
+		
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
 
 
 
@@ -300,81 +276,6 @@ var _hmt = _hmt || [];
 
 
 <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-(function($){
-  $('.fancybox').fancybox();
-})(jQuery);
-</script>
-
-
-
-   <script type="text/javascript">      
-     var search_path = "search.xml";
-	 if (search_path.length == 0) {
-	 	search_path = "search.xml";
-	 }
-	 var path = "/" + search_path;
-     searchFunc(path, 'local-search-input', 'local-search-result');
-   </script>
-
-
-
-
-
-<!-- mathjax config similar to math.stackexchange -->
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [ ['$','$'], ['\\(','\\)'] ],
-      displayMath: [ ['$$','$$'], ['\[','\]'] ], 
-      processEscapes: true
-    }
-  });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-      }
-    });
-</script>
-
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i < all.length; i += 1) {
-            all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config("");
-</script>
-
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-      all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-  });
-</script>
-
-<script type="text/javascript" src="custom_mathjax_source">
-</script>
-<!-- End: Injected MathJax -->
-<!-- hexo-inject:end -->
-
-
-</body>
-   </html>
-"text/css">
 <script src="/fancybox/jquery.fancybox.pack.js"></script>
 <script type="text/javascript">
 (function($){

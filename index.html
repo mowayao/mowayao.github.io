@@ -136,6 +136,110 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
+			<a href="/2018/05/07/detection-algorithms-overview/" >detection algorithms overview</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2018-05-07  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		
+	
+	</div>
+  <a type="button" href="/2018/05/07/detection-algorithms-overview/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2018/05/07/减小模型复杂度的原理/" >减小模型复杂度的原理</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2018-05-07  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		
+	
+	</div>
+  <a type="button" href="/2018/05/07/减小模型复杂度的原理/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
+			<a href="/2018/05/02/R-FCN笔记/" >R-FCN笔记</a>
+		</h3>
+		</div>
+	<div class="col-md-4">
+		<div class="date">post @ 2018-05-02  </div>
+		</div>
+	</div>
+	
+
+
+			<div class="entry">
+  <div class="row">
+	
+	
+		<p>论文：R-FCN: Object Detection via Region-based Fully Convolutional Networks，<strong>NIPS</strong> 2017</p>
+<p>作者：Jifeng Dai, Yi Li, Kaiming He, Jian Sun</p>
+<p>链接：<a href="https://arxiv.org/pdf/1605.06409.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1605.06409.pdf</a></p>
+<p>代码：<a href="https://github.com/daijifeng001/r-fcn" target="_blank" rel="external">https://github.com/daijifeng001/r-fcn</a></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fr2thjx8v0j31ce0oa0zb.jpg" alt=""></p>
+<p><strong>objective:</strong> address a dilemma between translation-invariance in image classification and translation-variance in object detection</p>
+<p><strong>solution:</strong> position-sensitive score maps</p>
+<ul>
+<li>83.6% mAP on the 2007 set, 82.0% the 2012 set</li>
+<li>a test-time speed of 170ms per image, 2.5-20× faster than the Faster R-CNN counterpart</li>
+</ul>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2ttte6q5j30wo0vy1kx.jpg" alt=""></p>
+<p>模型的backbone是ResNet-101，并将最后的fc层改成1024d的1x1的conv layer。</p>
+<p>在image classification中，网络需要较好的translation invariance，但是在detection中，因为需要准确地定位object的位置，这需要网络具有定位的representation，有一定的translation-variant，例如在candidate box中，网络最好能够对在box中的object的一些translation，例如旋转，平移等有一定的响应。所以为了引入translation invariance，作者提出了Region-based Fully Convolutional Network (R-FCN)。</p>
+<p>R-FCN通过构造position-sensitive的score map，每个score map都会对object的相对空间信息进行编码（encode），例如在object的左边还是右边。</p>
+<p>对于最后一层的conv layer，它会输出每个类别的$k^2$个position-sensitive score maps，所以一共有$k^2(C+1)$个channel，$k^2$个score maps分别对应$k\times k$的格子，例如k=3，就可以对相对位置进行了编码：{top-left, top-center, top-right, …, bottom-right}，然后再用一个position-sensitive ROI pooling进行信息的整合，文中的做法就是相加</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2sgoe0jtj31cc0omth7.jpg" alt=""></p>
+<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 2是与其他模型的比较，对于R-FCN来说，去k=7要优于k=3</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2tw517esj313u0dadij.jpg" alt=""></p>
+<p>Table 3是R-FCN和faster r-cnn在训练和测试的效率比较，可以发现R-FCN的效率要高于Faster r-cnn，同时准确率也要高于faster r-cnn。</p>
+<p>Table 4-6是R-FCN和其他模型在PASCAL VOC2007，PASCAL VOC2012，COCO数据集上的比较 </p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2u19dx60j30zg0twdne.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fr2u6dkj5nj30xm0bkn08.jpg" alt=""></p>
+
+	
+	</div>
+  <a type="button" href="/2018/05/02/R-FCN笔记/#more" class="btn btn-default more">Read More</a>
+</div>
+
+		
+			
+	
+	<!-- display as entry -->
+<div class="row">
+	<div class="col-md-8">
+		<h3 class="title">
 			<a href="/2018/04/21/FPN论文笔记/" >FPN论文笔记</a>
 		</h3>
 		</div>
@@ -611,204 +715,6 @@ var _hmt = _hmt || [];
 </div>
 
 		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2018/03/20/SPPNet笔记/" >SPPNet笔记</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2018-03-20  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>论文：Spatial Pyramid Pooling in Deep ConvolutionalNetworks for Visual Recognition，<strong>TPAMI</strong> 2015</p>
-<p>作者：Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun</p>
-<p>链接：<a href="https://arxiv.org/pdf/1406.4729.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1406.4729.pdf</a></p>
-<p>代码：<a href="https://github.com/ShaoqingRen/SPP_net" target="_blank" rel="external">https://github.com/ShaoqingRen/SPP_net</a></p>
-<ul>
-<li>提出spatial pyramid pooling layer，使得网络能够接受任意大小的输入，同时利用multi-level的spatial bins做hierarchy information aggregation，提高模型的鲁棒性</li>
-<li>对image classification和object detection（针对RCNN的优化）都可以提升模型的表现</li>
-<li>在ILSVRC 2014 object detection中排名第2，image classification中排名第3</li>
-</ul>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/56717690.jpg" alt=""></p>
-<p>在RCNN中，我们提取各个region proposals，然后将其warp到指定的大小，再用CNN提特征，这样的问题是图像object经过warp以后，会变形严重并且影响分辨率，从而影响分类的结果，所以作者提出SPP layer，使得对于任何大小的输入图像，神经网络都可以输出固定长度的特征，同时提高分类的鲁棒性。</p>
-<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>见Figure 3，将卷积层的输出经过SPP layer以后，利用max pooling分成3种的spatial bins，第一种是4x4，第二种是2x2，第三种是1x1(global pooling)。在做完pooling以后，我们可以得到16x256,4x256,1x256这三种维度的特征，256是输入的feature map的深度，拼接以后得到21x256长度的特征，其实可以将SPP layer看成是特征层面的re-scaled。</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/71347165.jpg" alt=""></p>
-<p>例如输入的feature map的大小是axa，需要产生3x3，2x2，1x1的特征向量，那么pooling的window size是ceil(a/n)，步长是floor(a/n)。将这些特征拼接得到固定长度的特征向量，再连接全连接层进行分类。</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/44112090.jpg" alt=""></p>
-<h5 id="Training-Strategy"><a href="#Training-Strategy" class="headerlink" title="Training Strategy"></a>Training Strategy</h5><p><strong>Multi-size Training</strong></p>
-<p>在分类任务的模型训练过程中，采用多个size的输入可以提高模型的结果。对于有两个不同大小输入的训练策略，使用两个固定大小（框架所限）的相同参数的网络进行交替训练。</p>
-<p><strong>Full-image Representation</strong></p>
-<p>在分类任务的模型训练过程中，将图像resize到min(w,h)=256，保持长宽比不变。</p>
-<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p><strong>Image Classifications</strong></p>
-<p>Table 1是三种base network的结构。</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/11136760.jpg" alt=""></p>
-<p>在分类任务中，作者通过实验证明，SPP layer，multi-size training，能够提高分类的精度（见Table 2）。SPP layer能够提高精度是因为利用spatial pyramid pooling可以提高鲁棒性。multi-size training中，有三种策略，一种是单个大小，第二种是180和224，还有一种是从[180,224]随机选择其中的一个size，实验证明，第二种精度最高。</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/84456005.jpg" alt=""></p>
-<p>从Table 3看，full-image representation相比较于central crop，可以提高准确率。</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/81983088.jpg" alt=""></p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/64521005.jpg" alt=""></p>
-<p><strong>Object Detection</strong></p>
-<p>下图是R-CNN和SPP-Net的对比，R-CNN的缺点是计算量大，包括了大量的重复计算。</p>
-<p><img src="http://img.blog.csdn.net/20170617102150673?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdjFfdml2aWFu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
-<p>其具体步骤和R-CNN类似：</p>
-<ol>
-<li>通过selective search得到2000个候选窗口</li>
-<li>将整张图像输入到CNN中，完成特征的提取，然后在feature map上找到候选框的区域，在对候选框进行spaital pyramid pooling，得到定长的特征向量,这样做可以大大提高效率。</li>
-<li>采用SVM模型，对物体进行分类。</li>
-</ol>
-<p>从Table 9看出，SPPNet相较于R-CNN计算效率有了较高的提升，同时准确率也有提高。</p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/35453761.jpg" alt=""></p>
-<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/27949731.jpg" alt=""></p>
-
-	
-	</div>
-  <a type="button" href="/2018/03/20/SPPNet笔记/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2018/03/13/RCNN笔记/" >RCNN笔记</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2018-03-13  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>论文：Rich feature hierarchies for accurate object detection and semantic segmentation，CVPR 2014</p>
-<p>作者：Ross Girshick，Jeff Donahue，Trevor Darrell，Jitendra Malik</p>
-<p>链接：<a href="https://arxiv.org/pdf/1311.2524.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1311.2524.pdf</a></p>
-<p>代码：<a href="https://github.com/rbgirshick/rcnn" target="_blank" rel="external">https://github.com/rbgirshick/rcnn</a></p>
-<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><ul>
-<li>之前的object detection算法都是用一些手工特征，例如SIFT或者HOG等，R-CNN使用pretrained的CNN提取region的特征，然后再用SVM分类做finetune（bridging the gap between image classification and object detection）</li>
-<li>尝试不同层的feature作为分类的特征</li>
-</ul>
-<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>R-CNN的模型见Figure 1，主要包括3个部分：</p>
-<ol>
-<li>提取region proposals</li>
-<li>用CNN提取特征，得到一定长度的特征向量</li>
-<li>对于提取到的特征，喂到若干个SVM，得到各个类别的概率</li>
-<li>利用NMS优化结果</li>
-</ol>
-<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fpbdwp017oj30tq0mq0wc.jpg" alt=""></p>
-<p><strong>Region proposals</strong></p>
-<p>对于region proposals的提取，主要利用selective search这个启发式搜索方法。</p>
-<p>selective search的步骤为：</p>
-<ul>
-<li>使用<a href="http://cs.brown.edu/~pff/segment/" target="_blank" rel="external">Efficient Graph Based Image Segmentation</a>中的方法来得到region</li>
-<li>得到所有region之间两两的相似度</li>
-<li>合并最像的两个region</li>
-<li>重新计算新合并region与其他region的相似度</li>
-<li>重复上述过程直到整张图片都聚合成一个大的region</li>
-<li>使用一种随机的计分方式给每个region打分，按照分数进行ranking，取出top k的子集，就是selective search的结果</li>
-</ul>
-<hr>
-<p><strong>Feature extraction</strong></p>
-<p>使用AlexNet提取特征，AlexNet现在ILSVRC 2012(IMAGENET)上做pre train。将图像的region patch warp到227x227，然后喂到网络，得到特征。</p>
-<p><strong>Object category classifier</strong></p>
-<p>对于每个类别，训练各自的SVM，这样就可以得到每个类的score，训练的时候将gt视为正样本，与gt的IoU &lt; 0.3视为负样本。因为负样本往往远远大于正样本，所以需要做hard negative mining，控制合理的比例，一般设置为1：3。</p>
-<p><strong>Bounding box regression</strong></p>
-<p>输入是n对${(P^i,G^i)}i=1,…,N$，其中$P^i=(P_x^i,P_y^i,P_w^i,P_h^i)$，对应bounding box的中心，长宽，$G^i=(G_x,G_y,G_w,G_h)$。将P进行映射（前两者是平移，后两个是缩放）：<br>$$<br>\hat{G}_x = P_wd_x(P)+P_x \ \hat{G}_y = P_hd_y(P)+P_y \ \hat{G}_x = P_w\exp (d_w(P))\ \hat{G}_h = P_h\exp(d_h(P)) \\d_\star(P)=w_\star^T\phi_5(P)<br>$$<br>训练的时候对gt的四个坐标进行转换（上面的逆运算，使得$t_x,t_y$）：<br>$$<br>t_x = (G_x-P_x)/P_w \ t_y =(G_y −P_y)/P_h \ t_w = \log(G_w/P_w)\\t_h = \log(G_h/P_h).<br>$$<br>经过这样的变换，$t_x,t_y$为需要学习的平移量，$t_w, t_h$为需要学习的缩放量。</p>
-<p>其中，$G$表示的是ground truth，P表示的训练样本，我们的任务是求解$W_\star$，其实就是通过梯度下降或者最小二乘法求解ridge regression问题，:<br>$$<br>w_\star =  \arg\min_{\hat{w}_\star}(t^i_\star − \hat{w}^T_\star \phi_5(P^i))^2+\lambda ||\hat{w}_\star||^2<br>$$<br>其中$\phi_5(P^i)$表示的是第5个pooling的输出。需要注意的是，正则系数$\lambda=1000$，而且当G和P相差很大的时候，效果会不好，所以需要设置IoU阈值，将其设为0.6。</p>
-<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1是模型在VOC 2012 test上的表现，可以看出R-CNN BB远超其他baseline，证明了模型的性能。</p>
-<p>Table 2是模型在VOC 2007 test上的表现，可以在上面做一些ablation study：</p>
-<ul>
-<li>对于不finetune的模型，第一行到第三行，可以发现fc6的结果最好，这样就可以移除fc7的参数，简化模型。</li>
-<li>对于finetune的模型，第四行到第六行，可以发现fc7的结果最好，经过网络的同层比较，可以发现finetune可以大大提升模型的performance。</li>
-<li>通过第七行与第六行比较，可以看出bounding box regression可以较为显著地提升模型性能。</li>
-<li>跟其他手工特征相比，CNN提取的特征具有更强的表达能力。</li>
-</ul>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fpbidj661zj31kw0eeq6d.jpg" alt=""></p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fpbi5y3ykqj31kw0k9wjg.jpg" alt=""></p>
-<p>​    </p>
-
-	
-	</div>
-  <a type="button" href="/2018/03/13/RCNN笔记/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
-			
-	
-	<!-- display as entry -->
-<div class="row">
-	<div class="col-md-8">
-		<h3 class="title">
-			<a href="/2018/03/06/ResNeXt笔记/" >ResNeXt笔记</a>
-		</h3>
-		</div>
-	<div class="col-md-4">
-		<div class="date">post @ 2018-03-06  </div>
-		</div>
-	</div>
-	
-
-
-			<div class="entry">
-  <div class="row">
-	
-	
-		<p>论文 :Aggregated Residual Transformations for Deep Neural Networks, CVPR 2017</p>
-<p>链接：<a href="https://arxiv.org/pdf/1611.05431.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1611.05431.pdf</a></p>
-<p>作者:  Saining Xie, Ross Girshick, Piotr Dollár, Zhuowen Tu, Kaiming He</p>
-<p>源码：<a href="https://github.com/facebookresearch/ResNeXt" target="_blank" rel="external">https://github.com/facebookresearch/ResNeXt</a></p>
-<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>提出ResNeXt网络，基于ResNet和GoogleNet。</p>
-<p>提出cardinality的概念，对于每个conv block，对输入做多种不同的（结构相同，参数不同）transformations，然后再aggregation，而transformations的数量就是cardinality。</p>
-<p>结构启发于inception module，同样是split-transform-merge的策略，这里的merge和transform都和inception不一样。split-transform-merge的策略主要是<strong><em>通过在一个尽可能小的计算复杂度的前提下，提高模型的表达能力</em></strong>（approach the representational power of large and dense layers, but at a considerably lower computational complexity）！ Inception的问题在于每个block都需要定制，导致了模型的灵活性较差，这些block的定制化设计相当于引入了一堆的超参，大量的超参对模型来讲无疑是不利的。而这篇文章就是基于这点进行改进！</p>
-<ul>
-<li>模块化</li>
-<li>超参少</li>
-<li>表达能力强</li>
-</ul>
-<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>首先，总结了两点block设计的原则：</p>
-<ol>
-<li>对于相同大小的feature map，block的超参要相同，也就是conv的filter参数要一样。【if producing spatial maps of the same size, the blocks share the same hyper-parameters (width and filter sizes)】</li>
-<li>如果空间维度减半，那么feature maps的数量要加倍。【each time when the spatial map is downsampled by a factor of 2, the width of the blocks is multiplied by a factor of 2】</li>
-</ol>
-<p>Figure 1是ResNet和ResNeXt的block结构比较，重点看ResNeXt，可以看到这里将256维的输入做32个不同的transformations，每个transformation先通过1x1的conv做降维(information embedding)，然后再经过几个conv，最后将这32个输出做aggregation。</p>
-<p>将其公式化:<br>$$<br>F(x) = \sum_{i=1}^C \tau_i(x)<br>$$<br>$\tau_i$的作用就是将x投影到低维空间（embeeding），然后做transform。C就是做transformation的数量，也就是cardinaty。aggregation后，再用short connection做identity mapping。</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fp3f3tppr3j30te0i0jur.jpg" alt=""></p>
-<p>Figure 3是异构的三种结构，（a）是初始版本，（b）concat，（c）group conv，这三者可以说是等价的。那么在实现上，可以利用group conv，更加方便！</p>
-<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fp4d6cqzx8j31cq0i2q8m.jpg" alt=""></p>
-<p>​    Table 1是ResNet-50和ResNeXt-50的参数对比</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fp4fhovd49j30nw0uaq8x.jpg" alt=""></p>
-<h5 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h5><p>Table 3是各个版本的ResNeXt以及ResNet在ImageNet-1K数据集上的表现，可以发现随着Cardinaty增加，模型总体上是变好的，体现在top-1 error逐渐在降低。</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fp4fegkbv6j30oc0jqn0j.jpg" alt=""></p>
-<p>Table 6是ResNet和ResNeXt在ImageNet-5K上的比较，可以可发现后者都要好于前者。</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fp4fkycmlxj30pi0eotbv.jpg" alt=""></p>
-<p>Table 5则是各个state-of-the-art的模型在ImageNet-1K数据集上表现，可以发现模型达到了最好的结果。</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fp4fmo7mobj30ow0gaacv.jpg" alt=""></p>
-<p>从Table 7可以发现，相同的参数，ResNeXt比Wide ResNet表现更好。</p>
-<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fp4fojev6aj30pc09sgn0.jpg" alt=""></p>
-
-	
-	</div>
-  <a type="button" href="/2018/03/06/ResNeXt笔记/#more" class="btn btn-default more">Read More</a>
-</div>
-
-		
 
 		</div>
 
@@ -856,7 +762,7 @@ var _hmt = _hmt || [];
 		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/algorithms/">algorithms<span>25</span></a></li>
+			<li><a href="/categories/algorithms/">algorithms<span>26</span></a></li>
 		
 			<li><a href="/categories/competition/">competition<span>1</span></a></li>
 		
@@ -869,43 +775,43 @@ var _hmt = _hmt || [];
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
+			<li><a href="/tags/math/">math<span>2</span></a></li>
+		
+			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
+		
+			<li><a href="/tags/summary/">summary<span>2</span></a></li>
+		
 			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
 		
 			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
 		
-			<li><a href="/tags/segmentation/">segmentation<span>2</span></a></li>
-		
 			<li><a href="/tags/notes/">notes<span>6</span></a></li>
-		
-			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
 		
 			<li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
 		
-			<li><a href="/tags/杂/">杂<span>1</span></a></li>
+			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
 		
 			<li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
 		
-			<li><a href="/tags/math/">math<span>2</span></a></li>
-		
-			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
-		
-			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
-		
-			<li><a href="/tags/classification/">classification<span>2</span></a></li>
-		
-			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
-		
-			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
+			<li><a href="/tags/deep-learning/">deep learning<span>32</span></a></li>
 		
 			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
 		
-			<li><a href="/tags/summary/">summary<span>2</span></a></li>
-		
-			<li><a href="/tags/object-detection/">object detection<span>9</span></a></li>
+			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
 		
 			<li><a href="/tags/paper/">paper<span>1</span></a></li>
 		
-			<li><a href="/tags/deep-learning/">deep learning<span>31</span></a></li>
+			<li><a href="/tags/classification/">classification<span>2</span></a></li>
+		
+			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
+		
+			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
+		
+			<li><a href="/tags/segmentation/">segmentation<span>2</span></a></li>
+		
+			<li><a href="/tags/object-detection/">object detection<span>10</span></a></li>
+		
+			<li><a href="/tags/杂/">杂<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -919,23 +825,23 @@ var _hmt = _hmt || [];
   <ul class="entry list-unstyled">
     
       <li>
+        <a href="/2018/05/07/detection-algorithms-overview/" ><i class="fa fa-file-o"></i>detection algorithms overview</a>
+      </li>
+    
+      <li>
+        <a href="/2018/05/07/减小模型复杂度的原理/" ><i class="fa fa-file-o"></i>减小模型复杂度的原理</a>
+      </li>
+    
+      <li>
+        <a href="/2018/05/02/R-FCN笔记/" ><i class="fa fa-file-o"></i>R-FCN笔记</a>
+      </li>
+    
+      <li>
         <a href="/2018/04/21/FPN论文笔记/" ><i class="fa fa-file-o"></i>FPN论文笔记</a>
       </li>
     
       <li>
         <a href="/2018/04/21/RON论文笔记/" ><i class="fa fa-file-o"></i>RON论文笔记</a>
-      </li>
-    
-      <li>
-        <a href="/2018/04/18/OHEM算法笔记/" ><i class="fa fa-file-o"></i>OHEM算法笔记</a>
-      </li>
-    
-      <li>
-        <a href="/2018/04/11/SSD笔记/" ><i class="fa fa-file-o"></i>SSD笔记</a>
-      </li>
-    
-      <li>
-        <a href="/2018/04/07/YOLO&amp;YOLOv2笔记/" ><i class="fa fa-file-o"></i>YOLO&amp;YOLOv2笔记</a>
       </li>
     
   </ul>
