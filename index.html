@@ -151,29 +151,19 @@ var _hmt = _hmt || [];
 	
 	
 		<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2ug64gnvj31jk0n3dny.jpg" alt=""></p>
-<p>###Two Stage</p>
+<p>###Two Stage </p>
 <p>将detection的任务分成两个步骤，第一个是寻找candidate，第二个是对candidate进行分类</p>
-<h4>Region-based Convolutional Network (R-CNN)</h4>
-<p>具体见<a href="http://wulimengmeng.top/2018/03/13/RCNN%E7%AC%94%E8%AE%B0/">这里</a></p>
+<h4 id="Region-based-Convolutional-Network-R-CNN"><a href="#Region-based-Convolutional-Network-R-CNN" class="headerlink" title="Region-based Convolutional Network (R-CNN)"></a>Region-based Convolutional Network (R-CNN)</h4><p>具体见<a href="http://wulimengmeng.top/2018/03/13/RCNN%E7%AC%94%E8%AE%B0/">这里</a></p>
 <p>R-CNN模型通过selective search得到candidate box，然后再结合deep learning model对box进行分类</p>
 <p><strong>selective search</strong></p>
 <p>大概的思路就是先将图片分成若干个较多的region，然后再逐步地根据region的相似性进行合并，即各种颜色空间（RGB，HSV，Lab），纹理相似度(HOG-like feature)，大小相似度，形状相似度，然后将这些相似度加权。</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fr2uoyhrynj30d208djvk.jpg" alt=""></p>
 <p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fr2v030gn8j30ht0brwg8.jpg" alt=""></p>
-<h4>SPP Net</h4>
-<h4>Fast R-CNN</h4>
-<h4>Faster R-CNN</h4>
-<h4>R-FCN</h4>
-<p>####R-FCN-3000</p>
+<h4 id="SPP-Net"><a href="#SPP-Net" class="headerlink" title="SPP Net"></a>SPP Net</h4><h4 id="Fast-R-CNN"><a href="#Fast-R-CNN" class="headerlink" title="Fast R-CNN"></a>Fast R-CNN</h4><h4 id="Faster-R-CNN"><a href="#Faster-R-CNN" class="headerlink" title="Faster R-CNN"></a>Faster R-CNN</h4><h4 id="R-FCN"><a href="#R-FCN" class="headerlink" title="R-FCN"></a>R-FCN</h4><p>####R-FCN-3000</p>
 <p>####OHEM</p>
 <p>####MASK R-CNN</p>
 <p>####SNIP</p>
-<h3>One State</h3>
-<h4>SSD</h4>
-<h4>YOLO</h4>
-<h4>RON</h4>
-<h4>FPN</h4>
-
+<h3 id="One-State"><a href="#One-State" class="headerlink" title="One State"></a>One State</h3><h4 id="SSD"><a href="#SSD" class="headerlink" title="SSD"></a>SSD</h4><h4 id="YOLO"><a href="#YOLO" class="headerlink" title="YOLO"></a>YOLO</h4><h4 id="RON"><a href="#RON" class="headerlink" title="RON"></a>RON</h4><h4 id="FPN"><a href="#FPN" class="headerlink" title="FPN"></a>FPN</h4>
 	
 	</div>
   <a type="button" href="/2018/05/07/detection-algorithms-overview/#more" class="btn btn-default more">Read More</a>
@@ -186,7 +176,7 @@ var _hmt = _hmt || [];
 <div class="row">
 	<div class="col-md-8">
 		<h3 class="title">
-			<a href="/2018/05/07/减小模型复杂度的原理/" >减小模型复杂度的原理</a>
+			<a href="/2018/05/07/正则化的理解/" >正则化的理解</a>
 		</h3>
 		</div>
 	<div class="col-md-4">
@@ -200,10 +190,38 @@ var _hmt = _hmt || [];
   <div class="row">
 	
 	
-		
+		<p>本文主要介绍一些正则化方法降低模型复杂度的原理（目的是防止过拟合，通过约束参数达到），主要是对l1正则和l2正则的原理进行思考。</p>
+<p>这里先对优化问题进行简要介绍，主要有三种最优化问题（凸优化）：</p>
+<ol>
+<li>无约束的优化问题：就是没有任何约束条件，直接求导求极值点即可</li>
+<li>有等式约束的优化问题：</li>
+</ol>
+<p>$$<br>\min f(X) \ s.t. g(x) = 0<br>$$</p>
+<p>通常使用拉格朗日乘子法就行求解，转换成$L(\lambda, x) = f(x) + \lambda g(x)$，分别对x和$\lambda$求偏导，得到极值点集合，然后再验证</p>
+<ol>
+<li>有不等式约束的优化问题：</li>
+</ol>
+<p>$$<br>\min f(X) \ s.t. g(x) = 0, h(x)  \le 0<br>$$</p>
+<p>f和h为凸函数，g是仿射函数，常用解法还是利用拉格朗日乘子法，即转化成$L(\lambda,\mu,x) = f(x) + \lambda g(x)+ \mu h(x)$，利用其最优化的KKT条件：</p>
+<ul>
+<li>$L(\lambda, \mu, x)$对变量的导数为0</li>
+<li>g(x) = 0</li>
+<li>$\mu h(x)=0$</li>
+</ul>
+<p>以简单的线性回归为例，将$E_D(w)$表示为data-dependent error，$E_w(w)$表示为regularization term，所以整个的error可以表示为：<br>$$<br>\frac{1}{2}\sum_{n=1}^N{t_n-w^T\phi(x_n)}^2+\frac{\lambda}{2}\sum_{j=1}^M|w_j|^q<br>$$<br><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fr52eorbknj31kw0jradg.jpg" alt=""></p>
+<p>我们可以把上式写成一般的形式：<br>$$<br>J(w) = f(w) + \lambda h(w)<br>$$<br>也可以还原成有等式约束的形式：<br>$$<br>\min f(w) \ s.t. \lambda h(w) \le c<br>$$<br>特定的regularizer也叫做weight decay，顾名思义，就是会让参数向0作decay（变相地降低模型复杂度），q=1时，也叫做lasso，q=2时，叫做ridge。这里还需要解释一个问题：为什么q=1时，很容易出现参数为0的情况，也就是经常会得到稀疏解（和l2相比更容易得到稀疏解而不是一定会得到稀疏解），下图可以解释：</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fr51ndkgxjj313a0qegou.jpg" alt=""></p>
+<p>对于l1正则来说，就图中的例子来说，<strong><em>边界</em></strong>可以转化成$w_1+w_2=\frac{c}{\lambda}$，在图中就是一个菱形，而l2正则则可以转化为$w_1^2+w_2^2=\frac{c}{\lambda}$的<strong><em>边界</em></strong>，在图中则是一个圆形。而损失函数图像是圆形（大部分情况是椭圆形），使得菱形和圆形更容易相较于坐标轴上！<strong><em>随着惩罚项$\lambda$增大，菱形和圆形的面积会越来越小，所以求得参数也越来越小！起到降低模型复杂度的效果！</em></strong></p>
+<p>#####prior</p>
+<p>对于bayesian view来说，通过最大化后验概率得到：<br>$$<br>w^<em> = \arg\max_w p(w|D) = \arg\max_w \frac{p(D|w)</em>p(w)}{p(D)} = \arg\max_w p(D|w)*p(w)<br>$$<br>其中p(D|w)是似然函数，表示在w条件下数据D出现的概率，p(w)是参数的先验函数。</p>
+<p>对于似然函数，我们假设数据之间都是i.i.d，那么我们有:<br>$$<br>p(D|w) = \prod_{k=1}^np(D_i|w)<br>$$<br>对最大后验概率去log：<br>$$<br>\arg\max_w p(D|w)*p(w) =\prod_{k=1}^np(D_i|w)p(w) = \log\prod_{k=1}^np(D_i|w)p(w) = \arg\min_w -\sum_{k=0}^n \log p(D|w) - \log p(w)<br>$$<br>当假设w服从高斯分布，那么经过转化以后就变成了l2正则，当假设w服从拉普拉斯分布，就可以转换成l1正则。</p>
+<p>下图是拉普拉斯分布，可以发现，拉普拉斯分布在0值附近非常突出，而高斯分布更加平缓，所以拉普拉斯更倾向于产生稀疏解，而高斯分布对权值大的惩罚更大（从几何图形也可以看出）</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fr5382j3pqj311y0t23zb.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fr535b1edsj31040r3gp3.jpg" alt=""></p>
+
 	
 	</div>
-  <a type="button" href="/2018/05/07/减小模型复杂度的原理/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2018/05/07/正则化的理解/#more" class="btn btn-default more">Read More</a>
 </div>
 
 		
@@ -800,43 +818,43 @@ var _hmt = _hmt || [];
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
+			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
 		
-			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
+			<li><a href="/tags/segmentation/">segmentation<span>2</span></a></li>
 		
-			<li><a href="/tags/notes/">notes<span>6</span></a></li>
+			<li><a href="/tags/notes/">notes<span>7</span></a></li>
 		
-			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
+			<li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
+		
+			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
+		
+			<li><a href="/tags/classification/">classification<span>2</span></a></li>
+		
+			<li><a href="/tags/object-detection/">object detection<span>11</span></a></li>
 		
 			<li><a href="/tags/deep-learning/">deep learning<span>33</span></a></li>
+		
+			<li><a href="/tags/math/">math<span>2</span></a></li>
+		
+			<li><a href="/tags/summary/">summary<span>2</span></a></li>
+		
+			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
 		
 			<li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
 		
 			<li><a href="/tags/paper/">paper<span>1</span></a></li>
 		
-			<li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
-		
-			<li><a href="/tags/classification/">classification<span>2</span></a></li>
-		
-			<li><a href="/tags/segmentation/">segmentation<span>2</span></a></li>
-		
-			<li><a href="/tags/math/">math<span>2</span></a></li>
-		
-			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
-		
-			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
-		
-			<li><a href="/tags/object-detection/">object detection<span>11</span></a></li>
+			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
 		
 			<li><a href="/tags/杂/">杂<span>1</span></a></li>
 		
-			<li><a href="/tags/machine-learning/">machine learning<span>1</span></a></li>
-		
-			<li><a href="/tags/summary/">summary<span>2</span></a></li>
-		
 			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
 		
+			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
+		
 			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
+		
+			<li><a href="/tags/machine-learning/">machine learning<span>2</span></a></li>
 		
 		 
 		</ul>
@@ -854,7 +872,7 @@ var _hmt = _hmt || [];
       </li>
     
       <li>
-        <a href="/2018/05/07/减小模型复杂度的原理/" ><i class="fa fa-file-o"></i>减小模型复杂度的原理</a>
+        <a href="/2018/05/07/正则化的理解/" ><i class="fa fa-file-o"></i>正则化的理解</a>
       </li>
     
       <li>

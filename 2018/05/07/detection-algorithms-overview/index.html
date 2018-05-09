@@ -9,10 +9,9 @@
   <title>detection algorithms overview | Mowayao&#39;s Blog</title>
   <meta name="author" content="Mowayao">
   
-  <meta name="description" content="###Two Stage
+  <meta name="description" content="###Two Stage 
 将detection的任务分成两个步骤，第一个是寻找candidate，第二个是对candidate进行分类
-Region-based Convolutional Network (R-CNN)
-具体见这里
+Region-based Convolutional Network (R-CNN)具体见这里
 R-CNN模型通过selective search得到candid">
   
   
@@ -140,29 +139,19 @@ var _hmt = _hmt || [];
 	  		
 
 	  <p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2ug64gnvj31jk0n3dny.jpg" alt=""></p>
-<p>###Two Stage</p>
+<p>###Two Stage </p>
 <p>将detection的任务分成两个步骤，第一个是寻找candidate，第二个是对candidate进行分类</p>
-<h4>Region-based Convolutional Network (R-CNN)</h4>
-<p>具体见<a href="http://wulimengmeng.top/2018/03/13/RCNN%E7%AC%94%E8%AE%B0/">这里</a></p>
+<h4 id="Region-based-Convolutional-Network-R-CNN"><a href="#Region-based-Convolutional-Network-R-CNN" class="headerlink" title="Region-based Convolutional Network (R-CNN)"></a>Region-based Convolutional Network (R-CNN)</h4><p>具体见<a href="http://wulimengmeng.top/2018/03/13/RCNN%E7%AC%94%E8%AE%B0/">这里</a></p>
 <p>R-CNN模型通过selective search得到candidate box，然后再结合deep learning model对box进行分类</p>
 <p><strong>selective search</strong></p>
 <p>大概的思路就是先将图片分成若干个较多的region，然后再逐步地根据region的相似性进行合并，即各种颜色空间（RGB，HSV，Lab），纹理相似度(HOG-like feature)，大小相似度，形状相似度，然后将这些相似度加权。</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fr2uoyhrynj30d208djvk.jpg" alt=""></p>
 <p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fr2v030gn8j30ht0brwg8.jpg" alt=""></p>
-<h4>SPP Net</h4>
-<h4>Fast R-CNN</h4>
-<h4>Faster R-CNN</h4>
-<h4>R-FCN</h4>
-<p>####R-FCN-3000</p>
+<h4 id="SPP-Net"><a href="#SPP-Net" class="headerlink" title="SPP Net"></a>SPP Net</h4><h4 id="Fast-R-CNN"><a href="#Fast-R-CNN" class="headerlink" title="Fast R-CNN"></a>Fast R-CNN</h4><h4 id="Faster-R-CNN"><a href="#Faster-R-CNN" class="headerlink" title="Faster R-CNN"></a>Faster R-CNN</h4><h4 id="R-FCN"><a href="#R-FCN" class="headerlink" title="R-FCN"></a>R-FCN</h4><p>####R-FCN-3000</p>
 <p>####OHEM</p>
 <p>####MASK R-CNN</p>
 <p>####SNIP</p>
-<h3>One State</h3>
-<h4>SSD</h4>
-<h4>YOLO</h4>
-<h4>RON</h4>
-<h4>FPN</h4>
-	  
+<h3 id="One-State"><a href="#One-State" class="headerlink" title="One State"></a>One State</h3><h4 id="SSD"><a href="#SSD" class="headerlink" title="SSD"></a>SSD</h4><h4 id="YOLO"><a href="#YOLO" class="headerlink" title="YOLO"></a>YOLO</h4><h4 id="RON"><a href="#RON" class="headerlink" title="RON"></a>RON</h4><h4 id="FPN"><a href="#FPN" class="headerlink" title="FPN"></a>FPN</h4>	  
 	</div>
 
 	<div>
@@ -176,7 +165,7 @@ var _hmt = _hmt || [];
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2018/05/07/减小模型复杂度的原理/" type="button" class="btn btn-default ">Next<i
+    <a href="/2018/05/07/正则化的理解/" type="button" class="btn btn-default ">Next<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
