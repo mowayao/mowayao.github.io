@@ -228,27 +228,13 @@ var _hmt = _hmt || [];
 <p>后来想到说可以先采样角度，每个角度确定一个半径，再在半径上均匀采样，面试官有提示说在半径上是均匀的吗？ 明显在半径上采样是不均匀的，因为在半径上的每一个点对应的周长是不一样的！！</p>
 <p>正确的姿势是这样的：</p>
 <p>我们计算长度为$r(0\le r\le1)$的概率为$p(r)$:</p>
-<p>首先我们需要计算落在$r\sim r+\Delta r$的概率，很直观，就是除以面积$\pi$，然后因为均匀采样所以需要除以$\Delta r$求得$p(r)$也就是：
-$$
-p(r\sim r+\Delta r) = \lim_{\Delta r\rightarrow0}\frac{\pi(r+\Delta r)^2-\pi r^2}{\pi}
-$$</p>
-<p>$$
-p(r) = \lim_{\Delta r\rightarrow0}\frac{\pi(r+\Delta r)^2-\pi r^2}{\pi \Delta r}=2r
-$$</p>
-<p>接下来就是求$p(r)$的CDF,$P(r)$，积分即可：
-$$
-P(r) = \int_0^r p(x) dx=r^2
-$$
-然后求得它的逆函数$P^{-1}(r)$:</p>
+<p>首先我们需要计算落在$r\sim r+\Delta r$的概率，很直观，就是除以面积$\pi$，然后因为均匀采样所以需要除以$\Delta r$求得$p(r)$也就是：<br>$$<br>p(r\sim r+\Delta r) = \lim_{\Delta r\rightarrow0}\frac{\pi(r+\Delta r)^2-\pi r^2}{\pi}<br>$$</p>
+<p>$$<br>p(r) = \lim_{\Delta r\rightarrow0}\frac{\pi(r+\Delta r)^2-\pi r^2}{\pi \Delta r}=2r<br>$$</p>
+<p>接下来就是求$p(r)$的CDF,$P(r)$，积分即可：<br>$$<br>P(r) = \int_0^r p(x) dx=r^2<br>$$<br>然后求得它的逆函数$P^{-1}(r)$:</p>
 <p>$$P^{-1}(r) = \sqrt r$$</p>
 <p>算到这里，答案呼之欲出，我们用一个随机变量$\zeta$ 在$[0,1]$均匀采样，然后在通过$r = \sqrt \zeta$求得r,为什么是均匀的呢，只要把$\sqrt \zeta$带入$P(r)$就可以发现$P(r)=\zeta$。</p>
-<p>如果面积变成3维，也就是单位球呢？做法还是一样的，首先还是对方向进行采样，这个自然是均匀的，然后就是在半径上采样，同样地，计算p(r)：
-$$
-p(r\sim r+\Delta r) = \lim_{\Delta r\rightarrow0}\frac{\frac{4}{3}\pi(r+\Delta r)^3-\frac{4}{3}\pi r^3}{\frac{4}{3}\pi}
-$$</p>
-<p>$$
-p(r) = \lim_{\Delta r\rightarrow0}\frac{\frac{4}{3}\pi(r+\Delta r)^3-\frac{4}{3}\pi r^3}{\frac{4}{3}\pi\Delta r}=3r^2
-$$</p>
+<p>如果面积变成3维，也就是单位球呢？做法还是一样的，首先还是对方向进行采样，这个自然是均匀的，然后就是在半径上采样，同样地，计算p(r)：<br>$$<br>p(r\sim r+\Delta r) = \lim_{\Delta r\rightarrow0}\frac{\frac{4}{3}\pi(r+\Delta r)^3-\frac{4}{3}\pi r^3}{\frac{4}{3}\pi}<br>$$</p>
+<p>$$<br>p(r) = \lim_{\Delta r\rightarrow0}\frac{\frac{4}{3}\pi(r+\Delta r)^3-\frac{4}{3}\pi r^3}{\frac{4}{3}\pi\Delta r}=3r^2<br>$$</p>
 <p>还是求CDF，后面就不继续了。。。依葫芦画瓢</p>
 
 	
@@ -607,43 +593,43 @@ $$</p>
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/notes/">notes<span>7</span></a></li>
-		
-			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
-		
-			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
-		
-			<li><a href="/tags/杂/">杂<span>1</span></a></li>
-		
-			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
-		
-			<li><a href="/tags/classification/">classification<span>2</span></a></li>
-		
-			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
+			<li><a href="/tags/summary/">summary<span>2</span></a></li>
 		
 			<li><a href="/tags/paper/">paper<span>1</span></a></li>
 		
-			<li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
+			<li><a href="/tags/杂/">杂<span>1</span></a></li>
+		
+			<li><a href="/tags/notes/">notes<span>7</span></a></li>
+		
+			<li><a href="/tags/classfication/">classfication<span>3</span></a></li>
+		
+			<li><a href="/tags/paper-notes/">paper notes<span>4</span></a></li>
 		
 			<li><a href="/tags/math/">math<span>2</span></a></li>
 		
-			<li><a href="/tags/object-detection/">object detection<span>11</span></a></li>
-		
-			<li><a href="/tags/machine-learning/">machine learning<span>2</span></a></li>
-		
 			<li><a href="/tags/Deep-Learning/">Deep Learning<span>1</span></a></li>
-		
-			<li><a href="/tags/segmentation/">segmentation<span>2</span></a></li>
-		
-			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
-		
-			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
-		
-			<li><a href="/tags/summary/">summary<span>2</span></a></li>
 		
 			<li><a href="/tags/deep-learning/">deep learning<span>33</span></a></li>
 		
+			<li><a href="/tags/algorithms/">algorithms<span>2</span></a></li>
+		
+			<li><a href="/tags/classification/">classification<span>2</span></a></li>
+		
+			<li><a href="/tags/computer-vision/">computer vision<span>4</span></a></li>
+		
+			<li><a href="/tags/GAN/">GAN<span>1</span></a></li>
+		
+			<li><a href="/tags/object-detection/">object detection<span>11</span></a></li>
+		
 			<li><a href="/tags/classifcation/">classifcation<span>8</span></a></li>
+		
+			<li><a href="/tags/segmentation/">segmentation<span>2</span></a></li>
+		
+			<li><a href="/tags/RNN/">RNN<span>1</span></a></li>
+		
+			<li><a href="/tags/machine-learning/">machine learning<span>2</span></a></li>
+		
+			<li><a href="/tags/face-detection/">face detection<span>1</span></a></li>
 		
 		 
 		</ul>
