@@ -139,8 +139,8 @@ var _hmt = _hmt || [];
 
 	  <p>论文：Spatial Pyramid Pooling in Deep ConvolutionalNetworks for Visual Recognition，<strong>TPAMI</strong> 2015</p>
 <p>作者：Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun</p>
-<p>链接：<a href="https://arxiv.org/pdf/1406.4729.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1406.4729.pdf</a></p>
-<p>代码：<a href="https://github.com/ShaoqingRen/SPP_net" target="_blank" rel="external">https://github.com/ShaoqingRen/SPP_net</a></p>
+<p>链接：https://arxiv.org/pdf/1406.4729.pdf</p>
+<p>代码：https://github.com/ShaoqingRen/SPP_net</p>
 <ul>
 <li>提出spatial pyramid pooling layer，使得网络能够接受任意大小的输入，同时利用multi-level的spatial bins做hierarchy information aggregation，提高模型的鲁棒性</li>
 <li>对image classification和object detection（针对RCNN的优化）都可以提升模型的表现</li>
@@ -148,15 +148,18 @@ var _hmt = _hmt || [];
 </ul>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/56717690.jpg" alt=""></p>
 <p>在RCNN中，我们提取各个region proposals，然后将其warp到指定的大小，再用CNN提特征，这样的问题是图像object经过warp以后，会变形严重并且影响分辨率，从而影响分类的结果，所以作者提出SPP layer，使得对于任何大小的输入图像，神经网络都可以输出固定长度的特征，同时提高分类的鲁棒性。</p>
-<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>见Figure 3，将卷积层的输出经过SPP layer以后，利用max pooling分成3种的spatial bins，第一种是4x4，第二种是2x2，第三种是1x1(global pooling)。在做完pooling以后，我们可以得到16x256,4x256,1x256这三种维度的特征，256是输入的feature map的深度，拼接以后得到21x256长度的特征，其实可以将SPP layer看成是特征层面的re-scaled。</p>
+<h5>Architecture</h5>
+<p>见Figure 3，将卷积层的输出经过SPP layer以后，利用max pooling分成3种的spatial bins，第一种是4x4，第二种是2x2，第三种是1x1(global pooling)。在做完pooling以后，我们可以得到16x256,4x256,1x256这三种维度的特征，256是输入的feature map的深度，拼接以后得到21x256长度的特征，其实可以将SPP layer看成是特征层面的re-scaled。</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/71347165.jpg" alt=""></p>
 <p>例如输入的feature map的大小是axa，需要产生3x3，2x2，1x1的特征向量，那么pooling的window size是ceil(a/n)，步长是floor(a/n)。将这些特征拼接得到固定长度的特征向量，再连接全连接层进行分类。</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/44112090.jpg" alt=""></p>
-<h5 id="Training-Strategy"><a href="#Training-Strategy" class="headerlink" title="Training Strategy"></a>Training Strategy</h5><p><strong>Multi-size Training</strong></p>
+<h5>Training Strategy</h5>
+<p><strong>Multi-size Training</strong></p>
 <p>在分类任务的模型训练过程中，采用多个size的输入可以提高模型的结果。对于有两个不同大小输入的训练策略，使用两个固定大小（框架所限）的相同参数的网络进行交替训练。</p>
 <p><strong>Full-image Representation</strong></p>
 <p>在分类任务的模型训练过程中，将图像resize到min(w,h)=256，保持长宽比不变。</p>
-<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p><strong>Image Classifications</strong></p>
+<h5>Experiments</h5>
+<p><strong>Image Classifications</strong></p>
 <p>Table 1是三种base network的结构。</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/11136760.jpg" alt=""></p>
 <p>在分类任务中，作者通过实验证明，SPP layer，multi-size training，能够提高分类的精度（见Table 2）。SPP layer能够提高精度是因为利用spatial pyramid pooling可以提高鲁棒性。multi-size training中，有三种策略，一种是单个大小，第二种是180和224，还有一种是从[180,224]随机选择其中的一个size，实验证明，第二种精度最高。</p>
@@ -186,12 +189,12 @@ var _hmt = _hmt || [];
     
     
     <a href="/2018/03/22/Fast-R-CNN笔记/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Anterior</a>
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2018/03/13/RCNN笔记/" type="button" class="btn btn-default ">Próximo<i
+    <a href="/2018/03/13/RCNN笔记/" type="button" class="btn btn-default ">Next<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -204,7 +207,7 @@ var _hmt = _hmt || [];
 	<!-- comment -->
 	
 <section id="comment">
-    <h2 class="title">Comentários</h2>
+    <h2 class="title">Comments</h2>
 
     
 </section>

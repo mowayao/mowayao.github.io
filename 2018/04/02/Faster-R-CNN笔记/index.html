@@ -139,8 +139,8 @@ var _hmt = _hmt || [];
 
 	  <p>论文：Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks，TPAMI 2016</p>
 <p>作者：Shaoqing Ren, Kaiming He, Ross Girshick, and Jian Sun</p>
-<p>链接：<a href="https://arxiv.org/pdf/1506.01497.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1506.01497.pdf</a></p>
-<p>代码：<a href="https://github.com/rbgirshick/py-faster-rcnn" target="_blank" rel="external">https://github.com/rbgirshick/py-faster-rcnn</a></p>
+<p>链接：https://arxiv.org/pdf/1506.01497.pdf</p>
+<p>代码：https://github.com/rbgirshick/py-faster-rcnn</p>
 <ul>
 <li>在Fast R-CNN的基础上进行优化，将Region Proposal Network（RPN）取代Selective Search，可以更加有效地检测object candidates，与Fast R-CNN共享参数，RPN的任务是预测物体的bbox和objectness score</li>
 <li>在RPN的基础上，提出anchor的概念，每个anchor可以代表不同的scale和ratio，从而达到translation-invariant的效果</li>
@@ -152,12 +152,14 @@ var _hmt = _hmt || [];
 <li>将region proposals输入到Fast R-CNN中，得到detection的结果</li>
 </ol>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fpyjflds95j30ny0tcq81.jpg" alt=""></p>
-<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p><strong>RPN</strong></p>
+<h5>Architecture</h5>
+<p><strong>RPN</strong></p>
 <p>RPN的输入为任意形状的图像，输出是一堆proposals的坐标，以及对应的confidence score。为了生成一堆region proposals，对于nxn的feature maps来说，作者通过sliding window（其实也就是3x3的conv）将其映射到固定维度的特征空间，然后再对得到的特征向量做分类和回归（将全连接改造成1x1的卷积，可以接受任何大小的输入）。</p>
 <p><strong>anchors</strong></p>
 <p>对于每个滑动窗口来说，假设该窗口有k个对应的proposals。这样reg layer就有4k的输出，cls layer有2k个输出。Figure 3就是anchor的示例。anchor可以解释为sliding window的中心点，通过假设这个中心点来自不同原始区域池化得到，所以可以根据这个中心点(anchor)逆推得到这些区域坐标和种类。假设现在有3中scales和3种ratios，以及feature maps的大小是WxH，那么总共有9xWxH个anchors，也可以将其理解成先验的bounding box。</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fpynk5f034j31d40k8nle.jpg" alt=""></p>
-<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>首先是坐标空间的转换，将其转到相对空间，这在R-CNN中已经介绍过。其实是Multi-task的训练：</p>
+<h5>Experiments</h5>
+<p>首先是坐标空间的转换，将其转到相对空间，这在R-CNN中已经介绍过。其实是Multi-task的训练：</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fpyo96peu1j30ke064t97.jpg" alt=""></p>
 <p><strong>RPN训练</strong></p>
 <p>RPN就直接用end-to-end的方法进行训练，对于每张图像，采样256个anchors，正负比例为1：1，如果正样本不够则用负样本补足。</p>
@@ -181,12 +183,12 @@ var _hmt = _hmt || [];
     
     
     <a href="/2018/04/07/YOLO&YOLOv2笔记/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Anterior</a>
+                class="fa fa-arrow-circle-o-left"></i> Prev</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2018/03/22/Fast-R-CNN笔记/" type="button" class="btn btn-default ">Próximo<i
+    <a href="/2018/03/22/Fast-R-CNN笔记/" type="button" class="btn btn-default ">Next<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -199,7 +201,7 @@ var _hmt = _hmt || [];
 	<!-- comment -->
 	
 <section id="comment">
-    <h2 class="title">Comentários</h2>
+    <h2 class="title">Comments</h2>
 
     
 </section>
