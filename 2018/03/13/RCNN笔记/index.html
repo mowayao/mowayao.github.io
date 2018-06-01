@@ -138,15 +138,13 @@ var _hmt = _hmt || [];
 
 	  <p>论文：Rich feature hierarchies for accurate object detection and semantic segmentation，CVPR 2014</p>
 <p>作者：Ross Girshick，Jeff Donahue，Trevor Darrell，Jitendra Malik</p>
-<p>链接：https://arxiv.org/pdf/1311.2524.pdf</p>
-<p>代码：https://github.com/rbgirshick/rcnn</p>
-<h5>Idea</h5>
-<ul>
+<p>链接：<a href="https://arxiv.org/pdf/1311.2524.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1311.2524.pdf</a></p>
+<p>代码：<a href="https://github.com/rbgirshick/rcnn" target="_blank" rel="external">https://github.com/rbgirshick/rcnn</a></p>
+<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><ul>
 <li>之前的object detection算法都是用一些手工特征，例如SIFT或者HOG等，R-CNN使用pretrained的CNN提取region的特征，然后再用SVM分类做finetune（bridging the gap between image classification and object detection）</li>
 <li>尝试不同层的feature作为分类的特征</li>
 </ul>
-<h5>Architecture</h5>
-<p>R-CNN的模型见Figure 1，主要包括3个部分：</p>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>R-CNN的模型见Figure 1，主要包括3个部分：</p>
 <ol>
 <li>提取region proposals</li>
 <li>用CNN提取特征，得到一定长度的特征向量</li>
@@ -171,22 +169,9 @@ var _hmt = _hmt || [];
 <p><strong>Object category classifier</strong></p>
 <p>对于每个类别，训练各自的SVM，这样就可以得到每个类的score，训练的时候将gt视为正样本，与gt的IoU &lt; 0.3视为负样本。因为负样本往往远远大于正样本，所以需要做hard negative mining，控制合理的比例，一般设置为1：3。</p>
 <p><strong>Bounding box regression</strong></p>
-<p>输入是n对${(P^i,G^i)}i=1,…,N$，其中$P^i=(P_x^i,P_y^i,P_w^i,P_h^i)$，对应bounding box的中心，长宽，$G^i=(G_x,G_y,G_w,G_h)$。将P进行映射（前两者是平移，后两个是缩放）：
-$$
-\hat{G}_x = P_wd_x(P)+P_x \ \hat{G}_y = P_hd_y(P)+P_y \ \hat{G}<em>x = P_w\exp (d_w(P))\ \hat{G}<em>h = P_h\exp(d_h(P)) \d</em>\star(P)=w</em>\star^T\phi_5(P)
-$$
-训练的时候对gt的四个坐标进行转换（上面的逆运算，使得$t_x,t_y$）：
-$$
-t_x = (G_x-P_x)/P_w \ t_y =(G_y −P_y)/P_h \ t_w = \log(G_w/P_w)\t_h = \log(G_h/P_h).
-$$
-经过这样的变换，$t_x,t_y$为需要学习的平移量，$t_w, t_h$为需要学习的缩放量。</p>
-<p>其中，$G$表示的是ground truth，P表示的训练样本，我们的任务是求解$W_\star$，其实就是通过梯度下降或者最小二乘法求解ridge regression问题，:
-$$
-w_\star =  \arg\min_{\hat{w}<em>\star}(t^i</em>\star − \hat{w}^T_\star \phi_5(P^i))^2+\lambda ||\hat{w}_\star||^2
-$$
-其中$\phi_5(P^i)$表示的是第5个pooling的输出。需要注意的是，正则系数$\lambda=1000$，而且当G和P相差很大的时候，效果会不好，所以需要设置IoU阈值，将其设为0.6。</p>
-<h5>Experiments</h5>
-<p>Table 1是模型在VOC 2012 test上的表现，可以看出R-CNN BB远超其他baseline，证明了模型的性能。</p>
+<p>输入是n对${(P^i,G^i)}i=1,…,N$，其中$P^i=(P_x^i,P_y^i,P_w^i,P_h^i)$，对应bounding box的中心，长宽，$G^i=(G_x,G_y,G_w,G_h)$。将P进行映射（前两者是平移，后两个是缩放）：<br>$$<br>\hat{G}_x = P_wd_x(P)+P_x \ \hat{G}_y = P_hd_y(P)+P_y \ \hat{G}_x = P_w\exp (d_w(P))\ \hat{G}_h = P_h\exp(d_h(P)) \\d_\star(P)=w_\star^T\phi_5(P)<br>$$<br>训练的时候对gt的四个坐标进行转换（上面的逆运算，使得$t_x,t_y$）：<br>$$<br>t_x = (G_x-P_x)/P_w \ t_y =(G_y −P_y)/P_h \ t_w = \log(G_w/P_w)\\t_h = \log(G_h/P_h).<br>$$<br>经过这样的变换，$t_x,t_y$为需要学习的平移量，$t_w, t_h$为需要学习的缩放量。</p>
+<p>其中，$G$表示的是ground truth，P表示的训练样本，我们的任务是求解$W_\star$，其实就是通过梯度下降或者最小二乘法求解ridge regression问题，:<br>$$<br>w_\star =  \arg\min_{\hat{w}_\star}(t^i_\star − \hat{w}^T_\star \phi_5(P^i))^2+\lambda ||\hat{w}_\star||^2<br>$$<br>其中$\phi_5(P^i)$表示的是第5个pooling的输出。需要注意的是，正则系数$\lambda=1000$，而且当G和P相差很大的时候，效果会不好，所以需要设置IoU阈值，将其设为0.6。</p>
+<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1是模型在VOC 2012 test上的表现，可以看出R-CNN BB远超其他baseline，证明了模型的性能。</p>
 <p>Table 2是模型在VOC 2007 test上的表现，可以在上面做一些ablation study：</p>
 <ul>
 <li>对于不finetune的模型，第一行到第三行，可以发现fc6的结果最好，这样就可以移除fc7的参数，简化模型。</li>
@@ -196,7 +181,7 @@ $$
 </ul>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fpbidj661zj31kw0eeq6d.jpg" alt=""></p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fpbi5y3ykqj31kw0k9wjg.jpg" alt=""></p>
-<p>​</p>
+<p>​    </p>
 	  
 	</div>
 
@@ -207,12 +192,12 @@ $$
     
     
     <a href="/2018/03/20/SPPNet笔记/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2018/03/06/ResNeXt笔记/" type="button" class="btn btn-default ">Next<i
+    <a href="/2018/03/06/ResNeXt笔记/" type="button" class="btn btn-default ">下一页<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -225,7 +210,7 @@ $$
 	<!-- comment -->
 	
 <section id="comment">
-    <h2 class="title">Comments</h2>
+    <h2 class="title">留言</h2>
 
     
 </section>
@@ -265,7 +250,7 @@ $$
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/deep-learning/">deep learning<span>32</span></a></li> <li><a href="/tags/object-detection/">object detection<span>10</span></a></li>
+  <li><a href="/tags/deep-learning/">deep learning<span>33</span></a></li> <li><a href="/tags/object-detection/">object detection<span>10</span></a></li>
     </ul>
 	</div>
 		

@@ -143,20 +143,10 @@ var _hmt = _hmt || [];
 </blockquote>
 <p>当我们计算feature map的大小时，假设输入的大小为: $n\times n$，卷积的参数是k(kernel size), p(padding), s(stride)，我们将得到$\lfloor \frac{n+2<em>p-k}{s}\rfloor+1$，如果我们引入dilation这个参数(相当于连续</em>标准卷积<em>的堆叠的receptive field)，那么最终的大小是$\lfloor \frac{n+2</em>p-k-d*(k-1)}{s}\rfloor+1$，pooling的参数是k，s，那么输出就是$\lfloor \frac{n-k}{s}\rfloor+1$</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1frc4o653j2j30u00bi0u6.jpg" alt=""></p>
-<p>为了简化计算，我们假设图像是正方形的，主要有几个式子：
-$$
-j_{out} = j_{in}\times s
-$$</p>
-<p>$$
-r_{out} = r_{in} + (k-1)\times j_{in}
-$$</p>
-<p>$$
-c_{out} = c_{in} + (\frac{k-1}{2}-p)\times j_{in}
-$$</p>
-<p>第一个等式计算的是jump in the output feature map，s是stride，相当于做完降采样以后，作用域进行了放大（感受野进行了放大，之后每次感受野的增加都需要乘上相应的倍数(jump的数量)），第二个等式计算的是receptive field，k是kernel size（如果没有放大倍数，那么就是按照kernel的大小的进行扩展，如果有倍数的话就乘以相应的倍数，因为这里的一个像素等于原图的jump数个像素）第三个式子计算的是receptive field的中心。那么如果考虑到dialated conv，那么对于receptive field的计算就变成了：
-$$
-r_{out} = r_{in} + (k-1+(k-1)\times (d-1))\times j_{in} = r_{in} + ((k-1)\times d)\times j_{in}
-$$</p>
+<p>为了简化计算，我们假设图像是正方形的，主要有几个式子：<br>$$<br>j_{out} = j_{in}\times s<br>$$</p>
+<p>$$<br>r_{out} = r_{in} + (k-1)\times j_{in}<br>$$</p>
+<p>$$<br>c_{out} = c_{in} + (\frac{k-1}{2}-p)\times j_{in}<br>$$</p>
+<p>第一个等式计算的是jump in the output feature map，s是stride，相当于做完降采样以后，作用域进行了放大（感受野进行了放大，之后每次感受野的增加都需要乘上相应的倍数(jump的数量)），第二个等式计算的是receptive field，k是kernel size（如果没有放大倍数，那么就是按照kernel的大小的进行扩展，如果有倍数的话就乘以相应的倍数，因为这里的一个像素等于原图的jump数个像素）第三个式子计算的是receptive field的中心。那么如果考虑到dialated conv，那么对于receptive field的计算就变成了：<br>$$<br>r_{out} = r_{in} + (k-1+(k-1)\times (d-1))\times j_{in} = r_{in} + ((k-1)\times d)\times j_{in}<br>$$</p>
 	  
 	</div>
 
@@ -166,12 +156,13 @@ $$</p>
 
     
     
-    <a type="button" class="btn btn-default disabled"><i class="fa fa-arrow-circle-o-left"></i>Prev</a>
+    <a href="/2018/06/01/Kaggle比赛小结-iMaterialist-Challenge-Furniture-at-FGVC5/" type="button" class="btn btn-default"><i
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2018/05/07/正则化的理解/" type="button" class="btn btn-default ">Next<i
+    <a href="/2018/05/07/正则化的理解/" type="button" class="btn btn-default ">下一页<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -184,7 +175,7 @@ $$</p>
 	<!-- comment -->
 	
 <section id="comment">
-    <h2 class="title">Comments</h2>
+    <h2 class="title">留言</h2>
 
     
 </section>
@@ -213,7 +204,7 @@ $$</p>
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/notes/">notes<span>8</span></a></li> <li><a href="/tags/computer-vision/">computer vision<span>5</span></a></li>
+  <li><a href="/tags/notes/">notes<span>8</span></a></li> <li><a href="/tags/computer-vision/">computer vision<span>6</span></a></li>
     </ul>
 	</div>
 		

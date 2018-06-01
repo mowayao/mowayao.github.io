@@ -138,21 +138,19 @@ var _hmt = _hmt || [];
 
 	  <p>论文：RON: Reverse Connection with Objectness Prior Networks for Object Detection，<strong>CVPR</strong> 2017</p>
 <p>作者：Tao Kong，Fuchun Sun，Anbang Yao，Huaping Liu，Ming Lu，Yurong Chen</p>
-<p>链接：https://arxiv.org/pdf/1707.01691.pdf</p>
-<p>代码：https://github.com/taokong/RON</p>
+<p>链接：<a href="https://arxiv.org/pdf/1707.01691.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1707.01691.pdf</a></p>
+<p>代码：<a href="https://github.com/taokong/RON" target="_blank" rel="external">https://github.com/taokong/RON</a></p>
 <p><strong>objective：</strong></p>
 <ul>
-<li>bridge the gap between the region-based and region-free methodologies</li>
+<li>bridge the gap between the region-based and region-free methodologies </li>
 </ul>
 <p><strong>solution</strong>：</p>
 <ul>
-<li>Multi-scale object localization，利用多个scale的feature map做detection
-<ul>
+<li>Multi-scale object localization，利用多个scale的feature map做detection<ul>
 <li>建立reverse connection，为前面的层提供highly semantic的information</li>
 </ul>
 </li>
-<li>Negative space mining
-<ul>
+<li>Negative space mining<ul>
 <li>通过建立objectness prior减少objects的搜索空间</li>
 </ul>
 </li>
@@ -161,8 +159,7 @@ var _hmt = _hmt || [];
 <p>效率较高，1.5G的 GPU内存，forward的速度是15FPS</p>
 <p>Figure 2是RON的网络模型，有4个scales feature map做detection。</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqk5dydd50j30t20tcqde.jpg" alt=""></p>
-<h5>Architecture</h5>
-<p>网络以VGG 16为backbone，将FC6和FC7改造为conv layer，在FC7处降采样。</p>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>网络以VGG 16为backbone，将FC6和FC7改造为conv layer，在FC7处降采样。</p>
 <p>所以每个用于detection的feature map大小为：1/8 (conv 4 3), 1/16 (conv 5 3), 1/32 (conv 6) and 1/64 (conv 7)</p>
 <p><strong>Reverse Connection</strong></p>
 <p>reverse connection的结构见Figure 3，将后一层的输出经过deconv做upsampling，deconv的通道是512，当前层经过conv，再用summation的方式做merge。</p>
@@ -177,12 +174,10 @@ var _hmt = _hmt || [];
 <p><strong>Detection and Bounding Box Regression</strong></p>
 <p>Figure 5是detection bbox reg head的结构，可以发现在分类的module中，作者加入了两个inception module来提高分类的精度</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqk5fg7sxbj30tg0dimz5.jpg" alt=""></p>
-<h5>Training</h5>
-<p><strong>Loss</strong></p>
+<h5 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h5><p><strong>Loss</strong></p>
 <p>相似的，也是multi-task loss</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqmmnkgq8jj30so04igm3.jpg" alt=""></p>
-<h5>Experiments</h5>
-<p>Table 1-3是模型在PASCAL VOC 2007, 2012和COCO上的结果。</p>
+<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1-3是模型在PASCAL VOC 2007, 2012和COCO上的结果。</p>
 <ul>
 <li>可以发现RON对小物体的检测提升比较明显，例如boat和bottle。</li>
 </ul>
@@ -199,12 +194,12 @@ var _hmt = _hmt || [];
     
     
     <a href="/2018/04/21/FPN论文笔记/" type="button" class="btn btn-default"><i
-                class="fa fa-arrow-circle-o-left"></i> Prev</a>
+                class="fa fa-arrow-circle-o-left"></i> 上一页</a>
     
 
     <a href="/" type="button" class="btn btn-default"><i class="fa fa-home"></i>Home</a>
     
-    <a href="/2018/04/18/OHEM算法笔记/" type="button" class="btn btn-default ">Next<i
+    <a href="/2018/04/18/OHEM算法笔记/" type="button" class="btn btn-default ">下一页<i
                 class="fa fa-arrow-circle-o-right"></i></a>
     
 
@@ -217,7 +212,7 @@ var _hmt = _hmt || [];
 	<!-- comment -->
 	
 <section id="comment">
-    <h2 class="title">Comments</h2>
+    <h2 class="title">留言</h2>
 
     
 </section>
@@ -257,7 +252,7 @@ var _hmt = _hmt || [];
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/deep-learning/">deep learning<span>32</span></a></li> <li><a href="/tags/object-detection/">object detection<span>10</span></a></li>
+  <li><a href="/tags/deep-learning/">deep learning<span>33</span></a></li> <li><a href="/tags/object-detection/">object detection<span>10</span></a></li>
     </ul>
 	</div>
 		
