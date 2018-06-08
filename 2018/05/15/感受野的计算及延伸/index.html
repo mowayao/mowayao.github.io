@@ -144,6 +144,18 @@
       </a>
     </li>  
   
+    
+      
+    
+    <li class="menu-item">
+      <a href="/atom.xml" id="RSS">
+        <span class="base-name">RSS</span>
+        
+          <span class="menu-item-label">RSS</span>
+        
+      </a>
+    </li>  
+  
   </ul>
   
 </nav>
@@ -196,6 +208,16 @@
             <div class="mobile-nav-item">
                 <a href="/about">
                     <span>About</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/atom.xml">
+                    <span>RSS</span>
                     
                     
                 </a>
@@ -258,10 +280,20 @@
 </blockquote>
 <p>当我们计算feature map的大小时，假设输入的大小为: $n\times n$，卷积的参数是k(kernel size), p(padding), s(stride)，我们将得到$\lfloor \frac{n+2<em>p-k}{s}\rfloor+1$，如果我们引入dilation这个参数(相当于连续</em>标准卷积<em>的堆叠的receptive field)，那么最终的大小是$\lfloor \frac{n+2</em>p-k-d*(k-1)}{s}\rfloor+1$，pooling的参数是k，s，那么输出就是$\lfloor \frac{n-k}{s}\rfloor+1$</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1frc4o653j2j30u00bi0u6.jpg" alt=""></p>
-<p>为了简化计算，我们假设图像是正方形的，主要有几个式子：<br>$$<br>j_{out} = j_{in}\times s<br>$$</p>
-<p>$$<br>r_{out} = r_{in} + (k-1)\times j_{in}<br>$$</p>
-<p>$$<br>c_{out} = c_{in} + (\frac{k-1}{2}-p)\times j_{in}<br>$$</p>
-<p>第一个等式计算的是jump in the output feature map，s是stride，相当于做完降采样以后，作用域进行了放大（感受野进行了放大，之后每次感受野的增加都需要乘上相应的倍数(jump的数量)），第二个等式计算的是receptive field，k是kernel size（如果没有放大倍数，那么就是按照kernel的大小的进行扩展，如果有倍数的话就乘以相应的倍数，因为这里的一个像素等于原图的jump数个像素）第三个式子计算的是receptive field的中心。那么如果考虑到dialated conv，那么对于receptive field的计算就变成了：<br>$$<br>r_{out} = r_{in} + (k-1+(k-1)\times (d-1))\times j_{in} = r_{in} + ((k-1)\times d)\times j_{in}<br>$$</p>
+<p>为了简化计算，我们假设图像是正方形的，主要有几个式子：
+$$
+j_{out} = j_{in}\times s
+$$</p>
+<p>$$
+r_{out} = r_{in} + (k-1)\times j_{in}
+$$</p>
+<p>$$
+c_{out} = c_{in} + (\frac{k-1}{2}-p)\times j_{in}
+$$</p>
+<p>第一个等式计算的是jump in the output feature map，s是stride，相当于做完降采样以后，作用域进行了放大（感受野进行了放大，之后每次感受野的增加都需要乘上相应的倍数(jump的数量)），第二个等式计算的是receptive field，k是kernel size（如果没有放大倍数，那么就是按照kernel的大小的进行扩展，如果有倍数的话就乘以相应的倍数，因为这里的一个像素等于原图的jump数个像素）第三个式子计算的是receptive field的中心。那么如果考虑到dialated conv，那么对于receptive field的计算就变成了：
+$$
+r_{out} = r_{in} + (k-1+(k-1)\times (d-1))\times j_{in} = r_{in} + ((k-1)\times d)\times j_{in}
+$$</p>
 
       
     

@@ -144,6 +144,18 @@
       </a>
     </li>  
   
+    
+      
+    
+    <li class="menu-item">
+      <a href="/atom.xml" id="RSS">
+        <span class="base-name">RSS</span>
+        
+          <span class="menu-item-label">RSS</span>
+        
+      </a>
+    </li>  
+  
   </ul>
   
 </nav>
@@ -196,6 +208,16 @@
             <div class="mobile-nav-item">
                 <a href="/about">
                     <span>About</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/atom.xml">
+                    <span>RSS</span>
                     
                     
                 </a>
@@ -257,11 +279,17 @@
       
         <p><a href="https://arxiv.org/pdf/1711.05101.pdf" target="_blank" rel="external">文章的链接</a></p>
 <p>首先，文章理清了l2正则和weight decay的区别，它们并不是对等的。 weight decay可以表示成:</p>
-<p>$$<br>x_{t+1} = (1-w_t)x_{t}-\alpha_t\nabla f_t(x_t)<br>$$</p>
+<p>$$
+x_{t+1} = (1-w_t)x_{t}-\alpha_t\nabla f_t(x_t)
+$$</p>
 <p>而l2正则的表示是：</p>
-<p>$$<br>f_{t,reg(x_t)} = f_t(x_t)+ \frac{w_t}{2} |x_t|_2^2<br>$$</p>
+<p>$$
+f_{t,reg(x_t)} = f_t(x_t)+ \frac{w_t}{2} |x_t|_2^2
+$$</p>
 <p>所以：</p>
-<p>$$<br>\nabla f_{t,reg(x_t)} = \nabla f_t(x_t)+w_tx_t<br>$$</p>
+<p>$$
+\nabla f_{t,reg(x_t)} = \nabla f_t(x_t)+w_tx_t
+$$</p>
 <p>注意到weight decay的系数只有$w_t$，那么，在大部分框架中，例如tensorflow, keras, pytorch等把weight decay和l2正则等价了，</p>
 <p>我们切换到SGD Mometum中来：因求完梯度以后，需要累加mometum，在$x_t$前面就存在了三个参数：$\alpha$学习率,$w_t$,$\eta_t$平滑系数。那么就和weight decay不对等了，当然可以把这三者乘积看成一个系数，但是这样还是削弱了原本的weight decay（系数变小了）。</p>
 <p>因此，作者把传统的SGD with momentum做了以下修改：</p>
