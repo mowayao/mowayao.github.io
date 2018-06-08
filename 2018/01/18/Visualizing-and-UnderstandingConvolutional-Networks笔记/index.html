@@ -1,20 +1,557 @@
-extends partial/layout
+<!DOCTYPE html>
+<html lang="">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/style/style.css">
+<script>
+    var NlviConfig = {
+        title: "Mowayao's Blog",
+        author: "Mowayao",
+        theme: "banderole",
+        lightbox: true,
+        animate: true,
+        baseUrl: "/",
+        search: true,
+        friends: false
+    }
+</script>
 
-block site_title
-    != page.title + " · " + config.title
 
-block description
-    - var desc = page.desc || page.title + ' - ' + config.author;
-    meta(name="description", content=desc)
 
-block container
-    include mixins/post
-    +post(page)
+    <link rel="stylesheet" href="/script/lib/lightbox/css/lightbox.min.css">
 
-block pagination
-    include mixins/paginator
-    +post()
-    include partial/comment
 
-block copyright
-    include partial/copyright
+
+
+    <link rel="stylesheet" href="/syuanpi/syuanpi.min.css">
+
+
+
+
+
+
+
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="browsermode" content="application">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mowayao's Blog">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="msapplication-navbutton-color" content="#666666">
+<meta name= "format-detection" content="telephone=no" />
+<meta name="keywords" content="nlvi, Nlvi" />
+
+
+  <meta name="subtitle" content="一往无前虎山行">
+
+
+
+
+  <meta name="keywords" content="deep learning, classfication, Nlvi" />
+
+  <title> Visualizing and UnderstandingConvolutional Networks笔记 · Mowayao's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="progress">
+  <div class="progress-inner"></div>
+</div>
+  
+  
+    <div class="tagcloud-mask"></div>  
+<div class="tagcloud" id="tagcloud">
+  <div class="tagcloud-inner">
+    <a href="/tags/DP/" style="font-size: 14px;">DP</a> <a href="/tags/Deep-Learning/" style="font-size: 14px;">Deep Learning</a> <a href="/tags/GAN/" style="font-size: 14px;">GAN</a> <a href="/tags/Leetcode/" style="font-size: 14px;">Leetcode</a> <a href="/tags/RNN/" style="font-size: 14px;">RNN</a> <a href="/tags/algorithms/" style="font-size: 14px;">algorithms</a> <a href="/tags/classfication/" style="font-size: 14px;">classfication</a> <a href="/tags/classifcation/" style="font-size: 14px;">classifcation</a> <a href="/tags/classification/" style="font-size: 14px;">classification</a> <a href="/tags/computer-vision/" style="font-size: 14px;">computer vision</a> <a href="/tags/deep-learning/" style="font-size: 14px;">deep learning</a> <a href="/tags/face-detection/" style="font-size: 14px;">face detection</a> <a href="/tags/machine-learning/" style="font-size: 14px;">machine learning</a> <a href="/tags/math/" style="font-size: 14px;">math</a> <a href="/tags/notes/" style="font-size: 14px;">notes</a> <a href="/tags/object-detection/" style="font-size: 14px;">object detection</a> <a href="/tags/paper/" style="font-size: 14px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 14px;">paper notes</a> <a href="/tags/segmentation/" style="font-size: 14px;">segmentation</a> <a href="/tags/summary/" style="font-size: 14px;">summary</a> <a href="/tags/杂/" style="font-size: 14px;">杂</a>
+  </div>
+</div>  
+  
+
+  <div class="container">
+
+    <header class="header" id="header">
+  <div class="header-wrapper">
+    <div class="logo">
+  <div class="logo-inner syuanpi tvIn">
+    <span><a href="/">Mowayao's Blog</a></span>
+    
+      <span id="subtitle">一往无前虎山行</span>
+    
+  </div>
+</div>
+    <nav class="main-nav">
+        
+  <ul class="main-nav-list syuanpi tvIn">
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="search">
+        <span>Search</span>
+        
+          <span class="menu-item-label">search</span>
+        
+      </a>
+    </li>
+  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/" id="article">
+        <span class="base-name">Article</span>
+        
+          <span class="menu-item-label">article</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/archives" id="archives">
+        <span class="base-name">Archives</span>
+        
+          <span class="menu-item-label">archives</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="javascript:;" id="tags">
+        <span class="base-name">Tags</span>
+        
+          <span class="menu-item-label">tags</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/about" id="about">
+        <span class="base-name">About</span>
+        
+          <span class="menu-item-label">about</span>
+        
+      </a>
+    </li>  
+  
+  </ul>
+  
+</nav>
+    
+    
+  </div>
+</header>
+<div class="mobile-header">
+  <div class="mobile-header-body">
+    <div class="mobile-header-list">
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/">
+                    <span>Article</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/archives">
+                    <span>Archives</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+        
+          <div class="mobile-nav-item inner-cloud">
+            <div class="mobile-nav-tag">
+              <a href="javascript:;" id="mobile-tags">
+                <span>Tags</span>
+                
+                
+              </a>
+            </div>
+            <div class="mobile-nav-tagcloud">
+              <div class="mobile-tagcloud-inner">
+                <a href="/tags/DP/" style="font-size: 14px;">DP</a> <a href="/tags/Deep-Learning/" style="font-size: 14px;">Deep Learning</a> <a href="/tags/GAN/" style="font-size: 14px;">GAN</a> <a href="/tags/Leetcode/" style="font-size: 14px;">Leetcode</a> <a href="/tags/RNN/" style="font-size: 14px;">RNN</a> <a href="/tags/algorithms/" style="font-size: 14px;">algorithms</a> <a href="/tags/classfication/" style="font-size: 14px;">classfication</a> <a href="/tags/classifcation/" style="font-size: 14px;">classifcation</a> <a href="/tags/classification/" style="font-size: 14px;">classification</a> <a href="/tags/computer-vision/" style="font-size: 14px;">computer vision</a> <a href="/tags/deep-learning/" style="font-size: 14px;">deep learning</a> <a href="/tags/face-detection/" style="font-size: 14px;">face detection</a> <a href="/tags/machine-learning/" style="font-size: 14px;">machine learning</a> <a href="/tags/math/" style="font-size: 14px;">math</a> <a href="/tags/notes/" style="font-size: 14px;">notes</a> <a href="/tags/object-detection/" style="font-size: 14px;">object detection</a> <a href="/tags/paper/" style="font-size: 14px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 14px;">paper notes</a> <a href="/tags/segmentation/" style="font-size: 14px;">segmentation</a> <a href="/tags/summary/" style="font-size: 14px;">summary</a> <a href="/tags/杂/" style="font-size: 14px;">杂</a>
+              </div>
+            </div>
+          </div>
+        
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/about">
+                    <span>About</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+    </div>
+  </div>
+  <div class="mobile-header-nav">
+    <div class="mobile-header-item" id="mobile-left">
+      <div class="header-menu-item">
+        <span class="header-menu-line"></span>
+      </div>
+    </div>
+    <h1 class="mobile-header-title">
+      <a href="/">Mowayao's Blog</a>
+    </h1>
+    <div class="mobile-header-item"></div>
+  </div>
+</div>
+    <div class="container-inner">
+      <main class="main" id="main">
+        <div class="main-wrapper">
+          
+    
+  
+  <article class="
+  post
+   is_post 
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-01-18</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+            
+              <aside class="post-tags syuanpi riseIn-light back-3">
+              
+                <a href="/tags/deep-learning/">deep learning</a>
+              
+                <a href="/tags/classfication/">classfication</a>
+              
+              </aside>
+            
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          Visualizing and UnderstandingConvolutional Networks笔记
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        <p>​论文：Visualizing and UnderstandingConvolutional Networks</p>
+<p>作者：Matthew D Zeiler, Rob Fergus, ECCV, 2014</p>
+<p>链接：<a href="https://cs.nyu.edu/~fergus/papers/zeilerECCV2014.pdf" target="_blank" rel="external">https://cs.nyu.edu/~fergus/papers/zeilerECCV2014.pdf</a></p>
+<p>博客链接：<a href="http://wulimengmeng.top/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks%E7%AC%94%E8%AE%B0/">http://wulimengmeng.top/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks%E7%AC%94%E8%AE%B0/</a></p>
+<p>代码实现： <a href="https://github.com/mowayao/Deconvnet" target="_blank" rel="external">https://github.com/mowayao/Deconvnet</a></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkxf4e7rcj318g0dgdke.jpg" alt=""></p>
+<p><strong>Idea:</strong> 模型的可视化对模型的优化非常重要，更好的理解模型可以帮助我们更好地改进模型。作者将网络的任一层输出的feature maps通过Deconvnet反馈到最终的输入（input pixel space）上（reveals the input stimuli that excite individual feature maps at any layer in the model）。</p>
+<h5 id="Deconvnet"><a href="#Deconvnet" class="headerlink" title="Deconvnet"></a>Deconvnet</h5><p>Deconvnet，顾名思义，就是将卷积，pooling，ReLU等运算做逆运算，将feature maps映射回pixels，可视化该feature map被原图哪部分特征激活，从而理解该feature map从原图像学习了何种特征。</p>
+<p>随机选择一些不同层的feature maps，经过“反向运算”，<strong><em>unpooling-&gt;ReLU-&gt;Transposed Conv</em></strong>，映射到输入，具体可以见Fig. 1。左边为Deconvnet，右边是Convnet，Unpooling层和pooling层一一对应。convnet是输入图像提取特征，而deconvnet是从特征映射到输入图像。</p>
+<p><strong>Unpooling:</strong> 通过记录每个pooling region的最大值的位置，在运算的时候将最大值复制到原来的位置，其他位置的值设为0。</p>
+<p><strong>ReLU</strong>：和forward时的ReLU运算相同</p>
+<p><strong>Filtering</strong>: 就是卷积的逆运算，卷积核的转置。</p>
+<p>考虑一个简单的卷积层运算，其参数为(feature map dim=4, kernel size=3, stride=1, padding=0, output dim=2)</p>
+<p>我们可以将$3\times3$ kernel转换成等价的稀疏矩阵C：</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fnqehkh9h4j30kc02hweb.jpg" alt=""></p>
+<p>再将$[4\times 4]$的输入转换成等价的16维的向量，那么$y=Cx$的输出就是一个4维向量，再将其转换成$2\times2$的矩阵，得到最终的结果。</p>
+<p>而Deconv也称Transposed conv，就是变成$C^Ty$。</p>
+<p>其实整个过程和convolution的back-propagation是很像的。<br>$$<br>\frac{\partial L}{\partial x_i} = \sum_j\frac{\partial y_j}{\partial  x_i}\cdot\frac{\partial L}{\partial y_j} \ = \sum_{j}C_{i,j}\cdot \frac{\partial L}{\partial y_j} \ = C^T_{*,i} \frac{\partial L}{\partial y}<br>$$<br>还有一个很重要的概念需要厘清：为什么用这种类似back-propogation的方法将feature map映射回输入图像，可以反应出feature map在原图中学到的东西？</p>
+<p>我们假设CNN是一个high level的非线性函数$f(X)$，输出是feature map。我们这里把所有的参数看成一个整体，做一个近似:<br>$$<br>f(X) \approx  W_iX<br>$$<br>这里的$W_i$表示的是第i个pattern，那么$f(X)$求关于X的梯度其实就是pattern W。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkv3ckslgj30us0qowkv.jpg" alt=""></p>
+<h5 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h5><p>基于AlexNet修改，将第一层$11\times 11$的大小减小到$7\times 7$, 并将步长从4减少到2， 并ImageNet 2012数据集上训练，具体见Fig. 3。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkzcp3ebcj30uy0i2791.jpg" alt=""></p>
+<h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p><strong>可视化：</strong></p>
+<p>结果见Fig. 2。 </p>
+<p>Layer 1: 可以看到基本上是一些图像最基本的元素，例如，edge，corner等。</p>
+<p>Layer 2-5： 随着深度的加深，其特征越来越具体，variance也越来越大！具有越来越强的辨别能力。</p>
+<p>说明CNN学习到的特征是层次化的！</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkzpsayskj30ji0sc1kx.jpg" alt=""></p>
+<p><strong>遮挡实验：</strong></p>
+<p>将图片中的一些区域进行遮挡，将其换成灰色方块，结果见Fig 6。具体以第一行为例，可以发现，当狗的身体一部分被遮挡时，网络还是显示亮蓝色，表示预测的是网球。说明，网络已经学会根据图像的context信息去剔除与目标无关的区域或者物体。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fnl01ru982j30q40s84hp.jpg" alt=""></p>
+<p><strong>Varying ImageNet Model Sizes：</strong></p>
+<p>对AlextNet进行模型调优，结果见Table 2。主要有几个发现：</p>
+<ul>
+<li>去掉全连接层反而降低了错误率</li>
+<li>增大中间层的卷积的数量可以大大提升模型性能</li>
+</ul>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fnl14d4h7dj30zu0m2q8s.jpg" alt=""></p>
+<p><strong>Feature Generalization:</strong></p>
+<p>测试模型的泛化能力，在Caltech-101, Caltech-256，PASCAL VOC 2012这三个数据集上测试模型提取特征的泛化性。 具体的做法就是1-7层的参数不动，然后训练一个新的softmax分类器。具体结果见Table 3, 4, 5，显示出了很强的泛化能力。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fnl1hi1a55j30z20b8tav.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnl1hwfrjwj30rs0ay40f.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnl1hydlkcj30zm0iy0yg.jpg" alt=""></p>
+
+      
+    
+    </div>
+    
+      
+      
+  <hr class="copy-line">
+  <div class="post-copyright">
+    <div class="copy-author">
+      <span>Author :</span>
+      <span>Mowayao</span>
+    </div>
+    <div class="copy-url">
+      <span>Url :</span>
+      <a href="http://wulimengmeng.top/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/">http://wulimengmeng.top/2018/01/18/Visualizing-and-UnderstandingConvolutional-Networks笔记/</a>
+    </div>
+    <div class="copy-origin">
+      <span>Origin :</span>
+      <a href="http://wulimengmeng.top">http://wulimengmeng.top</a>
+    </div>
+    <div class="copy-license">
+      
+      著作权归作者所有，转载请联系作者获得授权。
+    </div>
+  </div>
+
+    
+  </article>
+  
+    
+  <nav class="article-page">
+    
+      <a href="/2018/01/25/Going-Deeper-with-Convolutions笔记/" id="art-left" class="art-left">
+        <span class="next-title">
+          <i class="iconfont icon-left"></i>Going Deeper with Convolutions笔记
+        </span>
+      </a>
+    
+    
+      <a href="/2018/01/18/Network-In-Network算法笔记/" id="art-right" class="art-right">
+        <span class="prev-title"> 
+          Network In Network算法笔记<i class="iconfont icon-right"></i>  
+        </span>
+      </a>
+    
+  </nav>
+
+    
+  <i id="com-switch" class="iconfont icon-more jumping-in long infinite" style="font-size:24px;display:block;text-align:center;transform:rotate(180deg);"></i>
+  <div class="post-comments" id="post-comments" style="display: block;margin: auto 16px;">
+    
+<!-- Gitment Comments -->
+<div id="gitment"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  owner: "mowayao",
+  repo: 'mowayao.github.io',
+  oauth: {
+    client_id: '7855335a0336c8808ae8',
+    client_secret: '5de12a86e607d102099f0c51b6ad7af573d65fff',
+  },
+})
+gitment.render('gitment')
+</script>
+
+    
+    
+
+  </div>
+
+
+  
+   
+    
+  
+  <aside class="post-toc">
+    <span class="title" id="toc-switch"><span>Index</span></span>
+    <div class="toc-inner syuanpi back-1 fallIn-light">
+      <li class="title-link"><a href="javascript:;" class="toTop">Visualizing and UnderstandingConvolutional Networks笔记</a></li>
+      <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#Deconvnet"><span class="toc-text">Deconvnet</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Model"><span class="toc-text">Model</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#实验"><span class="toc-text">实验</span></a></li></ol>
+    </div>
+  </aside>
+
+
+  
+
+
+        </div>
+      </main>
+
+      <footer class="footer syuanpi fadeIn" id="footer">
+  <hr>
+  <div class="footer-wrapper">
+    <div class="left">
+      <div class="contact-icon">
+    
+    
+    
+    
+    
+    
+    
+    
+        
+        
+        
+        
+            <a href="https://www.zhihu.com/people/https://www.zhihu.com/people/yao-ze-ping" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+        
+        
+        
+    
+        
+            <a href="https://github.com/https://github.com/mowayao" class="iconfont icon-github" title="github"></a>
+        
+        
+        
+        
+        
+        
+        
+    
+</div>
+    </div>
+    <div class="right">
+      <div class="copyright">
+    <div class="info">
+        <span>&copy;</span>
+        <span>2018 ~ 2018</span>
+        <span>❤</span>
+        <span>Mowayao</span>
+    </div>
+    <div class="theme">
+        <span>
+            Powered by
+            <a href="http://hexo.io/" target="_blank">Hexo </a>
+        </span>
+        <span>
+            Theme
+            <a href="https://github.com/ColMugX/hexo-theme-Nlvi"> Nlvi </a>
+        </span>
+    </div>
+    
+    <div class="visit_count">
+        <i class="iconfont icon-visit"></i>
+        <span id="busuanzi_value_site_uv"></span>
+        <i class="iconfont icon-people"></i>
+        <span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+</div>
+    </div>
+  </div>
+</footer>
+    </div>
+  </div>
+  <script src="/script/lib/jquery/jquery-3.2.1.min.js"></script>
+
+
+    <script src="/script/lib/lightbox/js/lightbox.min.js"></script>
+
+
+
+    <script src="https://cdn.bootcss.com/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config;executed=true">MathJax.Hub.Config({tex2jax: {inlineMath: [["$","$"], ["\\(","\\)"]]}});</script>
+
+
+
+    
+        <script src="/h.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/x.js"></script>
+    
+        <script src="/o.js"></script>
+    
+        <script src="/-.js"></script>
+    
+        <script src="/g.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/n.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/r.js"></script>
+    
+        <script src="/a.js"></script>
+    
+        <script src="/t.js"></script>
+    
+        <script src="/o.js"></script>
+    
+        <script src="/r.js"></script>
+    
+        <script src="/-.js"></script>
+    
+        <script src="/f.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/d.js"></script>
+    
+
+
+<script src="/script/src/nlvi.js"></script>
+<script src="/script/src/utils.js"></script>
+<script src="/script/scheme/balance.js"></script>
+<script src="/script/src/plugins.js"></script>
+<script src="/script/bootstarp.js"></script>
+
+
+<div class="backtop syuanpi dead toTop" id="backtop">
+    <i class="iconfont icon-up"></i>
+    <span style="text-align:center;font-family:Georgia;"><span style="font-family:Georgia;" id="scrollpercent">1</span>%</span>
+</div>
+
+
+  <div class="search" id="search">
+    <div class="mask" id="mask"></div>
+    <div class="search-wrapper syuanpi">
+      <h2 id="search-header" class="syuanpi">搜索一下？</h2>
+      <div class="input">
+        <input type="text" id="local-search-input" results="0" name="">
+      </div>
+      <div id="local-search-result"></div>
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>

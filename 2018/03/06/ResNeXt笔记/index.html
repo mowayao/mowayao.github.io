@@ -1,20 +1,546 @@
-extends partial/layout
+<!DOCTYPE html>
+<html lang="">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/style/style.css">
+<script>
+    var NlviConfig = {
+        title: "Mowayao's Blog",
+        author: "Mowayao",
+        theme: "banderole",
+        lightbox: true,
+        animate: true,
+        baseUrl: "/",
+        search: true,
+        friends: false
+    }
+</script>
 
-block site_title
-    != page.title + " · " + config.title
 
-block description
-    - var desc = page.desc || page.title + ' - ' + config.author;
-    meta(name="description", content=desc)
 
-block container
-    include mixins/post
-    +post(page)
+    <link rel="stylesheet" href="/script/lib/lightbox/css/lightbox.min.css">
 
-block pagination
-    include mixins/paginator
-    +post()
-    include partial/comment
 
-block copyright
-    include partial/copyright
+
+
+    <link rel="stylesheet" href="/syuanpi/syuanpi.min.css">
+
+
+
+
+
+
+
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="browsermode" content="application">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mowayao's Blog">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="msapplication-navbutton-color" content="#666666">
+<meta name= "format-detection" content="telephone=no" />
+<meta name="keywords" content="nlvi, Nlvi" />
+
+
+  <meta name="subtitle" content="一往无前虎山行">
+
+
+
+
+  <meta name="keywords" content="deep learning, classification, Nlvi" />
+
+  <title> ResNeXt笔记 · Mowayao's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="progress">
+  <div class="progress-inner"></div>
+</div>
+  
+  
+    <div class="tagcloud-mask"></div>  
+<div class="tagcloud" id="tagcloud">
+  <div class="tagcloud-inner">
+    <a href="/tags/DP/" style="font-size: 14px;">DP</a> <a href="/tags/Deep-Learning/" style="font-size: 14px;">Deep Learning</a> <a href="/tags/GAN/" style="font-size: 14px;">GAN</a> <a href="/tags/Leetcode/" style="font-size: 14px;">Leetcode</a> <a href="/tags/RNN/" style="font-size: 14px;">RNN</a> <a href="/tags/algorithms/" style="font-size: 14px;">algorithms</a> <a href="/tags/classfication/" style="font-size: 14px;">classfication</a> <a href="/tags/classifcation/" style="font-size: 14px;">classifcation</a> <a href="/tags/classification/" style="font-size: 14px;">classification</a> <a href="/tags/computer-vision/" style="font-size: 14px;">computer vision</a> <a href="/tags/deep-learning/" style="font-size: 14px;">deep learning</a> <a href="/tags/face-detection/" style="font-size: 14px;">face detection</a> <a href="/tags/machine-learning/" style="font-size: 14px;">machine learning</a> <a href="/tags/math/" style="font-size: 14px;">math</a> <a href="/tags/notes/" style="font-size: 14px;">notes</a> <a href="/tags/object-detection/" style="font-size: 14px;">object detection</a> <a href="/tags/paper/" style="font-size: 14px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 14px;">paper notes</a> <a href="/tags/segmentation/" style="font-size: 14px;">segmentation</a> <a href="/tags/summary/" style="font-size: 14px;">summary</a> <a href="/tags/杂/" style="font-size: 14px;">杂</a>
+  </div>
+</div>  
+  
+
+  <div class="container">
+
+    <header class="header" id="header">
+  <div class="header-wrapper">
+    <div class="logo">
+  <div class="logo-inner syuanpi tvIn">
+    <span><a href="/">Mowayao's Blog</a></span>
+    
+      <span id="subtitle">一往无前虎山行</span>
+    
+  </div>
+</div>
+    <nav class="main-nav">
+        
+  <ul class="main-nav-list syuanpi tvIn">
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="search">
+        <span>Search</span>
+        
+          <span class="menu-item-label">search</span>
+        
+      </a>
+    </li>
+  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/" id="article">
+        <span class="base-name">Article</span>
+        
+          <span class="menu-item-label">article</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/archives" id="archives">
+        <span class="base-name">Archives</span>
+        
+          <span class="menu-item-label">archives</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="javascript:;" id="tags">
+        <span class="base-name">Tags</span>
+        
+          <span class="menu-item-label">tags</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/about" id="about">
+        <span class="base-name">About</span>
+        
+          <span class="menu-item-label">about</span>
+        
+      </a>
+    </li>  
+  
+  </ul>
+  
+</nav>
+    
+    
+  </div>
+</header>
+<div class="mobile-header">
+  <div class="mobile-header-body">
+    <div class="mobile-header-list">
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/">
+                    <span>Article</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/archives">
+                    <span>Archives</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+        
+          <div class="mobile-nav-item inner-cloud">
+            <div class="mobile-nav-tag">
+              <a href="javascript:;" id="mobile-tags">
+                <span>Tags</span>
+                
+                
+              </a>
+            </div>
+            <div class="mobile-nav-tagcloud">
+              <div class="mobile-tagcloud-inner">
+                <a href="/tags/DP/" style="font-size: 14px;">DP</a> <a href="/tags/Deep-Learning/" style="font-size: 14px;">Deep Learning</a> <a href="/tags/GAN/" style="font-size: 14px;">GAN</a> <a href="/tags/Leetcode/" style="font-size: 14px;">Leetcode</a> <a href="/tags/RNN/" style="font-size: 14px;">RNN</a> <a href="/tags/algorithms/" style="font-size: 14px;">algorithms</a> <a href="/tags/classfication/" style="font-size: 14px;">classfication</a> <a href="/tags/classifcation/" style="font-size: 14px;">classifcation</a> <a href="/tags/classification/" style="font-size: 14px;">classification</a> <a href="/tags/computer-vision/" style="font-size: 14px;">computer vision</a> <a href="/tags/deep-learning/" style="font-size: 14px;">deep learning</a> <a href="/tags/face-detection/" style="font-size: 14px;">face detection</a> <a href="/tags/machine-learning/" style="font-size: 14px;">machine learning</a> <a href="/tags/math/" style="font-size: 14px;">math</a> <a href="/tags/notes/" style="font-size: 14px;">notes</a> <a href="/tags/object-detection/" style="font-size: 14px;">object detection</a> <a href="/tags/paper/" style="font-size: 14px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 14px;">paper notes</a> <a href="/tags/segmentation/" style="font-size: 14px;">segmentation</a> <a href="/tags/summary/" style="font-size: 14px;">summary</a> <a href="/tags/杂/" style="font-size: 14px;">杂</a>
+              </div>
+            </div>
+          </div>
+        
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/about">
+                    <span>About</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+    </div>
+  </div>
+  <div class="mobile-header-nav">
+    <div class="mobile-header-item" id="mobile-left">
+      <div class="header-menu-item">
+        <span class="header-menu-line"></span>
+      </div>
+    </div>
+    <h1 class="mobile-header-title">
+      <a href="/">Mowayao's Blog</a>
+    </h1>
+    <div class="mobile-header-item"></div>
+  </div>
+</div>
+    <div class="container-inner">
+      <main class="main" id="main">
+        <div class="main-wrapper">
+          
+    
+  
+  <article class="
+  post
+   is_post 
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-03-06</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+            
+              <aside class="post-tags syuanpi riseIn-light back-3">
+              
+                <a href="/tags/deep-learning/">deep learning</a>
+              
+                <a href="/tags/classification/">classification</a>
+              
+              </aside>
+            
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          ResNeXt笔记
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        <p>论文 :Aggregated Residual Transformations for Deep Neural Networks, CVPR 2017</p>
+<p>链接：<a href="https://arxiv.org/pdf/1611.05431.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1611.05431.pdf</a></p>
+<p>作者:  Saining Xie, Ross Girshick, Piotr Dollár, Zhuowen Tu, Kaiming He</p>
+<p>源码：<a href="https://github.com/facebookresearch/ResNeXt" target="_blank" rel="external">https://github.com/facebookresearch/ResNeXt</a></p>
+<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>提出ResNeXt网络，基于ResNet和GoogleNet。</p>
+<p>提出cardinality的概念，对于每个conv block，对输入做多种不同的（结构相同，参数不同）transformations，然后再aggregation，而transformations的数量就是cardinality。</p>
+<p>结构启发于inception module，同样是split-transform-merge的策略，这里的merge和transform都和inception不一样。split-transform-merge的策略主要是<strong><em>通过在一个尽可能小的计算复杂度的前提下，提高模型的表达能力</em></strong>（approach the representational power of large and dense layers, but at a considerably lower computational complexity）！ Inception的问题在于每个block都需要定制，导致了模型的灵活性较差，这些block的定制化设计相当于引入了一堆的超参，大量的超参对模型来讲无疑是不利的。而这篇文章就是基于这点进行改进！</p>
+<ul>
+<li>模块化</li>
+<li>超参少</li>
+<li>表达能力强</li>
+</ul>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>首先，总结了两点block设计的原则：</p>
+<ol>
+<li>对于相同大小的feature map，block的超参要相同，也就是conv的filter参数要一样。【if producing spatial maps of the same size, the blocks share the same hyper-parameters (width and filter sizes)】</li>
+<li>如果空间维度减半，那么feature maps的数量要加倍。【each time when the spatial map is downsampled by a factor of 2, the width of the blocks is multiplied by a factor of 2】</li>
+</ol>
+<p>Figure 1是ResNet和ResNeXt的block结构比较，重点看ResNeXt，可以看到这里将256维的输入做32个不同的transformations，每个transformation先通过1x1的conv做降维(information embedding)，然后再经过几个conv，最后将这32个输出做aggregation。</p>
+<p>将其公式化:<br>$$<br>F(x) = \sum_{i=1}^C \tau_i(x)<br>$$<br>$\tau_i$的作用就是将x投影到低维空间（embeeding），然后做transform。C就是做transformation的数量，也就是cardinaty。aggregation后，再用short connection做identity mapping。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fp3f3tppr3j30te0i0jur.jpg" alt=""></p>
+<p>Figure 3是异构的三种结构，（a）是初始版本，（b）concat，（c）group conv，这三者可以说是等价的。那么在实现上，可以利用group conv，更加方便！</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fp4d6cqzx8j31cq0i2q8m.jpg" alt=""></p>
+<p>​    Table 1是ResNet-50和ResNeXt-50的参数对比</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fp4fhovd49j30nw0uaq8x.jpg" alt=""></p>
+<h5 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h5><p>Table 3是各个版本的ResNeXt以及ResNet在ImageNet-1K数据集上的表现，可以发现随着Cardinaty增加，模型总体上是变好的，体现在top-1 error逐渐在降低。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fp4fegkbv6j30oc0jqn0j.jpg" alt=""></p>
+<p>Table 6是ResNet和ResNeXt在ImageNet-5K上的比较，可以可发现后者都要好于前者。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fp4fkycmlxj30pi0eotbv.jpg" alt=""></p>
+<p>Table 5则是各个state-of-the-art的模型在ImageNet-1K数据集上表现，可以发现模型达到了最好的结果。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fp4fmo7mobj30ow0gaacv.jpg" alt=""></p>
+<p>从Table 7可以发现，相同的参数，ResNeXt比Wide ResNet表现更好。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fp4fojev6aj30pc09sgn0.jpg" alt=""></p>
+
+      
+    
+    </div>
+    
+      
+      
+  <hr class="copy-line">
+  <div class="post-copyright">
+    <div class="copy-author">
+      <span>Author :</span>
+      <span>Mowayao</span>
+    </div>
+    <div class="copy-url">
+      <span>Url :</span>
+      <a href="http://wulimengmeng.top/2018/03/06/ResNeXt笔记/">http://wulimengmeng.top/2018/03/06/ResNeXt笔记/</a>
+    </div>
+    <div class="copy-origin">
+      <span>Origin :</span>
+      <a href="http://wulimengmeng.top">http://wulimengmeng.top</a>
+    </div>
+    <div class="copy-license">
+      
+      著作权归作者所有，转载请联系作者获得授权。
+    </div>
+  </div>
+
+    
+  </article>
+  
+    
+  <nav class="article-page">
+    
+      <a href="/2018/03/13/RCNN笔记/" id="art-left" class="art-left">
+        <span class="next-title">
+          <i class="iconfont icon-left"></i>RCNN笔记
+        </span>
+      </a>
+    
+    
+      <a href="/2018/03/06/DenseNet笔记/" id="art-right" class="art-right">
+        <span class="prev-title"> 
+          DenseNet笔记<i class="iconfont icon-right"></i>  
+        </span>
+      </a>
+    
+  </nav>
+
+    
+  <i id="com-switch" class="iconfont icon-more jumping-in long infinite" style="font-size:24px;display:block;text-align:center;transform:rotate(180deg);"></i>
+  <div class="post-comments" id="post-comments" style="display: block;margin: auto 16px;">
+    
+<!-- Gitment Comments -->
+<div id="gitment"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  owner: "mowayao",
+  repo: 'mowayao.github.io',
+  oauth: {
+    client_id: '7855335a0336c8808ae8',
+    client_secret: '5de12a86e607d102099f0c51b6ad7af573d65fff',
+  },
+})
+gitment.render('gitment')
+</script>
+
+    
+    
+
+  </div>
+
+
+  
+   
+    
+  
+  <aside class="post-toc">
+    <span class="title" id="toc-switch"><span>Index</span></span>
+    <div class="toc-inner syuanpi back-1 fallIn-light">
+      <li class="title-link"><a href="javascript:;" class="toTop">ResNeXt笔记</a></li>
+      <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#Idea"><span class="toc-text">Idea</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Architecture"><span class="toc-text">Architecture</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Experiment"><span class="toc-text">Experiment</span></a></li></ol>
+    </div>
+  </aside>
+
+
+  
+
+
+        </div>
+      </main>
+
+      <footer class="footer syuanpi fadeIn" id="footer">
+  <hr>
+  <div class="footer-wrapper">
+    <div class="left">
+      <div class="contact-icon">
+    
+    
+    
+    
+    
+    
+    
+    
+        
+        
+        
+        
+            <a href="https://www.zhihu.com/people/https://www.zhihu.com/people/yao-ze-ping" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+        
+        
+        
+    
+        
+            <a href="https://github.com/https://github.com/mowayao" class="iconfont icon-github" title="github"></a>
+        
+        
+        
+        
+        
+        
+        
+    
+</div>
+    </div>
+    <div class="right">
+      <div class="copyright">
+    <div class="info">
+        <span>&copy;</span>
+        <span>2018 ~ 2018</span>
+        <span>❤</span>
+        <span>Mowayao</span>
+    </div>
+    <div class="theme">
+        <span>
+            Powered by
+            <a href="http://hexo.io/" target="_blank">Hexo </a>
+        </span>
+        <span>
+            Theme
+            <a href="https://github.com/ColMugX/hexo-theme-Nlvi"> Nlvi </a>
+        </span>
+    </div>
+    
+    <div class="visit_count">
+        <i class="iconfont icon-visit"></i>
+        <span id="busuanzi_value_site_uv"></span>
+        <i class="iconfont icon-people"></i>
+        <span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+</div>
+    </div>
+  </div>
+</footer>
+    </div>
+  </div>
+  <script src="/script/lib/jquery/jquery-3.2.1.min.js"></script>
+
+
+    <script src="/script/lib/lightbox/js/lightbox.min.js"></script>
+
+
+
+    <script src="https://cdn.bootcss.com/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config;executed=true">MathJax.Hub.Config({tex2jax: {inlineMath: [["$","$"], ["\\(","\\)"]]}});</script>
+
+
+
+    
+        <script src="/h.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/x.js"></script>
+    
+        <script src="/o.js"></script>
+    
+        <script src="/-.js"></script>
+    
+        <script src="/g.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/n.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/r.js"></script>
+    
+        <script src="/a.js"></script>
+    
+        <script src="/t.js"></script>
+    
+        <script src="/o.js"></script>
+    
+        <script src="/r.js"></script>
+    
+        <script src="/-.js"></script>
+    
+        <script src="/f.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/d.js"></script>
+    
+
+
+<script src="/script/src/nlvi.js"></script>
+<script src="/script/src/utils.js"></script>
+<script src="/script/scheme/balance.js"></script>
+<script src="/script/src/plugins.js"></script>
+<script src="/script/bootstarp.js"></script>
+
+
+<div class="backtop syuanpi dead toTop" id="backtop">
+    <i class="iconfont icon-up"></i>
+    <span style="text-align:center;font-family:Georgia;"><span style="font-family:Georgia;" id="scrollpercent">1</span>%</span>
+</div>
+
+
+  <div class="search" id="search">
+    <div class="mask" id="mask"></div>
+    <div class="search-wrapper syuanpi">
+      <h2 id="search-header" class="syuanpi">搜索一下？</h2>
+      <div class="input">
+        <input type="text" id="local-search-input" results="0" name="">
+      </div>
+      <div id="local-search-result"></div>
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>

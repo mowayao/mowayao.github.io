@@ -1,20 +1,563 @@
-extends partial/layout
+<!DOCTYPE html>
+<html lang="">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/style/style.css">
+<script>
+    var NlviConfig = {
+        title: "Mowayao's Blog",
+        author: "Mowayao",
+        theme: "banderole",
+        lightbox: true,
+        animate: true,
+        baseUrl: "/",
+        search: true,
+        friends: false
+    }
+</script>
 
-block site_title
-    != page.title + " · " + config.title
 
-block description
-    - var desc = page.desc || page.title + ' - ' + config.author;
-    meta(name="description", content=desc)
 
-block container
-    include mixins/post
-    +post(page)
+    <link rel="stylesheet" href="/script/lib/lightbox/css/lightbox.min.css">
 
-block pagination
-    include mixins/paginator
-    +post()
-    include partial/comment
 
-block copyright
-    include partial/copyright
+
+
+    <link rel="stylesheet" href="/syuanpi/syuanpi.min.css">
+
+
+
+
+
+
+
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="browsermode" content="application">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mowayao's Blog">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="msapplication-navbutton-color" content="#666666">
+<meta name= "format-detection" content="telephone=no" />
+<meta name="keywords" content="nlvi, Nlvi" />
+
+
+  <meta name="subtitle" content="一往无前虎山行">
+
+
+
+
+  <meta name="keywords" content="deep learning, object detection, Nlvi" />
+
+  <title> SSD笔记 · Mowayao's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="progress">
+  <div class="progress-inner"></div>
+</div>
+  
+  
+    <div class="tagcloud-mask"></div>  
+<div class="tagcloud" id="tagcloud">
+  <div class="tagcloud-inner">
+    <a href="/tags/DP/" style="font-size: 14px;">DP</a> <a href="/tags/Deep-Learning/" style="font-size: 14px;">Deep Learning</a> <a href="/tags/GAN/" style="font-size: 14px;">GAN</a> <a href="/tags/Leetcode/" style="font-size: 14px;">Leetcode</a> <a href="/tags/RNN/" style="font-size: 14px;">RNN</a> <a href="/tags/algorithms/" style="font-size: 14px;">algorithms</a> <a href="/tags/classfication/" style="font-size: 14px;">classfication</a> <a href="/tags/classifcation/" style="font-size: 14px;">classifcation</a> <a href="/tags/classification/" style="font-size: 14px;">classification</a> <a href="/tags/computer-vision/" style="font-size: 14px;">computer vision</a> <a href="/tags/deep-learning/" style="font-size: 14px;">deep learning</a> <a href="/tags/face-detection/" style="font-size: 14px;">face detection</a> <a href="/tags/machine-learning/" style="font-size: 14px;">machine learning</a> <a href="/tags/math/" style="font-size: 14px;">math</a> <a href="/tags/notes/" style="font-size: 14px;">notes</a> <a href="/tags/object-detection/" style="font-size: 14px;">object detection</a> <a href="/tags/paper/" style="font-size: 14px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 14px;">paper notes</a> <a href="/tags/segmentation/" style="font-size: 14px;">segmentation</a> <a href="/tags/summary/" style="font-size: 14px;">summary</a> <a href="/tags/杂/" style="font-size: 14px;">杂</a>
+  </div>
+</div>  
+  
+
+  <div class="container">
+
+    <header class="header" id="header">
+  <div class="header-wrapper">
+    <div class="logo">
+  <div class="logo-inner syuanpi tvIn">
+    <span><a href="/">Mowayao's Blog</a></span>
+    
+      <span id="subtitle">一往无前虎山行</span>
+    
+  </div>
+</div>
+    <nav class="main-nav">
+        
+  <ul class="main-nav-list syuanpi tvIn">
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="search">
+        <span>Search</span>
+        
+          <span class="menu-item-label">search</span>
+        
+      </a>
+    </li>
+  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/" id="article">
+        <span class="base-name">Article</span>
+        
+          <span class="menu-item-label">article</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/archives" id="archives">
+        <span class="base-name">Archives</span>
+        
+          <span class="menu-item-label">archives</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="javascript:;" id="tags">
+        <span class="base-name">Tags</span>
+        
+          <span class="menu-item-label">tags</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/about" id="about">
+        <span class="base-name">About</span>
+        
+          <span class="menu-item-label">about</span>
+        
+      </a>
+    </li>  
+  
+  </ul>
+  
+</nav>
+    
+    
+  </div>
+</header>
+<div class="mobile-header">
+  <div class="mobile-header-body">
+    <div class="mobile-header-list">
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/">
+                    <span>Article</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/archives">
+                    <span>Archives</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+        
+          <div class="mobile-nav-item inner-cloud">
+            <div class="mobile-nav-tag">
+              <a href="javascript:;" id="mobile-tags">
+                <span>Tags</span>
+                
+                
+              </a>
+            </div>
+            <div class="mobile-nav-tagcloud">
+              <div class="mobile-tagcloud-inner">
+                <a href="/tags/DP/" style="font-size: 14px;">DP</a> <a href="/tags/Deep-Learning/" style="font-size: 14px;">Deep Learning</a> <a href="/tags/GAN/" style="font-size: 14px;">GAN</a> <a href="/tags/Leetcode/" style="font-size: 14px;">Leetcode</a> <a href="/tags/RNN/" style="font-size: 14px;">RNN</a> <a href="/tags/algorithms/" style="font-size: 14px;">algorithms</a> <a href="/tags/classfication/" style="font-size: 14px;">classfication</a> <a href="/tags/classifcation/" style="font-size: 14px;">classifcation</a> <a href="/tags/classification/" style="font-size: 14px;">classification</a> <a href="/tags/computer-vision/" style="font-size: 14px;">computer vision</a> <a href="/tags/deep-learning/" style="font-size: 14px;">deep learning</a> <a href="/tags/face-detection/" style="font-size: 14px;">face detection</a> <a href="/tags/machine-learning/" style="font-size: 14px;">machine learning</a> <a href="/tags/math/" style="font-size: 14px;">math</a> <a href="/tags/notes/" style="font-size: 14px;">notes</a> <a href="/tags/object-detection/" style="font-size: 14px;">object detection</a> <a href="/tags/paper/" style="font-size: 14px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 14px;">paper notes</a> <a href="/tags/segmentation/" style="font-size: 14px;">segmentation</a> <a href="/tags/summary/" style="font-size: 14px;">summary</a> <a href="/tags/杂/" style="font-size: 14px;">杂</a>
+              </div>
+            </div>
+          </div>
+        
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/about">
+                    <span>About</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+    </div>
+  </div>
+  <div class="mobile-header-nav">
+    <div class="mobile-header-item" id="mobile-left">
+      <div class="header-menu-item">
+        <span class="header-menu-line"></span>
+      </div>
+    </div>
+    <h1 class="mobile-header-title">
+      <a href="/">Mowayao's Blog</a>
+    </h1>
+    <div class="mobile-header-item"></div>
+  </div>
+</div>
+    <div class="container-inner">
+      <main class="main" id="main">
+        <div class="main-wrapper">
+          
+    
+  
+  <article class="
+  post
+   is_post 
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-04-11</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+            
+              <aside class="post-tags syuanpi riseIn-light back-3">
+              
+                <a href="/tags/deep-learning/">deep learning</a>
+              
+                <a href="/tags/object-detection/">object detection</a>
+              
+              </aside>
+            
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          SSD笔记
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        <p>论文：SSD: Single Shot MultiBox Detector，<strong>ECCV</strong> 2016</p>
+<p>作者：Wei Liu, Dragomir Anguelov, Dumitru Erhan, Christian Szegedy, Scott Reed, Cheng-Yang Fu, Alexander C. Berg</p>
+<p>链接：<a href="https://arxiv.org/pdf/1512.02325.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1512.02325.pdf</a>    </p>
+<p>代码：<a href="https://github.com/weiliu89/caffe/tree/ssd" target="_blank" rel="external">https://github.com/weiliu89/caffe/tree/ssd</a></p>
+<p>gluon实现：<a href="https://github.com/mowayao/gluon_SSD" target="_blank" rel="external">https://github.com/mowayao/gluon_SSD</a></p>
+<ul>
+<li>将bbox的输出空间离散化到一些默认的priors，也就是默认设定的anchors</li>
+<li>不同Faster R-CNN的two stage的方式，SSD采用的是one shot的方法，精度和faster r-cnn接近，但是效率更高</li>
+<li>将多尺度的feature maps应用到detection中，针对不同尺度的feature map，采用不同scale和ratio</li>
+</ul>
+<p>#####The Single Shot Detector (SSD)</p>
+<p>将feature map分成nxn的cells，每个cell可以预测固定数量的box的conf和offset</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fqfue2u6o9j316a0taww0.jpg" alt=""></p>
+<p><strong>Model</strong></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgroawjivj315i0r0dnf.jpg" alt=""></p>
+<p>模型是基于pretrained的VGG-16进行修改和fine-tune</p>
+<ul>
+<li>Multi-scale feature map for detection: 在base net后加了conv feature layers用来做detection，这些layer使得feature maps的size逐渐降低，这样就可以做多尺度的预测</li>
+<li>Convolutional predictors for detection：在添加的conv feature layer后加入输出层，即conv predictor，生成固定大小的输出，对于mxn，p个channel的feature map，使用3x3xp的卷积核，预测conf和loc。</li>
+<li>Default boxes and aspect ratios：每个cell预测k个boxes，以及类别的数量是c，那么最后的输出channel则是(c+4)*k</li>
+</ul>
+<p><strong>Training</strong></p>
+<ul>
+<li>Matching strategy: 需要将default boxes做划分，将与gt与box的jaccard overlap大于0.5的定为gt，其他定为background</li>
+<li>Training objective:</li>
+</ul>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqgqb60zbdj30wo040q3a.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqgqb6a4gij30zg09wmyu.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgqb74a9zj315c04mdgq.jpg" alt=""></p>
+<ul>
+<li>Choosing scales and aspect ratios for default boxes: 为了针对不同scale的object，scale被定义为：</li>
+</ul>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqgrc1164dj30wa03q3yw.jpg" alt=""></p>
+<p>$s_{min}=0.2, s_{max}=0.9,$ratios $a_r\in {1,2,3,\frac{1}{2}, \frac{1}{3}}$，$w_k=s_k\sqrt a_r, h_k=s_k/\sqrt a_r$。另外对于 ratio = 1 的情况，再指定 scale 为$，s_k=\sqrt {s_ks_{k+1}}$也就是总共有 6 种不同的 default box</p>
+<ul>
+<li>Hard negative mining: 在做完matching后，大部分的box都是背景，所以需要做采样，选择loss最高的几个，并且保持3:1的比例</li>
+<li>Data augmentation：<ul>
+<li>使用全图作为输入，</li>
+<li>使用IOU和目标物体为0.1, 0.3，0.5, 0.7, 0.9的patch （这些 patch 在原图的大小的 $[0.1,1]$ 之间， 相应的宽高比在$[1/2,2]$之间）</li>
+<li>随机采取一个patch</li>
+</ul>
+</li>
+</ul>
+<h5 id="Experimental-Results"><a href="#Experimental-Results" class="headerlink" title="Experimental Results"></a>Experimental Results</h5><p>Table 1是SSD在PASCAL VOC2007上的表现，可以发现SSD512的表现优于Faster R-CNN，SSD300兼顾性能和效率</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgqghdz3lj31600k2wo1.jpg" alt=""></p>
+<p>Table 4是SSD在 PASCAL VOC2012上的表现，可以发现SSD512取得了SOTA的表现</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgrepc7k2j316w0es7b4.jpg" alt=""></p>
+<p>Table 5是在COCO上的表现，同样是SOTA</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgreqfglbj316i0dwtd9.jpg" alt=""></p>
+
+      
+    
+    </div>
+    
+      
+      
+  <hr class="copy-line">
+  <div class="post-copyright">
+    <div class="copy-author">
+      <span>Author :</span>
+      <span>Mowayao</span>
+    </div>
+    <div class="copy-url">
+      <span>Url :</span>
+      <a href="http://wulimengmeng.top/2018/04/11/SSD笔记/">http://wulimengmeng.top/2018/04/11/SSD笔记/</a>
+    </div>
+    <div class="copy-origin">
+      <span>Origin :</span>
+      <a href="http://wulimengmeng.top">http://wulimengmeng.top</a>
+    </div>
+    <div class="copy-license">
+      
+      著作权归作者所有，转载请联系作者获得授权。
+    </div>
+  </div>
+
+    
+  </article>
+  
+    
+  <nav class="article-page">
+    
+      <a href="/2018/04/18/OHEM算法笔记/" id="art-left" class="art-left">
+        <span class="next-title">
+          <i class="iconfont icon-left"></i>OHEM算法笔记
+        </span>
+      </a>
+    
+    
+      <a href="/2018/04/07/YOLO&YOLOv2笔记/" id="art-right" class="art-right">
+        <span class="prev-title"> 
+          YOLO&YOLOv2笔记<i class="iconfont icon-right"></i>  
+        </span>
+      </a>
+    
+  </nav>
+
+    
+  <i id="com-switch" class="iconfont icon-more jumping-in long infinite" style="font-size:24px;display:block;text-align:center;transform:rotate(180deg);"></i>
+  <div class="post-comments" id="post-comments" style="display: block;margin: auto 16px;">
+    
+<!-- Gitment Comments -->
+<div id="gitment"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  owner: "mowayao",
+  repo: 'mowayao.github.io',
+  oauth: {
+    client_id: '7855335a0336c8808ae8',
+    client_secret: '5de12a86e607d102099f0c51b6ad7af573d65fff',
+  },
+})
+gitment.render('gitment')
+</script>
+
+    
+    
+
+  </div>
+
+
+  
+   
+    
+  
+  <aside class="post-toc">
+    <span class="title" id="toc-switch"><span>Index</span></span>
+    <div class="toc-inner syuanpi back-1 fallIn-light">
+      <li class="title-link"><a href="javascript:;" class="toTop">SSD笔记</a></li>
+      <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#Experimental-Results"><span class="toc-text">Experimental Results</span></a></li></ol>
+    </div>
+  </aside>
+
+
+  
+
+
+        </div>
+      </main>
+
+      <footer class="footer syuanpi fadeIn" id="footer">
+  <hr>
+  <div class="footer-wrapper">
+    <div class="left">
+      <div class="contact-icon">
+    
+    
+    
+    
+    
+    
+    
+    
+        
+        
+        
+        
+            <a href="https://www.zhihu.com/people/https://www.zhihu.com/people/yao-ze-ping" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+        
+        
+        
+    
+        
+            <a href="https://github.com/https://github.com/mowayao" class="iconfont icon-github" title="github"></a>
+        
+        
+        
+        
+        
+        
+        
+    
+</div>
+    </div>
+    <div class="right">
+      <div class="copyright">
+    <div class="info">
+        <span>&copy;</span>
+        <span>2018 ~ 2018</span>
+        <span>❤</span>
+        <span>Mowayao</span>
+    </div>
+    <div class="theme">
+        <span>
+            Powered by
+            <a href="http://hexo.io/" target="_blank">Hexo </a>
+        </span>
+        <span>
+            Theme
+            <a href="https://github.com/ColMugX/hexo-theme-Nlvi"> Nlvi </a>
+        </span>
+    </div>
+    
+    <div class="visit_count">
+        <i class="iconfont icon-visit"></i>
+        <span id="busuanzi_value_site_uv"></span>
+        <i class="iconfont icon-people"></i>
+        <span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+</div>
+    </div>
+  </div>
+</footer>
+    </div>
+  </div>
+  <script src="/script/lib/jquery/jquery-3.2.1.min.js"></script>
+
+
+    <script src="/script/lib/lightbox/js/lightbox.min.js"></script>
+
+
+
+    <script src="https://cdn.bootcss.com/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config;executed=true">MathJax.Hub.Config({tex2jax: {inlineMath: [["$","$"], ["\\(","\\)"]]}});</script>
+
+
+
+    
+        <script src="/h.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/x.js"></script>
+    
+        <script src="/o.js"></script>
+    
+        <script src="/-.js"></script>
+    
+        <script src="/g.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/n.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/r.js"></script>
+    
+        <script src="/a.js"></script>
+    
+        <script src="/t.js"></script>
+    
+        <script src="/o.js"></script>
+    
+        <script src="/r.js"></script>
+    
+        <script src="/-.js"></script>
+    
+        <script src="/f.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/d.js"></script>
+    
+
+
+<script src="/script/src/nlvi.js"></script>
+<script src="/script/src/utils.js"></script>
+<script src="/script/scheme/balance.js"></script>
+<script src="/script/src/plugins.js"></script>
+<script src="/script/bootstarp.js"></script>
+
+
+<div class="backtop syuanpi dead toTop" id="backtop">
+    <i class="iconfont icon-up"></i>
+    <span style="text-align:center;font-family:Georgia;"><span style="font-family:Georgia;" id="scrollpercent">1</span>%</span>
+</div>
+
+
+  <div class="search" id="search">
+    <div class="mask" id="mask"></div>
+    <div class="search-wrapper syuanpi">
+      <h2 id="search-header" class="syuanpi">搜索一下？</h2>
+      <div class="input">
+        <input type="text" id="local-search-input" results="0" name="">
+      </div>
+      <div id="local-search-result"></div>
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>

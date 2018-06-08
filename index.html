@@ -1,12 +1,1169 @@
-extends partial/layout
+<!DOCTYPE html>
+<html lang="">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/style/style.css">
+<script>
+    var NlviConfig = {
+        title: "Mowayao's Blog",
+        author: "Mowayao",
+        theme: "banderole",
+        lightbox: true,
+        animate: true,
+        baseUrl: "/",
+        search: true,
+        friends: false
+    }
+</script>
 
-block container
-    include mixins/post
-    +posts()
 
-block pagination
-    include mixins/paginator
-    +home()
 
-block copyright
-    include partial/copyright
+    <link rel="stylesheet" href="/script/lib/lightbox/css/lightbox.min.css">
+
+
+
+
+    <link rel="stylesheet" href="/syuanpi/syuanpi.min.css">
+
+
+
+
+
+
+
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="browsermode" content="application">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mowayao's Blog">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="msapplication-navbutton-color" content="#666666">
+<meta name= "format-detection" content="telephone=no" />
+<meta name="keywords" content="nlvi, Nlvi" />
+
+
+  <meta name="subtitle" content="一往无前虎山行">
+
+
+
+
+  <title>
+  Mowayao's Blog
+  
+    | 一往无前虎山行
+  
+</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="progress">
+  <div class="progress-inner"></div>
+</div>
+  
+  
+    <div class="tagcloud-mask"></div>  
+<div class="tagcloud" id="tagcloud">
+  <div class="tagcloud-inner">
+    <a href="/tags/DP/" style="font-size: 14px;">DP</a> <a href="/tags/Deep-Learning/" style="font-size: 14px;">Deep Learning</a> <a href="/tags/GAN/" style="font-size: 14px;">GAN</a> <a href="/tags/Leetcode/" style="font-size: 14px;">Leetcode</a> <a href="/tags/RNN/" style="font-size: 14px;">RNN</a> <a href="/tags/algorithms/" style="font-size: 14px;">algorithms</a> <a href="/tags/classfication/" style="font-size: 14px;">classfication</a> <a href="/tags/classifcation/" style="font-size: 14px;">classifcation</a> <a href="/tags/classification/" style="font-size: 14px;">classification</a> <a href="/tags/computer-vision/" style="font-size: 14px;">computer vision</a> <a href="/tags/deep-learning/" style="font-size: 14px;">deep learning</a> <a href="/tags/face-detection/" style="font-size: 14px;">face detection</a> <a href="/tags/machine-learning/" style="font-size: 14px;">machine learning</a> <a href="/tags/math/" style="font-size: 14px;">math</a> <a href="/tags/notes/" style="font-size: 14px;">notes</a> <a href="/tags/object-detection/" style="font-size: 14px;">object detection</a> <a href="/tags/paper/" style="font-size: 14px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 14px;">paper notes</a> <a href="/tags/segmentation/" style="font-size: 14px;">segmentation</a> <a href="/tags/summary/" style="font-size: 14px;">summary</a> <a href="/tags/杂/" style="font-size: 14px;">杂</a>
+  </div>
+</div>  
+  
+
+  <div class="container">
+
+    <header class="header" id="header">
+  <div class="header-wrapper">
+    <div class="logo">
+  <div class="logo-inner syuanpi tvIn">
+    <span><a href="/">Mowayao's Blog</a></span>
+    
+      <span id="subtitle">一往无前虎山行</span>
+    
+  </div>
+</div>
+    <nav class="main-nav">
+        
+  <ul class="main-nav-list syuanpi tvIn">
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="search">
+        <span>Search</span>
+        
+          <span class="menu-item-label">search</span>
+        
+      </a>
+    </li>
+  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/" id="article">
+        <span class="base-name">Article</span>
+        
+          <span class="menu-item-label">article</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/archives" id="archives">
+        <span class="base-name">Archives</span>
+        
+          <span class="menu-item-label">archives</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="javascript:;" id="tags">
+        <span class="base-name">Tags</span>
+        
+          <span class="menu-item-label">tags</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/about" id="about">
+        <span class="base-name">About</span>
+        
+          <span class="menu-item-label">about</span>
+        
+      </a>
+    </li>  
+  
+  </ul>
+  
+</nav>
+    
+    
+  </div>
+</header>
+<div class="mobile-header">
+  <div class="mobile-header-body">
+    <div class="mobile-header-list">
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/">
+                    <span>Article</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/archives">
+                    <span>Archives</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+        
+          <div class="mobile-nav-item inner-cloud">
+            <div class="mobile-nav-tag">
+              <a href="javascript:;" id="mobile-tags">
+                <span>Tags</span>
+                
+                
+              </a>
+            </div>
+            <div class="mobile-nav-tagcloud">
+              <div class="mobile-tagcloud-inner">
+                <a href="/tags/DP/" style="font-size: 14px;">DP</a> <a href="/tags/Deep-Learning/" style="font-size: 14px;">Deep Learning</a> <a href="/tags/GAN/" style="font-size: 14px;">GAN</a> <a href="/tags/Leetcode/" style="font-size: 14px;">Leetcode</a> <a href="/tags/RNN/" style="font-size: 14px;">RNN</a> <a href="/tags/algorithms/" style="font-size: 14px;">algorithms</a> <a href="/tags/classfication/" style="font-size: 14px;">classfication</a> <a href="/tags/classifcation/" style="font-size: 14px;">classifcation</a> <a href="/tags/classification/" style="font-size: 14px;">classification</a> <a href="/tags/computer-vision/" style="font-size: 14px;">computer vision</a> <a href="/tags/deep-learning/" style="font-size: 14px;">deep learning</a> <a href="/tags/face-detection/" style="font-size: 14px;">face detection</a> <a href="/tags/machine-learning/" style="font-size: 14px;">machine learning</a> <a href="/tags/math/" style="font-size: 14px;">math</a> <a href="/tags/notes/" style="font-size: 14px;">notes</a> <a href="/tags/object-detection/" style="font-size: 14px;">object detection</a> <a href="/tags/paper/" style="font-size: 14px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 14px;">paper notes</a> <a href="/tags/segmentation/" style="font-size: 14px;">segmentation</a> <a href="/tags/summary/" style="font-size: 14px;">summary</a> <a href="/tags/杂/" style="font-size: 14px;">杂</a>
+              </div>
+            </div>
+          </div>
+        
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/about">
+                    <span>About</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+    </div>
+  </div>
+  <div class="mobile-header-nav">
+    <div class="mobile-header-item" id="mobile-left">
+      <div class="header-menu-item">
+        <span class="header-menu-line"></span>
+      </div>
+    </div>
+    <h1 class="mobile-header-title">
+      <a href="/">Mowayao's Blog</a>
+    </h1>
+    <div class="mobile-header-item"></div>
+  </div>
+</div>
+    <div class="container-inner">
+      <main class="main" id="main">
+        <div class="main-wrapper">
+          
+  
+
+<section class="posts">
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-06-01</span>
+          
+            
+              <span class="post-category"><a href="/categories/competition/">competition</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/06/01/Kaggle比赛小结-iMaterialist-Challenge-Furniture-at-FGVC5/">Kaggle比赛小结-iMaterialist Challenge (Furniture) at FGVC5</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p><a href="https://www.kaggle.com/c/imaterialist-challenge-furniture-2018" target="_blank" rel="external">https://www.kaggle.com/c/imaterialist-challenge-furniture-2018</a></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1frw1y1wwhhj31fa02adg9.jpg" alt=""></p>
+<p>参加完比赛，做个简单的总结：</p>
+<ul>
+<li>数据增强：random flip, color jitter, resize and crop</li>
+<li>数据的不平衡需要设置采样权重(这个好像不一定能work)</li>
+<li>网络模型，DenseNet201，SENet，InceptionResNetv2，SEResNext</li>
+<li>Focal Loss不work</li>
+<li>Adam or SGD</li>
+<li>Multi-crop for testing</li>
+<li>Ensemble: 取log后相加</li>
+</ul>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-06-01</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/06/01/Leetcode-Hard-DP/">Leetcode Hard DP</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p>[TOC]</p>
+<p>###72. Edit Distance</p>
+<p>Given two words word1 and word2, find the minimum number of operations required to convert word1 to word2.<br>You have the following 3 operations permitted on a word:</p>
+<ol>
+<li>Insert a character</li>
+<li>Delete a character</li>
+<li>Replace a character</li>
+</ol>
+<p>Example 1:</p>
+<p>Input: word1 = “horse”, word2 = “ros”<br>Output: 3<br>Explanation:<br>horse -&gt; rorse (replace ‘h’ with ‘r’)<br>rorse -&gt; rose (remove ‘r’)<br>rose -&gt; ros (remove ‘e’)</p>
+<p>Example 2:</p>
+<p>Input: word1 = “intention”, word2 = “execution”<br>Output: 5<br>Explanation:<br>intention -&gt; inention (remove ‘t’)<br>inention -&gt; enention (replace ‘i’ with ‘e’)<br>enention -&gt; exention (replace ‘n’ with ‘x’)<br>exention -&gt; exection (replace ‘n’ with ‘c’)<br>exection -&gt; execution (insert ‘u’)</p>
+<p>dp(i,j)的后续状态有dp(i-1, j)+1, dp(i, j-1)+1, dp(i-1, j-1)+1分别表示(删除或添加)和(替换)</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minDistance</span><span class="params">(<span class="built_in">string</span> word1, <span class="built_in">string</span> word2)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> n = word1.size(), m = word2.size();</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; dp(n+<span class="number">1</span>, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(m+<span class="number">1</span>, <span class="number">1e9</span>));</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= n; i++) dp[i][<span class="number">0</span>] = i;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt;= m; j++) dp[<span class="number">0</span>][j] = j;</div><div class="line">        dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= m; j++) &#123;</div><div class="line">                <span class="keyword">if</span> (word1[i<span class="number">-1</span>] == word2[j<span class="number">-1</span>]) &#123;</div><div class="line">                    dp[i][j] = min(dp[i][j], dp[i<span class="number">-1</span>][j<span class="number">-1</span>]);</div><div class="line">                &#125;</div><div class="line">                dp[i][j] = min(dp[i][j], min(dp[i<span class="number">-1</span>][j], min(dp[i][j<span class="number">-1</span>], dp[i<span class="number">-1</span>][j<span class="number">-1</span>]))+<span class="number">1</span>);</div><div class="line">            &#125;</div><div class="line">        </div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp[n][m];</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minDistance</span><span class="params">(<span class="built_in">string</span> word1, <span class="built_in">string</span> word2)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> n = word1.size(), m = word2.size();</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; dp(m+<span class="number">1</span>, <span class="number">1e9</span>);</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= m; i++) dp[i] = i;</div><div class="line">        <span class="comment">//dp[i-1j-1]</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</div><div class="line">            <span class="keyword">int</span> before = dp[<span class="number">0</span>];</div><div class="line">            dp[<span class="number">0</span>] = i;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt;= m; j++) &#123;</div><div class="line">                <span class="keyword">int</span> ret = <span class="number">1e9</span>;</div><div class="line">                <span class="keyword">if</span> (word1[i<span class="number">-1</span>] == word2[j<span class="number">-1</span>]) &#123;</div><div class="line">                    ret = min(ret, before);</div><div class="line">                &#125;</div><div class="line">                ret = min(ret, min(dp[j]+<span class="number">1</span>, min(dp[j<span class="number">-1</span>]+<span class="number">1</span>, before+<span class="number">1</span>)));</div><div class="line">                before = dp[j];</div><div class="line">                dp[j] = ret;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp[m];</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>###664. Strange Printer</p>
+<p>There is a strange printer with the following two special requirements:</p>
+<ol>
+<li>The printer can only print a sequence of the same character each time.</li>
+<li>At each turn, the printer can print new characters starting from and ending at any places, and will cover the original existing characters.</li>
+</ol>
+<p>Given a string consists of lower English letters only, your job is to count the minimum number of turns the printer needed in order to print it.<br>Example 1:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Input: &quot;aaabbb&quot;</div><div class="line">Output: 2</div><div class="line">Explanation: Print &quot;aaa&quot; first and then print &quot;bbb&quot;.</div></pre></td></tr></table></figure>
+<p>Example 2:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Input: &quot;aba&quot;</div><div class="line">Output: 2</div><div class="line">Explanation: Print &quot;aaa&quot; first and then print &quot;b&quot; from the second place of the string, which will cover the existing character &apos;a&apos;.</div></pre></td></tr></table></figure>
+<p>Hint: Length of the given string will not exceed 100.</p>
+<p>dp(i, j)　如果s[i]=s[j]，那么可以选择由dp(i-1, j)或者dp(i, j-1)搞定，否则的话就是寻找最佳的分割点</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; dp, <span class="built_in">string</span>&amp; s)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (l == r) <span class="keyword">return</span> <span class="number">1</span>;</div><div class="line">        <span class="keyword">if</span> (dp[l][r] != <span class="number">-1</span>) <span class="keyword">return</span> dp[l][r];</div><div class="line">        <span class="keyword">int</span> ret = <span class="number">1e9</span>;</div><div class="line">        <span class="keyword">if</span> (s[l] == s[r]) &#123;</div><div class="line">            ret = min(dfs(l+<span class="number">1</span>, r, dp, s), dfs(l, r<span class="number">-1</span>, dp, s));</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = l; i &lt; r; i++) &#123;</div><div class="line">            ret = min(ret, dfs(l, i, dp, s)+dfs(i+<span class="number">1</span>,r, dp, s));</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp[l][r] = ret;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">strangePrinter</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> n = s.size();</div><div class="line">        <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; dp(n, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n, <span class="number">-1</span>));</div><div class="line">        <span class="keyword">return</span> dfs(<span class="number">0</span>, n<span class="number">-1</span>, dp, s);</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="730-Count-Different-Palindromic-Subsequences"><a href="#730-Count-Different-Palindromic-Subsequences" class="headerlink" title="730. Count Different Palindromic Subsequences"></a>730. Count Different Palindromic Subsequences</h3><p>Given a string S, find the number of different non-empty palindromic subsequences in S, and <strong>return that number modulo 10^9 + 7.</strong></p>
+<p>A subsequence of a string S is obtained by deleting 0 or more characters from S.</p>
+<p>A sequence is palindromic if it is equal to the sequence reversed.</p>
+<p>Two sequences <code>A_1, A_2, ...</code> and <code>B_1, B_2, ...</code> are different if there is some <code>i</code> for which <code>A_i != B_i</code>.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">Input: </div><div class="line">S = &apos;bccb&apos;</div><div class="line">Output: 6</div><div class="line">Explanation: </div><div class="line">The 6 different non-empty palindromic subsequences are &apos;b&apos;, &apos;c&apos;, &apos;bb&apos;, &apos;cc&apos;, &apos;bcb&apos;, &apos;bccb&apos;.</div><div class="line">Note that &apos;bcb&apos; is counted only once, even though it occurs twice.</div></pre></td></tr></table></figure>
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Input: </div><div class="line">S = &apos;abcdabcdabcdabcdabcdabcdabcdabcddcbadcbadcbadcbadcbadcbadcbadcba&apos;</div><div class="line">Output: 104860361</div><div class="line">Explanation: </div><div class="line">There are 3104860382 different non-empty palindromic subsequences, which is 104860361 modulo 10^9 + 7.</div></pre></td></tr></table></figure>
+<p><strong>Note:</strong></p>
+<p>The length of <code>S</code> will be in the range <code>[1, 1000]</code>.</p>
+<p>Each character <code>S[i]</code> will be in the set <code>{&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;}</code>.</p>
+<p>枚举当前位置可选择的字符，再往下迭代，如果存在一对合理的，那么总共有３种选择，一种是偶数结束，一种是奇数结束，还有一种是选择这两个继续向下迭代，这样保证没有重复，非常tricky!!!!</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> mod = <span class="number">1e9</span> + <span class="number">7</span>;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">countPalindromicSubsequences</span><span class="params">(<span class="built_in">string</span> S)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> n = S.size();</div><div class="line">        <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;ll&gt;&gt; dp(n, <span class="built_in">vector</span>&lt;ll&gt;(n, <span class="number">-1</span>));</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; idxs(<span class="number">4</span>);</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">            idxs[S[i]-<span class="string">'a'</span>].push_back(i);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">int</span> d = dfs(<span class="number">0</span>, n<span class="number">-1</span>, dp, idxs);</div><div class="line">        <span class="keyword">return</span> dfs(<span class="number">0</span>, n<span class="number">-1</span>, dp, idxs);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function">ll <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> start, <span class="keyword">int</span> end, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;ll&gt;&gt;&amp;dp, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; idxs)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (start &gt; end) <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        <span class="keyword">if</span> (dp[start][end] != <span class="number">-1</span>) <span class="keyword">return</span> dp[start][end];</div><div class="line">        ll ans = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</div><div class="line">            <span class="keyword">auto</span> l = lower_bound(idxs[i].begin(), idxs[i].end(), start);</div><div class="line">            <span class="keyword">if</span> (l == idxs[i].end()) &#123;</div><div class="line">                <span class="keyword">continue</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">int</span> left = *l;</div><div class="line">            <span class="keyword">auto</span> r = upper_bound(idxs[i].begin(), idxs[i].end(), end);</div><div class="line">            <span class="keyword">int</span> right = <span class="number">-1</span>;</div><div class="line">            <span class="keyword">if</span> (r == idxs[i].end()) &#123;</div><div class="line">                right = idxs[i].back();</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">else</span> &#123;</div><div class="line">                r--;</div><div class="line">                right = *r;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">if</span> (right == left) &#123;</div><div class="line">                ans = (ans + <span class="number">1</span>) % mod;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (right &gt; left) &#123;</div><div class="line">                ans = (ans + dfs(left+<span class="number">1</span>, right<span class="number">-1</span>, dp, idxs) + <span class="number">2</span>) % mod;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp[start][end] = ans;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="97-Interleaving-String"><a href="#97-Interleaving-String" class="headerlink" title="97. Interleaving String"></a>97. Interleaving String</h3><p>Given <em>s1</em>, <em>s2</em>, <em>s3</em>, find whether <em>s3</em> is formed by the interleaving of <em>s1</em> and <em>s2</em>.</p>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Input: s1 = &quot;aabcc&quot;, s2 = &quot;dbbca&quot;, s3 = &quot;aadbbcbcac&quot;</div><div class="line">Output: true</div></pre></td></tr></table></figure>
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Input: s1 = &quot;aabcc&quot;, s2 = &quot;dbbca&quot;, s3 = &quot;aadbbbaccc&quot;</div><div class="line">Output: false</div></pre></td></tr></table></figure>
+<p>注意边界条件</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isInterleave</span><span class="params">(<span class="built_in">string</span> s1, <span class="built_in">string</span> s2, <span class="built_in">string</span> s3)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> n = s1.size(), m = s2.size(), t = s3.size();</div><div class="line">        <span class="keyword">if</span> (n == <span class="number">0</span>)  <span class="keyword">return</span> s2 == s3;</div><div class="line">        <span class="keyword">if</span> (m == <span class="number">0</span>)  <span class="keyword">return</span> s1 == s3;</div><div class="line">        <span class="keyword">if</span> (t == <span class="number">0</span>)  <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        <span class="keyword">if</span> (n+m != t) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;&gt; dp(n+<span class="number">1</span>, <span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;(m+<span class="number">1</span>, <span class="literal">false</span>));</div><div class="line">        dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="literal">true</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">            <span class="keyword">if</span> (s3[i] == s1[i]) &#123;</div><div class="line">                dp[i+<span class="number">1</span>][<span class="number">0</span>] = dp[i][<span class="number">0</span>];</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">else</span> &#123;</div><div class="line">                dp[i+<span class="number">1</span>][<span class="number">0</span>] = <span class="literal">false</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i++) &#123;</div><div class="line">            <span class="keyword">if</span> (s3[i] == s2[i]) &#123;</div><div class="line">                dp[<span class="number">0</span>][i+<span class="number">1</span>] = dp[<span class="number">0</span>][i];</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">else</span> &#123;</div><div class="line">                dp[<span class="number">0</span>][i+<span class="number">1</span>] = <span class="literal">false</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; m; j++) &#123;</div><div class="line">                <span class="keyword">if</span> (s3[i+j+<span class="number">1</span>] == s2[j]) &#123;</div><div class="line">                    dp[i+<span class="number">1</span>][j+<span class="number">1</span>] = dp[i+<span class="number">1</span>][j+<span class="number">1</span>] || dp[i+<span class="number">1</span>][j];</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">if</span> (s3[i+j+<span class="number">1</span>] == s1[i]) &#123;</div><div class="line">                    dp[i+<span class="number">1</span>][j+<span class="number">1</span>] = dp[i+<span class="number">1</span>][j+<span class="number">1</span>] || dp[i][j+<span class="number">1</span>];</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp[n][m];</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="312-Burst-Balloons"><a href="#312-Burst-Balloons" class="headerlink" title="312. Burst Balloons"></a>312. Burst Balloons</h3><p>Given <code>n</code> balloons, indexed from <code>0</code> to <code>n-1</code>. Each balloon is painted with a number on it represented by array <code>nums</code>. You are asked to burst all the balloons. If the you burst balloon <code>i</code> you will get <code>nums[left] * nums[i] * nums[right]</code> coins. Here <code>left</code> and <code>right</code>are adjacent indices of <code>i</code>. After the burst, the <code>left</code> and <code>right</code> then becomes adjacent.</p>
+<p>Find the maximum coins you can collect by bursting the balloons wisely.</p>
+<p><strong>Note:</strong></p>
+<ul>
+<li>You may imagine <code>nums[-1] = nums[n] = 1</code>. They are not real therefore you can not burst them.</li>
+<li>0 ≤ <code>n</code> ≤ 500, 0 ≤ <code>nums[i]</code> ≤ 100</li>
+</ul>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Input: [3,1,5,8]</div><div class="line">Output: 167 </div><div class="line">Explanation: nums = [3,1,5,8] --&gt; [3,5,8] --&gt;   [3,8]   --&gt;  [8]  --&gt; []</div><div class="line">             coins =  3*1*5      +  3*5*8    +  1*3*8      + 1*8*1   = 167</div></pre></td></tr></table></figure>
+<p>区间dp，选择中间burst的气球，然后分割区间，一个比较好用的trick就是在头尾补1</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxCoins</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</div><div class="line">        nums.insert(nums.begin(), <span class="number">1</span>);</div><div class="line">        nums.insert(nums.end(), <span class="number">1</span>);</div><div class="line">        </div><div class="line">        <span class="keyword">int</span> n = nums.size();</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; dp(n, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;(n, <span class="number">-1</span>));</div><div class="line">        <span class="keyword">return</span> dfs(<span class="number">0</span>, n<span class="number">-1</span>, dp, nums);</div><div class="line">        <span class="comment">//return 0;</span></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> l, <span class="keyword">int</span> r, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; dp, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (l+<span class="number">1</span> &gt;= r) <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> (dp[l][r] != <span class="number">-1</span>) <span class="keyword">return</span> dp[l][r];</div><div class="line">        <span class="keyword">int</span> ret = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = l+<span class="number">1</span>; i &lt; r; i++) &#123;</div><div class="line">            ret = max(ret, nums[l]*nums[i]*nums[r] + dfs(l, i, dp, nums) + dfs(i, r, dp, nums));</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp[l][r] = ret;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="354-Russian-Doll-Envelopes"><a href="#354-Russian-Doll-Envelopes" class="headerlink" title="354. Russian Doll Envelopes"></a>354. Russian Doll Envelopes</h3><p>You have a number of envelopes with widths and heights given as a pair of integers <code>(w, h)</code>. One envelope can fit into another if and only if both the width and height of one envelope is greater than the width and height of the other envelope.</p>
+<p>What is the maximum number of envelopes can you Russian doll? (put one inside other)</p>
+<p><strong>Example:</strong><br>Given envelopes = <code>[[5,4],[6,4],[6,7],[2,3]]</code>, the maximum number of envelopes you can Russian doll is <code>3</code> ([2,3] =&gt; [5,4] =&gt; [6,7]).</p>
+<p>思路类似最长上升子序列</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxEnvelopes</span><span class="params">(<span class="built_in">vector</span>&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt;&amp; envelopes)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> n = envelopes.size();</div><div class="line">        <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        sort(envelopes.begin(), envelopes.end());</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; dp(n, <span class="number">0</span>);</div><div class="line">        dp[<span class="number">0</span>] = <span class="number">1</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++) &#123;</div><div class="line">            dp[i] = <span class="number">1</span>;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++) &#123;</div><div class="line">                <span class="keyword">if</span> (envelopes[j].first &lt; envelopes[i].first &amp;&amp; envelopes[j].second &lt; envelopes[i].second)</div><div class="line">                    dp[i] = max(dp[i], dp[j]+<span class="number">1</span>);</div><div class="line">            &#125;</div><div class="line">           <span class="comment">// cout &lt;&lt; dp[i] &lt;&lt; endl;</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">int</span> ret = <span class="number">1</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">            ret = max(ret, dp[i]);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> ret;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">maxEnvelopes</span><span class="params">(<span class="built_in">vector</span>&lt;pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&gt;&amp; envelopes)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> n = envelopes.size();</div><div class="line">        <span class="keyword">if</span> (n == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        sort(envelopes.begin(), envelopes.end(), [](pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&amp; p1, pair&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt;&amp; p2)&#123;</div><div class="line">            <span class="keyword">return</span> p1.first == p2.first ? p1.second &gt; p2.second : p1.first &lt; p2.first; <span class="comment">//当first相同时，second按大到小排序避免冲突！！！</span></div><div class="line">        &#125;);</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; dp;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">            <span class="keyword">int</span> l = lower_bound(dp.begin(), dp.end(), envelopes[i].second) - dp.begin();</div><div class="line">            <span class="keyword">if</span> (l == dp.size()) &#123;</div><div class="line">                dp.push_back(envelopes[i].second);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">else</span> &#123;</div><div class="line">                dp[l] = envelopes[i].second;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp.size();</div><div class="line">      </div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="140-Word-Break-II"><a href="#140-Word-Break-II" class="headerlink" title="140. Word Break II"></a>140. Word Break II</h3><p>Given a <strong>non-empty</strong> string <em>s</em> and a dictionary <em>wordDict</em> containing a list of <strong>non-empty</strong> words, add spaces in <em>s</em> to construct a sentence where each word is a valid dictionary word. Return all such possible sentences.</p>
+<p><strong>Note:</strong></p>
+<ul>
+<li>The same word in the dictionary may be reused multiple times in the segmentation.</li>
+<li>You may assume the dictionary does not contain duplicate words.</li>
+</ul>
+<p><strong>Example 1:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Input:</div><div class="line">s = &quot;catsanddog&quot;</div><div class="line">wordDict = [&quot;cat&quot;, &quot;cats&quot;, &quot;and&quot;, &quot;sand&quot;, &quot;dog&quot;]</div><div class="line">Output:</div><div class="line">[</div><div class="line">  &quot;cats and dog&quot;,</div><div class="line">  &quot;cat sand dog&quot;</div><div class="line">]</div></pre></td></tr></table></figure>
+<p><strong>Example 2:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Input:</div><div class="line">s = &quot;pineapplepenapple&quot;</div><div class="line">wordDict = [&quot;apple&quot;, &quot;pen&quot;, &quot;applepen&quot;, &quot;pine&quot;, &quot;pineapple&quot;]</div><div class="line">Output:</div><div class="line">[</div><div class="line">  &quot;pine apple pen apple&quot;,</div><div class="line">  &quot;pineapple pen apple&quot;,</div><div class="line">  &quot;pine applepen apple&quot;</div><div class="line">]</div><div class="line">Explanation: Note that you are allowed to reuse a dictionary word.</div></pre></td></tr></table></figure>
+<p><strong>Example 3:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Input:</div><div class="line">s = &quot;catsandog&quot;</div><div class="line">wordDict = [&quot;cats&quot;, &quot;dog&quot;, &quot;sand&quot;, &quot;and&quot;, &quot;cat&quot;]</div><div class="line">Output:</div><div class="line">[]</div></pre></td></tr></table></figure>
+<p>预处理</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; wordBreak(<span class="built_in">string</span> s, <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; wordDict) &#123;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; ret;</div><div class="line">        </div><div class="line">        <span class="built_in">unordered_map</span>&lt;<span class="built_in">string</span>, <span class="keyword">bool</span>&gt; dict;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> word: wordDict) &#123;</div><div class="line">            dict[word] = <span class="literal">true</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">int</span> n = s.size();</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; pre(n+<span class="number">1</span>);</div><div class="line">        pre[<span class="number">0</span>].push_back(<span class="number">-1</span>);</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++) &#123;</div><div class="line">                <span class="built_in">string</span> substr = s.substr(j, i-j);</div><div class="line">                <span class="keyword">if</span> (dict[substr] &amp;&amp; pre[j].size() != <span class="number">0</span>) &#123;</div><div class="line">                    pre[i].push_back(j);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; cur;</div><div class="line">        dfs(cur, n, ret, pre, s);</div><div class="line">        <span class="keyword">return</span> ret;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp;cur, <span class="keyword">int</span> idx, <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&amp; ret, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; pre, <span class="built_in">string</span>&amp; s)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (idx == <span class="number">0</span>) &#123;</div><div class="line">            <span class="built_in">string</span> str;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = cur.size()<span class="number">-1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</div><div class="line">                <span class="keyword">if</span> (i != cur.size()<span class="number">-1</span>) str += <span class="string">" "</span>;</div><div class="line">                str += cur[i];</div><div class="line">            &#125;</div><div class="line">            ret.push_back(str);</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125; </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> t: pre[idx]) &#123;</div><div class="line">            cur.push_back(s.substr(t, idx-t));</div><div class="line">            dfs(cur, t, ret, pre, s);</div><div class="line">            cur.pop_back();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="410-Split-Array-Largest-Sum"><a href="#410-Split-Array-Largest-Sum" class="headerlink" title="410. Split Array Largest Sum"></a>410. Split Array Largest Sum</h3><p>Given an array which consists of non-negative integers and an integer <em>m</em>, you can split the array into <em>m</em> non-empty continuous subarrays. Write an algorithm to minimize the largest sum among these <em>m</em> subarrays.</p>
+<p><strong>Note:</strong><br>If <em>n</em> is the length of array, assume the following constraints are satisfied:</p>
+<ul>
+<li>1 ≤ <em>n</em> ≤ 1000</li>
+<li>1 ≤ <em>m</em> ≤ min(50, <em>n</em>)</li>
+</ul>
+<p><strong>Examples:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">Input:</div><div class="line">nums = [7,2,5,10,8]</div><div class="line">m = 2</div><div class="line"></div><div class="line">Output:</div><div class="line">18</div><div class="line"></div><div class="line">Explanation:</div><div class="line">There are four ways to split nums into two subarrays.</div><div class="line">The best way is to split it into [7,2,5] and [10,8],</div><div class="line">where the largest sum among the two subarrays is only 18.</div></pre></td></tr></table></figure>
+<p>二分,贪心</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">splitArray</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> m)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> n = nums.size();</div><div class="line">        ll s = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">            s += nums[i];</div><div class="line">        &#125;</div><div class="line">        ll l = <span class="number">0</span>, r = s;</div><div class="line">       <span class="keyword">while</span> (l &lt;= r) &#123;</div><div class="line">            ll mid = (l+r) / <span class="number">2</span>;</div><div class="line">            <span class="keyword">if</span> (!check(mid, nums, m)) &#123;</div><div class="line">                l = mid + <span class="number">1</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">else</span> &#123;</div><div class="line">                r = mid - <span class="number">1</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> l;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">check</span><span class="params">(ll x, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; nums, <span class="keyword">int</span> m)</span> </span>&#123;</div><div class="line">        </div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nums.size(); i++) &#123;</div><div class="line">            <span class="keyword">int</span> j = i<span class="number">-1</span>;</div><div class="line">            ll s = <span class="number">0</span>;</div><div class="line">            <span class="keyword">while</span>(j+<span class="number">1</span> &lt; nums.size() &amp;&amp; s+nums[j+<span class="number">1</span>] &lt;= x) s += nums[j+<span class="number">1</span>], ++j;</div><div class="line">            <span class="keyword">if</span> (j &lt; i) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">            --m;</div><div class="line">            i = j;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (m &gt;= <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">        <span class="keyword">else</span> <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="818-Race-Car"><a href="#818-Race-Car" class="headerlink" title="818. Race Car"></a>818. Race Car</h3><p>Your car starts at position 0 and speed +1 on an infinite number line.  (Your car can go into negative positions.)</p>
+<p>Your car drives automatically according to a sequence of instructions A (accelerate) and R (reverse).</p>
+<p>When you get an instruction “A”, your car does the following: <code>position += speed, speed *= 2</code>.</p>
+<p>When you get an instruction “R”, your car does the following: if your speed is positive then <code>speed = -1</code> , otherwise <code>speed = 1</code>.  (Your position stays the same.)</p>
+<p>For example, after commands “AAR”, your car goes to positions 0-&gt;1-&gt;3-&gt;3, and your speed goes to 1-&gt;2-&gt;4-&gt;-1.</p>
+<p>Now for some target position, say the <strong>length</strong> of the shortest sequence of instructions to get there.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Example 1:</div><div class="line">Input: </div><div class="line">target = 3</div><div class="line">Output: 2</div><div class="line">Explanation: </div><div class="line">The shortest instruction sequence is &quot;AA&quot;.</div><div class="line">Your position goes from 0-&gt;1-&gt;3.</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Example 2:</div><div class="line">Input: </div><div class="line">target = 6</div><div class="line">Output: 5</div><div class="line">Explanation: </div><div class="line">The shortest instruction sequence is &quot;AAARA&quot;.</div><div class="line">Your position goes from 0-&gt;1-&gt;3-&gt;7-&gt;7-&gt;6.</div></pre></td></tr></table></figure>
+<p><strong>Note:</strong></p>
+<ul>
+<li><code>1 &lt;= target &lt;= 10000</code>.</li>
+</ul>
+<p>贪心，选择合适的策略，没到，回去或超过再回去</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">racecar</span><span class="params">(<span class="keyword">int</span> target)</span> </span>&#123;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; dp(target+<span class="number">1</span>, <span class="number">-1</span>);</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> dfs(target, dp);</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span> target, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; dp)</span> </span>&#123;</div><div class="line">        </div><div class="line">        <span class="keyword">if</span> (target == <span class="number">0</span>) <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        <span class="keyword">if</span> (dp[target] != <span class="number">-1</span>) <span class="keyword">return</span> dp[target];</div><div class="line">        </div><div class="line">        <span class="keyword">int</span> t = <span class="built_in">floor</span>(log2(target+<span class="number">1</span>));</div><div class="line">        <span class="comment">//cout &lt;&lt; target &lt;&lt;" " &lt;&lt; t &lt;&lt; endl;</span></div><div class="line">        <span class="keyword">if</span> (<span class="number">1</span>&lt;&lt;t == target+<span class="number">1</span>) <span class="keyword">return</span> dp[target] = t;</div><div class="line">        <span class="keyword">int</span> ret = dfs((<span class="number">1</span>&lt;&lt;(t+<span class="number">1</span>))<span class="number">-1</span>-target, dp) + t + <span class="number">2</span>; <span class="comment">//forward excess target then backward t+1 + 1(reverse)</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; t; i++) &#123;</div><div class="line">            ret = min(ret, dfs(target - (<span class="number">1</span>&lt;&lt;t) + (<span class="number">1</span>&lt;&lt;i), dp) + t + i + <span class="number">2</span>); <span class="comment">//forward n then backward m (reverse twice)</span></div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> dp[target] = ret;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h3 id="132-Palindrome-Partitioning-II"><a href="#132-Palindrome-Partitioning-II" class="headerlink" title="132. Palindrome Partitioning II"></a>132. Palindrome Partitioning II</h3><p>Given a string <em>s</em>, partition <em>s</em> such that every substring of the partition is a palindrome.</p>
+<p>Return the minimum cuts needed for a palindrome partitioning of <em>s</em>.</p>
+<p><strong>Example:</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Input: &quot;aab&quot;</div><div class="line">Output: 1</div><div class="line">Explanation: The palindrome partitioning [&quot;aa&quot;,&quot;b&quot;] could be produced using 1 cut.</div></pre></td></tr></table></figure>
+<p>预处理</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">judge_palindrom</span><span class="params">(<span class="built_in">string</span>&amp;s, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>&#123;</div><div class="line">        <span class="keyword">while</span> (i &lt; j) &#123;</div><div class="line">            <span class="keyword">if</span> (s[i] != s[j]) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">            i++;</div><div class="line">            j--;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minCut</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> n = s.size();</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; palindrom(n);</div><div class="line">        <span class="comment">//vector&lt;vector&lt;bool&gt;&gt; isPalindrom(n, vector&lt;bool&gt;(n, false));</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt;= i; j++) &#123;</div><div class="line">                <span class="keyword">if</span> (judge_palindrom(s, j, i)) &#123;</div><div class="line">                    palindrom[i].push_back(j);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; dp(n, <span class="number">1e9</span>);</div><div class="line">        dp[<span class="number">0</span>] = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; palindrom[i].size(); j++) &#123;</div><div class="line">                <span class="keyword">int</span> idx = palindrom[i][j];</div><div class="line">                <span class="keyword">if</span> (idx == <span class="number">0</span>) &#123;</div><div class="line">                    dp[i] = <span class="number">1</span>;</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (dp[idx<span class="number">-1</span>] != <span class="number">1e9</span> &amp;&amp; dp[i] &gt; dp[idx<span class="number">-1</span>]+<span class="number">1</span>) &#123;</div><div class="line">                    dp[i] = dp[idx<span class="number">-1</span>] + <span class="number">1</span>;</div><div class="line">                &#125; </div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp[n<span class="number">-1</span>] - <span class="number">1</span>;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-05-15</span>
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/05/15/感受野的计算及延伸/">感受野的计算及延伸</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p>感受野(receptive field)的定义:</p>
+<blockquote>
+<p><em>The</em> <strong>receptive field</strong> <em>is defined as the region in the input space that a particular CNN’s feature is looking at (i.e. be affected by)</em></p>
+</blockquote>
+<p>当我们计算feature map的大小时，假设输入的大小为: $n\times n$，卷积的参数是k(kernel size), p(padding), s(stride)，我们将得到$\lfloor \frac{n+2<em>p-k}{s}\rfloor+1$，如果我们引入dilation这个参数(相当于连续</em>标准卷积<em>的堆叠的receptive field)，那么最终的大小是$\lfloor \frac{n+2</em>p-k-d*(k-1)}{s}\rfloor+1$，pooling的参数是k，s，那么输出就是$\lfloor \frac{n-k}{s}\rfloor+1$</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1frc4o653j2j30u00bi0u6.jpg" alt=""></p>
+<p>为了简化计算，我们假设图像是正方形的，主要有几个式子：<br>$$<br>j_{out} = j_{in}\times s<br>$$</p>
+<p>$$<br>r_{out} = r_{in} + (k-1)\times j_{in}<br>$$</p>
+<p>$$<br>c_{out} = c_{in} + (\frac{k-1}{2}-p)\times j_{in}<br>$$</p>
+<p>第一个等式计算的是jump in the output feature map，s是stride，相当于做完降采样以后，作用域进行了放大（感受野进行了放大，之后每次感受野的增加都需要乘上相应的倍数(jump的数量)），第二个等式计算的是receptive field，k是kernel size（如果没有放大倍数，那么就是按照kernel的大小的进行扩展，如果有倍数的话就乘以相应的倍数，因为这里的一个像素等于原图的jump数个像素）第三个式子计算的是receptive field的中心。那么如果考虑到dialated conv，那么对于receptive field的计算就变成了：<br>$$<br>r_{out} = r_{in} + (k-1+(k-1)\times (d-1))\times j_{in} = r_{in} + ((k-1)\times d)\times j_{in}<br>$$</p>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-05-07</span>
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/05/07/正则化的理解/">正则化的理解</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p>本文主要介绍一些正则化方法降低模型复杂度的原理（目的是防止过拟合，通过约束参数达到），主要是对l1正则和l2正则的原理进行思考。</p>
+<p>这里先对优化问题进行简要介绍，主要有三种最优化问题（凸优化）：</p>
+<ol>
+<li>无约束的优化问题：就是没有任何约束条件，直接求导求极值点即可</li>
+<li>有等式约束的优化问题：</li>
+</ol>
+<p>$$<br>\min f(X) \ s.t. g(x) = 0<br>$$</p>
+<p>通常使用拉格朗日乘子法就行求解，转换成$L(\lambda, x) = f(x) + \lambda g(x)$，分别对x和$\lambda$求偏导，得到极值点集合，然后再验证</p>
+<ol>
+<li>有不等式约束的优化问题：</li>
+</ol>
+<p>$$<br>\min f(X) \ s.t. g(x) = 0, h(x)  \le 0<br>$$</p>
+<p>f和h为凸函数，g是仿射函数，常用解法还是利用拉格朗日乘子法，即转化成$L(\lambda,\mu,x) = f(x) + \lambda g(x)+ \mu h(x)$，利用其最优化的KKT条件：</p>
+<ul>
+<li>$L(\lambda, \mu, x)$对变量的导数为0</li>
+<li>g(x) = 0</li>
+<li>$\mu h(x)=0$</li>
+</ul>
+<p>以简单的线性回归为例，将$E_D(w)$表示为data-dependent error，$E_w(w)$表示为regularization term，所以整个的error可以表示为：<br>$$<br>\frac{1}{2}\sum_{n=1}^N{t_n-w^T\phi(x_n)}^2+\frac{\lambda}{2}\sum_{j=1}^M|w_j|^q<br>$$<br><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fr52eorbknj31kw0jradg.jpg" alt=""></p>
+<p>我们可以把上式写成一般的形式：<br>$$<br>J(w) = f(w) + \lambda h(w)<br>$$<br>也可以还原成有等式约束的形式：<br>$$<br>\min f(w) \ s.t. \lambda h(w) \le c<br>$$<br>特定的regularizer也叫做weight decay，顾名思义，就是会让参数向0作decay（变相地降低模型复杂度），q=1时，也叫做lasso，q=2时，叫做ridge。这里还需要解释一个问题：为什么q=1时，很容易出现参数为0的情况，也就是经常会得到稀疏解（和l2相比更容易得到稀疏解而不是一定会得到稀疏解），下图可以解释：</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fr51ndkgxjj313a0qegou.jpg" alt=""></p>
+<p>对于l1正则来说，就图中的例子来说，<strong><em>边界</em></strong>可以转化成$w_1+w_2=\frac{c}{\lambda}$，在图中就是一个菱形，而l2正则则可以转化为$w_1^2+w_2^2=\frac{c}{\lambda}$的<strong><em>边界</em></strong>，在图中则是一个圆形。而损失函数图像是圆形（大部分情况是椭圆形），使得菱形和圆形更容易相较于坐标轴上！<strong><em>随着惩罚项$\lambda$增大，菱形和圆形的面积会越来越小，所以求得参数也越来越小！起到降低模型复杂度的效果！</em></strong></p>
+<h5 id="prior"><a href="#prior" class="headerlink" title="prior"></a>prior</h5><p>对于bayesian view来说，通过最大化后验概率得到：<br>$$<br>w^<em> = \arg\max_w p(w|D) = \arg\max_w\frac{p(D|w)</em>p(w)}{p(D)} = \arg\max_w p(D|w) * p(w)<br>$$<br>其中p(D|w)是似然函数，表示在w条件下数据D出现的概率，p(w)是参数的先验函数。</p>
+<p>对于似然函数，我们假设数据之间都是i.i.d，那么我们有:<br>$$<br>p(D|w) = \prod_{k=1}^np(D_i|w)<br>$$<br>对最大后验概率去log：<br>$$<br>\arg\max_w p(D|w)*p(w) =\prod_{k=1}^np(D_i|w)p(w) = \log\prod_{k=1}^np(D_i|w)p(w) = \arg\min_w -\sum_{k=0}^n \log p(D|w) - \log p(w)<br>$$<br>当假设w服从高斯分布，那么经过转化以后就变成了l2正则，当假设w服从拉普拉斯分布，就可以转换成l1正则。</p>
+<p>下图是拉普拉斯分布，可以发现，拉普拉斯分布在0值附近非常突出，而高斯分布更加平缓，所以拉普拉斯更倾向于产生稀疏解，而高斯分布对权值大的惩罚更大（从几何图形也可以看出）</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fr5382j3pqj311y0t23zb.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fr535b1edsj31040r3gp3.jpg" alt=""></p>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-05-02</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/05/02/R-FCN笔记/">R-FCN笔记</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p>论文：R-FCN: Object Detection via Region-based Fully Convolutional Networks，<strong>NIPS</strong> 2017</p>
+<p>作者：Jifeng Dai, Yi Li, Kaiming He, Jian Sun</p>
+<p>链接：<a href="https://arxiv.org/pdf/1605.06409.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1605.06409.pdf</a></p>
+<p>代码：<a href="https://github.com/daijifeng001/r-fcn" target="_blank" rel="external">https://github.com/daijifeng001/r-fcn</a></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fr2thjx8v0j31ce0oa0zb.jpg" alt=""></p>
+<p><strong>objective:</strong> address a dilemma between translation-invariance in image classification and translation-variance in object detection</p>
+<p><strong>solution:</strong> position-sensitive score maps</p>
+<ul>
+<li>83.6% mAP on the 2007 set, 82.0% the 2012 set</li>
+<li>a test-time speed of 170ms per image, 2.5-20× faster than the Faster R-CNN counterpart</li>
+</ul>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2ttte6q5j30wo0vy1kx.jpg" alt=""></p>
+<p>模型的backbone是ResNet-101，并将最后的fc层改成1024d的1x1的conv layer。</p>
+<p>在image classification中，网络需要较好的translation invariance，但是在detection中，因为需要准确地定位object的位置，这需要网络具有定位的representation，有一定的translation-variant，例如在candidate box中，网络最好能够对在box中的object的一些translation，例如旋转，平移等有一定的响应。所以为了引入translation invariance，作者提出了Region-based Fully Convolutional Network (R-FCN)。</p>
+<p>R-FCN通过构造position-sensitive的score map，每个score map都会对object的相对空间信息进行编码（encode），例如在object的左边还是右边。</p>
+<p>对于最后一层的conv layer，它会输出每个类别的$k^2$个position-sensitive score maps，所以一共有$k^2(C+1)$个channel，$k^2$个score maps分别对应$k\times k$的格子，例如k=3，就可以对相对位置进行了编码：{top-left, top-center, top-right, …, bottom-right}，然后再用一个position-sensitive ROI pooling进行信息的整合，文中的做法就是相加</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2sgoe0jtj31cc0omth7.jpg" alt=""></p>
+<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 2是与其他模型的比较，对于R-FCN来说，去k=7要优于k=3</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2tw517esj313u0dadij.jpg" alt=""></p>
+<p>Table 3是R-FCN和faster r-cnn在训练和测试的效率比较，可以发现R-FCN的效率要高于Faster r-cnn，同时准确率也要高于faster r-cnn。</p>
+<p>Table 4-6是R-FCN和其他模型在PASCAL VOC2007，PASCAL VOC2012，COCO数据集上的比较 </p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2u19dx60j30zg0twdne.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fr2u6dkj5nj30xm0bkn08.jpg" alt=""></p>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-04-21</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/04/21/FPN论文笔记/">FPN论文笔记</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p>论文：Feature Pyramid Networks for Object Detection，<strong>CVPR</strong> 2017</p>
+<p>作者：Tsung-Yi Lin, Piotr Doll´ar, Ross Girshick, Kaiming He, Bharath Hariharan, and Serge Belongie</p>
+<p>链接：<a href="https://arxiv.org/pdf/1612.03144.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1612.03144.pdf</a></p>
+<p>代码(unofficial)：<a href="https://github.com/unsky/FPN" target="_blank" rel="external">https://github.com/unsky/FPN</a></p>
+<ul>
+<li>feature pyramid在物体识别中比较常用，作者将其应用到object detection中</li>
+<li>不同于SSD，作者使用top-down的结构将来自更高pyramid level的semantically stronger的feature map和higher resolution features相结合，使得detection的结构更加准确</li>
+</ul>
+<p>Figure 1是不同类型的feature map的使用方法，作者使用的是(d)的结构，SSD使用的是(c)的结构</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqnpdczxhuj30w20usgvn.jpg" alt=""></p>
+<h5 id="Feature-Pyramid-Networks"><a href="#Feature-Pyramid-Networks" class="headerlink" title="Feature Pyramid Networks"></a>Feature Pyramid Networks</h5><p>Figure 3是top-down pathway的示意结构，现将来自higher pyramid的feature maps升采样，再将该层的feature map做1x1的conv，减少channel dimension（固定为256d），再用element-wise addtion做merge，然后再用3x3的conv去消除上采样aliasing的影响。在C5上（最高层），先用1x1 conv产生粗糙的特征图。</p>
+<p>${C2, C3, C4, C5}$层对应的融合特征层为${P2, P3, P4, P5}$</p>
+<p>通过这样的操作来加强特征，即<strong>保留空间信息并增强语义信息</strong>。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqnpkyj02ej30tk0jcn00.jpg" alt=""></p>
+<h5 id="Applications"><a href="#Applications" class="headerlink" title="Applications"></a>Applications</h5><p><strong>Feature Pyramid Networks for RPN</strong></p>
+<p>RPN的参数配置和Faster R-CNN类似，作者提到了一点就是在feature pyramid的detection head参数是可以共享的，结果和不共享接近，这说明了<strong>不同level的pyramid的semantic level是相似的</strong>！</p>
+<p><strong>Feature Pyramid Networks for Fast R-CNN</strong></p>
+<p>这里的重点是ROI的分配：</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqnqq1o4irj30m2034dg3.jpg" alt=""></p>
+<p>w,h是ROI的宽和高，$k_0$=4，表示的是大小为224x224的ROI的target level，利用这个式子进行转换，分配到相应的pyramid level。</p>
+<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p><strong>Ablation Study</strong></p>
+<p>Table 1，2，3是ablation study的表格</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fqnqwou2qwj315g0uc7ef.jpg" alt=""></p>
+<p>Table 4是单模型在COCO detection benchmark上的表现，FPN取得SOTA的表现</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqnr7se6qpj31kw0iatgv.jpg" alt=""></p>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-04-21</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/04/21/RON论文笔记/">RON论文笔记</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p>论文：RON: Reverse Connection with Objectness Prior Networks for Object Detection，<strong>CVPR</strong> 2017</p>
+<p>作者：Tao Kong，Fuchun Sun，Anbang Yao，Huaping Liu，Ming Lu，Yurong Chen</p>
+<p>链接：<a href="https://arxiv.org/pdf/1707.01691.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1707.01691.pdf</a></p>
+<p>代码：<a href="https://github.com/taokong/RON" target="_blank" rel="external">https://github.com/taokong/RON</a></p>
+<p><strong>objective：</strong></p>
+<ul>
+<li>bridge the gap between the region-based and region-free methodologies </li>
+</ul>
+<p><strong>solution</strong>：</p>
+<ul>
+<li>Multi-scale object localization，利用多个scale的feature map做detection<ul>
+<li>建立reverse connection，为前面的层提供highly semantic的information</li>
+</ul>
+</li>
+<li>Negative space mining<ul>
+<li>通过建立objectness prior减少objects的搜索空间</li>
+</ul>
+</li>
+</ul>
+<p>384x384的输入，PASCAL VOC 2007 81.3% mAP，PASCAL VOC 2012 80.7% mAP，COCO 27.4%</p>
+<p>效率较高，1.5G的 GPU内存，forward的速度是15FPS</p>
+<p>Figure 2是RON的网络模型，有4个scales feature map做detection。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqk5dydd50j30t20tcqde.jpg" alt=""></p>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>网络以VGG 16为backbone，将FC6和FC7改造为conv layer，在FC7处降采样。</p>
+<p>所以每个用于detection的feature map大小为：1/8 (conv 4 3), 1/16 (conv 5 3), 1/32 (conv 6) and 1/64 (conv 7)</p>
+<p><strong>Reverse Connection</strong></p>
+<p>reverse connection的结构见Figure 3，将后一层的输出经过deconv做upsampling，deconv的通道是512，当前层经过conv，再用summation的方式做merge。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqk5exvqeej30io0g6my5.jpg" alt=""></p>
+<p><strong>Reference Boxes</strong></p>
+<p>不同层的网络对应不同的receptive field，所以需要设计对应层的ref box的scale和ratio，下面是scale的设计：</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqmjznn3cij30rc02umxf.jpg" alt=""></p>
+<p>这里$s_{min}$设为$\frac{1}{10}$,不同的对应ratios是${\frac{1}{3},\frac{1}{2}, 1, 2, 3}$</p>
+<p><strong>Objectness Prior</strong></p>
+<p>针对正负样本比例严重失调， 这里使用 Objectness Prior 来过滤大部分负样本，具体的做法就是利用conv通道的设计，因为每个cell有10个default boxes，所以通道数是10，然后就是做二分类。这里需要设定阈值，将objectness score大于$o_p$的选为样本，这里$o_p$设为0.03，可以过滤掉大部分的样本。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqmmemlca0j30s00fwduh.jpg" alt=""></p>
+<p><strong>Detection and Bounding Box Regression</strong></p>
+<p>Figure 5是detection bbox reg head的结构，可以发现在分类的module中，作者加入了两个inception module来提高分类的精度</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqk5fg7sxbj30tg0dimz5.jpg" alt=""></p>
+<h5 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h5><p><strong>Loss</strong></p>
+<p>相似的，也是multi-task loss</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqmmnkgq8jj30so04igm3.jpg" alt=""></p>
+<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1-3是模型在PASCAL VOC 2007, 2012和COCO上的结果。</p>
+<ul>
+<li>可以发现RON对小物体的检测提升比较明显，例如boat和bottle。</li>
+</ul>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqmmqfxmthj31ko0dqq9a.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqmmraplo7j31kw0g2gt8.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqmmvqkb0xj30tg0hydjk.jpg" alt=""></p>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-04-18</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/04/18/OHEM算法笔记/">OHEM算法笔记</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p>论文：Training Region-based Object Detectors with Online Hard Example Mining，<strong>CVPR</strong> 2016</p>
+<p>作者：Abhinav Shrivastava, Abhinav Gupta, Ross Girshick</p>
+<p>链接：<a href="https://arxiv.org/pdf/1604.03540.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1604.03540.pdf</a></p>
+<p>代码：<a href="https://github.com/abhi2610/ohem" target="_blank" rel="external">https://github.com/abhi2610/ohem</a></p>
+<p>Hard example mining是机器学习模型训练经常会用的trick，顾名思义，就是sample目前对于模型比较难的example进行“强化”学习。在CNN中对于patch选择根据策略的不同，主要有sliding window和proposal。大部分的情况是根据loss来判断是否是hard，只是作为训练的一个trick。文章针对Fast R-CNN，提出online hard example mining的算法对其进行优化。在VOC2007, 2012都取得了SOTA，mAP分别是78.9%，76.3%。</p>
+<h5 id="Fast-R-CNN"><a href="#Fast-R-CNN" class="headerlink" title="Fast R-CNN"></a>Fast R-CNN</h5><p>FRCNN中，proposal的选择由它与gt的overlap决定，确定一个proposal为背景的阈值范围是：$[bg_{lo},0.5]$，这个范围的假设是这样的proposal是hard的可能性较大。作者认为这样得到的结果很可能是次优的，因为在其他位置可能存在更hard但是infrequent的样本，OHEM算法中移除了这个阈值</p>
+<h5 id="OHEM"><a href="#OHEM" class="headerlink" title="OHEM"></a>OHEM</h5><p>idea很简单，就是在forward的时候根据loss排序，然后选择loss最大的，也就是最worst的样本进行backward更新模型的参数。但是这样会存在一个问题，就是当两个ROI位置相近的时候，在feature map上对应的是同一个位置，loss是相近的，所以作者提出了对hard examples做NMS，选择B/N个ROI最backward，这里NMS的阈值为0.7。</p>
+<p>接下来就是工程上的优化，ROI进行backward的时候，空间和时间的消耗较大，如果直接做backward，那些没有选中的ROI还是会做backward，所以作者提出了Figure 2的网络结构，包含两个一样的的ROI network，其中一个是immutable的，用于计算forward的loss，只有在forward的时候分配内存，然后hard RoI sampling module使用刚才所说的方法进行采样，作为输入传到第二个ROI network，进行forward和backward，然后累积gradient，再backward。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgutzexflj31kw0v41kx.jpg" alt=""></p>
+<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 3和Table 4是模型在VOC 2007和VOC 2012的表现，都是SOTA，对FRCN提升明显。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqh3cawf16j31600radsm.jpg" alt=""></p>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-04-11</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/04/11/SSD笔记/">SSD笔记</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p>论文：SSD: Single Shot MultiBox Detector，<strong>ECCV</strong> 2016</p>
+<p>作者：Wei Liu, Dragomir Anguelov, Dumitru Erhan, Christian Szegedy, Scott Reed, Cheng-Yang Fu, Alexander C. Berg</p>
+<p>链接：<a href="https://arxiv.org/pdf/1512.02325.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1512.02325.pdf</a>    </p>
+<p>代码：<a href="https://github.com/weiliu89/caffe/tree/ssd" target="_blank" rel="external">https://github.com/weiliu89/caffe/tree/ssd</a></p>
+<p>gluon实现：<a href="https://github.com/mowayao/gluon_SSD" target="_blank" rel="external">https://github.com/mowayao/gluon_SSD</a></p>
+<ul>
+<li>将bbox的输出空间离散化到一些默认的priors，也就是默认设定的anchors</li>
+<li>不同Faster R-CNN的two stage的方式，SSD采用的是one shot的方法，精度和faster r-cnn接近，但是效率更高</li>
+<li>将多尺度的feature maps应用到detection中，针对不同尺度的feature map，采用不同scale和ratio</li>
+</ul>
+<p>#####The Single Shot Detector (SSD)</p>
+<p>将feature map分成nxn的cells，每个cell可以预测固定数量的box的conf和offset</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fqfue2u6o9j316a0taww0.jpg" alt=""></p>
+<p><strong>Model</strong></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgroawjivj315i0r0dnf.jpg" alt=""></p>
+<p>模型是基于pretrained的VGG-16进行修改和fine-tune</p>
+<ul>
+<li>Multi-scale feature map for detection: 在base net后加了conv feature layers用来做detection，这些layer使得feature maps的size逐渐降低，这样就可以做多尺度的预测</li>
+<li>Convolutional predictors for detection：在添加的conv feature layer后加入输出层，即conv predictor，生成固定大小的输出，对于mxn，p个channel的feature map，使用3x3xp的卷积核，预测conf和loc。</li>
+<li>Default boxes and aspect ratios：每个cell预测k个boxes，以及类别的数量是c，那么最后的输出channel则是(c+4)*k</li>
+</ul>
+<p><strong>Training</strong></p>
+<ul>
+<li>Matching strategy: 需要将default boxes做划分，将与gt与box的jaccard overlap大于0.5的定为gt，其他定为background</li>
+<li>Training objective:</li>
+</ul>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqgqb60zbdj30wo040q3a.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqgqb6a4gij30zg09wmyu.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgqb74a9zj315c04mdgq.jpg" alt=""></p>
+<ul>
+<li>Choosing scales and aspect ratios for default boxes: 为了针对不同scale的object，scale被定义为：</li>
+</ul>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqgrc1164dj30wa03q3yw.jpg" alt=""></p>
+<p>$s_{min}=0.2, s_{max}=0.9,$ratios $a_r\in {1,2,3,\frac{1}{2}, \frac{1}{3}}$，$w_k=s_k\sqrt a_r, h_k=s_k/\sqrt a_r$。另外对于 ratio = 1 的情况，再指定 scale 为$，s_k=\sqrt {s_ks_{k+1}}$也就是总共有 6 种不同的 default box</p>
+<ul>
+<li>Hard negative mining: 在做完matching后，大部分的box都是背景，所以需要做采样，选择loss最高的几个，并且保持3:1的比例</li>
+<li>Data augmentation：<ul>
+<li>使用全图作为输入，</li>
+<li>使用IOU和目标物体为0.1, 0.3，0.5, 0.7, 0.9的patch （这些 patch 在原图的大小的 $[0.1,1]$ 之间， 相应的宽高比在$[1/2,2]$之间）</li>
+<li>随机采取一个patch</li>
+</ul>
+</li>
+</ul>
+<h5 id="Experimental-Results"><a href="#Experimental-Results" class="headerlink" title="Experimental Results"></a>Experimental Results</h5><p>Table 1是SSD在PASCAL VOC2007上的表现，可以发现SSD512的表现优于Faster R-CNN，SSD300兼顾性能和效率</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgqghdz3lj31600k2wo1.jpg" alt=""></p>
+<p>Table 4是SSD在 PASCAL VOC2012上的表现，可以发现SSD512取得了SOTA的表现</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgrepc7k2j316w0es7b4.jpg" alt=""></p>
+<p>Table 5是在COCO上的表现，同样是SOTA</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgreqfglbj316i0dwtd9.jpg" alt=""></p>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-04-07</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/04/07/YOLO&YOLOv2笔记/">YOLO&YOLOv2笔记</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <h3 id="YOLO"><a href="#YOLO" class="headerlink" title="YOLO"></a>YOLO</h3><p>论文：You Only Look Once: Unified, Real-Time Object Detection，<strong>CVPR</strong> 2016</p>
+<p>作者：Joseph Redmon, Santosh Divvala, Ross Girshick, and Ali Farhadi</p>
+<p>链接：<a href="https://arxiv.org/pdf/1506.02640.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1506.02640.pdf</a></p>
+<p>代码：<a href="https://pjreddie.com/darknet/yolo/" target="_blank" rel="external">https://pjreddie.com/darknet/yolo/</a></p>
+<ul>
+<li>将detection的分类问题转化为回归问题</li>
+<li>在VOC 2007上，达到45FPS，mAP 63.4%，Fast YOLO可以达到155FPS，mAP 52.7%</li>
+<li>将整张图划分为7x7的网格，每个格子预测置信度score和坐标位置，5个输出</li>
+<li>没有利用proposal（不同于SSD和fast r-cnn），对小目标不是很友好</li>
+<li>使用全局的context信息，背景错误较少</li>
+</ul>
+<h5 id="Unified-Detection"><a href="#Unified-Detection" class="headerlink" title="Unified Detection"></a>Unified Detection</h5><p>首先将输入图像分成SxS块，每个grid cell预测B个bounding box和confidence scores，以及预测C类。这样网络最后一层的输出是SxSx(Bx5+C)的tensor。如果一个object的中心落在某个grid，那么这个grid就需要负责预测这个object。文中的参数S=7,B=2,C=20。所以最后的输出的tensor大小为7x7x30。</p>
+<p>confidence score的计算则是:$P(object)\times IOU_{pred}^{gt}$，第一项是表示是否落入grid，第二项则是预测的框和实际的框的IOU值。</p>
+<p>loss function的设计为：</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fq7loi7sgqj30ro0hotao.jpg" alt=""></p>
+<p>可以发现作者的一个trick，就是对于宽和长，做了开根号的处理，这样做的目的是当物体很小的时候相对于大物体有同等的差值，可以获得更大的loss。</p>
+<p>网络结构Figure 3所示，启发于GoogLeNet，但是没有使用inception，而是使用1x1的conv，共有24个卷积层加2个全连接层，先在ImageNet上预训练。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fq7l4n5bd5j31kw0pjtfl.jpg" alt=""></p>
+<p><strong>Limitations of YOLO</strong></p>
+<ol>
+<li>对bounding box的预测做了较强的空间假设，每个grid只能预测两个boxes，并且只属于一类。这样就对小物体的预测非常不友好，特别是当一些小物体成群出现的时候。</li>
+<li>在测试的时候，如果objects有不同的或者不寻常的比例的时候，泛化性会比较差</li>
+<li>loss function的设计还需要再优化</li>
+</ol>
+<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1是各个object detection实时系统的比较，可以发现Fast YOLO的速度非常高，同时保持较高的mAP。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fq7mi5up9aj30v20su0yx.jpg" alt=""></p>
+<p>Figure 4是Fast R-CNN和YOLO的错误组成对比，可以发现YOLO对于背景的预测较好，因为利用了全局的context，但是loc的错误较大，这和loss function的设计不无关系。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fq7mknid1jj30t60mun1s.jpg" alt=""></p>
+<h3 id="YOLO-v2"><a href="#YOLO-v2" class="headerlink" title="YOLO v2"></a>YOLO v2</h3><p>论文：YOLO9000: Better, Faster, Stronger Joseph，<strong>CVPR</strong> 2017</p>
+<p>作者：Joseph Redmon, Ali Farhadi</p>
+<p>链接：<a href="http://openaccess.thecvf.com/content_cvpr_2017/papers/Redmon_YOLO9000_Better_Faster_CVPR_2017_paper.pdf" target="_blank" rel="external">http://openaccess.thecvf.com/content_cvpr_2017/papers/Redmon_YOLO9000_Better_Faster_CVPR_2017_paper.pdf</a></p>
+<p>代码：<a href="http://pjreddie.com/yolo9000/" target="_blank" rel="external">http://pjreddie.com/yolo9000/</a></p>
+<h5 id="Better"><a href="#Better" class="headerlink" title="Better"></a>Better</h5><ul>
+<li><p>Batch Normalization:在每个conv后加入bn，取消dropout，mAP提高了2%</p>
+</li>
+<li><p>High Resolution Classifie: pretrain的时候就把图像分辨率调高，从224x224变成448x448，提高了4%</p>
+</li>
+<li><p>Convolutional With Anchor Boxes: 吸收Faster R-CNN中RPN的思想，去掉全连接层，加入anchor boxes，这样导致acc略有下降，但是召回率提高较多</p>
+</li>
+<li><p>Dimension Clusters: 通过k-means选择较好的priors，也就是anchor，选择k=5作为复杂度和高召回率的折中，将distance metric定义为：</p>
+</li>
+<li><p>$$<br>d(box, centroid) = 1-IOU(box, centroid)<br>$$</p>
+<p>在k=5的前提下，召回率和使用9个anchor box的相近</p>
+</li>
+<li><p>Direct location prediction: 对坐标进行转换，和fast r-cnn等类似，提升5%，见Figure 3</p>
+</li>
+<li><p>Fine-Grained Features: 为了得到奇数大小的feature maps，将图像分辨率调整到416，得到奇数大小的好处是改点就是这个区域的中心，然后调整降采样的步长为32，这样就是416/32=13，参考SSD和faster r-cnn利用多尺度的feature maps，作者提出passthrough layer，将high resolution features和low resolution features结合，对于high resolution的feature maps，将相邻的特征分配到不同的channels，例如26x26x512变换成13x13x2048，再和原来的特征图相连接，相当于把feature maps做深度的扩充，这样有1%的提升</p>
+</li>
+</ul>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fq7upwxukoj30t60teadt.jpg" alt=""></p>
+<ul>
+<li>Multi-Scale Training: 每隔10个batches，随机选择一个scale，sclales有：320，352…,608。Table 3是不同尺度的结果，可以发现 544的最优！mAP达到78.6。在288x288的scale上，可以得到90FPS，同时mAP和Fast R-CNN一样</li>
+</ul>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fq7vdy6vauj30ty0skjya.jpg" alt=""></p>
+<p>Table 2是ablation studies的结果</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fq7vx9xa1aj31kw0nwjy5.jpg" alt=""></p>
+<h5 id="Faster"><a href="#Faster" class="headerlink" title="Faster"></a>Faster</h5><p>提出darknet-19，效率相较于VGG 16有了较大的提升。</p>
+<p>VGG-16对于224x224的图像做一次forward，卷积层的浮点数计算为30.69 billion。而darknet-19的卷积层浮点数计算为8.52 billion，但是在分类的准确性上略有降低。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fq7x1hlp1vj30jm0pujve.jpg" alt=""></p>
+<h5 id="Stronger"><a href="#Stronger" class="headerlink" title="Stronger"></a>Stronger</h5><p>这里作者提出了一个非常fancy的idea，WordNet，解决不同数据集之间label mutually exclusive的问题。WordNet通过构建hierarchical tree来简化问题，并且选择最短的到达root的路径，Figure 6为图示。利用有向图对条件概率计算进行优化，分层地计算概率，然后做出预测。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fq7wy9z9kxj30pc0wkqaw.jpg" alt=""></p>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+</section>
+  
+  <nav class="pagination">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next ></a>
+  </nav>
+
+
+        </div>
+      </main>
+
+      <footer class="footer syuanpi fadeIn" id="footer">
+  <hr>
+  <div class="footer-wrapper">
+    <div class="left">
+      <div class="contact-icon">
+    
+    
+    
+    
+    
+    
+    
+    
+        
+        
+        
+        
+            <a href="https://www.zhihu.com/people/https://www.zhihu.com/people/yao-ze-ping" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+        
+        
+        
+    
+        
+            <a href="https://github.com/https://github.com/mowayao" class="iconfont icon-github" title="github"></a>
+        
+        
+        
+        
+        
+        
+        
+    
+</div>
+    </div>
+    <div class="right">
+      <div class="copyright">
+    <div class="info">
+        <span>&copy;</span>
+        <span>2018 ~ 2018</span>
+        <span>❤</span>
+        <span>Mowayao</span>
+    </div>
+    <div class="theme">
+        <span>
+            Powered by
+            <a href="http://hexo.io/" target="_blank">Hexo </a>
+        </span>
+        <span>
+            Theme
+            <a href="https://github.com/ColMugX/hexo-theme-Nlvi"> Nlvi </a>
+        </span>
+    </div>
+    
+    <div class="visit_count">
+        <i class="iconfont icon-visit"></i>
+        <span id="busuanzi_value_site_uv"></span>
+        <i class="iconfont icon-people"></i>
+        <span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+</div>
+    </div>
+  </div>
+</footer>
+    </div>
+  </div>
+  <script src="/script/lib/jquery/jquery-3.2.1.min.js"></script>
+
+
+    <script src="/script/lib/lightbox/js/lightbox.min.js"></script>
+
+
+
+    <script src="https://cdn.bootcss.com/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config;executed=true">MathJax.Hub.Config({tex2jax: {inlineMath: [["$","$"], ["\\(","\\)"]]}});</script>
+
+
+
+    
+        <script src="/h.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/x.js"></script>
+    
+        <script src="/o.js"></script>
+    
+        <script src="/-.js"></script>
+    
+        <script src="/g.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/n.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/r.js"></script>
+    
+        <script src="/a.js"></script>
+    
+        <script src="/t.js"></script>
+    
+        <script src="/o.js"></script>
+    
+        <script src="/r.js"></script>
+    
+        <script src="/-.js"></script>
+    
+        <script src="/f.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/d.js"></script>
+    
+
+
+<script src="/script/src/nlvi.js"></script>
+<script src="/script/src/utils.js"></script>
+<script src="/script/scheme/balance.js"></script>
+<script src="/script/src/plugins.js"></script>
+<script src="/script/bootstarp.js"></script>
+
+
+<div class="backtop syuanpi dead toTop" id="backtop">
+    <i class="iconfont icon-up"></i>
+    <span style="text-align:center;font-family:Georgia;"><span style="font-family:Georgia;" id="scrollpercent">1</span>%</span>
+</div>
+
+
+  <div class="search" id="search">
+    <div class="mask" id="mask"></div>
+    <div class="search-wrapper syuanpi">
+      <h2 id="search-header" class="syuanpi">搜索一下？</h2>
+      <div class="input">
+        <input type="text" id="local-search-input" results="0" name="">
+      </div>
+      <div id="local-search-result"></div>
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>

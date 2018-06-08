@@ -1,20 +1,562 @@
-extends partial/layout
+<!DOCTYPE html>
+<html lang="">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/style/style.css">
+<script>
+    var NlviConfig = {
+        title: "Mowayao's Blog",
+        author: "Mowayao",
+        theme: "banderole",
+        lightbox: true,
+        animate: true,
+        baseUrl: "/",
+        search: true,
+        friends: false
+    }
+</script>
 
-block site_title
-    != page.title + " · " + config.title
 
-block description
-    - var desc = page.desc || page.title + ' - ' + config.author;
-    meta(name="description", content=desc)
 
-block container
-    include mixins/post
-    +post(page)
+    <link rel="stylesheet" href="/script/lib/lightbox/css/lightbox.min.css">
 
-block pagination
-    include mixins/paginator
-    +post()
-    include partial/comment
 
-block copyright
-    include partial/copyright
+
+
+    <link rel="stylesheet" href="/syuanpi/syuanpi.min.css">
+
+
+
+
+
+
+
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="browsermode" content="application">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mowayao's Blog">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="msapplication-navbutton-color" content="#666666">
+<meta name= "format-detection" content="telephone=no" />
+<meta name="keywords" content="nlvi, Nlvi" />
+
+
+  <meta name="subtitle" content="一往无前虎山行">
+
+
+
+
+  <meta name="keywords" content="deep learning, GAN, Nlvi" />
+
+  <title> Comic Generation · Mowayao's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="progress">
+  <div class="progress-inner"></div>
+</div>
+  
+  
+    <div class="tagcloud-mask"></div>  
+<div class="tagcloud" id="tagcloud">
+  <div class="tagcloud-inner">
+    <a href="/tags/DP/" style="font-size: 14px;">DP</a> <a href="/tags/Deep-Learning/" style="font-size: 14px;">Deep Learning</a> <a href="/tags/GAN/" style="font-size: 14px;">GAN</a> <a href="/tags/Leetcode/" style="font-size: 14px;">Leetcode</a> <a href="/tags/RNN/" style="font-size: 14px;">RNN</a> <a href="/tags/algorithms/" style="font-size: 14px;">algorithms</a> <a href="/tags/classfication/" style="font-size: 14px;">classfication</a> <a href="/tags/classifcation/" style="font-size: 14px;">classifcation</a> <a href="/tags/classification/" style="font-size: 14px;">classification</a> <a href="/tags/computer-vision/" style="font-size: 14px;">computer vision</a> <a href="/tags/deep-learning/" style="font-size: 14px;">deep learning</a> <a href="/tags/face-detection/" style="font-size: 14px;">face detection</a> <a href="/tags/machine-learning/" style="font-size: 14px;">machine learning</a> <a href="/tags/math/" style="font-size: 14px;">math</a> <a href="/tags/notes/" style="font-size: 14px;">notes</a> <a href="/tags/object-detection/" style="font-size: 14px;">object detection</a> <a href="/tags/paper/" style="font-size: 14px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 14px;">paper notes</a> <a href="/tags/segmentation/" style="font-size: 14px;">segmentation</a> <a href="/tags/summary/" style="font-size: 14px;">summary</a> <a href="/tags/杂/" style="font-size: 14px;">杂</a>
+  </div>
+</div>  
+  
+
+  <div class="container">
+
+    <header class="header" id="header">
+  <div class="header-wrapper">
+    <div class="logo">
+  <div class="logo-inner syuanpi tvIn">
+    <span><a href="/">Mowayao's Blog</a></span>
+    
+      <span id="subtitle">一往无前虎山行</span>
+    
+  </div>
+</div>
+    <nav class="main-nav">
+        
+  <ul class="main-nav-list syuanpi tvIn">
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="search">
+        <span>Search</span>
+        
+          <span class="menu-item-label">search</span>
+        
+      </a>
+    </li>
+  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/" id="article">
+        <span class="base-name">Article</span>
+        
+          <span class="menu-item-label">article</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/archives" id="archives">
+        <span class="base-name">Archives</span>
+        
+          <span class="menu-item-label">archives</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="javascript:;" id="tags">
+        <span class="base-name">Tags</span>
+        
+          <span class="menu-item-label">tags</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/about" id="about">
+        <span class="base-name">About</span>
+        
+          <span class="menu-item-label">about</span>
+        
+      </a>
+    </li>  
+  
+  </ul>
+  
+</nav>
+    
+    
+  </div>
+</header>
+<div class="mobile-header">
+  <div class="mobile-header-body">
+    <div class="mobile-header-list">
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/">
+                    <span>Article</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/archives">
+                    <span>Archives</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+        
+          <div class="mobile-nav-item inner-cloud">
+            <div class="mobile-nav-tag">
+              <a href="javascript:;" id="mobile-tags">
+                <span>Tags</span>
+                
+                
+              </a>
+            </div>
+            <div class="mobile-nav-tagcloud">
+              <div class="mobile-tagcloud-inner">
+                <a href="/tags/DP/" style="font-size: 14px;">DP</a> <a href="/tags/Deep-Learning/" style="font-size: 14px;">Deep Learning</a> <a href="/tags/GAN/" style="font-size: 14px;">GAN</a> <a href="/tags/Leetcode/" style="font-size: 14px;">Leetcode</a> <a href="/tags/RNN/" style="font-size: 14px;">RNN</a> <a href="/tags/algorithms/" style="font-size: 14px;">algorithms</a> <a href="/tags/classfication/" style="font-size: 14px;">classfication</a> <a href="/tags/classifcation/" style="font-size: 14px;">classifcation</a> <a href="/tags/classification/" style="font-size: 14px;">classification</a> <a href="/tags/computer-vision/" style="font-size: 14px;">computer vision</a> <a href="/tags/deep-learning/" style="font-size: 14px;">deep learning</a> <a href="/tags/face-detection/" style="font-size: 14px;">face detection</a> <a href="/tags/machine-learning/" style="font-size: 14px;">machine learning</a> <a href="/tags/math/" style="font-size: 14px;">math</a> <a href="/tags/notes/" style="font-size: 14px;">notes</a> <a href="/tags/object-detection/" style="font-size: 14px;">object detection</a> <a href="/tags/paper/" style="font-size: 14px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 14px;">paper notes</a> <a href="/tags/segmentation/" style="font-size: 14px;">segmentation</a> <a href="/tags/summary/" style="font-size: 14px;">summary</a> <a href="/tags/杂/" style="font-size: 14px;">杂</a>
+              </div>
+            </div>
+          </div>
+        
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/about">
+                    <span>About</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+    </div>
+  </div>
+  <div class="mobile-header-nav">
+    <div class="mobile-header-item" id="mobile-left">
+      <div class="header-menu-item">
+        <span class="header-menu-line"></span>
+      </div>
+    </div>
+    <h1 class="mobile-header-title">
+      <a href="/">Mowayao's Blog</a>
+    </h1>
+    <div class="mobile-header-item"></div>
+  </div>
+</div>
+    <div class="container-inner">
+      <main class="main" id="main">
+        <div class="main-wrapper">
+          
+    
+  
+  <article class="
+  post
+   is_post 
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-01-05</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+            
+              <aside class="post-tags syuanpi riseIn-light back-3">
+              
+                <a href="/tags/deep-learning/">deep learning</a>
+              
+                <a href="/tags/GAN/">GAN</a>
+              
+              </aside>
+            
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          Comic Generation
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        <p>最近写了一下李宏毅的MLDS 2017的<a href="https://www.csie.ntu.edu.tw/~yvchen/f106-adl/A4" target="_blank" rel="external">HW4-Comics Generation</a>，正好总结一下GAN以及assignment的做法。</p>
+<h2 id="Basic-Idea-of-GAN"><a href="#Basic-Idea-of-GAN" class="headerlink" title="Basic Idea of GAN"></a>Basic Idea of GAN</h2><p>给定数据分布：$P_{data}(x)$</p>
+<p>我们有一个分布$P_G(x;\theta)$</p>
+<p>从$P_{data}(x)$采样m个样本${x_1,x_2,…x_m}$</p>
+<p>我们的目的是找到这样的$\theta$使得分布$P_G(x;\theta)$尽可能的和$P_{data}(x)$接近</p>
+<p>如果给定参数$\theta$，我们就可以计算产生这一对样本的似然：<br>$$<br>L=\prod_{i=1}^mP_G(x_i;\theta)<br>$$<br>然后找到$\theta^\ast$最大化似然L：<br>$$<br>\theta^\ast = arg \max_\theta\prod_{i=1}^mP_G(x_i;\theta)=arg\max_\theta\log\prod_{i=1}^mP_G(x_i;\theta) =arg\max_\theta\sum_{i=1}^m\log P_G(x_i;\theta) \ \approx arg\max_\theta E_{x\sim P_{data}}[\log P_G(x;\theta)]<br>$$<br>现在，我们可以用NN来模拟$P_G(x;\theta)$<br>$$<br>P_G(x) = \int_z P_{prior}(z) I_{[G(z)=x]}dz<br>$$<br>z服从unit gaussian，但是这样似然明显很难计算！</p>
+<ul>
+<li>Generator G<ul>
+<li>G is a function, input z, output x</li>
+<li>Given a prior distribution$ P_{prior}(z)$, a probability distribution $P_G(x)$ is defined by function G</li>
+</ul>
+</li>
+<li>Discriminator D<ul>
+<li>D is a function, input x, output scalar</li>
+<li>Evaluate the “difference” between $P_G(x)$ and $P_{data}(x)$</li>
+</ul>
+</li>
+</ul>
+<p>目的是找到最佳的G：<br>$$<br>G^\ast = arg\min_G\max_DV(G,D)<br>$$</p>
+<p>$$<br>V= E_{x\sim P_{data}}[\log D(x)] + E_{x\sim P_G}[\log (1-D(x))]<br>$$</p>
+<p>下面是将上述问题转化为：</p>
+<p>首先最优的D：<br>$$<br>P_{data}(x)\log D(x) + P_G(x) \log (1-D(x))<br>$$</p>
+<p>$$<br>f(D) = a\log(D) + b\log(1-D)<br>$$</p>
+<p>求极值，得到：<br>$$<br>D^\ast(x) =\frac{P_{data}(x)}{P_{data}(x)+P_G(x)}<br>$$<br>所以<br>$$<br>\max_DV(G,D) = V(G,D^*)=E_{x\sim P_{data}}[\log\frac{P_{data}(x)}{P_{data}(x)+P_G(x)}] + E_{x\sim P_G}[\log\frac{P_G(x)}{P_{data}(x)+P_G(x)}] \ = -2\log 2+E_{x\sim P_{data}}[\log\frac{P_{data}(x)}{(P_{data}(x)+P_G(x))/2}] + E_{x\sim P_G}[\log\frac{P_G(x)}{(P_{data}(x)+P_G(x))/2}] \ =-2\log 2 + KL(P_{data}(x)||\frac{P_{data}(x)+P_G(x)}{2}) + KL(P_{G}(x)||\frac{P_{data}(x)+P_G(x)}{2})<br>$$<br>将分母项 $P_{data}(x)+P_G(x)$ 除以2，那么整个式子就需要减去 $2\log\frac{1}{2}$ ，这就等价成了JS散度，定义了两个分布的相似性：</p>
+<p>$$<br>JSD(P||Q) = \frac{1}{2}KL(P||M)+\frac{1}{2}KL(Q||M), M = \frac{1}{2}(P+Q)<br>$$</p>
+<h3 id="一些tricks"><a href="#一些tricks" class="headerlink" title="一些tricks:"></a>一些tricks:</h3><p>有时候在训练的时候会碰到discriminator loss几乎一直是平的（0），这样就会让discriminator的作用变小（telling little information），也就意味着$P_{data}$和$P_{G}$几乎没有overlap，这是因为两者都是low dim manifold in high-dim space。</p>
+<ul>
+<li>add noise，增加两个分布的接触点或面，而且noise要随机事件decay。</li>
+<li>​</li>
+</ul>
+<h3 id="Conditional-GAN"><a href="#Conditional-GAN" class="headerlink" title="Conditional GAN"></a>Conditional GAN</h3><p>z是噪声,y是条件，在初始的GAN加入了额外的条件y，y可以是任何形式的额外信息，包括类的属性等。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fn60wm16qej30oe0ki40z.jpg" alt=""></p>
+<h3 id="FGAN"><a href="#FGAN" class="headerlink" title="FGAN"></a>FGAN</h3><p>用f-divergence代替原始的KL divergence</p>
+<p>f-divergence, f is convex:<br>$$<br>D_f(P||Q) = \int_xq(x)f(\frac{p(x)}{q(x)})dx<br>$$<br>例如：<br>$$<br>f(x) = x\log x \ f(x) = -\log x \ f(x) = (x-1)^2<br>$$</p>
+<h4 id="Fenchel-Conjugate"><a href="#Fenchel-Conjugate" class="headerlink" title="Fenchel Conjugate"></a>Fenchel Conjugate</h4><p>$$<br>f^\ast(t) = \max_{x\in dom(f)}(xt-f(x))<br>$$</p>
+<p>$$<br>f(x) = \max_{t\in dom(f^<em>)}{xt-f^\ast(t} \ D_f(P||Q) = \int_x q(x)(\max_{t\in dom(f^</em>)}{\frac{p(x)}{q(x)}t-f^\ast(t)}dx<br>$$</p>
+<p>$$<br>D_f(P||Q) \ge \int_x q(x)(x\frac{p(x)}{q(x)}D(x)-f^\ast(D(x)))dx \ = \int_xp(x)D(x)dx-\int_x q(x)f^\ast(D(x))dx \ =\max_DE_{x_\sim P}(D(x))-E_{x\sim Q}f^\ast(D(x))<br>$$</p>
+<p>D is a function whose input is x and output is t</p>
+<p>这就相当于定义了一个新的V(G,D)</p>
+<h3 id="LSGAN（Least-Squares-GANs）"><a href="#LSGAN（Least-Squares-GANs）" class="headerlink" title="LSGAN（Least Squares GANs）"></a>LSGAN（Least Squares GANs）</h3><p>使用最小二乘损失函数代替了GAN的损失函数,事实上，作者认为使用JS散度并不能拉近真实分布和生成分布之间的距离，使用最小二乘可以将图像的分布尽可能的接近决策边界<br>$$<br>\min_DV_{LSGAN}(D) = \frac{1}{2}E_{x\sim p_{data}(x)}[(D(x)-b)^2]+\frac{1}{2}E_{x\sim p_{z}(z)}[(D(G(z))-a)^2]<br>$$</p>
+<p>$$<br>\min_GV_{LSGAN}(G)= \frac{1}{2}E_{x\sim p_{data}(x)}[(D(G(z))-c)^2]<br>$$</p>
+<h3 id="infoGAN"><a href="#infoGAN" class="headerlink" title="infoGAN"></a>infoGAN</h3><p>$$<br>\min_{G,Q}\max_DV_{infoGAN}(D,G,Q) = V(D,G) - \lambda L_I(G,Q)<br>$$</p>
+<p>其中，$L_1(G,Q)=E_{c\sim P(c),x\sim G(z,c)}[\log Q(c|x)]+H(c)$</p>
+<p>也就是：<br>$$<br>L_{D,Q}=L_D^{GAN} - \lambda L_1(c,c’) \ L_{G} = L_G^{GAN} - \lambda L_1(c,c’)<br>$$</p>
+<p>###WGAN</p>
+<p>$$<br>L_D^{WGAN} = E[D(x)]-E[D(G(z))]<br>$$</p>
+<p>$$<br>L_G^{WGAN} = E[D(G(Z))]<br>$$</p>
+<p>$$<br>W_D\leftarrow clip_by_value(W_D, -0.01, 0.01)<br>$$</p>
+
+      
+    
+    </div>
+    
+      
+      
+  <hr class="copy-line">
+  <div class="post-copyright">
+    <div class="copy-author">
+      <span>Author :</span>
+      <span>Mowayao</span>
+    </div>
+    <div class="copy-url">
+      <span>Url :</span>
+      <a href="http://wulimengmeng.top/2018/01/05/Comic-Generation/">http://wulimengmeng.top/2018/01/05/Comic-Generation/</a>
+    </div>
+    <div class="copy-origin">
+      <span>Origin :</span>
+      <a href="http://wulimengmeng.top">http://wulimengmeng.top</a>
+    </div>
+    <div class="copy-license">
+      
+      著作权归作者所有，转载请联系作者获得授权。
+    </div>
+  </div>
+
+    
+  </article>
+  
+    
+  <nav class="article-page">
+    
+      <a href="/2018/01/18/VGGNet算法笔记/" id="art-left" class="art-left">
+        <span class="next-title">
+          <i class="iconfont icon-left"></i>VGGNet算法笔记
+        </span>
+      </a>
+    
+    
+      <a href="/2017/12/18/CS224n-assignment1/" id="art-right" class="art-right">
+        <span class="prev-title"> 
+          CS224n assignment1<i class="iconfont icon-right"></i>  
+        </span>
+      </a>
+    
+  </nav>
+
+    
+  <i id="com-switch" class="iconfont icon-more jumping-in long infinite" style="font-size:24px;display:block;text-align:center;transform:rotate(180deg);"></i>
+  <div class="post-comments" id="post-comments" style="display: block;margin: auto 16px;">
+    
+<!-- Gitment Comments -->
+<div id="gitment"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  owner: "mowayao",
+  repo: 'mowayao.github.io',
+  oauth: {
+    client_id: '7855335a0336c8808ae8',
+    client_secret: '5de12a86e607d102099f0c51b6ad7af573d65fff',
+  },
+})
+gitment.render('gitment')
+</script>
+
+    
+    
+
+  </div>
+
+
+  
+   
+    
+  
+  <aside class="post-toc">
+    <span class="title" id="toc-switch"><span>Index</span></span>
+    <div class="toc-inner syuanpi back-1 fallIn-light">
+      <li class="title-link"><a href="javascript:;" class="toTop">Comic Generation</a></li>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Basic-Idea-of-GAN"><span class="toc-text">Basic Idea of GAN</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#一些tricks"><span class="toc-text">一些tricks:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Conditional-GAN"><span class="toc-text">Conditional GAN</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FGAN"><span class="toc-text">FGAN</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Fenchel-Conjugate"><span class="toc-text">Fenchel Conjugate</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LSGAN（Least-Squares-GANs）"><span class="toc-text">LSGAN（Least Squares GANs）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#infoGAN"><span class="toc-text">infoGAN</span></a></li></ol></li></ol>
+    </div>
+  </aside>
+
+
+  
+
+
+        </div>
+      </main>
+
+      <footer class="footer syuanpi fadeIn" id="footer">
+  <hr>
+  <div class="footer-wrapper">
+    <div class="left">
+      <div class="contact-icon">
+    
+    
+    
+    
+    
+    
+    
+    
+        
+        
+        
+        
+            <a href="https://www.zhihu.com/people/https://www.zhihu.com/people/yao-ze-ping" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+        
+        
+        
+    
+        
+            <a href="https://github.com/https://github.com/mowayao" class="iconfont icon-github" title="github"></a>
+        
+        
+        
+        
+        
+        
+        
+    
+</div>
+    </div>
+    <div class="right">
+      <div class="copyright">
+    <div class="info">
+        <span>&copy;</span>
+        <span>2018 ~ 2018</span>
+        <span>❤</span>
+        <span>Mowayao</span>
+    </div>
+    <div class="theme">
+        <span>
+            Powered by
+            <a href="http://hexo.io/" target="_blank">Hexo </a>
+        </span>
+        <span>
+            Theme
+            <a href="https://github.com/ColMugX/hexo-theme-Nlvi"> Nlvi </a>
+        </span>
+    </div>
+    
+    <div class="visit_count">
+        <i class="iconfont icon-visit"></i>
+        <span id="busuanzi_value_site_uv"></span>
+        <i class="iconfont icon-people"></i>
+        <span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+</div>
+    </div>
+  </div>
+</footer>
+    </div>
+  </div>
+  <script src="/script/lib/jquery/jquery-3.2.1.min.js"></script>
+
+
+    <script src="/script/lib/lightbox/js/lightbox.min.js"></script>
+
+
+
+    <script src="https://cdn.bootcss.com/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config;executed=true">MathJax.Hub.Config({tex2jax: {inlineMath: [["$","$"], ["\\(","\\)"]]}});</script>
+
+
+
+    
+        <script src="/h.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/x.js"></script>
+    
+        <script src="/o.js"></script>
+    
+        <script src="/-.js"></script>
+    
+        <script src="/g.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/n.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/r.js"></script>
+    
+        <script src="/a.js"></script>
+    
+        <script src="/t.js"></script>
+    
+        <script src="/o.js"></script>
+    
+        <script src="/r.js"></script>
+    
+        <script src="/-.js"></script>
+    
+        <script src="/f.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/d.js"></script>
+    
+
+
+<script src="/script/src/nlvi.js"></script>
+<script src="/script/src/utils.js"></script>
+<script src="/script/scheme/balance.js"></script>
+<script src="/script/src/plugins.js"></script>
+<script src="/script/bootstarp.js"></script>
+
+
+<div class="backtop syuanpi dead toTop" id="backtop">
+    <i class="iconfont icon-up"></i>
+    <span style="text-align:center;font-family:Georgia;"><span style="font-family:Georgia;" id="scrollpercent">1</span>%</span>
+</div>
+
+
+  <div class="search" id="search">
+    <div class="mask" id="mask"></div>
+    <div class="search-wrapper syuanpi">
+      <h2 id="search-header" class="syuanpi">搜索一下？</h2>
+      <div class="input">
+        <input type="text" id="local-search-input" results="0" name="">
+      </div>
+      <div id="local-search-result"></div>
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>

@@ -1,12 +1,1188 @@
-extends partial/layout
+<!DOCTYPE html>
+<html lang="">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/style/style.css">
+<script>
+    var NlviConfig = {
+        title: "Mowayao's Blog",
+        author: "Mowayao",
+        theme: "banderole",
+        lightbox: true,
+        animate: true,
+        baseUrl: "/",
+        search: true,
+        friends: false
+    }
+</script>
 
-block container
-    include mixins/post
-    +posts()
 
-block pagination
-    include mixins/paginator
-    +home()
 
-block copyright
-    include partial/copyright
+    <link rel="stylesheet" href="/script/lib/lightbox/css/lightbox.min.css">
+
+
+
+
+    <link rel="stylesheet" href="/syuanpi/syuanpi.min.css">
+
+
+
+
+
+
+
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="browsermode" content="application">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mowayao's Blog">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="msapplication-navbutton-color" content="#666666">
+<meta name= "format-detection" content="telephone=no" />
+<meta name="keywords" content="nlvi, Nlvi" />
+
+
+  <meta name="subtitle" content="一往无前虎山行">
+
+
+
+
+  <title>
+  Mowayao's Blog
+  
+    | 一往无前虎山行
+  
+</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="progress">
+  <div class="progress-inner"></div>
+</div>
+  
+  
+    <div class="tagcloud-mask"></div>  
+<div class="tagcloud" id="tagcloud">
+  <div class="tagcloud-inner">
+    <a href="/tags/DP/" style="font-size: 14px;">DP</a> <a href="/tags/Deep-Learning/" style="font-size: 14px;">Deep Learning</a> <a href="/tags/GAN/" style="font-size: 14px;">GAN</a> <a href="/tags/Leetcode/" style="font-size: 14px;">Leetcode</a> <a href="/tags/RNN/" style="font-size: 14px;">RNN</a> <a href="/tags/algorithms/" style="font-size: 14px;">algorithms</a> <a href="/tags/classfication/" style="font-size: 14px;">classfication</a> <a href="/tags/classifcation/" style="font-size: 14px;">classifcation</a> <a href="/tags/classification/" style="font-size: 14px;">classification</a> <a href="/tags/computer-vision/" style="font-size: 14px;">computer vision</a> <a href="/tags/deep-learning/" style="font-size: 14px;">deep learning</a> <a href="/tags/face-detection/" style="font-size: 14px;">face detection</a> <a href="/tags/machine-learning/" style="font-size: 14px;">machine learning</a> <a href="/tags/math/" style="font-size: 14px;">math</a> <a href="/tags/notes/" style="font-size: 14px;">notes</a> <a href="/tags/object-detection/" style="font-size: 14px;">object detection</a> <a href="/tags/paper/" style="font-size: 14px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 14px;">paper notes</a> <a href="/tags/segmentation/" style="font-size: 14px;">segmentation</a> <a href="/tags/summary/" style="font-size: 14px;">summary</a> <a href="/tags/杂/" style="font-size: 14px;">杂</a>
+  </div>
+</div>  
+  
+
+  <div class="container">
+
+    <header class="header" id="header">
+  <div class="header-wrapper">
+    <div class="logo">
+  <div class="logo-inner syuanpi tvIn">
+    <span><a href="/">Mowayao's Blog</a></span>
+    
+      <span id="subtitle">一往无前虎山行</span>
+    
+  </div>
+</div>
+    <nav class="main-nav">
+        
+  <ul class="main-nav-list syuanpi tvIn">
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="search">
+        <span>Search</span>
+        
+          <span class="menu-item-label">search</span>
+        
+      </a>
+    </li>
+  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/" id="article">
+        <span class="base-name">Article</span>
+        
+          <span class="menu-item-label">article</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/archives" id="archives">
+        <span class="base-name">Archives</span>
+        
+          <span class="menu-item-label">archives</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="javascript:;" id="tags">
+        <span class="base-name">Tags</span>
+        
+          <span class="menu-item-label">tags</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/about" id="about">
+        <span class="base-name">About</span>
+        
+          <span class="menu-item-label">about</span>
+        
+      </a>
+    </li>  
+  
+  </ul>
+  
+</nav>
+    
+    
+  </div>
+</header>
+<div class="mobile-header">
+  <div class="mobile-header-body">
+    <div class="mobile-header-list">
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/">
+                    <span>Article</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/archives">
+                    <span>Archives</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+        
+          <div class="mobile-nav-item inner-cloud">
+            <div class="mobile-nav-tag">
+              <a href="javascript:;" id="mobile-tags">
+                <span>Tags</span>
+                
+                
+              </a>
+            </div>
+            <div class="mobile-nav-tagcloud">
+              <div class="mobile-tagcloud-inner">
+                <a href="/tags/DP/" style="font-size: 14px;">DP</a> <a href="/tags/Deep-Learning/" style="font-size: 14px;">Deep Learning</a> <a href="/tags/GAN/" style="font-size: 14px;">GAN</a> <a href="/tags/Leetcode/" style="font-size: 14px;">Leetcode</a> <a href="/tags/RNN/" style="font-size: 14px;">RNN</a> <a href="/tags/algorithms/" style="font-size: 14px;">algorithms</a> <a href="/tags/classfication/" style="font-size: 14px;">classfication</a> <a href="/tags/classifcation/" style="font-size: 14px;">classifcation</a> <a href="/tags/classification/" style="font-size: 14px;">classification</a> <a href="/tags/computer-vision/" style="font-size: 14px;">computer vision</a> <a href="/tags/deep-learning/" style="font-size: 14px;">deep learning</a> <a href="/tags/face-detection/" style="font-size: 14px;">face detection</a> <a href="/tags/machine-learning/" style="font-size: 14px;">machine learning</a> <a href="/tags/math/" style="font-size: 14px;">math</a> <a href="/tags/notes/" style="font-size: 14px;">notes</a> <a href="/tags/object-detection/" style="font-size: 14px;">object detection</a> <a href="/tags/paper/" style="font-size: 14px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 14px;">paper notes</a> <a href="/tags/segmentation/" style="font-size: 14px;">segmentation</a> <a href="/tags/summary/" style="font-size: 14px;">summary</a> <a href="/tags/杂/" style="font-size: 14px;">杂</a>
+              </div>
+            </div>
+          </div>
+        
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/about">
+                    <span>About</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+    </div>
+  </div>
+  <div class="mobile-header-nav">
+    <div class="mobile-header-item" id="mobile-left">
+      <div class="header-menu-item">
+        <span class="header-menu-line"></span>
+      </div>
+    </div>
+    <h1 class="mobile-header-title">
+      <a href="/">Mowayao's Blog</a>
+    </h1>
+    <div class="mobile-header-item"></div>
+  </div>
+</div>
+    <div class="container-inner">
+      <main class="main" id="main">
+        <div class="main-wrapper">
+          
+  
+
+<section class="posts">
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-04-02</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/04/02/Faster-R-CNN笔记/">Faster R-CNN笔记</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p>论文：Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks，TPAMI 2016</p>
+<p>作者：Shaoqing Ren, Kaiming He, Ross Girshick, and Jian Sun</p>
+<p>链接：<a href="https://arxiv.org/pdf/1506.01497.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1506.01497.pdf</a></p>
+<p>代码：<a href="https://github.com/rbgirshick/py-faster-rcnn" target="_blank" rel="external">https://github.com/rbgirshick/py-faster-rcnn</a></p>
+<ul>
+<li>在Fast R-CNN的基础上进行优化，将Region Proposal Network（RPN）取代Selective Search，可以更加有效地检测object candidates，与Fast R-CNN共享参数，RPN的任务是预测物体的bbox和objectness score</li>
+<li>在RPN的基础上，提出anchor的概念，每个anchor可以代表不同的scale和ratio，从而达到translation-invariant的效果</li>
+</ul>
+<p>Figure 2的Faster R-CNN的结构图，主要要经过3个步骤：</p>
+<ol>
+<li>输入图像进入CNNs，得到相应的feature maps</li>
+<li>将feature maps输入到RPN中，得到region proposals</li>
+<li>将region proposals输入到Fast R-CNN中，得到detection的结果</li>
+</ol>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fpyjflds95j30ny0tcq81.jpg" alt=""></p>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p><strong>RPN</strong></p>
+<p>RPN的输入为任意形状的图像，输出是一堆proposals的坐标，以及对应的confidence score。为了生成一堆region proposals，对于nxn的feature maps来说，作者通过sliding window（其实也就是3x3的conv）将其映射到固定维度的特征空间，然后再对得到的特征向量做分类和回归（将全连接改造成1x1的卷积，可以接受任何大小的输入）。</p>
+<p><strong>anchors</strong></p>
+<p>对于每个滑动窗口来说，假设该窗口有k个对应的proposals。这样reg layer就有4k的输出，cls layer有2k个输出。Figure 3就是anchor的示例。anchor可以解释为sliding window的中心点，通过假设这个中心点来自不同原始区域池化得到，所以可以根据这个中心点(anchor)逆推得到这些区域坐标和种类。假设现在有3中scales和3种ratios，以及feature maps的大小是WxH，那么总共有9xWxH个anchors，也可以将其理解成先验的bounding box。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fpynk5f034j31d40k8nle.jpg" alt=""></p>
+<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>首先是坐标空间的转换，将其转到相对空间，这在R-CNN中已经介绍过。其实是Multi-task的训练：</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fpyo96peu1j30ke064t97.jpg" alt=""></p>
+<p><strong>RPN训练</strong></p>
+<p>RPN就直接用end-to-end的方法进行训练，对于每张图像，采样256个anchors，正负比例为1：1，如果正样本不够则用负样本补足。</p>
+<p><strong>Fast R-CNN训练</strong></p>
+<p>两个网络的训练需要比较多的trick，作者采用4-Step Alternating Training:</p>
+<ol>
+<li>对网络初始化（pretrained model），end-to-end地训练RPN</li>
+<li>用RPN生成propals训练Fast R-CNN</li>
+<li>将共享的卷积层fix住，训练RPN相关的层</li>
+<li>将共享的卷积层fix住，训练Fast R-CNN相关的层</li>
+</ol>
+<p>Table 6和Table 7是Faster R-CNN在PASCAL VOC 2007和PASCAL VOC 2012两个数据集上的结果们也是RPN和SS的比较，可以看出RPN要好于SS</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fq0p3j4jrnj31580ictfx.jpg" alt=""></p>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-03-22</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/03/22/Fast-R-CNN笔记/">Fast R-CNN笔记</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p>论文：Fast R-CNN，<strong>ICCV</strong> 2015</p>
+<p>作者：Ross Girshick</p>
+<p>链接：<a href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Girshick_Fast_R-CNN_ICCV_2015_paper.pdf" target="_blank" rel="external">https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Girshick_Fast_R-CNN_ICCV_2015_paper.pdf</a></p>
+<p>代码：<a href="https://github.com/rbgirshick/fast-rcnn" target="_blank" rel="external">https://github.com/rbgirshick/fast-rcnn</a></p>
+<ul>
+<li><p>简化训练过程，实现end-to-end的训练方式</p>
+<ul>
+<li>将SVM分类器换成softmax，整合到网络中，鼓励类间竞争</li>
+<li>将bounding box regression整合到网络中</li>
+</ul>
+</li>
+<li><p>在Fast-RCNN中，region proposal的计算都是share的，避免重复计算</p>
+</li>
+<li><p>提出ROI pooling layer使得每个region proposal可以得到确定长度的特征向量</p>
+</li>
+<li><p>探索了一些训练的tricks，可以参考！</p>
+<p>​</p>
+<p>Figure 1是Fast R-CNN的图示</p>
+</li>
+</ul>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/FuPCSWv0EUA2laIjMRDcJTU9oA0F" alt=""></p>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>下图是R-CNN和Fast R-CNN的比较</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/FurXilgjM6ixsxoU1HRAgilULtUt" alt=""></p>
+<p>回顾一下R-CNN：</p>
+<ol>
+<li>用selective search提取region proposals</li>
+<li>将region warp到固定大小，用CNN提取特征，得到一定长度的特征向量</li>
+<li>对于提取到的特征，放到若干个SVM，得到各个类别的概率，再用简单的线性回归模型做 bounding box regression（就是对候选区域进行微调）</li>
+<li>利用NMS优化结果</li>
+</ol>
+<p>可以发现：</p>
+<ol>
+<li>R-CNN存在着大量的重复计算，即对每个region propasal使用CNN提取特征，如果有n个patch就需要网络n次的forward</li>
+<li>需要将region warp到固定大小，造成物体变形分辨率降低影响分类结果</li>
+<li>没有end-to-end。。。</li>
+</ol>
+<p><strong>改进</strong></p>
+<p>首先，R-CNN重复大量计算，需要针对这点进行优化，将卷积计算的结果重复利用，减少不必要的重复计算，先用CNN对全图提取特征，得到feature maps，然后用selective search对原图提取region proposals，根据缩放比例，在feature maps上找到相应的区域，再对这个区域进行分类和bounding box的回归。这样我们只需要做一次卷积就可以了。但是这又面临一个问题，这些区域的特征长度是不固定的，所以，收到SPP-Net的启发，提出ROI Pooling layer，使得feature maps输入能够得到固定长度的特征向量。</p>
+<p>其次，Fast R-CNN将softmax分类器替换SVM，同时将bounding box regression融合到网络中，实现end-to-end的训练，其实就是通过multi-task的思想，实现对CNN的fine tune。</p>
+<p><strong>ROI POOLING</strong></p>
+<p>为了能够使得每个region得到相同固定大小的特征，我们需要调整它的维度使得它能够适应全连接层。所以论文提出了ROI POOLING这个方法，下面介绍一下ROI POOLING的工作原理：</p>
+<p>假设输入的feature maps的维度是CxHxW，C,H,W分别表示feature maps的深度，高，宽。因为C是固定的而H和W是不固定的，所以论文采用了一种和SPPNet近似的方法。加入我们想要得到固定大小Cxhxw的输出，采用动态pooling的方法，将pooling的kernel size设置成(H/h, W/w)，步长也是一样。这样就可以得到固定长度的feature maps了。</p>
+<p><strong>Scale Invariance</strong></p>
+<p>为了实现object detector的scale invariance，作者探索了两者方法：</p>
+<ol>
+<li>直接暴力地resize</li>
+<li>使用图像金字塔</li>
+</ol>
+<p><strong>Truncated SVD</strong></p>
+<p>在训练的时候，因为ROIs数量不多，所以大部分的时间花在卷积运算上，而在测试的时候，需要计算每个ROIs的后验概率，有一半的时间花在全连接上，所以文章提出truncated SVD优化计算，将两个全连接取代一个全连接。<br>$$<br>W \approx U\Sigma_tV^T<br>$$<br>U是一个$u\times t$的矩阵，$\Sigma_t$是$t\times t$的矩阵，V是$v\times t$的矩阵，所以参数从$uv$减少到了$t(v+u)$，如果t要远小于$\min(u,v)$。</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/Frc5IQiqhfIQW8Z39bNmc8BF3-vM" alt=""></p>
+<p><strong>Mini-batch sampling</strong></p>
+<p>在训练的时候，每次mini-batch中，从中采样两张图像，每张图像采样64个ROIs，这样每个batch的大小就是128，正负样本比例为1：3。</p>
+<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1-3是Fast R-CNN在VOC 2007, 2010, 2012三个数据集上的表现，都是SOAT。</p>
+<p>Table 4是Fast-RCNN,RCNN以及SPPnet在training和testing效率上的比较，可以发现效率提升非常明显。</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/FozRMPEXdJimmQmIloMArAEK4bjz" alt=""></p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/FkHrR24XRqVg4etaxtFh-t2IF5G3" alt=""></p>
+<h5 id="Design-evaluation"><a href="#Design-evaluation" class="headerlink" title="Design evaluation"></a>Design evaluation</h5><ul>
+<li>Multi-task训练可以提高分类结果</li>
+<li>Multi-scale detection可以帮助提高结果，但是提升不大，折中之下，选了single scale</li>
+<li>training data越多越好，数据增强，将VOC2012的数据加到VOC2007中，提升明显！</li>
+<li>在FRCN中，softmax要好于SVM，鼓励类间竞争</li>
+<li>并不是proposals越多越好，需要取个合适的数量</li>
+</ul>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-03-20</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/03/20/SPPNet笔记/">SPPNet笔记</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p>论文：Spatial Pyramid Pooling in Deep ConvolutionalNetworks for Visual Recognition，<strong>TPAMI</strong> 2015</p>
+<p>作者：Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun</p>
+<p>链接：<a href="https://arxiv.org/pdf/1406.4729.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1406.4729.pdf</a></p>
+<p>代码：<a href="https://github.com/ShaoqingRen/SPP_net" target="_blank" rel="external">https://github.com/ShaoqingRen/SPP_net</a></p>
+<ul>
+<li>提出spatial pyramid pooling layer，使得网络能够接受任意大小的输入，同时利用multi-level的spatial bins做hierarchy information aggregation，提高模型的鲁棒性</li>
+<li>对image classification和object detection（针对RCNN的优化）都可以提升模型的表现</li>
+<li>在ILSVRC 2014 object detection中排名第2，image classification中排名第3</li>
+</ul>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/56717690.jpg" alt=""></p>
+<p>在RCNN中，我们提取各个region proposals，然后将其warp到指定的大小，再用CNN提特征，这样的问题是图像object经过warp以后，会变形严重并且影响分辨率，从而影响分类的结果，所以作者提出SPP layer，使得对于任何大小的输入图像，神经网络都可以输出固定长度的特征，同时提高分类的鲁棒性。</p>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>见Figure 3，将卷积层的输出经过SPP layer以后，利用max pooling分成3种的spatial bins，第一种是4x4，第二种是2x2，第三种是1x1(global pooling)。在做完pooling以后，我们可以得到16x256,4x256,1x256这三种维度的特征，256是输入的feature map的深度，拼接以后得到21x256长度的特征，其实可以将SPP layer看成是特征层面的re-scaled。</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/71347165.jpg" alt=""></p>
+<p>例如输入的feature map的大小是axa，需要产生3x3，2x2，1x1的特征向量，那么pooling的window size是ceil(a/n)，步长是floor(a/n)。将这些特征拼接得到固定长度的特征向量，再连接全连接层进行分类。</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/44112090.jpg" alt=""></p>
+<h5 id="Training-Strategy"><a href="#Training-Strategy" class="headerlink" title="Training Strategy"></a>Training Strategy</h5><p><strong>Multi-size Training</strong></p>
+<p>在分类任务的模型训练过程中，采用多个size的输入可以提高模型的结果。对于有两个不同大小输入的训练策略，使用两个固定大小（框架所限）的相同参数的网络进行交替训练。</p>
+<p><strong>Full-image Representation</strong></p>
+<p>在分类任务的模型训练过程中，将图像resize到min(w,h)=256，保持长宽比不变。</p>
+<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p><strong>Image Classifications</strong></p>
+<p>Table 1是三种base network的结构。</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/11136760.jpg" alt=""></p>
+<p>在分类任务中，作者通过实验证明，SPP layer，multi-size training，能够提高分类的精度（见Table 2）。SPP layer能够提高精度是因为利用spatial pyramid pooling可以提高鲁棒性。multi-size training中，有三种策略，一种是单个大小，第二种是180和224，还有一种是从[180,224]随机选择其中的一个size，实验证明，第二种精度最高。</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/84456005.jpg" alt=""></p>
+<p>从Table 3看，full-image representation相比较于central crop，可以提高准确率。</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/81983088.jpg" alt=""></p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/64521005.jpg" alt=""></p>
+<p><strong>Object Detection</strong></p>
+<p>下图是R-CNN和SPP-Net的对比，R-CNN的缺点是计算量大，包括了大量的重复计算。</p>
+<p><img src="http://img.blog.csdn.net/20170617102150673?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdjFfdml2aWFu/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt=""></p>
+<p>其具体步骤和R-CNN类似：</p>
+<ol>
+<li>通过selective search得到2000个候选窗口</li>
+<li>将整张图像输入到CNN中，完成特征的提取，然后在feature map上找到候选框的区域，在对候选框进行spaital pyramid pooling，得到定长的特征向量,这样做可以大大提高效率。</li>
+<li>采用SVM模型，对物体进行分类。</li>
+</ol>
+<p>从Table 9看出，SPPNet相较于R-CNN计算效率有了较高的提升，同时准确率也有提高。</p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/35453761.jpg" alt=""></p>
+<p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/27949731.jpg" alt=""></p>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-03-13</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/03/13/RCNN笔记/">RCNN笔记</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p>论文：Rich feature hierarchies for accurate object detection and semantic segmentation，CVPR 2014</p>
+<p>作者：Ross Girshick，Jeff Donahue，Trevor Darrell，Jitendra Malik</p>
+<p>链接：<a href="https://arxiv.org/pdf/1311.2524.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1311.2524.pdf</a></p>
+<p>代码：<a href="https://github.com/rbgirshick/rcnn" target="_blank" rel="external">https://github.com/rbgirshick/rcnn</a></p>
+<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><ul>
+<li>之前的object detection算法都是用一些手工特征，例如SIFT或者HOG等，R-CNN使用pretrained的CNN提取region的特征，然后再用SVM分类做finetune（bridging the gap between image classification and object detection）</li>
+<li>尝试不同层的feature作为分类的特征</li>
+</ul>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>R-CNN的模型见Figure 1，主要包括3个部分：</p>
+<ol>
+<li>提取region proposals</li>
+<li>用CNN提取特征，得到一定长度的特征向量</li>
+<li>对于提取到的特征，喂到若干个SVM，得到各个类别的概率</li>
+<li>利用NMS优化结果</li>
+</ol>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fpbdwp017oj30tq0mq0wc.jpg" alt=""></p>
+<p><strong>Region proposals</strong></p>
+<p>对于region proposals的提取，主要利用selective search这个启发式搜索方法。</p>
+<p>selective search的步骤为：</p>
+<ul>
+<li>使用<a href="http://cs.brown.edu/~pff/segment/" target="_blank" rel="external">Efficient Graph Based Image Segmentation</a>中的方法来得到region</li>
+<li>得到所有region之间两两的相似度</li>
+<li>合并最像的两个region</li>
+<li>重新计算新合并region与其他region的相似度</li>
+<li>重复上述过程直到整张图片都聚合成一个大的region</li>
+<li>使用一种随机的计分方式给每个region打分，按照分数进行ranking，取出top k的子集，就是selective search的结果</li>
+</ul>
+<hr>
+<p><strong>Feature extraction</strong></p>
+<p>使用AlexNet提取特征，AlexNet现在ILSVRC 2012(IMAGENET)上做pre train。将图像的region patch warp到227x227，然后喂到网络，得到特征。</p>
+<p><strong>Object category classifier</strong></p>
+<p>对于每个类别，训练各自的SVM，这样就可以得到每个类的score，训练的时候将gt视为正样本，与gt的IoU &lt; 0.3视为负样本。因为负样本往往远远大于正样本，所以需要做hard negative mining，控制合理的比例，一般设置为1：3。</p>
+<p><strong>Bounding box regression</strong></p>
+<p>输入是n对${(P^i,G^i)}i=1,…,N$，其中$P^i=(P_x^i,P_y^i,P_w^i,P_h^i)$，对应bounding box的中心，长宽，$G^i=(G_x,G_y,G_w,G_h)$。将P进行映射（前两者是平移，后两个是缩放）：<br>$$<br>\hat{G}_x = P_wd_x(P)+P_x \ \hat{G}_y = P_hd_y(P)+P_y \ \hat{G}_x = P_w\exp (d_w(P))\ \hat{G}_h = P_h\exp(d_h(P)) \\d_\star(P)=w_\star^T\phi_5(P)<br>$$<br>训练的时候对gt的四个坐标进行转换（上面的逆运算，使得$t_x,t_y$）：<br>$$<br>t_x = (G_x-P_x)/P_w \ t_y =(G_y −P_y)/P_h \ t_w = \log(G_w/P_w)\\t_h = \log(G_h/P_h).<br>$$<br>经过这样的变换，$t_x,t_y$为需要学习的平移量，$t_w, t_h$为需要学习的缩放量。</p>
+<p>其中，$G$表示的是ground truth，P表示的训练样本，我们的任务是求解$W_\star$，其实就是通过梯度下降或者最小二乘法求解ridge regression问题，:<br>$$<br>w_\star =  \arg\min_{\hat{w}_\star}(t^i_\star − \hat{w}^T_\star \phi_5(P^i))^2+\lambda ||\hat{w}_\star||^2<br>$$<br>其中$\phi_5(P^i)$表示的是第5个pooling的输出。需要注意的是，正则系数$\lambda=1000$，而且当G和P相差很大的时候，效果会不好，所以需要设置IoU阈值，将其设为0.6。</p>
+<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1是模型在VOC 2012 test上的表现，可以看出R-CNN BB远超其他baseline，证明了模型的性能。</p>
+<p>Table 2是模型在VOC 2007 test上的表现，可以在上面做一些ablation study：</p>
+<ul>
+<li>对于不finetune的模型，第一行到第三行，可以发现fc6的结果最好，这样就可以移除fc7的参数，简化模型。</li>
+<li>对于finetune的模型，第四行到第六行，可以发现fc7的结果最好，经过网络的同层比较，可以发现finetune可以大大提升模型的performance。</li>
+<li>通过第七行与第六行比较，可以看出bounding box regression可以较为显著地提升模型性能。</li>
+<li>跟其他手工特征相比，CNN提取的特征具有更强的表达能力。</li>
+</ul>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fpbidj661zj31kw0eeq6d.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fpbi5y3ykqj31kw0k9wjg.jpg" alt=""></p>
+<p>​    </p>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-03-06</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/03/06/ResNeXt笔记/">ResNeXt笔记</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p>论文 :Aggregated Residual Transformations for Deep Neural Networks, CVPR 2017</p>
+<p>链接：<a href="https://arxiv.org/pdf/1611.05431.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1611.05431.pdf</a></p>
+<p>作者:  Saining Xie, Ross Girshick, Piotr Dollár, Zhuowen Tu, Kaiming He</p>
+<p>源码：<a href="https://github.com/facebookresearch/ResNeXt" target="_blank" rel="external">https://github.com/facebookresearch/ResNeXt</a></p>
+<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>提出ResNeXt网络，基于ResNet和GoogleNet。</p>
+<p>提出cardinality的概念，对于每个conv block，对输入做多种不同的（结构相同，参数不同）transformations，然后再aggregation，而transformations的数量就是cardinality。</p>
+<p>结构启发于inception module，同样是split-transform-merge的策略，这里的merge和transform都和inception不一样。split-transform-merge的策略主要是<strong><em>通过在一个尽可能小的计算复杂度的前提下，提高模型的表达能力</em></strong>（approach the representational power of large and dense layers, but at a considerably lower computational complexity）！ Inception的问题在于每个block都需要定制，导致了模型的灵活性较差，这些block的定制化设计相当于引入了一堆的超参，大量的超参对模型来讲无疑是不利的。而这篇文章就是基于这点进行改进！</p>
+<ul>
+<li>模块化</li>
+<li>超参少</li>
+<li>表达能力强</li>
+</ul>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>首先，总结了两点block设计的原则：</p>
+<ol>
+<li>对于相同大小的feature map，block的超参要相同，也就是conv的filter参数要一样。【if producing spatial maps of the same size, the blocks share the same hyper-parameters (width and filter sizes)】</li>
+<li>如果空间维度减半，那么feature maps的数量要加倍。【each time when the spatial map is downsampled by a factor of 2, the width of the blocks is multiplied by a factor of 2】</li>
+</ol>
+<p>Figure 1是ResNet和ResNeXt的block结构比较，重点看ResNeXt，可以看到这里将256维的输入做32个不同的transformations，每个transformation先通过1x1的conv做降维(information embedding)，然后再经过几个conv，最后将这32个输出做aggregation。</p>
+<p>将其公式化:<br>$$<br>F(x) = \sum_{i=1}^C \tau_i(x)<br>$$<br>$\tau_i$的作用就是将x投影到低维空间（embeeding），然后做transform。C就是做transformation的数量，也就是cardinaty。aggregation后，再用short connection做identity mapping。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fp3f3tppr3j30te0i0jur.jpg" alt=""></p>
+<p>Figure 3是异构的三种结构，（a）是初始版本，（b）concat，（c）group conv，这三者可以说是等价的。那么在实现上，可以利用group conv，更加方便！</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fp4d6cqzx8j31cq0i2q8m.jpg" alt=""></p>
+<p>​    Table 1是ResNet-50和ResNeXt-50的参数对比</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fp4fhovd49j30nw0uaq8x.jpg" alt=""></p>
+<h5 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h5><p>Table 3是各个版本的ResNeXt以及ResNet在ImageNet-1K数据集上的表现，可以发现随着Cardinaty增加，模型总体上是变好的，体现在top-1 error逐渐在降低。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fp4fegkbv6j30oc0jqn0j.jpg" alt=""></p>
+<p>Table 6是ResNet和ResNeXt在ImageNet-5K上的比较，可以可发现后者都要好于前者。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fp4fkycmlxj30pi0eotbv.jpg" alt=""></p>
+<p>Table 5则是各个state-of-the-art的模型在ImageNet-1K数据集上表现，可以发现模型达到了最好的结果。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fp4fmo7mobj30ow0gaacv.jpg" alt=""></p>
+<p>从Table 7可以发现，相同的参数，ResNeXt比Wide ResNet表现更好。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fp4fojev6aj30pc09sgn0.jpg" alt=""></p>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-03-06</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/03/06/DenseNet笔记/">DenseNet笔记</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p>论文 ：Densely Connected Convolutional Networks, CVPR 2017</p>
+<p>链接：<a href="http://openaccess.thecvf.com/content_cvpr_2017/papers/Huang_Densely_Connected_Convolutional_CVPR_2017_paper.pdf" target="_blank" rel="external">http://openaccess.thecvf.com/content_cvpr_2017/papers/Huang_Densely_Connected_Convolutional_CVPR_2017_paper.pdf</a></p>
+<p>作者: Huang Gao, Liu Zhuang, Weinberger, K. Q., &amp; van der Maaten, L. </p>
+<p>源码：<a href="https://github.com/liuzhuang13/DenseNet" target="_blank" rel="external">https://github.com/liuzhuang13/DenseNet</a>.</p>
+<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>DenseNet的idea和ResNet有点相近，既然ResNet可以通过一个skip connection就提高模型的性能，那为什么不多几个呢？</p>
+<p>这样的话就可以使得梯度信息的回传更加有效（ResNet通过identity mapping进行另一条路径的梯度回传,而DenseNet的每一层梯度都可以直接回传回它前面的层），可以充分利用各个level的特征，也可以减少参数等。</p>
+<ul>
+<li>alleviate the vanishing-gradient problem，利用dense connection有效回传梯度</li>
+<li>strengthen feature propagation，利用dense connection融合(concat)不同level的特征，使得浅层的特征更容易传播到高层，同时也可以让浅层的conv学一些discriminative features。</li>
+<li>encourage feature reuse</li>
+<li>substantially reduce the number of parameters，通过控制growth rate减少参数量</li>
+</ul>
+<p>假设有L层网络，那么如果将网络视为DAG，那么如果实行全连接，并且保证网络前向传播，共有$\frac{L\times(L+1)}{2}$条边。</p>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fp33t32d1mj31kw0bt0xv.jpg" alt=""></p>
+<p><strong>Dense Block</strong></p>
+<p>首先，将其公式化，我们考虑第l层网络的输入和输出，$x_l$表示为第l层的输出，那么有:<br>$$<br>x_l = H_l([x_0,x_1,…,x_{l-1}])<br>$$<br>这里，$[x_0,x_1,…,x_{l-1}]$表示feature map的按通道拼接，形成新的tensor。</p>
+<p>$H_l$是一个组合函数，BN-ReLU-Conv(3x3)。</p>
+<p>为了将模型简化，将预想中的DenseNet分拆成若干个dense block，见Figure 2。</p>
+<p><strong>Growth Rate</strong></p>
+<p>$H_l$的输出是k个feature maps，也被叫做是growth rate。</p>
+<p>对于每个dense block来说，假设输入的深度是$k_0$，对于第l个层的输出，则有$k\times(l-1)+k_0$的深度，从Figure 2就可以简单得出。作者将这种dense connection解释为collective knowledge，获取前面层的输出，growth rate则是起到限制knowledge容量的作用，使得knowledge精简化!</p>
+<p><strong>Transition Layer</strong></p>
+<p>每个block之间用transition layer，包括1x1的conv和pooling层。transition layer起到压缩网络模型的作用，如果每个block包括m个feature maps，那么经过压缩后，就变成$\theta m, 0\le \theta \le 1$，同时利用pooling降采样。我们把$\theta =0.5$的结构（将feature maps的数量降为原来的一般）记作DenseNet-C。</p>
+<p><strong>Bottleneck Layer</strong></p>
+<p>因为每个block的输出都是k，但是它的输入往往比k更大，所以引入bottleneck layer起到降维的作用，同时保留尽可能多的信息。这样$H_l$就变成了BN-ReLU-Conv(1x1)-BN-ReLU-Conv(3x3)，我们将使用bottleneck layer的版本记作DenseNet-B。</p>
+<p>Table 1是模型的参数结构。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fp3b35pbwqj31kw0qqair.jpg" alt=""></p>
+<h5 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h5><p><strong>训练细节</strong></p>
+<p>对于CIFAR和SVHN,初始lr设为0.1，在训练50%和75%的epochs时，除以10。</p>
+<p>对于IMAGENET,初始lr设为0.1，在30和60个epochs后，除以10。</p>
+<p>SGD，weight decay $10^{-4}$</p>
+<p>因为CIFAR和SVHN数据集较小，所以在conv后（除第一个）都加了dropout，ratio为0.2。</p>
+<p>Tabel 2是各个模型在CIFAR-10，CIFAR-100，SVHN三个数据集上的结果，+号表示做数据增强，将用了Bottleneck layer和feature maps compression的记做DenseNet-BC。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fp3bafnkxmj314u0pwgtx.jpg" alt=""></p>
+<p>总的来说，数据增强可以提升表现！</p>
+<ul>
+<li>可以发现，和ResNet相比，参数更少，错误率更低，模型参数利用率高！</li>
+<li>在C10和C100上，DenseNet-BC(L=190,k=40)达到最优的结果。</li>
+<li>观察原始的DenseNet（没有BC），可以发现，随着L和k的增大，模型性能在提升（参数量上升，模型容量提升，表达能力提升），说明dense block有较强的抗过拟合的能力。</li>
+<li>在SVHN上，DenseNet-BC结果要比没有原始的DenseNet，这可能是数据集过小，模型过拟合了。</li>
+</ul>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-02-26</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/02/26/SegNet笔记/">SegNet笔记</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p>论文 ：SegNet: Identity Mappings in Deep Residual Networks, ECCV 2016</p>
+<p>链接：<a href="http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=7803544" target="_blank" rel="external">http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=7803544</a></p>
+<p>作者: Vijay Badrinarayanan, Alex Kendall , and Roberto Cipolla</p>
+<p><strong>Idea</strong></p>
+<ul>
+<li>SegNet基于FCN，包含encoder和decoder两个部分，encoder使用VGGNet，decoder则使用skip architecture将相同分辨率的feature map结合再做后续的预测。</li>
+<li>上采样的方法不同于transposed convolution和双线性插值等方法，使用maxpooling的逆运算的方法做上采样，得到稀疏的feature map，再做卷积得到稠密的feature map。</li>
+</ul>
+<p><strong>Architecture</strong></p>
+<p>具体的框架结构件Fig.2，主要由两部分组成，encoder和decoder。</p>
+<p>encoder的部分包含VGGNet在全连接层前的所有卷积层，这样共有13个卷积层，并且参数是直接从在imagenet预训练过的VGGNet直接拷贝过来，进行初始化。通过移除全连接层，可以大大地减少参数量和提高运算效率，参数量从134M减少到了14.7M。</p>
+<p>文章的重点部分在于decoder的设计，decoder部分包含和encoder一样的卷积层数量，并且参数配置一一对应。在VGGNet中，max pooling的stride是2，kernel size是2，所以它的下采样是没有重叠的。在升采样上，和其他类似U-Net等不同的是，SegNet使用的是maxpooling逆运算，也就是利用保存的max pooling的元素下标，将feature map恢复到原来的大小，再利用可训练的卷积层得到稠密的feature map。具体的过程见Fig.3。</p>
+<p>因为使用max pooling可以提高特征的translation invariance，同时提高分类的鲁棒性，但是同时也损失了很多边缘信息，因为我们把边缘的位置信息丢弃了。通常来说，响应比较强的都是一些纹理边缘，而max pooling本质上是一个滤波器，将局部最大值保留下来，舍去其他值。通过将max pooling的下标保留下来，可以帮助我们尽可能的恢复边缘位置信息。</p>
+<p>使用上述上采样的方法有以下的好处：</p>
+<ul>
+<li>可以得到更加细致的轮廓</li>
+<li>减少训练参数，同时能够end-to-end的训练</li>
+<li>可以将其融入到任何encoder-decoder的结构中，具有普适性。</li>
+</ul>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fotu08o3s4j312u0e4ajm.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fotuej8g3gj313a0eo429.jpg" alt=""></p>
+<p>Pytorch代码实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">segnet</span><span class="params">(nn.Module)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n_classes=<span class="number">21</span>, in_channels=<span class="number">3</span>, is_unpooling=True)</span>:</span></div><div class="line">        super(segnet, self).__init__()</div><div class="line"></div><div class="line">        self.in_channels = in_channels</div><div class="line">        self.is_unpooling = is_unpooling</div><div class="line"></div><div class="line">        self.down1 = segnetDown2(self.in_channels, <span class="number">64</span>)</div><div class="line">        self.down2 = segnetDown2(<span class="number">64</span>, <span class="number">128</span>)</div><div class="line">        self.down3 = segnetDown3(<span class="number">128</span>, <span class="number">256</span>)</div><div class="line">        self.down4 = segnetDown3(<span class="number">256</span>, <span class="number">512</span>)</div><div class="line">        self.down5 = segnetDown3(<span class="number">512</span>, <span class="number">512</span>)</div><div class="line"></div><div class="line">        self.up5 = segnetUp3(<span class="number">512</span>, <span class="number">512</span>)</div><div class="line">        self.up4 = segnetUp3(<span class="number">512</span>, <span class="number">256</span>)</div><div class="line">        self.up3 = segnetUp3(<span class="number">256</span>, <span class="number">128</span>)</div><div class="line">        self.up2 = segnetUp2(<span class="number">128</span>, <span class="number">64</span>)</div><div class="line">        self.up1 = segnetUp2(<span class="number">64</span>, n_classes)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, inputs)</span>:</span></div><div class="line"></div><div class="line">        down1, indices_1, unpool_shape1 = self.down1(inputs)</div><div class="line">        down2, indices_2, unpool_shape2 = self.down2(down1)</div><div class="line">        down3, indices_3, unpool_shape3 = self.down3(down2)</div><div class="line">        down4, indices_4, unpool_shape4 = self.down4(down3)</div><div class="line">        down5, indices_5, unpool_shape5 = self.down5(down4)</div><div class="line"></div><div class="line">        up5 = self.up5(down5, indices_5, unpool_shape5)</div><div class="line">        up4 = self.up4(up5, indices_4, unpool_shape4)</div><div class="line">        up3 = self.up3(up4, indices_3, unpool_shape3)</div><div class="line">        up2 = self.up2(up3, indices_2, unpool_shape2)</div><div class="line">        up1 = self.up1(up2, indices_1, unpool_shape1)</div><div class="line"></div><div class="line">        <span class="keyword">return</span> up1</div></pre></td></tr></table></figure>
+<p><strong>实验</strong></p>
+<p>首先针对deocder做了以下几种变形：</p>
+<ul>
+<li>SegNet-basic: 4个编码块和4个解码块，编码块由conv,bn,relu组成，然后加max pooling，解码器由conv，bn组成，并且没有bias。所有的卷积核的大小都是7x7。</li>
+<li>SegNet-Basic-SingleChannelDecoder：卷积是单通道的，分别和对应的feature map层做卷积，这样可以减少训练参数，同时提高inference的速度。</li>
+<li>FCN-basic：和SegNet-basic类似，不同的是使用FCN的上采样方法。</li>
+<li>FCN-basic-NoAddition：不进行feature map相加，只通过deconv上采样。</li>
+<li>Bilinear-Interpolation：使用双线性插值上采样。</li>
+<li>SegNet-Basic-EncoderAddition：和FCN的方法类似，比较消耗显存，将几个feature map相加得到最终的feature map</li>
+<li>FCN-Basic-NoDimReduction：再输出最终的结果之间不进行降维，FCN-basic会将维度降低到64，然后在做1x1的卷积。</li>
+</ul>
+<p>比较结果见TABLE 1。参数数量上，FCN-Basic和FCN-Basic-NoAddition最少，inference time则是FCN-Basic-NoAddition最少。</p>
+<ul>
+<li>在性能上，bilinear-interpolation表现最差，说明了decoder需要学习，而不是简单粗暴的直接上采样！</li>
+<li>SegNet-Basic和FCN-Basic相比，精度相近，区别在于后者的显存消耗更大因为后者需要存储多个feature map，而前者只需要存储max pooling的下标。除此之外，后者的forward时间更短，因为它在做预测前对feature map做了降维。</li>
+<li>FCN-Basic-NoAddition和SegNet-Basic：两者的decoder最为相似，因为都是直接学上采样，没有feature map的相加，在精度上，SegNet-Basic较好，说明了利用低层次的feature map的重要性，也就是将高层次语义信息和低层次位置信息结合的重要性。</li>
+<li>FCN-Basic-NoAddition-NoDimReduction和SegNet-Basic：前者的模型要大于后者，因为没有做降维。在性能上，前者也不如后者。说明并不是模型越大，表现越好，重要的是需要capture更多的边缘信息。</li>
+<li>FCN-Basic-NoAddition 和SegNet-Basic-SingleChannelDecoder：证明了当面临存储消耗，精度和inference时间的妥协的时候，我们可以选择SegNet!</li>
+<li>当内存和inference时间不受限的时候，模型越大，表现越好。因为FCN-Basic-NoDimReduction和SegNet-EncoderAddition比其他变种要好。</li>
+<li>class balance的影响：在class average accuracy和mIoU指标上，可以发现没有class weighted的时候比经过class weighted的要差，而在global accuracy上，情况则相反，这是因为绝大部分的像素都是天空，道路和建筑。</li>
+</ul>
+<p>总结一下：</p>
+<ul>
+<li>内存受限的时候，可以用过降维，存储max pooling下标来提升表现。</li>
+<li>编码器一定，解码越大，性能越好</li>
+<li>编码器的feature map被完整保留下来时，效果最好，毕竟是空间换性能！</li>
+</ul>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fotvqp2uqsj313y0g2agk.jpg" alt=""></p>
+<p>模型在CamVid数据集上的比较结果见TABLE 3，CamVid是一个用于自动驾驶的室外场景，可以发现在迭代次数较少的时候，SegNet要好于其他方法其他方法，但是当迭代次数较高的时候，整体上SegNet还是表现最优，但是在BF指标上不如DeconvNet。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fotwygav2aj313c0a8tc7.jpg" alt=""></p>
+<p>模型在SUNRGB-D数据集上的比较结果见TABLE 4，可以发现，所有方法的表现都比较差，在G，C，BF指标上，SegNet好于其他模型，但是mIoU比DeepLab-LargeFOV要差。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fotx37mf6nj31360c642m.jpg" alt=""></p>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-02-26</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/02/26/Fully-Convolutional-Networks-for-Semantic-Segmentation-FCN-笔记/">Fully Convolutional Networks for Semantic Segmentation(FCN)笔记</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p>论文：Fully Convolutional Networks for Semantic Segmentation，CVPR 2015</p>
+<p>链接：<a href="https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf" target="_blank" rel="external">https://people.eecs.berkeley.edu/~jonlong/long_shelhamer_fcn.pdf</a></p>
+<p>作者：Jonathan Long, Evan Shelhamer, Trevor Darrell</p>
+<p><strong>Idea</strong></p>
+<p>传统的图像分割算法主要依赖于：</p>
+<ol>
+<li>图像patch的训练，使得效率和准确率都不够。</li>
+<li>后处理</li>
+<li>multi-scale pyramid的预处理</li>
+<li>ensemble</li>
+</ol>
+<p>…</p>
+<p>这篇文章的主要贡献就是建立构造了全卷积神经网络，在显存足够的前提下可以接受任意大小的输入，然后得到对应大小的输出。作者将VGGNet,GoogleNet用于物体分类并预训练好的网络改造成全卷积神经网络，能够实现end-to-end的训练，并将其finetune，用来做图像的语义分割。除此之外，在升采样的过程中，由于之前的降采样丢失了大量的位置信息，所以作者采用了skip architecture将低层的输出传给高层，实现浅层的位置信息和高层的语义信息的融合。</p>
+<p><strong>网络结构</strong></p>
+<p>以VGGNet为例，见Figure3，最后的全连接层的维度是4096，为了将其改造成全卷积，将全连接层改成1x1的卷积，这样它的输出变成了4096x1x1。然后，通过deconvotion的操作对feature map进行升采样，恢复到和原图一样的大小，所以最终的输出的大小为WxHxC，其中W,H是原图的大小，而C是像素的种类数，每个空间位置表示的是各个类别的概率。降采样会提高感受野，同时也会包含越来越多的语义信息，但是也会丢失位置信息，所以，为了做出更好的像素分类结果，需要将高层的语义信息(what)和底层的位置信息(where)结合起来，使用skip architecture的结构，用低层信息对结果进行修正，提高模型的性能。除此之外，作者还提供了3个变种，即FCN-32s，FCN-16s，FCN-8s。顾名思义，FCN-32s就是通过deconvolution进行32倍的升采样直接输出。FCN-16s则是联合pool4和2倍升采样的conv7，再做16倍的升采样。FCN-8s是pool3，2倍升采样的pool4和4倍升采样的conv7，结合以后再做8倍的升采样。</p>
+<p>升采样的方法有多种，可以采用双线性插值等非学习性方法，也可以采用transposed convolution，通过设定步长等参数进行升采样。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fotrxkpssoj31j20tw113.jpg" alt=""></p>
+<p>下面是FCN-8的pytorch实现。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">fcn_8s</span><span class="params">(nn.Module)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, num_classes)</span>:</span></div><div class="line">        super(fcn, self).__init__()</div><div class="line">        self.stage1 = nn.Sequential(*list(pretrained_net.children())[:<span class="number">-4</span>])</div><div class="line">        self.stage2 = list(pretrained_net.children())[<span class="number">-4</span>]</div><div class="line">        self.stage3 = list(pretrained_net.children())[<span class="number">-3</span>] </div><div class="line">        </div><div class="line">        self.scores1 = nn.Conv2d(<span class="number">512</span>, num_classes, <span class="number">1</span>)</div><div class="line">        self.scores2 = nn.Conv2d(<span class="number">256</span>, num_classes, <span class="number">1</span>)</div><div class="line">        self.scores3 = nn.Conv2d(<span class="number">128</span>, num_classes, <span class="number">1</span>)</div><div class="line">        </div><div class="line">        self.upsample_8x = nn.ConvTranspose2d(num_classes, num_classes, <span class="number">16</span>, <span class="number">8</span>, <span class="number">4</span>, bias=<span class="keyword">False</span>)</div><div class="line">        self.upsample_4x = nn.ConvTranspose2d(num_classes, num_classes, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>, bias=<span class="keyword">False</span>)</div><div class="line">        self.upsample_2x = nn.ConvTranspose2d(num_classes, num_classes, <span class="number">4</span>, <span class="number">2</span>, <span class="number">1</span>, bias=<span class="keyword">False</span>)   </div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, x)</span>:</span></div><div class="line">        x = self.stage1(x)</div><div class="line">        s1 = x <span class="comment"># 1/8</span></div><div class="line">        </div><div class="line">        x = self.stage2(x)</div><div class="line">        s2 = x <span class="comment"># 1/16</span></div><div class="line">    </div><div class="line">        x = self.stage3(x)</div><div class="line">        s3 = x <span class="comment"># 1/32</span></div><div class="line">        </div><div class="line">        s3 = self.scores1(s3)</div><div class="line">        s3 = self.upsample_2x(s3)</div><div class="line">        s2 = self.scores2(s2)</div><div class="line">        s2 = s2 + s3</div><div class="line">        </div><div class="line">        s1 = self.scores3(s1)</div><div class="line">        s2 = self.upsample_4x(s2)</div><div class="line">        s = s1 + s2</div><div class="line">        s = self.upsample_8x(s2)</div><div class="line">        <span class="keyword">return</span> s</div></pre></td></tr></table></figure>
+<p><strong>实验</strong></p>
+<p>3个变种的效果在PASCAL VOS数据集上的比较，见Table 2和Figure 4，可以发现都是FCN-8s更胜一筹。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fotswcnw1kj30q60dw76m.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fotsvv8zbuj30rw0h4win.jpg" alt=""></p>
+<p>3种分类模型在PASCAL VOC 2011数据集的比较：AlexNet，VGGNet，GoogleNet，见Table1，可以发现VGGNet超出其他两个模型很多。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fotsyeuufij30q60me42k.jpg" alt=""></p>
+<p>同时，FCN在PASCAL-S，NYUDv2，SIFT FLOW数据集也取得了state-of-the-art的结果。</p>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-02-09</span>
+          
+            
+              <span class="post-category"><a href="/categories/competition/">competition</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/02/09/Kaggle比赛小结-Camera-Model-Identification/">Kaggle比赛小结-Camera Model Identification</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p><a href="https://www.kaggle.com/c/sp-society-camera-model-identification" target="_blank" rel="external">https://www.kaggle.com/c/sp-society-camera-model-identification</a></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1foa5fw8h19j31k20483yy.jpg" alt=""></p>
+<p>参加完比赛，做个简单的总结：</p>
+<ul>
+<li>数据增强：JPEG压缩，resizing，gamma修正</li>
+<li>数据的不平衡需要设置采样权重</li>
+<li>Random Crop，尽可能大，取512的结果好于256，先crop 1024，做完数据增强后再crop 512</li>
+<li>网络模型，Dense201&gt;Dense161…..</li>
+<li>Focal Loss可以提高结果</li>
+<li>learning rate: 1e-4，optimizer: Adam，batch size: 16……</li>
+<li>ensemble</li>
+</ul>
+<p>可以考虑的点：</p>
+<ul>
+<li>因为验证集的结果还不错，可以将测试集用训练得到的模型做分类，再训练，做数据扩充</li>
+<li>可以人工地下载更多的数据。。。</li>
+<li>结合手工提取的特征做结果的修正，例如noise pattern:<a href="https://www.kaggle.com/zeemeen/i-have-a-clue-what-i-am-doing-noise-patterns" target="_blank" rel="external">https://www.kaggle.com/zeemeen/i-have-a-clue-what-i-am-doing-noise-patterns</a></li>
+</ul>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-02-07</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/02/07/Inception-v4-Inception-ResNet-and-Inception-v4-笔记/">Inception-v4, Inception-ResNet and(Inception v4)笔记</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p>论文 ：Inception-v4, Inception-ResNet and the Impact of Residual Connections on Learning, AAAI 2017</p>
+<p>链接：<a href="https://arxiv.org/abs/1602.07261" target="_blank" rel="external">https://arxiv.org/abs/1602.07261</a></p>
+<p>作者: Christian Szegedy, Sergey Ioffe, Vincent Vanhoucke, Alex Alemi</p>
+<p>呃。。。这篇文章的主要贡献是了尝试了ResNet和Inception结合的多种可能性。。。。对Inception block进行修改和优化，提出了Inception v4（Figure 9），Inception-ResNet-v1和Inception-ResNet-v2（Figure 15），将ImageNet classification task的top-5 error刷到了3.08%。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fobembpr0rj30ee0rcwhc.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fobdqhuy1oj30eo0de3zr.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fobdr5dh4pj30ek0c6myf.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fobdrmnbfwj30es0fitab.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fobdroxsyfj30fi0h2jt6.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fobdsgyknpj30eg0m8wg5.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fobdss6xhkj30f40femyk.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fobdsvxatrj30fg0j6dhi.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fobdt1ggqpj30ew0cc75o.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fobdtqs6ylj30g00jsdhj.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fobdu21ayyj30cw0kkgnb.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fobdvixvgxj30ek0lewgk.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fobdvwhgcdj30ek0fe3zx.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fobdvyzlfvj30ek0j0myu.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fobdw3cijkj30fi0c20u5.jpg" alt=""></p>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fobdw6e7fqj30f20iiwg6.jpg" alt=""></p>
+<p>实验发现：如果feature map的数量超过1000，网络会不work，训练的时候会不稳定，而且在早期就会“die”。所以在residual加个scaling，使得数值偏小，见Figure 20。</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fobe052il4j30s00o4q62.jpg" alt=""></p>
+<h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p>single crop和single model的比较结果见Table 2，可以发现Inception-ResNet-v2略胜一筹，但是和Inception-v4差距不大。</p>
+<p>小数量的crop和single model的比较结果见Table 3，和Table 2的结果类似。</p>
+<p>dense crop和single model的比较结果见Table 4，结果依然类似。</p>
+<p>以及，crop的数量对结果影响还是很大的！</p>
+<p>144 crop的模型ensemble后的比较结果见Table 5。</p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fobe29be8mj30t60e6q5l.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fobe24s4gmj30sq0e80vm.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tKfTcgy1fobe25u8vpj30tq0dmju6.jpg" alt=""></p>
+<p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fobe291a2tj30uw0gu0wt.jpg" alt=""></p>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+</section>
+  
+  <nav class="pagination">
+      <a class="extend prev" rel="prev" href="/">< Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">Next ></a>
+  </nav>
+
+
+        </div>
+      </main>
+
+      <footer class="footer syuanpi fadeIn" id="footer">
+  <hr>
+  <div class="footer-wrapper">
+    <div class="left">
+      <div class="contact-icon">
+    
+    
+    
+    
+    
+    
+    
+    
+        
+        
+        
+        
+            <a href="https://www.zhihu.com/people/https://www.zhihu.com/people/yao-ze-ping" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+        
+        
+        
+    
+        
+            <a href="https://github.com/https://github.com/mowayao" class="iconfont icon-github" title="github"></a>
+        
+        
+        
+        
+        
+        
+        
+    
+</div>
+    </div>
+    <div class="right">
+      <div class="copyright">
+    <div class="info">
+        <span>&copy;</span>
+        <span>2018 ~ 2018</span>
+        <span>❤</span>
+        <span>Mowayao</span>
+    </div>
+    <div class="theme">
+        <span>
+            Powered by
+            <a href="http://hexo.io/" target="_blank">Hexo </a>
+        </span>
+        <span>
+            Theme
+            <a href="https://github.com/ColMugX/hexo-theme-Nlvi"> Nlvi </a>
+        </span>
+    </div>
+    
+    <div class="visit_count">
+        <i class="iconfont icon-visit"></i>
+        <span id="busuanzi_value_site_uv"></span>
+        <i class="iconfont icon-people"></i>
+        <span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+</div>
+    </div>
+  </div>
+</footer>
+    </div>
+  </div>
+  <script src="/script/lib/jquery/jquery-3.2.1.min.js"></script>
+
+
+    <script src="/script/lib/lightbox/js/lightbox.min.js"></script>
+
+
+
+    <script src="https://cdn.bootcss.com/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config;executed=true">MathJax.Hub.Config({tex2jax: {inlineMath: [["$","$"], ["\\(","\\)"]]}});</script>
+
+
+
+    
+        <script src="/h.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/x.js"></script>
+    
+        <script src="/o.js"></script>
+    
+        <script src="/-.js"></script>
+    
+        <script src="/g.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/n.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/r.js"></script>
+    
+        <script src="/a.js"></script>
+    
+        <script src="/t.js"></script>
+    
+        <script src="/o.js"></script>
+    
+        <script src="/r.js"></script>
+    
+        <script src="/-.js"></script>
+    
+        <script src="/f.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/d.js"></script>
+    
+
+
+<script src="/script/src/nlvi.js"></script>
+<script src="/script/src/utils.js"></script>
+<script src="/script/scheme/balance.js"></script>
+<script src="/script/src/plugins.js"></script>
+<script src="/script/bootstarp.js"></script>
+
+
+<div class="backtop syuanpi dead toTop" id="backtop">
+    <i class="iconfont icon-up"></i>
+    <span style="text-align:center;font-family:Georgia;"><span style="font-family:Georgia;" id="scrollpercent">1</span>%</span>
+</div>
+
+
+  <div class="search" id="search">
+    <div class="mask" id="mask"></div>
+    <div class="search-wrapper syuanpi">
+      <h2 id="search-header" class="syuanpi">搜索一下？</h2>
+      <div class="input">
+        <input type="text" id="local-search-input" results="0" name="">
+      </div>
+      <div id="local-search-result"></div>
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
