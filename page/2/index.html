@@ -258,6 +258,94 @@
     <header class="post-header">
       <div class="post-time syuanpi riseIn-light back-1">
         <div class="post-time-wrapper">
+          <span>2018-04-21</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/04/21/RON论文笔记/">RON论文笔记</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <p>论文：RON: Reverse Connection with Objectness Prior Networks for Object Detection，<strong>CVPR</strong> 2017</p>
+<p>作者：Tao Kong，Fuchun Sun，Anbang Yao，Huaping Liu，Ming Lu，Yurong Chen</p>
+<p>链接：<a href="https://arxiv.org/pdf/1707.01691.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1707.01691.pdf</a></p>
+<p>代码：<a href="https://github.com/taokong/RON" target="_blank" rel="external">https://github.com/taokong/RON</a></p>
+<p><strong>objective：</strong></p>
+<ul>
+<li>bridge the gap between the region-based and region-free methodologies </li>
+</ul>
+<p><strong>solution</strong>：</p>
+<ul>
+<li>Multi-scale object localization，利用多个scale的feature map做detection<ul>
+<li>建立reverse connection，为前面的层提供highly semantic的information</li>
+</ul>
+</li>
+<li>Negative space mining<ul>
+<li>通过建立objectness prior减少objects的搜索空间</li>
+</ul>
+</li>
+</ul>
+<p>384x384的输入，PASCAL VOC 2007 81.3% mAP，PASCAL VOC 2012 80.7% mAP，COCO 27.4%</p>
+<p>效率较高，1.5G的 GPU内存，forward的速度是15FPS</p>
+<p>Figure 2是RON的网络模型，有4个scales feature map做detection。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqk5dydd50j30t20tcqde.jpg" alt=""></p>
+<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>网络以VGG 16为backbone，将FC6和FC7改造为conv layer，在FC7处降采样。</p>
+<p>所以每个用于detection的feature map大小为：1/8 (conv 4 3), 1/16 (conv 5 3), 1/32 (conv 6) and 1/64 (conv 7)</p>
+<p><strong>Reverse Connection</strong></p>
+<p>reverse connection的结构见Figure 3，将后一层的输出经过deconv做upsampling，deconv的通道是512，当前层经过conv，再用summation的方式做merge。</p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqk5exvqeej30io0g6my5.jpg" alt=""></p>
+<p><strong>Reference Boxes</strong></p>
+<p>不同层的网络对应不同的receptive field，所以需要设计对应层的ref box的scale和ratio，下面是scale的设计：</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqmjznn3cij30rc02umxf.jpg" alt=""></p>
+<p>这里$s_{min}$设为$\frac{1}{10}$,不同的对应ratios是${\frac{1}{3},\frac{1}{2}, 1, 2, 3}$</p>
+<p><strong>Objectness Prior</strong></p>
+<p>针对正负样本比例严重失调， 这里使用 Objectness Prior 来过滤大部分负样本，具体的做法就是利用conv通道的设计，因为每个cell有10个default boxes，所以通道数是10，然后就是做二分类。这里需要设定阈值，将objectness score大于$o_p$的选为样本，这里$o_p$设为0.03，可以过滤掉大部分的样本。</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqmmemlca0j30s00fwduh.jpg" alt=""></p>
+<p><strong>Detection and Bounding Box Regression</strong></p>
+<p>Figure 5是detection bbox reg head的结构，可以发现在分类的module中，作者加入了两个inception module来提高分类的精度</p>
+<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqk5fg7sxbj30tg0dimz5.jpg" alt=""></p>
+<h5 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h5><p><strong>Loss</strong></p>
+<p>相似的，也是multi-task loss</p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqmmnkgq8jj30so04igm3.jpg" alt=""></p>
+<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1-3是模型在PASCAL VOC 2007, 2012和COCO上的结果。</p>
+<ul>
+<li>可以发现RON对小物体的检测提升比较明显，例如boat和bottle。</li>
+</ul>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqmmqfxmthj31ko0dqq9a.jpg" alt=""></p>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqmmraplo7j31kw0g2gt8.jpg" alt=""></p>
+<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqmmvqkb0xj30tg0hydjk.jpg" alt=""></p>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
           <span>2018-04-18</span>
           
             
@@ -973,101 +1061,6 @@
 <li>观察原始的DenseNet（没有BC），可以发现，随着L和k的增大，模型性能在提升（参数量上升，模型容量提升，表达能力提升），说明dense block有较强的抗过拟合的能力。</li>
 <li>在SVHN上，DenseNet-BC结果要比没有原始的DenseNet，这可能是数据集过小，模型过拟合了。</li>
 </ul>
-
-        
-      
-    
-    </div>
-    
-  </article>
-  
-   
-    
-  
-
-  
-    
-  
-  <article class="
-  post
-  
-  ">
-    <header class="post-header">
-      <div class="post-time syuanpi riseIn-light back-1">
-        <div class="post-time-wrapper">
-          <span>2018-02-26</span>
-          
-            
-              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
-            
-          
-          
-        </div>
-      </div>
-      <h1 class="post-title syuanpi riseIn-light back-2">
-        
-          <a href="/2018/02/26/SegNet笔记/">SegNet笔记</a>
-        
-      </h1>
-    </header>
-    <div class="post-content syuanpi riseIn-light back-3">
-      
-        
-          <p>论文 ：SegNet: Identity Mappings in Deep Residual Networks, ECCV 2016</p>
-<p>链接：<a href="http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=7803544" target="_blank" rel="external">http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=7803544</a></p>
-<p>作者: Vijay Badrinarayanan, Alex Kendall , and Roberto Cipolla</p>
-<p><strong>Idea</strong></p>
-<ul>
-<li>SegNet基于FCN，包含encoder和decoder两个部分，encoder使用VGGNet，decoder则使用skip architecture将相同分辨率的feature map结合再做后续的预测。</li>
-<li>上采样的方法不同于transposed convolution和双线性插值等方法，使用maxpooling的逆运算的方法做上采样，得到稀疏的feature map，再做卷积得到稠密的feature map。</li>
-</ul>
-<p><strong>Architecture</strong></p>
-<p>具体的框架结构件Fig.2，主要由两部分组成，encoder和decoder。</p>
-<p>encoder的部分包含VGGNet在全连接层前的所有卷积层，这样共有13个卷积层，并且参数是直接从在imagenet预训练过的VGGNet直接拷贝过来，进行初始化。通过移除全连接层，可以大大地减少参数量和提高运算效率，参数量从134M减少到了14.7M。</p>
-<p>文章的重点部分在于decoder的设计，decoder部分包含和encoder一样的卷积层数量，并且参数配置一一对应。在VGGNet中，max pooling的stride是2，kernel size是2，所以它的下采样是没有重叠的。在升采样上，和其他类似U-Net等不同的是，SegNet使用的是maxpooling逆运算，也就是利用保存的max pooling的元素下标，将feature map恢复到原来的大小，再利用可训练的卷积层得到稠密的feature map。具体的过程见Fig.3。</p>
-<p>因为使用max pooling可以提高特征的translation invariance，同时提高分类的鲁棒性，但是同时也损失了很多边缘信息，因为我们把边缘的位置信息丢弃了。通常来说，响应比较强的都是一些纹理边缘，而max pooling本质上是一个滤波器，将局部最大值保留下来，舍去其他值。通过将max pooling的下标保留下来，可以帮助我们尽可能的恢复边缘位置信息。</p>
-<p>使用上述上采样的方法有以下的好处：</p>
-<ul>
-<li>可以得到更加细致的轮廓</li>
-<li>减少训练参数，同时能够end-to-end的训练</li>
-<li>可以将其融入到任何encoder-decoder的结构中，具有普适性。</li>
-</ul>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fotu08o3s4j312u0e4ajm.jpg" alt=""></p>
-<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fotuej8g3gj313a0eo429.jpg" alt=""></p>
-<p>Pytorch代码实现：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">segnet</span><span class="params">(nn.Module)</span>:</span></div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n_classes=<span class="number">21</span>, in_channels=<span class="number">3</span>, is_unpooling=True)</span>:</span></div><div class="line">        super(segnet, self).__init__()</div><div class="line"></div><div class="line">        self.in_channels = in_channels</div><div class="line">        self.is_unpooling = is_unpooling</div><div class="line"></div><div class="line">        self.down1 = segnetDown2(self.in_channels, <span class="number">64</span>)</div><div class="line">        self.down2 = segnetDown2(<span class="number">64</span>, <span class="number">128</span>)</div><div class="line">        self.down3 = segnetDown3(<span class="number">128</span>, <span class="number">256</span>)</div><div class="line">        self.down4 = segnetDown3(<span class="number">256</span>, <span class="number">512</span>)</div><div class="line">        self.down5 = segnetDown3(<span class="number">512</span>, <span class="number">512</span>)</div><div class="line"></div><div class="line">        self.up5 = segnetUp3(<span class="number">512</span>, <span class="number">512</span>)</div><div class="line">        self.up4 = segnetUp3(<span class="number">512</span>, <span class="number">256</span>)</div><div class="line">        self.up3 = segnetUp3(<span class="number">256</span>, <span class="number">128</span>)</div><div class="line">        self.up2 = segnetUp2(<span class="number">128</span>, <span class="number">64</span>)</div><div class="line">        self.up1 = segnetUp2(<span class="number">64</span>, n_classes)</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, inputs)</span>:</span></div><div class="line"></div><div class="line">        down1, indices_1, unpool_shape1 = self.down1(inputs)</div><div class="line">        down2, indices_2, unpool_shape2 = self.down2(down1)</div><div class="line">        down3, indices_3, unpool_shape3 = self.down3(down2)</div><div class="line">        down4, indices_4, unpool_shape4 = self.down4(down3)</div><div class="line">        down5, indices_5, unpool_shape5 = self.down5(down4)</div><div class="line"></div><div class="line">        up5 = self.up5(down5, indices_5, unpool_shape5)</div><div class="line">        up4 = self.up4(up5, indices_4, unpool_shape4)</div><div class="line">        up3 = self.up3(up4, indices_3, unpool_shape3)</div><div class="line">        up2 = self.up2(up3, indices_2, unpool_shape2)</div><div class="line">        up1 = self.up1(up2, indices_1, unpool_shape1)</div><div class="line"></div><div class="line">        <span class="keyword">return</span> up1</div></pre></td></tr></table></figure>
-<p><strong>实验</strong></p>
-<p>首先针对deocder做了以下几种变形：</p>
-<ul>
-<li>SegNet-basic: 4个编码块和4个解码块，编码块由conv,bn,relu组成，然后加max pooling，解码器由conv，bn组成，并且没有bias。所有的卷积核的大小都是7x7。</li>
-<li>SegNet-Basic-SingleChannelDecoder：卷积是单通道的，分别和对应的feature map层做卷积，这样可以减少训练参数，同时提高inference的速度。</li>
-<li>FCN-basic：和SegNet-basic类似，不同的是使用FCN的上采样方法。</li>
-<li>FCN-basic-NoAddition：不进行feature map相加，只通过deconv上采样。</li>
-<li>Bilinear-Interpolation：使用双线性插值上采样。</li>
-<li>SegNet-Basic-EncoderAddition：和FCN的方法类似，比较消耗显存，将几个feature map相加得到最终的feature map</li>
-<li>FCN-Basic-NoDimReduction：再输出最终的结果之间不进行降维，FCN-basic会将维度降低到64，然后在做1x1的卷积。</li>
-</ul>
-<p>比较结果见TABLE 1。参数数量上，FCN-Basic和FCN-Basic-NoAddition最少，inference time则是FCN-Basic-NoAddition最少。</p>
-<ul>
-<li>在性能上，bilinear-interpolation表现最差，说明了decoder需要学习，而不是简单粗暴的直接上采样！</li>
-<li>SegNet-Basic和FCN-Basic相比，精度相近，区别在于后者的显存消耗更大因为后者需要存储多个feature map，而前者只需要存储max pooling的下标。除此之外，后者的forward时间更短，因为它在做预测前对feature map做了降维。</li>
-<li>FCN-Basic-NoAddition和SegNet-Basic：两者的decoder最为相似，因为都是直接学上采样，没有feature map的相加，在精度上，SegNet-Basic较好，说明了利用低层次的feature map的重要性，也就是将高层次语义信息和低层次位置信息结合的重要性。</li>
-<li>FCN-Basic-NoAddition-NoDimReduction和SegNet-Basic：前者的模型要大于后者，因为没有做降维。在性能上，前者也不如后者。说明并不是模型越大，表现越好，重要的是需要capture更多的边缘信息。</li>
-<li>FCN-Basic-NoAddition 和SegNet-Basic-SingleChannelDecoder：证明了当面临存储消耗，精度和inference时间的妥协的时候，我们可以选择SegNet!</li>
-<li>当内存和inference时间不受限的时候，模型越大，表现越好。因为FCN-Basic-NoDimReduction和SegNet-EncoderAddition比其他变种要好。</li>
-<li>class balance的影响：在class average accuracy和mIoU指标上，可以发现没有class weighted的时候比经过class weighted的要差，而在global accuracy上，情况则相反，这是因为绝大部分的像素都是天空，道路和建筑。</li>
-</ul>
-<p>总结一下：</p>
-<ul>
-<li>内存受限的时候，可以用过降维，存储max pooling下标来提升表现。</li>
-<li>编码器一定，解码越大，性能越好</li>
-<li>编码器的feature map被完整保留下来时，效果最好，毕竟是空间换性能！</li>
-</ul>
-<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fotvqp2uqsj313y0g2agk.jpg" alt=""></p>
-<p>模型在CamVid数据集上的比较结果见TABLE 3，CamVid是一个用于自动驾驶的室外场景，可以发现在迭代次数较少的时候，SegNet要好于其他方法其他方法，但是当迭代次数较高的时候，整体上SegNet还是表现最优，但是在BF指标上不如DeconvNet。</p>
-<p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fotwygav2aj313c0a8tc7.jpg" alt=""></p>
-<p>模型在SUNRGB-D数据集上的比较结果见TABLE 4，可以发现，所有方法的表现都比较差，在G，C，BF指标上，SegNet好于其他模型，但是mIoU比DeepLab-LargeFOV要差。</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fotx37mf6nj31360c642m.jpg" alt=""></p>
 
         
       

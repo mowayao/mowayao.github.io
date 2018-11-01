@@ -258,6 +258,90 @@
     <header class="post-header">
       <div class="post-time syuanpi riseIn-light back-1">
         <div class="post-time-wrapper">
+          <span>2018-10-28</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          <a href="/2018/10/28/Weekly-Leetcode-2018-10-28/">Weekly Leetcode(2018.10.28)</a>
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        
+          <h2 id="929-独特的电子邮件地址"><a href="#929-独特的电子邮件地址" class="headerlink" title="929. 独特的电子邮件地址"></a>929. 独特的电子邮件地址</h2><p>每封电子邮件都由一个本地名称和一个域名组成，以 @ 符号分隔。</p>
+<p>例如，在 alice@leetcode.com中， alice 是本地名称，而 leetcode.com 是域名。</p>
+<p>除了小写字母，这些电子邮件还可能包含 ‘,’ 或 ‘+’。</p>
+<p>如果在电子邮件地址的本地名称部分中的某些字符之间添加句点（’.’），则发往那里的邮件将会转发到本地名称中没有点的同一地址。例如，”alice.z@leetcode.com” 和 “alicez@leetcode.com” 会转发到同一电子邮件地址。 （请注意，此规则不适用于域名。）</p>
+<p>如果在本地名称中添加加号（’+’），则会忽略第一个加号后面的所有内容。这允许过滤某些电子邮件，例如 m.y+name@email.com 将转发到 my@email.com。 （同样，此规则不适用于域名。）</p>
+<p>可以同时使用这两个规则。</p>
+<p>给定电子邮件列表 emails，我们会向列表中的每个地址发送一封电子邮件。实际收到邮件的不同地址有多少？</p>
+<p>示例：</p>
+<p>输入：[“test.email+alex@leetcode.com”,”test.e.mail+bob.cathy@leetcode.com”,”testemail+david@lee.tcode.com”]<br>输出：2<br>解释：实际收到邮件的是 “testemail@leetcode.com” 和 “testemail@lee.tcode.com”。</p>
+<p>提示：</p>
+<p>1 &lt;= emails[i].length &lt;= 100<br>1 &lt;= emails.length &lt;= 100<br>每封 emails[i] 都包含有且仅有一个 ‘@’ 字符。</p>
+<p><strong>Solution</strong></p>
+<p>python3一些内置函数就可以啦</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> reduce</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">numUniqueEmails</span><span class="params">(self, emails)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        :type emails: List[str]</span></div><div class="line"><span class="string">        :rtype: int</span></div><div class="line"><span class="string">        """</span></div><div class="line">        cnt = <span class="number">0</span></div><div class="line">        vis = dict()</div><div class="line">        <span class="keyword">for</span> email <span class="keyword">in</span> emails:</div><div class="line">            adr, dom = email.split(<span class="string">'@'</span>)</div><div class="line">            tmp = <span class="string">""</span></div><div class="line">            <span class="keyword">if</span> <span class="string">'+'</span> <span class="keyword">in</span> adr:</div><div class="line">                adr = adr.split(<span class="string">'+'</span>)[<span class="number">0</span>]</div><div class="line">            tmp = reduce(<span class="keyword">lambda</span> x, y: x+y, adr.split(<span class="string">'.'</span>)) + <span class="string">'@'</span> + dom</div><div class="line">            <span class="keyword">if</span> tmp <span class="keyword">not</span> <span class="keyword">in</span> vis:</div><div class="line">                cnt += <span class="number">1</span></div><div class="line">                vis[tmp] = <span class="keyword">True</span></div><div class="line">            </div><div class="line">        <span class="keyword">return</span> cnt</div></pre></td></tr></table></figure>
+<h2 id="930-和相同的二元子数组"><a href="#930-和相同的二元子数组" class="headerlink" title="930. 和相同的二元子数组"></a>930. 和相同的二元子数组</h2><p>在由若干 0 和 1  组成的数组 A 中，有多少个和为 S 的非空子数组。</p>
+<p>示例：</p>
+<p>输入：A = [1,0,1,0,1], S = 2<br>输出：4<br>解释：<br>如下面黑体所示，有 4 个满足题目要求的子数组：<br>[1,0,1,0,1]<br>[1,0,1,0,1]<br>[1,0,1,0,1]<br>[1,0,1,0,1]</p>
+<p>提示：</p>
+<p>A.length &lt;= 30000<br>0 &lt;= S &lt;= A.length<br>A[i] 为 0 或 1</p>
+<p><strong>Solution</strong></p>
+<p>计算一下前缀和，然后对于前缀和为s的位置，统计前缀和s-S的个数，对于S=0需要特判</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">numSubarraysWithSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; A, <span class="keyword">int</span> S)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> pre = <span class="number">0</span>, ret = <span class="number">0</span>;</div><div class="line">        <span class="keyword">if</span> (S == <span class="number">0</span>) &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; A.size(); i++) &#123;</div><div class="line">                <span class="keyword">if</span> (A[i] == <span class="number">1</span>) <span class="keyword">continue</span>;</div><div class="line">                <span class="keyword">int</span> j = i;</div><div class="line">                <span class="keyword">while</span> (j+<span class="number">1</span> &lt; A.size() &amp;&amp; A[j+<span class="number">1</span>] == <span class="number">0</span>) j++;</div><div class="line">                <span class="keyword">int</span> num = j-i+<span class="number">1</span>;</div><div class="line">                ret += (num+<span class="number">1</span>)*num/<span class="number">2</span>;</div><div class="line">                i = j;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">return</span> ret;</div><div class="line">            </div><div class="line">        &#125;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; preS(A.size()+<span class="number">1</span>, <span class="number">0</span>);</div><div class="line">        </div><div class="line">        preS[<span class="number">0</span>] = <span class="number">1</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> a: A) &#123;</div><div class="line">            pre += a;</div><div class="line">            preS[pre]++;</div><div class="line">            <span class="keyword">if</span> (pre &gt;= S) &#123;</div><div class="line">                ret += preS[pre-S];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> ret;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="931-下降路径最小和"><a href="#931-下降路径最小和" class="headerlink" title="931. 下降路径最小和"></a>931. 下降路径最小和</h2><p>给定一个方形整数数组 A，我们想要得到通过 A 的下降路径的最小和。</p>
+<p>下降路径可以从第一行中的任何元素开始，并从每一行中选择一个元素。在下一行选择的元素和当前行所选元素最多相隔一列。</p>
+<p>示例：</p>
+<p>输入：[[1,2,3],[4,5,6],[7,8,9]]<br>输出：12<br>解释：<br>可能的下降路径有：<br>[1,4,7], [1,4,8], [1,5,7], [1,5,8], [1,5,9]<br>[2,4,7], [2,4,8], [2,5,7], [2,5,8], [2,5,9], [2,6,8], [2,6,9]<br>[3,5,7], [3,5,8], [3,5,9], [3,6,8], [3,6,9]<br>和最小的下降路径是 [1,4,7]，所以答案是 12。</p>
+<p>提示：</p>
+<p>1 &lt;= A.length == A[0].length &lt;= 100<br>-100 &lt;= A[i][j] &lt;= 100</p>
+<p><strong>Solution</strong></p>
+<p>比较简单的DP， 可以空间优化</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minFallingPathSum</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; A)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> n = A.size();</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; dp(n, <span class="number">0</span>);</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">            dp[i] = A[<span class="number">0</span>][i];</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++) &#123;</div><div class="line">            <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; tmp(n, INT_MAX);</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</div><div class="line">                <span class="keyword">if</span> (j &gt; <span class="number">0</span>) &#123;</div><div class="line">                    tmp[j] = min(dp[j<span class="number">-1</span>]+A[i][j], tmp[j]);</div><div class="line">                &#125;</div><div class="line">                tmp[j] = min(dp[j]+A[i][j], tmp[j]);</div><div class="line">                <span class="keyword">if</span> (j+<span class="number">1</span> &lt; n) &#123;</div><div class="line">                    tmp[j] = min(dp[j+<span class="number">1</span>]+A[i][j], tmp[j]);</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; n; j++) &#123;</div><div class="line">                dp[j] = tmp[j];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">int</span> ret = INT_MAX;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">            ret = min(ret, dp[i]);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> ret;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="932-漂亮数组"><a href="#932-漂亮数组" class="headerlink" title="932. 漂亮数组"></a>932. 漂亮数组</h2><p>对于某些固定的 N，如果数组 A 是整数 1, 2, …, N 组成的排列，使得：</p>
+<p>对于每个 i &lt; j，都不存在 k 满足 i &lt; k &lt; j 使得 A[k] * 2 = A[i] + A[j]。</p>
+<p>那么数组 A 是漂亮数组。</p>
+<p>给定 N，返回任意漂亮数组 A（保证存在一个）。</p>
+<p>示例 1：</p>
+<p>输入：4<br>输出：[2,1,4,3]<br>示例 2：</p>
+<p>输入：5<br>输出：[3,1,2,5,4]</p>
+<p>提示：</p>
+<p>1 &lt;= N &lt;= 1000</p>
+<p><strong>Solution</strong></p>
+<p>递归，左边奇数，右边偶数。</p>
+<p>1 2 3 =&gt; 1 3 2<br>1 2 3 4 5 =&gt; 1 3 5 2 4 =&gt; 1 5 3 2 4</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    </div><div class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; beautifulArray(<span class="keyword">int</span> N) &#123;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; ret;</div><div class="line">        <span class="keyword">if</span> (N==<span class="number">1</span>) &#123;</div><div class="line">            ret.push_back(<span class="number">1</span>);</div><div class="line">            <span class="keyword">return</span> ret;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (N==<span class="number">2</span>) &#123;</div><div class="line">            ret.push_back(<span class="number">1</span>);</div><div class="line">            ret.push_back(<span class="number">2</span>);</div><div class="line">            <span class="keyword">return</span> ret;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (N&amp;<span class="number">1</span>) &#123;</div><div class="line">            <span class="keyword">int</span> mid = (N+<span class="number">1</span>)/<span class="number">2</span>;</div><div class="line">            <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; left = beautifulArray(mid);</div><div class="line">            <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; right = beautifulArray(mid<span class="number">-1</span>);</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; left.size(); i++) &#123;</div><div class="line">                ret.push_back(left[i]*<span class="number">2</span><span class="number">-1</span>);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; right.size(); i++) &#123;</div><div class="line">                ret.push_back(right[i]*<span class="number">2</span>);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">int</span> mid = N/<span class="number">2</span>;</div><div class="line">            <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; left = beautifulArray(mid);</div><div class="line">            <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; right = beautifulArray(mid);</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; left.size(); i++) &#123;</div><div class="line">                ret.push_back(left[i]*<span class="number">2</span><span class="number">-1</span>);</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; right.size(); i++) &#123;</div><div class="line">                ret.push_back(right[i]*<span class="number">2</span>);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> ret;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+
+        
+      
+    
+    </div>
+    
+  </article>
+  
+   
+    
+  
+
+  
+    
+  
+  <article class="
+  post
+  
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
           <span>2018-10-23</span>
           
             
@@ -374,24 +458,23 @@
     <div class="post-content syuanpi riseIn-light back-3">
       
         
-          <h2 id="Pairwise-Confusion-for-Fine-Grained-Visual-Classification"><a href="#Pairwise-Confusion-for-Fine-Grained-Visual-Classification" class="headerlink" title="Pairwise Confusion for Fine-Grained Visual Classification"></a>Pairwise Confusion for Fine-Grained Visual Classification</h2><h2 id="SNIPER-Efficient-Multi-Scale-Training"><a href="#SNIPER-Efficient-Multi-Scale-Training" class="headerlink" title="SNIPER: Efficient Multi-Scale Training"></a>SNIPER: Efficient Multi-Scale Training</h2><ul>
+          <h2 id="Deep-Speaker-an-End-to-End-Neural-Speaker-Embedding-System"><a href="#Deep-Speaker-an-End-to-End-Neural-Speaker-Embedding-System" class="headerlink" title="Deep Speaker: an End-to-End Neural Speaker Embedding System"></a>Deep Speaker: an End-to-End Neural Speaker Embedding System</h2><ul>
+<li>paper: <a href="https://arxiv.org/pdf/1705.02304.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1705.02304.pdf</a></li>
+</ul>
+<p>##### </p>
+<h2 id="SNIPER-Efficient-Multi-Scale-Training"><a href="#SNIPER-Efficient-Multi-Scale-Training" class="headerlink" title="SNIPER: Efficient Multi-Scale Training"></a>SNIPER: Efficient Multi-Scale Training</h2><ul>
 <li>code: <a href="https://github.com/MahyarNajibi/SNIPER" target="_blank" rel="external">https://github.com/MahyarNajibi/SNIPER</a></li>
 <li>paper: <a href="https://arxiv.org/abs/1805.09300" target="_blank" rel="external">https://arxiv.org/abs/1805.09300</a></li>
 </ul>
-<p>####Idea</p>
-<p>这篇文章可以看作是<a href="https://arxiv.org/abs/1711.08189" target="_blank" rel="external">SNIP</a>和fast-rcnn的优化. SNIP的核心思想就是<strong>忽略大分辨率图中的大尺度物体, 小分辨率图中的小尺度物体</strong>.</p>
+<h4 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h4><p>这篇文章可以看作是<a href="https://arxiv.org/abs/1711.08189" target="_blank" rel="external">SNIP</a>和fast-rcnn的优化. SNIP的核心思想就是<strong>忽略大分辨率图中的大尺度物体, 小分辨率图中的小尺度物体</strong>.</p>
 <p>文章开头重点分析了RCNN和fast RCNN的尺度不变性和计算性能. 首先, RCNN相较于fast RCNN具有较好的尺度不变形,这是因为它从图像中利用非监督的方法提取一些proposal, 然后再resize到224x224固定维度(CNNs能够对固定分辨率的图像进行分类),再放到网络中测试. 但是它引入了重复计算,效率较低. 而fast-RCNN为了消除计算瓶颈, 不同尺度大小的图像经过同一个CNN提取特征, 将proposal映射到高纬度的feature map,用固定维度的ROI pooled features作为每个region proposal的语义表示, 这样带来的问题就是破坏了RCNN的尺度不变特性. 但是也可以capture特征中的更多上下文信息.</p>
-<p>#####Chips</p>
-<p>文章提出了一个全新的多尺度训练方法, 采用尺度固定的chips作为输入从而保证尺度不变形, chips从图像金字塔中采样得到. 首先, 源码中采用了三个尺度, (3.0, 1.667, 512.0), 即将图像方法3倍, 1.67倍, 将小边固定为512, 保持比率resize. 然后再在图像中按照stride 32得到512x512的子图.</p>
-<p>######positive chips的采样</p>
-<p>对于每个尺度, GT都有一个面积区间,</p>
+<h5 id="Chips"><a href="#Chips" class="headerlink" title="Chips"></a>Chips</h5><p>文章提出了一个全新的多尺度训练方法, 采用尺度固定的chips作为输入从而保证尺度不变形, chips从图像金字塔中采样得到. 首先, 源码中采用了三个尺度, (3.0, 1.667, 512.0), 即将图像方法3倍, 1.67倍, 将小边固定为512, 保持比率resize. 然后再在图像中按照stride 32得到512x512的子图.</p>
+<h6 id="positive-chips的采样"><a href="#positive-chips的采样" class="headerlink" title="positive chips的采样"></a>positive chips的采样</h6><p>对于每个尺度, GT都有一个面积区间,</p>
 <p>​                            $$R^i=[r^i_{min},r^i_{max}]$$</p>
 <p>, 对于三个尺度分别为: ((-1, 80), (32, 150), (120, -1)), 第一个-1表示的是0, 第二个-1表示的是无穷大, 将对应尺度的GT进行筛选. 作者贪心地选择chips使得尽可能多的GT被包含, 这里作者的策略是先计算每个chip包含的GT数量, 然后选择最多的5个, 需要注意的是再选择完当前个chip后,需要做后续操作, 即将这个chip包含的GT删除, 然后再选择最优的chip,不断重复. 得到固定尺度的子图512x512. 由于chip的分辨率较小, 大部分对检测没有用的背景都被消除了, 这对训练是非常有帮助的, 这样模型就更容易收敛!</p>
-<p><strong>negative chips采样</strong></p>
-<p>如果只使用正的chips训练, 虽然可以加快收敛速度, 但是会提高false positive rate,因为有用的负样本太少了!</p>
+<h6 id="negative-chips采样"><a href="#negative-chips采样" class="headerlink" title="negative chips采样"></a>negative chips采样</h6><p>如果只使用正的chips训练, 虽然可以加快收敛速度, 但是会提高false positive rate,因为有用的负样本太少了!</p>
 <p>所以作者提出使用训练了几个epoch的RPN来帮助生成negative chips. 具体的做法是使用RPN生成proposal, 去除GT, 剩下的几个proposal作为hard example, 然后选择所有至少包含M个proposal的chips, negative chips中不含有GT!</p>
-<p>######Label Assignment</p>
-<p>这里说的是faster R-CNN是由RPN和fast R-CNN两部分组成的, RPN采用的全标签,即不对GT进行过滤晒除, 而fast R-CNN则是按照上文提到的策略进行选择GT.</p>
+<h6 id="Label-Assignment"><a href="#Label-Assignment" class="headerlink" title="Label Assignment"></a>Label Assignment</h6><p>这里说的是faster R-CNN是由RPN和fast R-CNN两部分组成的, RPN采用的全标签,即不对GT进行过滤晒除, 而fast R-CNN则是按照上文提到的策略进行选择GT.</p>
 <p>整个模型的训练流程就是先通过chip generation生成positive chips和negative chips. 然后再放到RPN训练, 然后再选择proposal放到fast RCNN.</p>
 
         
@@ -867,94 +950,6 @@
 <p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fqnqwou2qwj315g0uc7ef.jpg" alt=""></p>
 <p>Table 4是单模型在COCO detection benchmark上的表现，FPN取得SOTA的表现</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqnr7se6qpj31kw0iatgv.jpg" alt=""></p>
-
-        
-      
-    
-    </div>
-    
-  </article>
-  
-   
-    
-  
-
-  
-    
-  
-  <article class="
-  post
-  
-  ">
-    <header class="post-header">
-      <div class="post-time syuanpi riseIn-light back-1">
-        <div class="post-time-wrapper">
-          <span>2018-04-21</span>
-          
-            
-              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
-            
-          
-          
-        </div>
-      </div>
-      <h1 class="post-title syuanpi riseIn-light back-2">
-        
-          <a href="/2018/04/21/RON论文笔记/">RON论文笔记</a>
-        
-      </h1>
-    </header>
-    <div class="post-content syuanpi riseIn-light back-3">
-      
-        
-          <p>论文：RON: Reverse Connection with Objectness Prior Networks for Object Detection，<strong>CVPR</strong> 2017</p>
-<p>作者：Tao Kong，Fuchun Sun，Anbang Yao，Huaping Liu，Ming Lu，Yurong Chen</p>
-<p>链接：<a href="https://arxiv.org/pdf/1707.01691.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1707.01691.pdf</a></p>
-<p>代码：<a href="https://github.com/taokong/RON" target="_blank" rel="external">https://github.com/taokong/RON</a></p>
-<p><strong>objective：</strong></p>
-<ul>
-<li>bridge the gap between the region-based and region-free methodologies </li>
-</ul>
-<p><strong>solution</strong>：</p>
-<ul>
-<li>Multi-scale object localization，利用多个scale的feature map做detection<ul>
-<li>建立reverse connection，为前面的层提供highly semantic的information</li>
-</ul>
-</li>
-<li>Negative space mining<ul>
-<li>通过建立objectness prior减少objects的搜索空间</li>
-</ul>
-</li>
-</ul>
-<p>384x384的输入，PASCAL VOC 2007 81.3% mAP，PASCAL VOC 2012 80.7% mAP，COCO 27.4%</p>
-<p>效率较高，1.5G的 GPU内存，forward的速度是15FPS</p>
-<p>Figure 2是RON的网络模型，有4个scales feature map做detection。</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqk5dydd50j30t20tcqde.jpg" alt=""></p>
-<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>网络以VGG 16为backbone，将FC6和FC7改造为conv layer，在FC7处降采样。</p>
-<p>所以每个用于detection的feature map大小为：1/8 (conv 4 3), 1/16 (conv 5 3), 1/32 (conv 6) and 1/64 (conv 7)</p>
-<p><strong>Reverse Connection</strong></p>
-<p>reverse connection的结构见Figure 3，将后一层的输出经过deconv做upsampling，deconv的通道是512，当前层经过conv，再用summation的方式做merge。</p>
-<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqk5exvqeej30io0g6my5.jpg" alt=""></p>
-<p><strong>Reference Boxes</strong></p>
-<p>不同层的网络对应不同的receptive field，所以需要设计对应层的ref box的scale和ratio，下面是scale的设计：</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqmjznn3cij30rc02umxf.jpg" alt=""></p>
-<p>这里$s_{min}$设为$\frac{1}{10}$,不同的对应ratios是${\frac{1}{3},\frac{1}{2}, 1, 2, 3}$</p>
-<p><strong>Objectness Prior</strong></p>
-<p>针对正负样本比例严重失调， 这里使用 Objectness Prior 来过滤大部分负样本，具体的做法就是利用conv通道的设计，因为每个cell有10个default boxes，所以通道数是10，然后就是做二分类。这里需要设定阈值，将objectness score大于$o_p$的选为样本，这里$o_p$设为0.03，可以过滤掉大部分的样本。</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqmmemlca0j30s00fwduh.jpg" alt=""></p>
-<p><strong>Detection and Bounding Box Regression</strong></p>
-<p>Figure 5是detection bbox reg head的结构，可以发现在分类的module中，作者加入了两个inception module来提高分类的精度</p>
-<p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqk5fg7sxbj30tg0dimz5.jpg" alt=""></p>
-<h5 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h5><p><strong>Loss</strong></p>
-<p>相似的，也是multi-task loss</p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqmmnkgq8jj30so04igm3.jpg" alt=""></p>
-<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1-3是模型在PASCAL VOC 2007, 2012和COCO上的结果。</p>
-<ul>
-<li>可以发现RON对小物体的检测提升比较明显，例如boat和bottle。</li>
-</ul>
-<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqmmqfxmthj31ko0dqq9a.jpg" alt=""></p>
-<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqmmraplo7j31kw0g2gt8.jpg" alt=""></p>
-<p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqmmvqkb0xj30tg0hydjk.jpg" alt=""></p>
 
         
       
