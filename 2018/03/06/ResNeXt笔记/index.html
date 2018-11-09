@@ -279,10 +279,11 @@
     <div class="post-content syuanpi riseIn-light back-3">
       
         <p>论文 :Aggregated Residual Transformations for Deep Neural Networks, CVPR 2017</p>
-<p>链接：<a href="https://arxiv.org/pdf/1611.05431.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1611.05431.pdf</a></p>
+<p>链接：https://arxiv.org/pdf/1611.05431.pdf</p>
 <p>作者:  Saining Xie, Ross Girshick, Piotr Dollár, Zhuowen Tu, Kaiming He</p>
-<p>源码：<a href="https://github.com/facebookresearch/ResNeXt" target="_blank" rel="external">https://github.com/facebookresearch/ResNeXt</a></p>
-<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>提出ResNeXt网络，基于ResNet和GoogleNet。</p>
+<p>源码：https://github.com/facebookresearch/ResNeXt</p>
+<h5>Idea</h5>
+<p>提出ResNeXt网络，基于ResNet和GoogleNet。</p>
 <p>提出cardinality的概念，对于每个conv block，对输入做多种不同的（结构相同，参数不同）transformations，然后再aggregation，而transformations的数量就是cardinality。</p>
 <p>结构启发于inception module，同样是split-transform-merge的策略，这里的merge和transform都和inception不一样。split-transform-merge的策略主要是<strong><em>通过在一个尽可能小的计算复杂度的前提下，提高模型的表达能力</em></strong>（approach the representational power of large and dense layers, but at a considerably lower computational complexity）！ Inception的问题在于每个block都需要定制，导致了模型的灵活性较差，这些block的定制化设计相当于引入了一堆的超参，大量的超参对模型来讲无疑是不利的。而这篇文章就是基于这点进行改进！</p>
 <ul>
@@ -290,21 +291,25 @@
 <li>超参少</li>
 <li>表达能力强</li>
 </ul>
-<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>首先，总结了两点block设计的原则：</p>
+<h5>Architecture</h5>
+<p>首先，总结了两点block设计的原则：</p>
 <ol>
 <li>对于相同大小的feature map，block的超参要相同，也就是conv的filter参数要一样。【if producing spatial maps of the same size, the blocks share the same hyper-parameters (width and filter sizes)】</li>
 <li>如果空间维度减半，那么feature maps的数量要加倍。【each time when the spatial map is downsampled by a factor of 2, the width of the blocks is multiplied by a factor of 2】</li>
 </ol>
 <p>Figure 1是ResNet和ResNeXt的block结构比较，重点看ResNeXt，可以看到这里将256维的输入做32个不同的transformations，每个transformation先通过1x1的conv做降维(information embedding)，然后再经过几个conv，最后将这32个输出做aggregation。</p>
-<p>将其公式化:</p>
-<script type="math/tex; mode=display">
-F(x) = \sum_{i=1}^C \tau_i(x)</script><p>$\tau_i$的作用就是将x投影到低维空间（embeeding），然后做transform。C就是做transformation的数量，也就是cardinaty。aggregation后，再用short connection做identity mapping。</p>
+<p>将其公式化:
+$$
+F(x) = \sum_{i=1}^C \tau_i(x)
+$$
+$\tau_i$的作用就是将x投影到低维空间（embeeding），然后做transform。C就是做transformation的数量，也就是cardinaty。aggregation后，再用short connection做identity mapping。</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fp3f3tppr3j30te0i0jur.jpg" alt=""></p>
 <p>Figure 3是异构的三种结构，（a）是初始版本，（b）concat，（c）group conv，这三者可以说是等价的。那么在实现上，可以利用group conv，更加方便！</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fp4d6cqzx8j31cq0i2q8m.jpg" alt=""></p>
-<p>​    Table 1是ResNet-50和ResNeXt-50的参数对比</p>
+<p>​	Table 1是ResNet-50和ResNeXt-50的参数对比</p>
 <p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fp4fhovd49j30nw0uaq8x.jpg" alt=""></p>
-<h5 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h5><p>Table 3是各个版本的ResNeXt以及ResNet在ImageNet-1K数据集上的表现，可以发现随着Cardinaty增加，模型总体上是变好的，体现在top-1 error逐渐在降低。</p>
+<h5>Experiment</h5>
+<p>Table 3是各个版本的ResNeXt以及ResNet在ImageNet-1K数据集上的表现，可以发现随着Cardinaty增加，模型总体上是变好的，体现在top-1 error逐渐在降低。</p>
 <p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fp4fegkbv6j30oc0jqn0j.jpg" alt=""></p>
 <p>Table 6是ResNet和ResNeXt在ImageNet-5K上的比较，可以可发现后者都要好于前者。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fp4fkycmlxj30pi0eotbv.jpg" alt=""></p>
@@ -394,7 +399,7 @@ gitment.render('gitment')
     <span class="title" id="toc-switch"><span>Index</span></span>
     <div class="toc-inner syuanpi back-1 fallIn-light">
       <li class="title-link"><a href="javascript:;" class="toTop">ResNeXt笔记</a></li>
-      <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#Idea"><span class="toc-text">Idea</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Architecture"><span class="toc-text">Architecture</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Experiment"><span class="toc-text">Experiment</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">Idea</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">Architecture</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">Experiment</span></a></li></ol>
     </div>
   </aside>
 

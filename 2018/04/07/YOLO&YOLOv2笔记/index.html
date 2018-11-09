@@ -278,10 +278,11 @@
     </header>
     <div class="post-content syuanpi riseIn-light back-3">
       
-        <h3 id="YOLO"><a href="#YOLO" class="headerlink" title="YOLO"></a>YOLO</h3><p>论文：You Only Look Once: Unified, Real-Time Object Detection，<strong>CVPR</strong> 2016</p>
+        <h3>YOLO</h3>
+<p>论文：You Only Look Once: Unified, Real-Time Object Detection，<strong>CVPR</strong> 2016</p>
 <p>作者：Joseph Redmon, Santosh Divvala, Ross Girshick, and Ali Farhadi</p>
-<p>链接：<a href="https://arxiv.org/pdf/1506.02640.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1506.02640.pdf</a></p>
-<p>代码：<a href="https://pjreddie.com/darknet/yolo/" target="_blank" rel="external">https://pjreddie.com/darknet/yolo/</a></p>
+<p>链接：https://arxiv.org/pdf/1506.02640.pdf</p>
+<p>代码：https://pjreddie.com/darknet/yolo/</p>
 <ul>
 <li>将detection的分类问题转化为回归问题</li>
 <li>在VOC 2007上，达到45FPS，mAP 63.4%，Fast YOLO可以达到155FPS，mAP 52.7%</li>
@@ -289,7 +290,8 @@
 <li>没有利用proposal（不同于SSD和fast r-cnn），对小目标不是很友好</li>
 <li>使用全局的context信息，背景错误较少</li>
 </ul>
-<h5 id="Unified-Detection"><a href="#Unified-Detection" class="headerlink" title="Unified Detection"></a>Unified Detection</h5><p>首先将输入图像分成SxS块，每个grid cell预测B个bounding box和confidence scores，以及预测C类。这样网络最后一层的输出是SxSx(Bx5+C)的tensor。如果一个object的中心落在某个grid，那么这个grid就需要负责预测这个object。文中的参数S=7,B=2,C=20。所以最后的输出的tensor大小为7x7x30。</p>
+<h5>Unified Detection</h5>
+<p>首先将输入图像分成SxS块，每个grid cell预测B个bounding box和confidence scores，以及预测C类。这样网络最后一层的输出是SxSx(Bx5+C)的tensor。如果一个object的中心落在某个grid，那么这个grid就需要负责预测这个object。文中的参数S=7,B=2,C=20。所以最后的输出的tensor大小为7x7x30。</p>
 <p>confidence score的计算则是:$P(object)\times IOU_{pred}^{gt}$，第一项是表示是否落入grid，第二项则是预测的框和实际的框的IOU值。</p>
 <p>loss function的设计为：</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fq7loi7sgqj30ro0hotao.jpg" alt=""></p>
@@ -302,29 +304,41 @@
 <li>在测试的时候，如果objects有不同的或者不寻常的比例的时候，泛化性会比较差</li>
 <li>loss function的设计还需要再优化</li>
 </ol>
-<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1是各个object detection实时系统的比较，可以发现Fast YOLO的速度非常高，同时保持较高的mAP。</p>
+<h5>Experiments</h5>
+<p>Table 1是各个object detection实时系统的比较，可以发现Fast YOLO的速度非常高，同时保持较高的mAP。</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fq7mi5up9aj30v20su0yx.jpg" alt=""></p>
 <p>Figure 4是Fast R-CNN和YOLO的错误组成对比，可以发现YOLO对于背景的预测较好，因为利用了全局的context，但是loc的错误较大，这和loss function的设计不无关系。</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fq7mknid1jj30t60mun1s.jpg" alt=""></p>
-<h3 id="YOLO-v2"><a href="#YOLO-v2" class="headerlink" title="YOLO v2"></a>YOLO v2</h3><p>论文：YOLO9000: Better, Faster, Stronger Joseph，<strong>CVPR</strong> 2017</p>
+<h3>YOLO v2</h3>
+<p>论文：YOLO9000: Better, Faster, Stronger Joseph，<strong>CVPR</strong> 2017</p>
 <p>作者：Joseph Redmon, Ali Farhadi</p>
-<p>链接：<a href="http://openaccess.thecvf.com/content_cvpr_2017/papers/Redmon_YOLO9000_Better_Faster_CVPR_2017_paper.pdf" target="_blank" rel="external">http://openaccess.thecvf.com/content_cvpr_2017/papers/Redmon_YOLO9000_Better_Faster_CVPR_2017_paper.pdf</a></p>
-<p>代码：<a href="http://pjreddie.com/yolo9000/" target="_blank" rel="external">http://pjreddie.com/yolo9000/</a></p>
-<h5 id="Better"><a href="#Better" class="headerlink" title="Better"></a>Better</h5><ul>
-<li><p>Batch Normalization:在每个conv后加入bn，取消dropout，mAP提高了2%</p>
+<p>链接：http://openaccess.thecvf.com/content_cvpr_2017/papers/Redmon_YOLO9000_Better_Faster_CVPR_2017_paper.pdf</p>
+<p>代码：http://pjreddie.com/yolo9000/</p>
+<h5>Better</h5>
+<ul>
+<li>
+<p>Batch Normalization:在每个conv后加入bn，取消dropout，mAP提高了2%</p>
 </li>
-<li><p>High Resolution Classifie: pretrain的时候就把图像分辨率调高，从224x224变成448x448，提高了4%</p>
+<li>
+<p>High Resolution Classifie: pretrain的时候就把图像分辨率调高，从224x224变成448x448，提高了4%</p>
 </li>
-<li><p>Convolutional With Anchor Boxes: 吸收Faster R-CNN中RPN的思想，去掉全连接层，加入anchor boxes，这样导致acc略有下降，但是召回率提高较多</p>
+<li>
+<p>Convolutional With Anchor Boxes: 吸收Faster R-CNN中RPN的思想，去掉全连接层，加入anchor boxes，这样导致acc略有下降，但是召回率提高较多</p>
 </li>
-<li><p>Dimension Clusters: 通过k-means选择较好的priors，也就是anchor，选择k=5作为复杂度和高召回率的折中，将distance metric定义为：</p>
+<li>
+<p>Dimension Clusters: 通过k-means选择较好的priors，也就是anchor，选择k=5作为复杂度和高召回率的折中，将distance metric定义为：</p>
 </li>
-<li><script type="math/tex; mode=display">
-d(box, centroid) = 1-IOU(box, centroid)</script><p>在k=5的前提下，召回率和使用9个anchor box的相近</p>
+<li>
+<p>$$
+d(box, centroid) = 1-IOU(box, centroid)
+$$</p>
+<p>在k=5的前提下，召回率和使用9个anchor box的相近</p>
 </li>
-<li><p>Direct location prediction: 对坐标进行转换，和fast r-cnn等类似，提升5%，见Figure 3</p>
+<li>
+<p>Direct location prediction: 对坐标进行转换，和fast r-cnn等类似，提升5%，见Figure 3</p>
 </li>
-<li><p>Fine-Grained Features: 为了得到奇数大小的feature maps，将图像分辨率调整到416，得到奇数大小的好处是改点就是这个区域的中心，然后调整降采样的步长为32，这样就是416/32=13，参考SSD和faster r-cnn利用多尺度的feature maps，作者提出passthrough layer，将high resolution features和low resolution features结合，对于high resolution的feature maps，将相邻的特征分配到不同的channels，例如26x26x512变换成13x13x2048，再和原来的特征图相连接，相当于把feature maps做深度的扩充，这样有1%的提升</p>
+<li>
+<p>Fine-Grained Features: 为了得到奇数大小的feature maps，将图像分辨率调整到416，得到奇数大小的好处是改点就是这个区域的中心，然后调整降采样的步长为32，这样就是416/32=13，参考SSD和faster r-cnn利用多尺度的feature maps，作者提出passthrough layer，将high resolution features和low resolution features结合，对于high resolution的feature maps，将相邻的特征分配到不同的channels，例如26x26x512变换成13x13x2048，再和原来的特征图相连接，相当于把feature maps做深度的扩充，这样有1%的提升</p>
 </li>
 </ul>
 <p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fq7upwxukoj30t60teadt.jpg" alt=""></p>
@@ -334,10 +348,12 @@ d(box, centroid) = 1-IOU(box, centroid)</script><p>在k=5的前提下，召回�
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fq7vdy6vauj30ty0skjya.jpg" alt=""></p>
 <p>Table 2是ablation studies的结果</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fq7vx9xa1aj31kw0nwjy5.jpg" alt=""></p>
-<h5 id="Faster"><a href="#Faster" class="headerlink" title="Faster"></a>Faster</h5><p>提出darknet-19，效率相较于VGG 16有了较大的提升。</p>
+<h5>Faster</h5>
+<p>提出darknet-19，效率相较于VGG 16有了较大的提升。</p>
 <p>VGG-16对于224x224的图像做一次forward，卷积层的浮点数计算为30.69 billion。而darknet-19的卷积层浮点数计算为8.52 billion，但是在分类的准确性上略有降低。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fq7x1hlp1vj30jm0pujve.jpg" alt=""></p>
-<h5 id="Stronger"><a href="#Stronger" class="headerlink" title="Stronger"></a>Stronger</h5><p>这里作者提出了一个非常fancy的idea，WordNet，解决不同数据集之间label mutually exclusive的问题。WordNet通过构建hierarchical tree来简化问题，并且选择最短的到达root的路径，Figure 6为图示。利用有向图对条件概率计算进行优化，分层地计算概率，然后做出预测。</p>
+<h5>Stronger</h5>
+<p>这里作者提出了一个非常fancy的idea，WordNet，解决不同数据集之间label mutually exclusive的问题。WordNet通过构建hierarchical tree来简化问题，并且选择最短的到达root的路径，Figure 6为图示。利用有向图对条件概率计算进行优化，分层地计算概率，然后做出预测。</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fq7wy9z9kxj30pc0wkqaw.jpg" alt=""></p>
 
       
@@ -421,7 +437,7 @@ gitment.render('gitment')
     <span class="title" id="toc-switch"><span>Index</span></span>
     <div class="toc-inner syuanpi back-1 fallIn-light">
       <li class="title-link"><a href="javascript:;" class="toTop">YOLO&YOLOv2笔记</a></li>
-      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#YOLO"><span class="toc-text">YOLO</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Unified-Detection"><span class="toc-text">Unified Detection</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Experiments"><span class="toc-text">Experiments</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#YOLO-v2"><span class="toc-text">YOLO v2</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Better"><span class="toc-text">Better</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Faster"><span class="toc-text">Faster</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Stronger"><span class="toc-text">Stronger</span></a></li></ol></li></ol></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">YOLO</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">Unified Detection</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">Experiments</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#undefined"><span class="toc-text">YOLO v2</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">Better</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">Faster</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">Stronger</span></a></li></ol></li></ol></li></ol>
     </div>
   </aside>
 

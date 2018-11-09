@@ -278,25 +278,28 @@
         
           <p>论文：Feature Pyramid Networks for Object Detection，<strong>CVPR</strong> 2017</p>
 <p>作者：Tsung-Yi Lin, Piotr Doll´ar, Ross Girshick, Kaiming He, Bharath Hariharan, and Serge Belongie</p>
-<p>链接：<a href="https://arxiv.org/pdf/1612.03144.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1612.03144.pdf</a></p>
-<p>代码(unofficial)：<a href="https://github.com/unsky/FPN" target="_blank" rel="external">https://github.com/unsky/FPN</a></p>
+<p>链接：https://arxiv.org/pdf/1612.03144.pdf</p>
+<p>代码(unofficial)：https://github.com/unsky/FPN</p>
 <ul>
 <li>feature pyramid在物体识别中比较常用，作者将其应用到object detection中</li>
 <li>不同于SSD，作者使用top-down的结构将来自更高pyramid level的semantically stronger的feature map和higher resolution features相结合，使得detection的结构更加准确</li>
 </ul>
 <p>Figure 1是不同类型的feature map的使用方法，作者使用的是(d)的结构，SSD使用的是(c)的结构</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqnpdczxhuj30w20usgvn.jpg" alt=""></p>
-<h5 id="Feature-Pyramid-Networks"><a href="#Feature-Pyramid-Networks" class="headerlink" title="Feature Pyramid Networks"></a>Feature Pyramid Networks</h5><p>Figure 3是top-down pathway的示意结构，现将来自higher pyramid的feature maps升采样，再将该层的feature map做1x1的conv，减少channel dimension（固定为256d），再用element-wise addtion做merge，然后再用3x3的conv去消除上采样aliasing的影响。在C5上（最高层），先用1x1 conv产生粗糙的特征图。</p>
+<h5>Feature Pyramid Networks</h5>
+<p>Figure 3是top-down pathway的示意结构，现将来自higher pyramid的feature maps升采样，再将该层的feature map做1x1的conv，减少channel dimension（固定为256d），再用element-wise addtion做merge，然后再用3x3的conv去消除上采样aliasing的影响。在C5上（最高层），先用1x1 conv产生粗糙的特征图。</p>
 <p>${C2, C3, C4, C5}$层对应的融合特征层为${P2, P3, P4, P5}$</p>
 <p>通过这样的操作来加强特征，即<strong>保留空间信息并增强语义信息</strong>。</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqnpkyj02ej30tk0jcn00.jpg" alt=""></p>
-<h5 id="Applications"><a href="#Applications" class="headerlink" title="Applications"></a>Applications</h5><p><strong>Feature Pyramid Networks for RPN</strong></p>
+<h5>Applications</h5>
+<p><strong>Feature Pyramid Networks for RPN</strong></p>
 <p>RPN的参数配置和Faster R-CNN类似，作者提到了一点就是在feature pyramid的detection head参数是可以共享的，结果和不共享接近，这说明了<strong>不同level的pyramid的semantic level是相似的</strong>！</p>
 <p><strong>Feature Pyramid Networks for Fast R-CNN</strong></p>
 <p>这里的重点是ROI的分配：</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqnqq1o4irj30m2034dg3.jpg" alt=""></p>
 <p>w,h是ROI的宽和高，$k_0$=4，表示的是大小为224x224的ROI的target level，利用这个式子进行转换，分配到相应的pyramid level。</p>
-<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p><strong>Ablation Study</strong></p>
+<h5>Experiments</h5>
+<p><strong>Ablation Study</strong></p>
 <p>Table 1，2，3是ablation study的表格</p>
 <p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fqnqwou2qwj315g0uc7ef.jpg" alt=""></p>
 <p>Table 4是单模型在COCO detection benchmark上的表现，FPN取得SOTA的表现</p>
@@ -343,19 +346,21 @@
         
           <p>论文：RON: Reverse Connection with Objectness Prior Networks for Object Detection，<strong>CVPR</strong> 2017</p>
 <p>作者：Tao Kong，Fuchun Sun，Anbang Yao，Huaping Liu，Ming Lu，Yurong Chen</p>
-<p>链接：<a href="https://arxiv.org/pdf/1707.01691.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1707.01691.pdf</a></p>
-<p>代码：<a href="https://github.com/taokong/RON" target="_blank" rel="external">https://github.com/taokong/RON</a></p>
+<p>链接：https://arxiv.org/pdf/1707.01691.pdf</p>
+<p>代码：https://github.com/taokong/RON</p>
 <p><strong>objective：</strong></p>
 <ul>
-<li>bridge the gap between the region-based and region-free methodologies </li>
+<li>bridge the gap between the region-based and region-free methodologies</li>
 </ul>
 <p><strong>solution</strong>：</p>
 <ul>
-<li>Multi-scale object localization，利用多个scale的feature map做detection<ul>
+<li>Multi-scale object localization，利用多个scale的feature map做detection
+<ul>
 <li>建立reverse connection，为前面的层提供highly semantic的information</li>
 </ul>
 </li>
-<li>Negative space mining<ul>
+<li>Negative space mining
+<ul>
 <li>通过建立objectness prior减少objects的搜索空间</li>
 </ul>
 </li>
@@ -364,7 +369,8 @@
 <p>效率较高，1.5G的 GPU内存，forward的速度是15FPS</p>
 <p>Figure 2是RON的网络模型，有4个scales feature map做detection。</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqk5dydd50j30t20tcqde.jpg" alt=""></p>
-<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>网络以VGG 16为backbone，将FC6和FC7改造为conv layer，在FC7处降采样。</p>
+<h5>Architecture</h5>
+<p>网络以VGG 16为backbone，将FC6和FC7改造为conv layer，在FC7处降采样。</p>
 <p>所以每个用于detection的feature map大小为：1/8 (conv 4 3), 1/16 (conv 5 3), 1/32 (conv 6) and 1/64 (conv 7)</p>
 <p><strong>Reverse Connection</strong></p>
 <p>reverse connection的结构见Figure 3，将后一层的输出经过deconv做upsampling，deconv的通道是512，当前层经过conv，再用summation的方式做merge。</p>
@@ -379,10 +385,12 @@
 <p><strong>Detection and Bounding Box Regression</strong></p>
 <p>Figure 5是detection bbox reg head的结构，可以发现在分类的module中，作者加入了两个inception module来提高分类的精度</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fqk5fg7sxbj30tg0dimz5.jpg" alt=""></p>
-<h5 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h5><p><strong>Loss</strong></p>
+<h5>Training</h5>
+<p><strong>Loss</strong></p>
 <p>相似的，也是multi-task loss</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqmmnkgq8jj30so04igm3.jpg" alt=""></p>
-<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1-3是模型在PASCAL VOC 2007, 2012和COCO上的结果。</p>
+<h5>Experiments</h5>
+<p>Table 1-3是模型在PASCAL VOC 2007, 2012和COCO上的结果。</p>
 <ul>
 <li>可以发现RON对小物体的检测提升比较明显，例如boat和bottle。</li>
 </ul>
@@ -431,14 +439,17 @@
         
           <p>论文：Training Region-based Object Detectors with Online Hard Example Mining，<strong>CVPR</strong> 2016</p>
 <p>作者：Abhinav Shrivastava, Abhinav Gupta, Ross Girshick</p>
-<p>链接：<a href="https://arxiv.org/pdf/1604.03540.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1604.03540.pdf</a></p>
-<p>代码：<a href="https://github.com/abhi2610/ohem" target="_blank" rel="external">https://github.com/abhi2610/ohem</a></p>
+<p>链接：https://arxiv.org/pdf/1604.03540.pdf</p>
+<p>代码：https://github.com/abhi2610/ohem</p>
 <p>Hard example mining是机器学习模型训练经常会用的trick，顾名思义，就是sample目前对于模型比较难的example进行“强化”学习。在CNN中对于patch选择根据策略的不同，主要有sliding window和proposal。大部分的情况是根据loss来判断是否是hard，只是作为训练的一个trick。文章针对Fast R-CNN，提出online hard example mining的算法对其进行优化。在VOC2007, 2012都取得了SOTA，mAP分别是78.9%，76.3%。</p>
-<h5 id="Fast-R-CNN"><a href="#Fast-R-CNN" class="headerlink" title="Fast R-CNN"></a>Fast R-CNN</h5><p>FRCNN中，proposal的选择由它与gt的overlap决定，确定一个proposal为背景的阈值范围是：$[bg_{lo},0.5]$，这个范围的假设是这样的proposal是hard的可能性较大。作者认为这样得到的结果很可能是次优的，因为在其他位置可能存在更hard但是infrequent的样本，OHEM算法中移除了这个阈值</p>
-<h5 id="OHEM"><a href="#OHEM" class="headerlink" title="OHEM"></a>OHEM</h5><p>idea很简单，就是在forward的时候根据loss排序，然后选择loss最大的，也就是最worst的样本进行backward更新模型的参数。但是这样会存在一个问题，就是当两个ROI位置相近的时候，在feature map上对应的是同一个位置，loss是相近的，所以作者提出了对hard examples做NMS，选择B/N个ROI最backward，这里NMS的阈值为0.7。</p>
+<h5>Fast R-CNN</h5>
+<p>FRCNN中，proposal的选择由它与gt的overlap决定，确定一个proposal为背景的阈值范围是：$[bg_{lo},0.5]$，这个范围的假设是这样的proposal是hard的可能性较大。作者认为这样得到的结果很可能是次优的，因为在其他位置可能存在更hard但是infrequent的样本，OHEM算法中移除了这个阈值</p>
+<h5>OHEM</h5>
+<p>idea很简单，就是在forward的时候根据loss排序，然后选择loss最大的，也就是最worst的样本进行backward更新模型的参数。但是这样会存在一个问题，就是当两个ROI位置相近的时候，在feature map上对应的是同一个位置，loss是相近的，所以作者提出了对hard examples做NMS，选择B/N个ROI最backward，这里NMS的阈值为0.7。</p>
 <p>接下来就是工程上的优化，ROI进行backward的时候，空间和时间的消耗较大，如果直接做backward，那些没有选中的ROI还是会做backward，所以作者提出了Figure 2的网络结构，包含两个一样的的ROI network，其中一个是immutable的，用于计算forward的loss，只有在forward的时候分配内存，然后hard RoI sampling module使用刚才所说的方法进行采样，作为输入传到第二个ROI network，进行forward和backward，然后累积gradient，再backward。</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgutzexflj31kw0v41kx.jpg" alt=""></p>
-<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 3和Table 4是模型在VOC 2007和VOC 2012的表现，都是SOTA，对FRCN提升明显。</p>
+<h5>Experiments</h5>
+<p>Table 3和Table 4是模型在VOC 2007和VOC 2012的表现，都是SOTA，对FRCN提升明显。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqh3cawf16j31600radsm.jpg" alt=""></p>
 
         
@@ -482,15 +493,16 @@
         
           <p>论文：SSD: Single Shot MultiBox Detector，<strong>ECCV</strong> 2016</p>
 <p>作者：Wei Liu, Dragomir Anguelov, Dumitru Erhan, Christian Szegedy, Scott Reed, Cheng-Yang Fu, Alexander C. Berg</p>
-<p>链接：<a href="https://arxiv.org/pdf/1512.02325.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1512.02325.pdf</a>    </p>
-<p>代码：<a href="https://github.com/weiliu89/caffe/tree/ssd" target="_blank" rel="external">https://github.com/weiliu89/caffe/tree/ssd</a></p>
-<p>gluon实现：<a href="https://github.com/mowayao/gluon_SSD" target="_blank" rel="external">https://github.com/mowayao/gluon_SSD</a></p>
+<p>链接：https://arxiv.org/pdf/1512.02325.pdf</p>
+<p>代码：https://github.com/weiliu89/caffe/tree/ssd</p>
+<p>gluon实现：https://github.com/mowayao/gluon_SSD</p>
 <ul>
 <li>将bbox的输出空间离散化到一些默认的priors，也就是默认设定的anchors</li>
 <li>不同Faster R-CNN的two stage的方式，SSD采用的是one shot的方法，精度和faster r-cnn接近，但是效率更高</li>
 <li>将多尺度的feature maps应用到detection中，针对不同尺度的feature map，采用不同scale和ratio</li>
 </ul>
-<h5 id="The-Single-Shot-Detector-SSD"><a href="#The-Single-Shot-Detector-SSD" class="headerlink" title="The Single Shot Detector (SSD)"></a>The Single Shot Detector (SSD)</h5><p>将feature map分成nxn的cells，每个cell可以预测固定数量的box的conf和offset</p>
+<p>#####The Single Shot Detector (SSD)</p>
+<p>将feature map分成nxn的cells，每个cell可以预测固定数量的box的conf和offset</p>
 <p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fqfue2u6o9j316a0taww0.jpg" alt=""></p>
 <p><strong>Model</strong></p>
 <p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgroawjivj315i0r0dnf.jpg" alt=""></p>
@@ -512,17 +524,19 @@
 <li>Choosing scales and aspect ratios for default boxes: 为了针对不同scale的object，scale被定义为：</li>
 </ul>
 <p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqgrc1164dj30wa03q3yw.jpg" alt=""></p>
-<p>$s<em>{min}=0.2, s</em>{max}=0.9,$ratios $a<em>r\in {1,2,3,\frac{1}{2}, \frac{1}{3}}$，$w_k=s_k\sqrt a_r, h_k=s_k/\sqrt a_r$。另外对于 ratio = 1 的情况，再指定 scale 为$，s_k=\sqrt {s_ks</em>{k+1}}$也就是总共有 6 种不同的 default box</p>
+<p>$s_{min}=0.2, s_{max}=0.9,$ratios $a_r\in {1,2,3,\frac{1}{2}, \frac{1}{3}}$，$w_k=s_k\sqrt a_r, h_k=s_k/\sqrt a_r$。另外对于 ratio = 1 的情况，再指定 scale 为$，s_k=\sqrt {s_ks_{k+1}}$也就是总共有 6 种不同的 default box</p>
 <ul>
 <li>Hard negative mining: 在做完matching后，大部分的box都是背景，所以需要做采样，选择loss最高的几个，并且保持3:1的比例</li>
-<li>Data augmentation：<ul>
+<li>Data augmentation：
+<ul>
 <li>使用全图作为输入，</li>
 <li>使用IOU和目标物体为0.1, 0.3，0.5, 0.7, 0.9的patch （这些 patch 在原图的大小的 $[0.1,1]$ 之间， 相应的宽高比在$[1/2,2]$之间）</li>
 <li>随机采取一个patch</li>
 </ul>
 </li>
 </ul>
-<h5 id="Experimental-Results"><a href="#Experimental-Results" class="headerlink" title="Experimental Results"></a>Experimental Results</h5><p>Table 1是SSD在PASCAL VOC2007上的表现，可以发现SSD512的表现优于Faster R-CNN，SSD300兼顾性能和效率</p>
+<h5>Experimental Results</h5>
+<p>Table 1是SSD在PASCAL VOC2007上的表现，可以发现SSD512的表现优于Faster R-CNN，SSD300兼顾性能和效率</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgqghdz3lj31600k2wo1.jpg" alt=""></p>
 <p>Table 4是SSD在 PASCAL VOC2012上的表现，可以发现SSD512取得了SOTA的表现</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgrepc7k2j316w0es7b4.jpg" alt=""></p>
@@ -568,10 +582,11 @@
     <div class="post-content syuanpi riseIn-light back-3">
       
         
-          <h3 id="YOLO"><a href="#YOLO" class="headerlink" title="YOLO"></a>YOLO</h3><p>论文：You Only Look Once: Unified, Real-Time Object Detection，<strong>CVPR</strong> 2016</p>
+          <h3>YOLO</h3>
+<p>论文：You Only Look Once: Unified, Real-Time Object Detection，<strong>CVPR</strong> 2016</p>
 <p>作者：Joseph Redmon, Santosh Divvala, Ross Girshick, and Ali Farhadi</p>
-<p>链接：<a href="https://arxiv.org/pdf/1506.02640.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1506.02640.pdf</a></p>
-<p>代码：<a href="https://pjreddie.com/darknet/yolo/" target="_blank" rel="external">https://pjreddie.com/darknet/yolo/</a></p>
+<p>链接：https://arxiv.org/pdf/1506.02640.pdf</p>
+<p>代码：https://pjreddie.com/darknet/yolo/</p>
 <ul>
 <li>将detection的分类问题转化为回归问题</li>
 <li>在VOC 2007上，达到45FPS，mAP 63.4%，Fast YOLO可以达到155FPS，mAP 52.7%</li>
@@ -579,7 +594,8 @@
 <li>没有利用proposal（不同于SSD和fast r-cnn），对小目标不是很友好</li>
 <li>使用全局的context信息，背景错误较少</li>
 </ul>
-<h5 id="Unified-Detection"><a href="#Unified-Detection" class="headerlink" title="Unified Detection"></a>Unified Detection</h5><p>首先将输入图像分成SxS块，每个grid cell预测B个bounding box和confidence scores，以及预测C类。这样网络最后一层的输出是SxSx(Bx5+C)的tensor。如果一个object的中心落在某个grid，那么这个grid就需要负责预测这个object。文中的参数S=7,B=2,C=20。所以最后的输出的tensor大小为7x7x30。</p>
+<h5>Unified Detection</h5>
+<p>首先将输入图像分成SxS块，每个grid cell预测B个bounding box和confidence scores，以及预测C类。这样网络最后一层的输出是SxSx(Bx5+C)的tensor。如果一个object的中心落在某个grid，那么这个grid就需要负责预测这个object。文中的参数S=7,B=2,C=20。所以最后的输出的tensor大小为7x7x30。</p>
 <p>confidence score的计算则是:$P(object)\times IOU_{pred}^{gt}$，第一项是表示是否落入grid，第二项则是预测的框和实际的框的IOU值。</p>
 <p>loss function的设计为：</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fq7loi7sgqj30ro0hotao.jpg" alt=""></p>
@@ -592,29 +608,41 @@
 <li>在测试的时候，如果objects有不同的或者不寻常的比例的时候，泛化性会比较差</li>
 <li>loss function的设计还需要再优化</li>
 </ol>
-<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1是各个object detection实时系统的比较，可以发现Fast YOLO的速度非常高，同时保持较高的mAP。</p>
+<h5>Experiments</h5>
+<p>Table 1是各个object detection实时系统的比较，可以发现Fast YOLO的速度非常高，同时保持较高的mAP。</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fq7mi5up9aj30v20su0yx.jpg" alt=""></p>
 <p>Figure 4是Fast R-CNN和YOLO的错误组成对比，可以发现YOLO对于背景的预测较好，因为利用了全局的context，但是loc的错误较大，这和loss function的设计不无关系。</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fq7mknid1jj30t60mun1s.jpg" alt=""></p>
-<h3 id="YOLO-v2"><a href="#YOLO-v2" class="headerlink" title="YOLO v2"></a>YOLO v2</h3><p>论文：YOLO9000: Better, Faster, Stronger Joseph，<strong>CVPR</strong> 2017</p>
+<h3>YOLO v2</h3>
+<p>论文：YOLO9000: Better, Faster, Stronger Joseph，<strong>CVPR</strong> 2017</p>
 <p>作者：Joseph Redmon, Ali Farhadi</p>
-<p>链接：<a href="http://openaccess.thecvf.com/content_cvpr_2017/papers/Redmon_YOLO9000_Better_Faster_CVPR_2017_paper.pdf" target="_blank" rel="external">http://openaccess.thecvf.com/content_cvpr_2017/papers/Redmon_YOLO9000_Better_Faster_CVPR_2017_paper.pdf</a></p>
-<p>代码：<a href="http://pjreddie.com/yolo9000/" target="_blank" rel="external">http://pjreddie.com/yolo9000/</a></p>
-<h5 id="Better"><a href="#Better" class="headerlink" title="Better"></a>Better</h5><ul>
-<li><p>Batch Normalization:在每个conv后加入bn，取消dropout，mAP提高了2%</p>
+<p>链接：http://openaccess.thecvf.com/content_cvpr_2017/papers/Redmon_YOLO9000_Better_Faster_CVPR_2017_paper.pdf</p>
+<p>代码：http://pjreddie.com/yolo9000/</p>
+<h5>Better</h5>
+<ul>
+<li>
+<p>Batch Normalization:在每个conv后加入bn，取消dropout，mAP提高了2%</p>
 </li>
-<li><p>High Resolution Classifie: pretrain的时候就把图像分辨率调高，从224x224变成448x448，提高了4%</p>
+<li>
+<p>High Resolution Classifie: pretrain的时候就把图像分辨率调高，从224x224变成448x448，提高了4%</p>
 </li>
-<li><p>Convolutional With Anchor Boxes: 吸收Faster R-CNN中RPN的思想，去掉全连接层，加入anchor boxes，这样导致acc略有下降，但是召回率提高较多</p>
+<li>
+<p>Convolutional With Anchor Boxes: 吸收Faster R-CNN中RPN的思想，去掉全连接层，加入anchor boxes，这样导致acc略有下降，但是召回率提高较多</p>
 </li>
-<li><p>Dimension Clusters: 通过k-means选择较好的priors，也就是anchor，选择k=5作为复杂度和高召回率的折中，将distance metric定义为：</p>
+<li>
+<p>Dimension Clusters: 通过k-means选择较好的priors，也就是anchor，选择k=5作为复杂度和高召回率的折中，将distance metric定义为：</p>
 </li>
-<li><script type="math/tex; mode=display">
-d(box, centroid) = 1-IOU(box, centroid)</script><p>在k=5的前提下，召回率和使用9个anchor box的相近</p>
+<li>
+<p>$$
+d(box, centroid) = 1-IOU(box, centroid)
+$$</p>
+<p>在k=5的前提下，召回率和使用9个anchor box的相近</p>
 </li>
-<li><p>Direct location prediction: 对坐标进行转换，和fast r-cnn等类似，提升5%，见Figure 3</p>
+<li>
+<p>Direct location prediction: 对坐标进行转换，和fast r-cnn等类似，提升5%，见Figure 3</p>
 </li>
-<li><p>Fine-Grained Features: 为了得到奇数大小的feature maps，将图像分辨率调整到416，得到奇数大小的好处是改点就是这个区域的中心，然后调整降采样的步长为32，这样就是416/32=13，参考SSD和faster r-cnn利用多尺度的feature maps，作者提出passthrough layer，将high resolution features和low resolution features结合，对于high resolution的feature maps，将相邻的特征分配到不同的channels，例如26x26x512变换成13x13x2048，再和原来的特征图相连接，相当于把feature maps做深度的扩充，这样有1%的提升</p>
+<li>
+<p>Fine-Grained Features: 为了得到奇数大小的feature maps，将图像分辨率调整到416，得到奇数大小的好处是改点就是这个区域的中心，然后调整降采样的步长为32，这样就是416/32=13，参考SSD和faster r-cnn利用多尺度的feature maps，作者提出passthrough layer，将high resolution features和low resolution features结合，对于high resolution的feature maps，将相邻的特征分配到不同的channels，例如26x26x512变换成13x13x2048，再和原来的特征图相连接，相当于把feature maps做深度的扩充，这样有1%的提升</p>
 </li>
 </ul>
 <p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fq7upwxukoj30t60teadt.jpg" alt=""></p>
@@ -624,10 +652,12 @@ d(box, centroid) = 1-IOU(box, centroid)</script><p>在k=5的前提下，召回�
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fq7vdy6vauj30ty0skjya.jpg" alt=""></p>
 <p>Table 2是ablation studies的结果</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fq7vx9xa1aj31kw0nwjy5.jpg" alt=""></p>
-<h5 id="Faster"><a href="#Faster" class="headerlink" title="Faster"></a>Faster</h5><p>提出darknet-19，效率相较于VGG 16有了较大的提升。</p>
+<h5>Faster</h5>
+<p>提出darknet-19，效率相较于VGG 16有了较大的提升。</p>
 <p>VGG-16对于224x224的图像做一次forward，卷积层的浮点数计算为30.69 billion。而darknet-19的卷积层浮点数计算为8.52 billion，但是在分类的准确性上略有降低。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fq7x1hlp1vj30jm0pujve.jpg" alt=""></p>
-<h5 id="Stronger"><a href="#Stronger" class="headerlink" title="Stronger"></a>Stronger</h5><p>这里作者提出了一个非常fancy的idea，WordNet，解决不同数据集之间label mutually exclusive的问题。WordNet通过构建hierarchical tree来简化问题，并且选择最短的到达root的路径，Figure 6为图示。利用有向图对条件概率计算进行优化，分层地计算概率，然后做出预测。</p>
+<h5>Stronger</h5>
+<p>这里作者提出了一个非常fancy的idea，WordNet，解决不同数据集之间label mutually exclusive的问题。WordNet通过构建hierarchical tree来简化问题，并且选择最短的到达root的路径，Figure 6为图示。利用有向图对条件概率计算进行优化，分层地计算概率，然后做出预测。</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fq7wy9z9kxj30pc0wkqaw.jpg" alt=""></p>
 
         
@@ -671,8 +701,8 @@ d(box, centroid) = 1-IOU(box, centroid)</script><p>在k=5的前提下，召回�
         
           <p>论文：Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks，TPAMI 2016</p>
 <p>作者：Shaoqing Ren, Kaiming He, Ross Girshick, and Jian Sun</p>
-<p>链接：<a href="https://arxiv.org/pdf/1506.01497.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1506.01497.pdf</a></p>
-<p>代码：<a href="https://github.com/rbgirshick/py-faster-rcnn" target="_blank" rel="external">https://github.com/rbgirshick/py-faster-rcnn</a></p>
+<p>链接：https://arxiv.org/pdf/1506.01497.pdf</p>
+<p>代码：https://github.com/rbgirshick/py-faster-rcnn</p>
 <ul>
 <li>在Fast R-CNN的基础上进行优化，将Region Proposal Network（RPN）取代Selective Search，可以更加有效地检测object candidates，与Fast R-CNN共享参数，RPN的任务是预测物体的bbox和objectness score</li>
 <li>在RPN的基础上，提出anchor的概念，每个anchor可以代表不同的scale和ratio，从而达到translation-invariant的效果</li>
@@ -684,12 +714,14 @@ d(box, centroid) = 1-IOU(box, centroid)</script><p>在k=5的前提下，召回�
 <li>将region proposals输入到Fast R-CNN中，得到detection的结果</li>
 </ol>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fpyjflds95j30ny0tcq81.jpg" alt=""></p>
-<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p><strong>RPN</strong></p>
+<h5>Architecture</h5>
+<p><strong>RPN</strong></p>
 <p>RPN的输入为任意形状的图像，输出是一堆proposals的坐标，以及对应的confidence score。为了生成一堆region proposals，对于nxn的feature maps来说，作者通过sliding window（其实也就是3x3的conv）将其映射到固定维度的特征空间，然后再对得到的特征向量做分类和回归（将全连接改造成1x1的卷积，可以接受任何大小的输入）。</p>
 <p><strong>anchors</strong></p>
 <p>对于每个滑动窗口来说，假设该窗口有k个对应的proposals。这样reg layer就有4k的输出，cls layer有2k个输出。Figure 3就是anchor的示例。anchor可以解释为sliding window的中心点，通过假设这个中心点来自不同原始区域池化得到，所以可以根据这个中心点(anchor)逆推得到这些区域坐标和种类。假设现在有3中scales和3种ratios，以及feature maps的大小是WxH，那么总共有9xWxH个anchors，也可以将其理解成先验的bounding box。</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fpynk5f034j31d40k8nle.jpg" alt=""></p>
-<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>首先是坐标空间的转换，将其转到相对空间，这在R-CNN中已经介绍过。其实是Multi-task的训练：</p>
+<h5>Experiments</h5>
+<p>首先是坐标空间的转换，将其转到相对空间，这在R-CNN中已经介绍过。其实是Multi-task的训练：</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fpyo96peu1j30ke064t97.jpg" alt=""></p>
 <p><strong>RPN训练</strong></p>
 <p>RPN就直接用end-to-end的方法进行训练，对于每张图像，采样256个anchors，正负比例为1：1，如果正样本不够则用负样本补足。</p>
@@ -745,26 +777,31 @@ d(box, centroid) = 1-IOU(box, centroid)</script><p>在k=5的前提下，召回�
         
           <p>论文：Fast R-CNN，<strong>ICCV</strong> 2015</p>
 <p>作者：Ross Girshick</p>
-<p>链接：<a href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Girshick_Fast_R-CNN_ICCV_2015_paper.pdf" target="_blank" rel="external">https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Girshick_Fast_R-CNN_ICCV_2015_paper.pdf</a></p>
-<p>代码：<a href="https://github.com/rbgirshick/fast-rcnn" target="_blank" rel="external">https://github.com/rbgirshick/fast-rcnn</a></p>
+<p>链接：https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Girshick_Fast_R-CNN_ICCV_2015_paper.pdf</p>
+<p>代码：https://github.com/rbgirshick/fast-rcnn</p>
 <ul>
-<li><p>简化训练过程，实现end-to-end的训练方式</p>
+<li>
+<p>简化训练过程，实现end-to-end的训练方式</p>
 <ul>
 <li>将SVM分类器换成softmax，整合到网络中，鼓励类间竞争</li>
 <li>将bounding box regression整合到网络中</li>
 </ul>
 </li>
-<li><p>在Fast-RCNN中，region proposal的计算都是share的，避免重复计算</p>
+<li>
+<p>在Fast-RCNN中，region proposal的计算都是share的，避免重复计算</p>
 </li>
-<li><p>提出ROI pooling layer使得每个region proposal可以得到确定长度的特征向量</p>
+<li>
+<p>提出ROI pooling layer使得每个region proposal可以得到确定长度的特征向量</p>
 </li>
-<li><p>探索了一些训练的tricks，可以参考！</p>
+<li>
+<p>探索了一些训练的tricks，可以参考！</p>
 <p>​</p>
 <p>Figure 1是Fast R-CNN的图示</p>
 </li>
 </ul>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/FuPCSWv0EUA2laIjMRDcJTU9oA0F" alt=""></p>
-<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>下图是R-CNN和Fast R-CNN的比较</p>
+<h5>Architecture</h5>
+<p>下图是R-CNN和Fast R-CNN的比较</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/FurXilgjM6ixsxoU1HRAgilULtUt" alt=""></p>
 <p>回顾一下R-CNN：</p>
 <ol>
@@ -792,17 +829,21 @@ d(box, centroid) = 1-IOU(box, centroid)</script><p>在k=5的前提下，召回�
 <li>使用图像金字塔</li>
 </ol>
 <p><strong>Truncated SVD</strong></p>
-<p>在训练的时候，因为ROIs数量不多，所以大部分的时间花在卷积运算上，而在测试的时候，需要计算每个ROIs的后验概率，有一半的时间花在全连接上，所以文章提出truncated SVD优化计算，将两个全连接取代一个全连接。</p>
-<script type="math/tex; mode=display">
-W \approx U\Sigma_tV^T</script><p>U是一个$u\times t$的矩阵，$\Sigma_t$是$t\times t$的矩阵，V是$v\times t$的矩阵，所以参数从$uv$减少到了$t(v+u)$，如果t要远小于$\min(u,v)$。</p>
+<p>在训练的时候，因为ROIs数量不多，所以大部分的时间花在卷积运算上，而在测试的时候，需要计算每个ROIs的后验概率，有一半的时间花在全连接上，所以文章提出truncated SVD优化计算，将两个全连接取代一个全连接。
+$$
+W \approx U\Sigma_tV^T
+$$
+U是一个$u\times t$的矩阵，$\Sigma_t$是$t\times t$的矩阵，V是$v\times t$的矩阵，所以参数从$uv$减少到了$t(v+u)$，如果t要远小于$\min(u,v)$。</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/Frc5IQiqhfIQW8Z39bNmc8BF3-vM" alt=""></p>
 <p><strong>Mini-batch sampling</strong></p>
 <p>在训练的时候，每次mini-batch中，从中采样两张图像，每张图像采样64个ROIs，这样每个batch的大小就是128，正负样本比例为1：3。</p>
-<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1-3是Fast R-CNN在VOC 2007, 2010, 2012三个数据集上的表现，都是SOAT。</p>
+<h5>Experiments</h5>
+<p>Table 1-3是Fast R-CNN在VOC 2007, 2010, 2012三个数据集上的表现，都是SOAT。</p>
 <p>Table 4是Fast-RCNN,RCNN以及SPPnet在training和testing效率上的比较，可以发现效率提升非常明显。</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/FozRMPEXdJimmQmIloMArAEK4bjz" alt=""></p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/FkHrR24XRqVg4etaxtFh-t2IF5G3" alt=""></p>
-<h5 id="Design-evaluation"><a href="#Design-evaluation" class="headerlink" title="Design evaluation"></a>Design evaluation</h5><ul>
+<h5>Design evaluation</h5>
+<ul>
 <li>Multi-task训练可以提高分类结果</li>
 <li>Multi-scale detection可以帮助提高结果，但是提升不大，折中之下，选了single scale</li>
 <li>training data越多越好，数据增强，将VOC2012的数据加到VOC2007中，提升明显！</li>
@@ -851,8 +892,8 @@ W \approx U\Sigma_tV^T</script><p>U是一个$u\times t$的矩阵，$\Sigma_t$是
         
           <p>论文：Spatial Pyramid Pooling in Deep ConvolutionalNetworks for Visual Recognition，<strong>TPAMI</strong> 2015</p>
 <p>作者：Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun</p>
-<p>链接：<a href="https://arxiv.org/pdf/1406.4729.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1406.4729.pdf</a></p>
-<p>代码：<a href="https://github.com/ShaoqingRen/SPP_net" target="_blank" rel="external">https://github.com/ShaoqingRen/SPP_net</a></p>
+<p>链接：https://arxiv.org/pdf/1406.4729.pdf</p>
+<p>代码：https://github.com/ShaoqingRen/SPP_net</p>
 <ul>
 <li>提出spatial pyramid pooling layer，使得网络能够接受任意大小的输入，同时利用multi-level的spatial bins做hierarchy information aggregation，提高模型的鲁棒性</li>
 <li>对image classification和object detection（针对RCNN的优化）都可以提升模型的表现</li>
@@ -860,15 +901,18 @@ W \approx U\Sigma_tV^T</script><p>U是一个$u\times t$的矩阵，$\Sigma_t$是
 </ul>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/56717690.jpg" alt=""></p>
 <p>在RCNN中，我们提取各个region proposals，然后将其warp到指定的大小，再用CNN提特征，这样的问题是图像object经过warp以后，会变形严重并且影响分辨率，从而影响分类的结果，所以作者提出SPP layer，使得对于任何大小的输入图像，神经网络都可以输出固定长度的特征，同时提高分类的鲁棒性。</p>
-<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>见Figure 3，将卷积层的输出经过SPP layer以后，利用max pooling分成3种的spatial bins，第一种是4x4，第二种是2x2，第三种是1x1(global pooling)。在做完pooling以后，我们可以得到16x256,4x256,1x256这三种维度的特征，256是输入的feature map的深度，拼接以后得到21x256长度的特征，其实可以将SPP layer看成是特征层面的re-scaled。</p>
+<h5>Architecture</h5>
+<p>见Figure 3，将卷积层的输出经过SPP layer以后，利用max pooling分成3种的spatial bins，第一种是4x4，第二种是2x2，第三种是1x1(global pooling)。在做完pooling以后，我们可以得到16x256,4x256,1x256这三种维度的特征，256是输入的feature map的深度，拼接以后得到21x256长度的特征，其实可以将SPP layer看成是特征层面的re-scaled。</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/71347165.jpg" alt=""></p>
 <p>例如输入的feature map的大小是axa，需要产生3x3，2x2，1x1的特征向量，那么pooling的window size是ceil(a/n)，步长是floor(a/n)。将这些特征拼接得到固定长度的特征向量，再连接全连接层进行分类。</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/44112090.jpg" alt=""></p>
-<h5 id="Training-Strategy"><a href="#Training-Strategy" class="headerlink" title="Training Strategy"></a>Training Strategy</h5><p><strong>Multi-size Training</strong></p>
+<h5>Training Strategy</h5>
+<p><strong>Multi-size Training</strong></p>
 <p>在分类任务的模型训练过程中，采用多个size的输入可以提高模型的结果。对于有两个不同大小输入的训练策略，使用两个固定大小（框架所限）的相同参数的网络进行交替训练。</p>
 <p><strong>Full-image Representation</strong></p>
 <p>在分类任务的模型训练过程中，将图像resize到min(w,h)=256，保持长宽比不变。</p>
-<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p><strong>Image Classifications</strong></p>
+<h5>Experiments</h5>
+<p><strong>Image Classifications</strong></p>
 <p>Table 1是三种base network的结构。</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/18-3-21/11136760.jpg" alt=""></p>
 <p>在分类任务中，作者通过实验证明，SPP layer，multi-size training，能够提高分类的精度（见Table 2）。SPP layer能够提高精度是因为利用spatial pyramid pooling可以提高鲁棒性。multi-size training中，有三种策略，一种是单个大小，第二种是180和224，还有一种是从[180,224]随机选择其中的一个size，实验证明，第二种精度最高。</p>
@@ -930,13 +974,15 @@ W \approx U\Sigma_tV^T</script><p>U是一个$u\times t$的矩阵，$\Sigma_t$是
         
           <p>论文：Rich feature hierarchies for accurate object detection and semantic segmentation，CVPR 2014</p>
 <p>作者：Ross Girshick，Jeff Donahue，Trevor Darrell，Jitendra Malik</p>
-<p>链接：<a href="https://arxiv.org/pdf/1311.2524.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1311.2524.pdf</a></p>
-<p>代码：<a href="https://github.com/rbgirshick/rcnn" target="_blank" rel="external">https://github.com/rbgirshick/rcnn</a></p>
-<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><ul>
+<p>链接：https://arxiv.org/pdf/1311.2524.pdf</p>
+<p>代码：https://github.com/rbgirshick/rcnn</p>
+<h5>Idea</h5>
+<ul>
 <li>之前的object detection算法都是用一些手工特征，例如SIFT或者HOG等，R-CNN使用pretrained的CNN提取region的特征，然后再用SVM分类做finetune（bridging the gap between image classification and object detection）</li>
 <li>尝试不同层的feature作为分类的特征</li>
 </ul>
-<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>R-CNN的模型见Figure 1，主要包括3个部分：</p>
+<h5>Architecture</h5>
+<p>R-CNN的模型见Figure 1，主要包括3个部分：</p>
 <ol>
 <li>提取region proposals</li>
 <li>用CNN提取特征，得到一定长度的特征向量</li>
@@ -961,15 +1007,22 @@ W \approx U\Sigma_tV^T</script><p>U是一个$u\times t$的矩阵，$\Sigma_t$是
 <p><strong>Object category classifier</strong></p>
 <p>对于每个类别，训练各自的SVM，这样就可以得到每个类的score，训练的时候将gt视为正样本，与gt的IoU &lt; 0.3视为负样本。因为负样本往往远远大于正样本，所以需要做hard negative mining，控制合理的比例，一般设置为1：3。</p>
 <p><strong>Bounding box regression</strong></p>
-<p>输入是n对${(P^i,G^i)}i=1,…,N$，其中$P^i=(P_x^i,P_y^i,P_w^i,P_h^i)$，对应bounding box的中心，长宽，$G^i=(G_x,G_y,G_w,G_h)$。将P进行映射（前两者是平移，后两个是缩放）：</p>
-<script type="math/tex; mode=display">
-\hat{G}_x = P_wd_x(P)+P_x \\ \hat{G}_y = P_hd_y(P)+P_y \\ \hat{G}_x = P_w\exp (d_w(P))\\ \hat{G}_h = P_h\exp(d_h(P)) \\d_\star(P)=w_\star^T\phi_5(P)</script><p>训练的时候对gt的四个坐标进行转换（上面的逆运算，使得$t_x,t_y$）：</p>
-<script type="math/tex; mode=display">
-t_x = (G_x-P_x)/P_w \\ t_y =(G_y −P_y)/P_h \\ t_w = \log(G_w/P_w)\\t_h = \log(G_h/P_h).</script><p>经过这样的变换，$t_x,t_y$为需要学习的平移量，$t_w, t_h$为需要学习的缩放量。</p>
-<p>其中，$G$表示的是ground truth，P表示的训练样本，我们的任务是求解$W_\star$，其实就是通过梯度下降或者最小二乘法求解ridge regression问题，:</p>
-<script type="math/tex; mode=display">
-w_\star =  \arg\min_{\hat{w}_\star}(t^i_\star − \hat{w}^T_\star \phi_5(P^i))^2+\lambda ||\hat{w}_\star||^2</script><p>其中$\phi_5(P^i)$表示的是第5个pooling的输出。需要注意的是，正则系数$\lambda=1000$，而且当G和P相差很大的时候，效果会不好，所以需要设置IoU阈值，将其设为0.6。</p>
-<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1是模型在VOC 2012 test上的表现，可以看出R-CNN BB远超其他baseline，证明了模型的性能。</p>
+<p>输入是n对${(P^i,G^i)}i=1,…,N$，其中$P^i=(P_x^i,P_y^i,P_w^i,P_h^i)$，对应bounding box的中心，长宽，$G^i=(G_x,G_y,G_w,G_h)$。将P进行映射（前两者是平移，后两个是缩放）：
+$$
+\hat{G}_x = P_wd_x(P)+P_x \ \hat{G}_y = P_hd_y(P)+P_y \ \hat{G}<em>x = P_w\exp (d_w(P))\ \hat{G}<em>h = P_h\exp(d_h(P)) \d</em>\star(P)=w</em>\star^T\phi_5(P)
+$$
+训练的时候对gt的四个坐标进行转换（上面的逆运算，使得$t_x,t_y$）：
+$$
+t_x = (G_x-P_x)/P_w \ t_y =(G_y −P_y)/P_h \ t_w = \log(G_w/P_w)\t_h = \log(G_h/P_h).
+$$
+经过这样的变换，$t_x,t_y$为需要学习的平移量，$t_w, t_h$为需要学习的缩放量。</p>
+<p>其中，$G$表示的是ground truth，P表示的训练样本，我们的任务是求解$W_\star$，其实就是通过梯度下降或者最小二乘法求解ridge regression问题，:
+$$
+w_\star =  \arg\min_{\hat{w}<em>\star}(t^i</em>\star − \hat{w}^T_\star \phi_5(P^i))^2+\lambda ||\hat{w}_\star||^2
+$$
+其中$\phi_5(P^i)$表示的是第5个pooling的输出。需要注意的是，正则系数$\lambda=1000$，而且当G和P相差很大的时候，效果会不好，所以需要设置IoU阈值，将其设为0.6。</p>
+<h5>Experiments</h5>
+<p>Table 1是模型在VOC 2012 test上的表现，可以看出R-CNN BB远超其他baseline，证明了模型的性能。</p>
 <p>Table 2是模型在VOC 2007 test上的表现，可以在上面做一些ablation study：</p>
 <ul>
 <li>对于不finetune的模型，第一行到第三行，可以发现fc6的结果最好，这样就可以移除fc7的参数，简化模型。</li>
@@ -979,7 +1032,7 @@ w_\star =  \arg\min_{\hat{w}_\star}(t^i_\star − \hat{w}^T_\star \phi_5(P^i))^2
 </ul>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fpbidj661zj31kw0eeq6d.jpg" alt=""></p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fpbi5y3ykqj31kw0k9wjg.jpg" alt=""></p>
-<p>​    </p>
+<p>​</p>
 
         
       
@@ -1021,10 +1074,11 @@ w_\star =  \arg\min_{\hat{w}_\star}(t^i_\star − \hat{w}^T_\star \phi_5(P^i))^2
       
         
           <p>论文 :Aggregated Residual Transformations for Deep Neural Networks, CVPR 2017</p>
-<p>链接：<a href="https://arxiv.org/pdf/1611.05431.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1611.05431.pdf</a></p>
+<p>链接：https://arxiv.org/pdf/1611.05431.pdf</p>
 <p>作者:  Saining Xie, Ross Girshick, Piotr Dollár, Zhuowen Tu, Kaiming He</p>
-<p>源码：<a href="https://github.com/facebookresearch/ResNeXt" target="_blank" rel="external">https://github.com/facebookresearch/ResNeXt</a></p>
-<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>提出ResNeXt网络，基于ResNet和GoogleNet。</p>
+<p>源码：https://github.com/facebookresearch/ResNeXt</p>
+<h5>Idea</h5>
+<p>提出ResNeXt网络，基于ResNet和GoogleNet。</p>
 <p>提出cardinality的概念，对于每个conv block，对输入做多种不同的（结构相同，参数不同）transformations，然后再aggregation，而transformations的数量就是cardinality。</p>
 <p>结构启发于inception module，同样是split-transform-merge的策略，这里的merge和transform都和inception不一样。split-transform-merge的策略主要是<strong><em>通过在一个尽可能小的计算复杂度的前提下，提高模型的表达能力</em></strong>（approach the representational power of large and dense layers, but at a considerably lower computational complexity）！ Inception的问题在于每个block都需要定制，导致了模型的灵活性较差，这些block的定制化设计相当于引入了一堆的超参，大量的超参对模型来讲无疑是不利的。而这篇文章就是基于这点进行改进！</p>
 <ul>
@@ -1032,21 +1086,25 @@ w_\star =  \arg\min_{\hat{w}_\star}(t^i_\star − \hat{w}^T_\star \phi_5(P^i))^2
 <li>超参少</li>
 <li>表达能力强</li>
 </ul>
-<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>首先，总结了两点block设计的原则：</p>
+<h5>Architecture</h5>
+<p>首先，总结了两点block设计的原则：</p>
 <ol>
 <li>对于相同大小的feature map，block的超参要相同，也就是conv的filter参数要一样。【if producing spatial maps of the same size, the blocks share the same hyper-parameters (width and filter sizes)】</li>
 <li>如果空间维度减半，那么feature maps的数量要加倍。【each time when the spatial map is downsampled by a factor of 2, the width of the blocks is multiplied by a factor of 2】</li>
 </ol>
 <p>Figure 1是ResNet和ResNeXt的block结构比较，重点看ResNeXt，可以看到这里将256维的输入做32个不同的transformations，每个transformation先通过1x1的conv做降维(information embedding)，然后再经过几个conv，最后将这32个输出做aggregation。</p>
-<p>将其公式化:</p>
-<script type="math/tex; mode=display">
-F(x) = \sum_{i=1}^C \tau_i(x)</script><p>$\tau_i$的作用就是将x投影到低维空间（embeeding），然后做transform。C就是做transformation的数量，也就是cardinaty。aggregation后，再用short connection做identity mapping。</p>
+<p>将其公式化:
+$$
+F(x) = \sum_{i=1}^C \tau_i(x)
+$$
+$\tau_i$的作用就是将x投影到低维空间（embeeding），然后做transform。C就是做transformation的数量，也就是cardinaty。aggregation后，再用short connection做identity mapping。</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fp3f3tppr3j30te0i0jur.jpg" alt=""></p>
 <p>Figure 3是异构的三种结构，（a）是初始版本，（b）concat，（c）group conv，这三者可以说是等价的。那么在实现上，可以利用group conv，更加方便！</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fp4d6cqzx8j31cq0i2q8m.jpg" alt=""></p>
-<p>​    Table 1是ResNet-50和ResNeXt-50的参数对比</p>
+<p>​	Table 1是ResNet-50和ResNeXt-50的参数对比</p>
 <p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fp4fhovd49j30nw0uaq8x.jpg" alt=""></p>
-<h5 id="Experiment"><a href="#Experiment" class="headerlink" title="Experiment"></a>Experiment</h5><p>Table 3是各个版本的ResNeXt以及ResNet在ImageNet-1K数据集上的表现，可以发现随着Cardinaty增加，模型总体上是变好的，体现在top-1 error逐渐在降低。</p>
+<h5>Experiment</h5>
+<p>Table 3是各个版本的ResNeXt以及ResNet在ImageNet-1K数据集上的表现，可以发现随着Cardinaty增加，模型总体上是变好的，体现在top-1 error逐渐在降低。</p>
 <p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fp4fegkbv6j30oc0jqn0j.jpg" alt=""></p>
 <p>Table 6是ResNet和ResNeXt在ImageNet-5K上的比较，可以可发现后者都要好于前者。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fp4fkycmlxj30pi0eotbv.jpg" alt=""></p>

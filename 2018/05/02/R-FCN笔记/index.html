@@ -280,8 +280,8 @@
       
         <p>论文：R-FCN: Object Detection via Region-based Fully Convolutional Networks，<strong>NIPS</strong> 2017</p>
 <p>作者：Jifeng Dai, Yi Li, Kaiming He, Jian Sun</p>
-<p>链接：<a href="https://arxiv.org/pdf/1605.06409.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1605.06409.pdf</a></p>
-<p>代码：<a href="https://github.com/daijifeng001/r-fcn" target="_blank" rel="external">https://github.com/daijifeng001/r-fcn</a></p>
+<p>链接：https://arxiv.org/pdf/1605.06409.pdf</p>
+<p>代码：https://github.com/daijifeng001/r-fcn</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fr2thjx8v0j31ce0oa0zb.jpg" alt=""></p>
 <p><strong>objective:</strong> address a dilemma between translation-invariance in image classification and translation-variance in object detection</p>
 <p><strong>solution:</strong> position-sensitive score maps</p>
@@ -289,16 +289,18 @@
 <li>83.6% mAP on the 2007 set, 82.0% the 2012 set</li>
 <li>a test-time speed of 170ms per image, 2.5-20× faster than the Faster R-CNN counterpart</li>
 </ul>
-<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2ttte6q5j30wo0vy1kx.jpg" alt=""></p>
+<h5>Architecture</h5>
+<p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2ttte6q5j30wo0vy1kx.jpg" alt=""></p>
 <p>模型的backbone是ResNet-101，并将最后的fc层改成1024d的1x1的conv layer。</p>
 <p>在image classification中，网络需要较好的translation invariance，但是在detection中，因为需要准确地定位object的位置，这需要网络具有定位的representation，有一定的translation-variant，例如在candidate box中，网络最好能够对在box中的object的一些translation，例如旋转，平移等有一定的响应。所以为了引入translation invariance，作者提出了Region-based Fully Convolutional Network (R-FCN)。</p>
 <p>R-FCN通过构造position-sensitive的score map，每个score map都会对object的相对空间信息进行编码（encode），例如在object的左边还是右边。</p>
-<p>对于最后一层的conv layer，它会输出每个类别的$k^2$个position-sensitive score maps，所以一共有$k^2(C+1)$个channel，$k^2$个score maps分别对应$k\times k$的格子，例如k=3，就可以对相对位置进行了编码：{top-left, top-center, top-right, …, bottom-right}，然后再用一个position-sensitive ROI pooling进行信息的整合，文中的做法就是相加</p>
+<p>对于最后一层的conv layer，它会输出每个类别的$k^2$个position-sensitive score maps，所以一共有$k^2(C+1)$个channel，$k^2$个score maps分别对应$k\times k$的格子，例如k=3，就可以对相对位置进行了编码：{top-left, top-center, top-right, ..., bottom-right}，然后再用一个position-sensitive ROI pooling进行信息的整合，文中的做法就是相加</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2sgoe0jtj31cc0omth7.jpg" alt=""></p>
-<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 2是与其他模型的比较，对于R-FCN来说，去k=7要优于k=3</p>
+<h5>Experiments</h5>
+<p>Table 2是与其他模型的比较，对于R-FCN来说，去k=7要优于k=3</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2tw517esj313u0dadij.jpg" alt=""></p>
 <p>Table 3是R-FCN和faster r-cnn在训练和测试的效率比较，可以发现R-FCN的效率要高于Faster r-cnn，同时准确率也要高于faster r-cnn。</p>
-<p>Table 4-6是R-FCN和其他模型在PASCAL VOC2007，PASCAL VOC2012，COCO数据集上的比较 </p>
+<p>Table 4-6是R-FCN和其他模型在PASCAL VOC2007，PASCAL VOC2012，COCO数据集上的比较</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcly1fr2u19dx60j30zg0twdne.jpg" alt=""></p>
 <p><img src="https://ws4.sinaimg.cn/large/006tKfTcly1fr2u6dkj5nj30xm0bkn08.jpg" alt=""></p>
 
@@ -383,7 +385,7 @@ gitment.render('gitment')
     <span class="title" id="toc-switch"><span>Index</span></span>
     <div class="toc-inner syuanpi back-1 fallIn-light">
       <li class="title-link"><a href="javascript:;" class="toTop">R-FCN笔记</a></li>
-      <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#Architecture"><span class="toc-text">Architecture</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Experiments"><span class="toc-text">Experiments</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">Architecture</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">Experiments</span></a></li></ol>
     </div>
   </aside>
 
