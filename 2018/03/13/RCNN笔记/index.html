@@ -311,8 +311,14 @@
 <p><strong>Object category classifier</strong></p>
 <p>对于每个类别，训练各自的SVM，这样就可以得到每个类的score，训练的时候将gt视为正样本，与gt的IoU &lt; 0.3视为负样本。因为负样本往往远远大于正样本，所以需要做hard negative mining，控制合理的比例，一般设置为1：3。</p>
 <p><strong>Bounding box regression</strong></p>
-<p>输入是n对${(P^i,G^i)}i=1,…,N$，其中$P^i=(P_x^i,P_y^i,P_w^i,P_h^i)$，对应bounding box的中心，长宽，$G^i=(G_x,G_y,G_w,G_h)$。将P进行映射（前两者是平移，后两个是缩放）：<br>$$<br>\hat{G}_x = P_wd_x(P)+P_x \ \hat{G}_y = P_hd_y(P)+P_y \ \hat{G}_x = P_w\exp (d_w(P))\ \hat{G}_h = P_h\exp(d_h(P)) \\d_\star(P)=w_\star^T\phi_5(P)<br>$$<br>训练的时候对gt的四个坐标进行转换（上面的逆运算，使得$t_x,t_y$）：<br>$$<br>t_x = (G_x-P_x)/P_w \ t_y =(G_y −P_y)/P_h \ t_w = \log(G_w/P_w)\\t_h = \log(G_h/P_h).<br>$$<br>经过这样的变换，$t_x,t_y$为需要学习的平移量，$t_w, t_h$为需要学习的缩放量。</p>
-<p>其中，$G$表示的是ground truth，P表示的训练样本，我们的任务是求解$W_\star$，其实就是通过梯度下降或者最小二乘法求解ridge regression问题，:<br>$$<br>w_\star =  \arg\min_{\hat{w}_\star}(t^i_\star − \hat{w}^T_\star \phi_5(P^i))^2+\lambda ||\hat{w}_\star||^2<br>$$<br>其中$\phi_5(P^i)$表示的是第5个pooling的输出。需要注意的是，正则系数$\lambda=1000$，而且当G和P相差很大的时候，效果会不好，所以需要设置IoU阈值，将其设为0.6。</p>
+<p>输入是n对${(P^i,G^i)}i=1,…,N$，其中$P^i=(P_x^i,P_y^i,P_w^i,P_h^i)$，对应bounding box的中心，长宽，$G^i=(G_x,G_y,G_w,G_h)$。将P进行映射（前两者是平移，后两个是缩放）：</p>
+<script type="math/tex; mode=display">
+\hat{G}_x = P_wd_x(P)+P_x \\ \hat{G}_y = P_hd_y(P)+P_y \\ \hat{G}_x = P_w\exp (d_w(P))\\ \hat{G}_h = P_h\exp(d_h(P)) \\d_\star(P)=w_\star^T\phi_5(P)</script><p>训练的时候对gt的四个坐标进行转换（上面的逆运算，使得$t_x,t_y$）：</p>
+<script type="math/tex; mode=display">
+t_x = (G_x-P_x)/P_w \\ t_y =(G_y −P_y)/P_h \\ t_w = \log(G_w/P_w)\\t_h = \log(G_h/P_h).</script><p>经过这样的变换，$t_x,t_y$为需要学习的平移量，$t_w, t_h$为需要学习的缩放量。</p>
+<p>其中，$G$表示的是ground truth，P表示的训练样本，我们的任务是求解$W_\star$，其实就是通过梯度下降或者最小二乘法求解ridge regression问题，:</p>
+<script type="math/tex; mode=display">
+w_\star =  \arg\min_{\hat{w}_\star}(t^i_\star − \hat{w}^T_\star \phi_5(P^i))^2+\lambda ||\hat{w}_\star||^2</script><p>其中$\phi_5(P^i)$表示的是第5个pooling的输出。需要注意的是，正则系数$\lambda=1000$，而且当G和P相差很大的时候，效果会不好，所以需要设置IoU阈值，将其设为0.6。</p>
 <h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1是模型在VOC 2012 test上的表现，可以看出R-CNN BB远超其他baseline，证明了模型的性能。</p>
 <p>Table 2是模型在VOC 2007 test上的表现，可以在上面做一些ablation study：</p>
 <ul>

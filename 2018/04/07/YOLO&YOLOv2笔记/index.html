@@ -319,8 +319,8 @@
 </li>
 <li><p>Dimension Clusters: 通过k-means选择较好的priors，也就是anchor，选择k=5作为复杂度和高召回率的折中，将distance metric定义为：</p>
 </li>
-<li><p>$$<br>d(box, centroid) = 1-IOU(box, centroid)<br>$$</p>
-<p>在k=5的前提下，召回率和使用9个anchor box的相近</p>
+<li><script type="math/tex; mode=display">
+d(box, centroid) = 1-IOU(box, centroid)</script><p>在k=5的前提下，召回率和使用9个anchor box的相近</p>
 </li>
 <li><p>Direct location prediction: 对坐标进行转换，和fast r-cnn等类似，提升5%，见Figure 3</p>
 </li>

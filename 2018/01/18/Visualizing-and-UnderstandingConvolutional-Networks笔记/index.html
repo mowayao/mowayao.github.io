@@ -295,8 +295,12 @@
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fnqehkh9h4j30kc02hweb.jpg" alt=""></p>
 <p>再将$[4\times 4]$的输入转换成等价的16维的向量，那么$y=Cx$的输出就是一个4维向量，再将其转换成$2\times2$的矩阵，得到最终的结果。</p>
 <p>而Deconv也称Transposed conv，就是变成$C^Ty$。</p>
-<p>其实整个过程和convolution的back-propagation是很像的。<br>$$<br>\frac{\partial L}{\partial x_i} = \sum_j\frac{\partial y_j}{\partial  x_i}\cdot\frac{\partial L}{\partial y_j} \ = \sum_{j}C_{i,j}\cdot \frac{\partial L}{\partial y_j} \ = C^T_{*,i} \frac{\partial L}{\partial y}<br>$$<br>还有一个很重要的概念需要厘清：为什么用这种类似back-propogation的方法将feature map映射回输入图像，可以反应出feature map在原图中学到的东西？</p>
-<p>我们假设CNN是一个high level的非线性函数$f(X)$，输出是feature map。我们这里把所有的参数看成一个整体，做一个近似:<br>$$<br>f(X) \approx  W_iX<br>$$<br>这里的$W_i$表示的是第i个pattern，那么$f(X)$求关于X的梯度其实就是pattern W。</p>
+<p>其实整个过程和convolution的back-propagation是很像的。</p>
+<script type="math/tex; mode=display">
+\frac{\partial L}{\partial x_i} = \sum_j\frac{\partial y_j}{\partial  x_i}\cdot\frac{\partial L}{\partial y_j} \\ = \sum_{j}C_{i,j}\cdot \frac{\partial L}{\partial y_j} \\ = C^T_{*,i} \frac{\partial L}{\partial y}</script><p>还有一个很重要的概念需要厘清：为什么用这种类似back-propogation的方法将feature map映射回输入图像，可以反应出feature map在原图中学到的东西？</p>
+<p>我们假设CNN是一个high level的非线性函数$f(X)$，输出是feature map。我们这里把所有的参数看成一个整体，做一个近似:</p>
+<script type="math/tex; mode=display">
+f(X) \approx  W_iX</script><p>这里的$W_i$表示的是第i个pattern，那么$f(X)$求关于X的梯度其实就是pattern W。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkv3ckslgj30us0qowkv.jpg" alt=""></p>
 <h5 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h5><p>基于AlexNet修改，将第一层$11\times 11$的大小减小到$7\times 7$, 并将步长从4减少到2， 并ImageNet 2012数据集上训练，具体见Fig. 3。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcly1fnkzcp3ebcj30uy0i2791.jpg" alt=""></p>

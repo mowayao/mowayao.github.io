@@ -286,7 +286,9 @@
 <blockquote>
 <p>Another assumption one can make about the connection between the source and the target domains is that given the same observation$X=x$, the conditional distributions of Y are the same in the two domains. However, the marginal distributions of X may be different in the source and the target domains. Formally, we assume that $ P_s(Y \vert X = x) = P_t(Y \vert X = x)$ for all $ x \in \mathcal{X}$! but $ P_s(X) \ne P_t(X)$. This difference between the two domains is called <em>covariate shift</em></p>
 </blockquote>
-<p>covariates其实就是输入特征，记做X，假设对任意的$x\in \mathcal{X}$,$P_s(Y|X=x)=P_t(Y|X=x)$，表示Y关于X的条件分布在source domain（训练集）和target domain（测试集）是一样的，但是$P_s(X)\neq P_t(X) $，两者的边缘分布是不一样的！这个问题经常发生在transfer learning中。从表面上看，对于分类问题，只要两者的条件分布相同，即使边缘分布不同，也不会影响分类的结果，但是，当模型是有参数的时候，也就是$P(Y|X,\theta)$的时候，我们需要选择最优的参数$\theta^*$来使得loss($\theta$)最小。在这个时候，如果$P_s(X)\neq P_t(X) $，也就打破了传统机器学习中训练集和测试集的数据是i.i.d（独立同分布）的，那么在target domain的最优模型会和source domain的不一样，因为参数的求解依赖于X的分布（似然函数）！<br>$$<br>P(\theta|D)=\frac{P(D|\theta)\times P(\theta)}{P(D)}<br>$$<br>Internal Covariate Shift表示的是在神经网络发生的convariate shift，因为网络参数在更新，在神经网络的特定层的输出分布就发生了改变，这就导致它的后面层需要去适应它分布的变化，这就降低了训练速度，影响了模型的训练效果。</p>
+<p>covariates其实就是输入特征，记做X，假设对任意的$x\in \mathcal{X}$,$P_s(Y|X=x)=P_t(Y|X=x)$，表示Y关于X的条件分布在source domain（训练集）和target domain（测试集）是一样的，但是$P_s(X)\neq P_t(X) $，两者的边缘分布是不一样的！这个问题经常发生在transfer learning中。从表面上看，对于分类问题，只要两者的条件分布相同，即使边缘分布不同，也不会影响分类的结果，但是，当模型是有参数的时候，也就是$P(Y|X,\theta)$的时候，我们需要选择最优的参数$\theta^*$来使得loss($\theta$)最小。在这个时候，如果$P_s(X)\neq P_t(X) $，也就打破了传统机器学习中训练集和测试集的数据是i.i.d（独立同分布）的，那么在target domain的最优模型会和source domain的不一样，因为参数的求解依赖于X的分布（似然函数）！</p>
+<script type="math/tex; mode=display">
+P(\theta|D)=\frac{P(D|\theta)\times P(\theta)}{P(D)}</script><p>Internal Covariate Shift表示的是在神经网络发生的convariate shift，因为网络参数在更新，在神经网络的特定层的输出分布就发生了改变，这就导致它的后面层需要去适应它分布的变化，这就降低了训练速度，影响了模型的训练效果。</p>
 <p><strong>Vanishing Gradient</strong></p>
 <p>一些容易饱和的非线性激活函数(tanh, sigmoid等)当输入很大的时候，梯度容易饱和。这使得模型在加深的时候，梯度容易消失！以及，ReLU的使用使得部分神经元“死掉”后不再有梯度传回去，随着网络的不断迭代，越来越多的神经元会“死掉”！所以这需要我们：</p>
 <ul>

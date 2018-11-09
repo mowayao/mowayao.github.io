@@ -321,7 +321,9 @@
 <h2 id="YOLO"><a href="#YOLO" class="headerlink" title="YOLO"></a>YOLO</h2><p><img src="http://upload-images.jianshu.io/upload_images/75110-91ee171b49f3ea20.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
 <p>YOLO首先将图像分为S×S的格子（grid cell）。如果一个目标的中心落入格子，该格子就负责检测该目标。每一个格子（grid cell）预测bounding boxes和该boxes的置信值（confidence score）。置信值代表box包含一个目标的置信度。然后，我们定义置信值为。如果没有目标，置信值为零。另外，我们希望预测的置信值和ground truth的intersection over union (IOU)相同。</p>
 <p>每一个bounding box包含5个值：$x，y，w，h$和confidence。$（x，y）$代表与格子相关的box的中心。$（w，h）$为与全图信息相关的box的宽和高。confidence代表预测boxes的IOU和gound truth。</p>
-<p>每个格子（grid cell）预测条件概率值C($Pr(Class_i|Object) $)。概率值C代表了格子包含一个目标的概率，每一格子只预测一类概率。在测试时，每个box通过类别概率和box置信度相乘来得到特定类别置信分数：<br>$$<br>Pr(Class_i|Object) \cdot Pr(Object)\cdot IOU_{pred}^{truth} = Pr(Class_i)\cdot IOU_{pred}^{truth}<br>$$<br>它将图片划分为S×S的网格，对于每个网格单元预测边界框(B)、边界框的置信度以及类别概率(C)，因此这些预测值可以表示为S×S×(B∗5+C)的张量。</p>
+<p>每个格子（grid cell）预测条件概率值C($Pr(Class_i|Object) $)。概率值C代表了格子包含一个目标的概率，每一格子只预测一类概率。在测试时，每个box通过类别概率和box置信度相乘来得到特定类别置信分数：</p>
+<script type="math/tex; mode=display">
+Pr(Class_i|Object) \cdot Pr(Object)\cdot IOU_{pred}^{truth} = Pr(Class_i)\cdot IOU_{pred}^{truth}</script><p>它将图片划分为S×S的网格，对于每个网格单元预测边界框(B)、边界框的置信度以及类别概率(C)，因此这些预测值可以表示为S×S×(B∗5+C)的张量。</p>
 
       
     

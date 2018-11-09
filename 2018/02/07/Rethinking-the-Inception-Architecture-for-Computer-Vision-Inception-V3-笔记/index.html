@@ -323,7 +323,7 @@
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fo80da87wrj30ra0vcagv.jpg" alt=""></p>
 <p><strong>Label Smoothing</strong></p>
 <p>为了防止模型预测的时候over-confident，用label smoothing来做一个正则化。</p>
-<p>将label distribution从$q(k|x)=\delta_{k,y}$替换为$q(k|y)=(1-\epsilon)\delta_{k,y}+\epsilon\mu$</p>
+<p>将label distribution从$q(k|x)=\delta<em>{k,y}$替换为$q(k|y)=(1-\epsilon)\delta</em>{k,y}+\epsilon\mu$</p>
 <h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p>首先针对不同的感受野做了实验，见Table2，299x299在保准计算效率的同时，有较高的准确率。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fobcl3nkrlj30ra0a0dhh.jpg" alt=""></p>
 <p>单模型比较结果见Table 3。</p>

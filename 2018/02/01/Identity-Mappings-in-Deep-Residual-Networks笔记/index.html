@@ -281,15 +281,18 @@
         <p>论文 ：Identity Mappings in Deep Residual Networks, ECCV 2016</p>
 <p>链接：<a href="https://arxiv.org/pdf/1603.05027.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1603.05027.pdf</a></p>
 <p>作者: Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun</p>
-<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>ResNet的每个unit可以表示为：<br>$$<br>y_l = h(x_l)+F(x_l,W_l) \ x_{l+1} = f(y_l)<br>$$<br>$x_l$是第l个unit的输入，$x_{l+1}$是l个单元的输出。在ResNet v1中，$h(x_l)=x_l$，表示identity mapping(做了3种尝试，选择了这种)，f是ReLU函数，F包含2-3个卷积层，中间还有BN和ReLU（见Figure 1(a))。如果h和f都是identity mapping的时候，<strong>信号可以直接从一个unit到另一个unit，无论是forward还是backward，这样可以使训练更加容易</strong>。</p>
-<p>Forward:<br>$$<br>x_{l+1}=x_l+F(x_l,W_l)… \ x_L = x_l + \sum_{i=l}^{L+1}F(x_i,W_i)<br>$$</p>
-<ul>
-<li>第L层的特征$x_L$可以表示成$x_l+\sum_{i=l}^{L-1}F(x_i,W_i)$</li>
-<li>$x_L=x_o+\sum_{i=0}^{L-1}F(x_i,W_i)$，可以由所有的残差函数相加得到，再加上$x_o$</li>
+<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>ResNet的每个unit可以表示为：</p>
+<script type="math/tex; mode=display">
+y_l = h(x_l)+F(x_l,W_l) \\ x_{l+1} = f(y_l)</script><p>$x<em>l$是第l个unit的输入，$x</em>{l+1}$是l个单元的输出。在ResNet v1中，$h(x_l)=x_l$，表示identity mapping(做了3种尝试，选择了这种)，f是ReLU函数，F包含2-3个卷积层，中间还有BN和ReLU（见Figure 1(a))。如果h和f都是identity mapping的时候，<strong>信号可以直接从一个unit到另一个unit，无论是forward还是backward，这样可以使训练更加容易</strong>。</p>
+<p>Forward:</p>
+<script type="math/tex; mode=display">
+x_{l+1}=x_l+F(x_l,W_l)... \\ x_L = x_l + \sum_{i=l}^{L+1}F(x_i,W_i)</script><ul>
+<li>第L层的特征$x<em>L$可以表示成$x_l+\sum</em>{i=l}^{L-1}F(x_i,W_i)$</li>
+<li>$x<em>L=x_o+\sum</em>{i=0}^{L-1}F(x_i,W_i)$，可以由所有的残差函数相加得到，再加上$x_o$</li>
 </ul>
 <p>Backward:</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fo5tv0mjxdj30my03mjrs.jpg" alt=""></p>
-<p>从梯度计算来看，$x_l$的梯度与l+1到L的layer都有关，$\frac{\partial \epsilon}{\partial x_L}$保证梯度会从L穿回到l，而且梯度不会消失，因为$\frac{\partial}{\partial x_l}\sum_{i=l}^{L-1}F(x_i, W_i)$很少为-1。</p>
+<p>从梯度计算来看，$x<em>l$的梯度与l+1到L的layer都有关，$\frac{\partial \epsilon}{\partial x_L}$保证梯度会从L穿回到l，而且梯度不会消失，因为$\frac{\partial}{\partial x_l}\sum</em>{i=l}^{L-1}F(x_i, W_i)$很少为-1。</p>
 <p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fo5n89qljvj318e0v4tjb.jpg" alt=""></p>
 <p><strong>Identity Skip Connection</strong></p>
 <p>主要是印证当shortcut不取identity mapping时，效果为什么不好</p>

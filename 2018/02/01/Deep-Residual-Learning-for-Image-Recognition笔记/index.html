@@ -292,7 +292,11 @@
 <p>If the optimal function is closer to an identity mapping than to a zero mapping, it should be easier for the solver to find the perturbations with reference to an identity mapping, than to learn the function as a new one.</p>
 </blockquote>
 <p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fo2bil5j4xj30ts0foq6o.jpg" alt=""></p>
-<h5 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h5><p><strong>short connection</strong><br>$$<br>y = \mathbf{F}(x,{W_i})+x<br>$$<br>$\mathbf{F}(x,{W_i})$表示待学习的残差mapping。而后面+x这个运算可以通过shortcuts进行element-wise的加法。优点是不需要额外的参数，当维度不统一的时候，可以进行zero padding或者线性投影（虽然会引入少量的参数）使得两者的维度一致。<br>$$<br>y = \mathbf{F}(x,{W_i})+W_sx<br>$$<br><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo2br70niwj30za0g0gnk.jpg" alt=""></p>
+<h5 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h5><p><strong>short connection</strong></p>
+<script type="math/tex; mode=display">
+y = \mathbf{F}(x,\{W_i\})+x</script><p>$\mathbf{F}(x,{W_i})$表示待学习的残差mapping。而后面+x这个运算可以通过shortcuts进行element-wise的加法。优点是不需要额外的参数，当维度不统一的时候，可以进行zero padding或者线性投影（虽然会引入少量的参数）使得两者的维度一致。</p>
+<script type="math/tex; mode=display">
+y = \mathbf{F}(x,\{W_i\})+W_sx</script><p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo2br70niwj30za0g0gnk.jpg" alt=""></p>
 <p><strong>Bottleneck design</strong></p>
 <p>在3x3卷积前后加入1x1卷积来降低和提高feature map的深度，实现feature map之间的线性组合，提高模型的非线性能力，同时还可以使得输入输出的维度保持一致，具体见Figure 5。</p>
 <p>Bottleneck的结构也被应用到了50-layer,101-layer,152-layer的网络中。</p>

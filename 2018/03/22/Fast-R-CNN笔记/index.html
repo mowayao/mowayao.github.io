@@ -327,7 +327,9 @@
 <li>使用图像金字塔</li>
 </ol>
 <p><strong>Truncated SVD</strong></p>
-<p>在训练的时候，因为ROIs数量不多，所以大部分的时间花在卷积运算上，而在测试的时候，需要计算每个ROIs的后验概率，有一半的时间花在全连接上，所以文章提出truncated SVD优化计算，将两个全连接取代一个全连接。<br>$$<br>W \approx U\Sigma_tV^T<br>$$<br>U是一个$u\times t$的矩阵，$\Sigma_t$是$t\times t$的矩阵，V是$v\times t$的矩阵，所以参数从$uv$减少到了$t(v+u)$，如果t要远小于$\min(u,v)$。</p>
+<p>在训练的时候，因为ROIs数量不多，所以大部分的时间花在卷积运算上，而在测试的时候，需要计算每个ROIs的后验概率，有一半的时间花在全连接上，所以文章提出truncated SVD优化计算，将两个全连接取代一个全连接。</p>
+<script type="math/tex; mode=display">
+W \approx U\Sigma_tV^T</script><p>U是一个$u\times t$的矩阵，$\Sigma_t$是$t\times t$的矩阵，V是$v\times t$的矩阵，所以参数从$uv$减少到了$t(v+u)$，如果t要远小于$\min(u,v)$。</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/Frc5IQiqhfIQW8Z39bNmc8BF3-vM" alt=""></p>
 <p><strong>Mini-batch sampling</strong></p>
 <p>在训练的时候，每次mini-batch中，从中采样两张图像，每张图像采样64个ROIs，这样每个batch的大小就是128，正负样本比例为1：3。</p>

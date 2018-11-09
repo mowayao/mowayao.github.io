@@ -310,11 +310,11 @@
 <p>首先对每列进行采样，列确定后，再采样，利用P和alias。过程非常简单，时间效率是$O(1)$</p>
 <p>接下来就是证明这个alias表和P表是否一定存在！</p>
 <blockquote>
-<p><strong>Theorem:</strong> Given k width-one rectangles of heights $h_0,h_1,…,h_{k−1}$ such that $\sum_{i=0}^{k-1}h_i=k$, there is a way of cutting the rectangles and distributing them into k columns, each of which has height 1, such that each column contains at most two different rectangles and the $i$th column contains at least one piece of the $i$th rectangle.</p>
+<p><strong>Theorem:</strong> Given k width-one rectangles of heights $h<em>0,h_1,…,h</em>{k−1}$ such that $\sum_{i=0}^{k-1}h_i=k$, there is a way of cutting the rectangles and distributing them into k columns, each of which has height 1, such that each column contains at most two different rectangles and the $i$th column contains at least one piece of the $i$th rectangle.</p>
 </blockquote>
 <p>证明：</p>
 <p>当k=1的时候，很明显是成立的。</p>
-<p>假设当$k=x$的时候成立，那么我们就需要证明$k=x+1$时，是否满足。<br>考虑任一个宽度为$x+1$的矩形，高度分别是：$h_0, h_1, …, h_{k}$, 且满足$\sum_{i = 0}^{k}{h_i} =  x+ 1$,假设一些高度$h_l \le 1$ 还有一些$h_g\ge 1$。不可能同时大于0或者小于0。</p>
+<p>假设当$k=x$的时候成立，那么我们就需要证明$k=x+1$时，是否满足。<br>考虑任一个宽度为$x+1$的矩形，高度分别是：$h<em>0, h_1, …, h</em>{k}$, 且满足$\sum_{i = 0}^{k}{h_i} =  x+ 1$,假设一些高度$h_l \le 1$ 还有一些$h_g\ge 1$。不可能同时大于0或者小于0。</p>
 <p>接下来就是用$h_g$把$h_l$填满，这样我们就只剩下$x$个未解决的。所以。。成立！</p>
 <p>具体的做法如下：</p>
 <blockquote>

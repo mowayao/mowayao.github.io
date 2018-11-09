@@ -291,7 +291,9 @@
 <p>假设有L层网络，那么如果将网络视为DAG，那么如果实行全连接，并且保证网络前向传播，共有$\frac{L\times(L+1)}{2}$条边。</p>
 <h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fp33t32d1mj31kw0bt0xv.jpg" alt=""></p>
 <p><strong>Dense Block</strong></p>
-<p>首先，将其公式化，我们考虑第l层网络的输入和输出，$x_l$表示为第l层的输出，那么有:<br>$$<br>x_l = H_l([x_0,x_1,…,x_{l-1}])<br>$$<br>这里，$[x_0,x_1,…,x_{l-1}]$表示feature map的按通道拼接，形成新的tensor。</p>
+<p>首先，将其公式化，我们考虑第l层网络的输入和输出，$x_l$表示为第l层的输出，那么有:</p>
+<script type="math/tex; mode=display">
+x_l = H_l([x_0,x_1,...,x_{l-1}])</script><p>这里，$[x<em>0,x_1,…,x</em>{l-1}]$表示feature map的按通道拼接，形成新的tensor。</p>
 <p>$H_l$是一个组合函数，BN-ReLU-Conv(3x3)。</p>
 <p>为了将模型简化，将预想中的DenseNet分拆成若干个dense block，见Figure 2。</p>
 <p><strong>Growth Rate</strong></p>
@@ -692,7 +694,7 @@
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fo80da87wrj30ra0vcagv.jpg" alt=""></p>
 <p><strong>Label Smoothing</strong></p>
 <p>为了防止模型预测的时候over-confident，用label smoothing来做一个正则化。</p>
-<p>将label distribution从$q(k|x)=\delta_{k,y}$替换为$q(k|y)=(1-\epsilon)\delta_{k,y}+\epsilon\mu$</p>
+<p>将label distribution从$q(k|x)=\delta<em>{k,y}$替换为$q(k|y)=(1-\epsilon)\delta</em>{k,y}+\epsilon\mu$</p>
 <h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p>首先针对不同的感受野做了实验，见Table2，299x299在保准计算效率的同时，有较高的准确率。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fobcl3nkrlj30ra0a0dhh.jpg" alt=""></p>
 <p>单模型比较结果见Table 3。</p>
@@ -740,15 +742,18 @@
           <p>论文 ：Identity Mappings in Deep Residual Networks, ECCV 2016</p>
 <p>链接：<a href="https://arxiv.org/pdf/1603.05027.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1603.05027.pdf</a></p>
 <p>作者: Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun</p>
-<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>ResNet的每个unit可以表示为：<br>$$<br>y_l = h(x_l)+F(x_l,W_l) \ x_{l+1} = f(y_l)<br>$$<br>$x_l$是第l个unit的输入，$x_{l+1}$是l个单元的输出。在ResNet v1中，$h(x_l)=x_l$，表示identity mapping(做了3种尝试，选择了这种)，f是ReLU函数，F包含2-3个卷积层，中间还有BN和ReLU（见Figure 1(a))。如果h和f都是identity mapping的时候，<strong>信号可以直接从一个unit到另一个unit，无论是forward还是backward，这样可以使训练更加容易</strong>。</p>
-<p>Forward:<br>$$<br>x_{l+1}=x_l+F(x_l,W_l)… \ x_L = x_l + \sum_{i=l}^{L+1}F(x_i,W_i)<br>$$</p>
-<ul>
-<li>第L层的特征$x_L$可以表示成$x_l+\sum_{i=l}^{L-1}F(x_i,W_i)$</li>
-<li>$x_L=x_o+\sum_{i=0}^{L-1}F(x_i,W_i)$，可以由所有的残差函数相加得到，再加上$x_o$</li>
+<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>ResNet的每个unit可以表示为：</p>
+<script type="math/tex; mode=display">
+y_l = h(x_l)+F(x_l,W_l) \\ x_{l+1} = f(y_l)</script><p>$x<em>l$是第l个unit的输入，$x</em>{l+1}$是l个单元的输出。在ResNet v1中，$h(x_l)=x_l$，表示identity mapping(做了3种尝试，选择了这种)，f是ReLU函数，F包含2-3个卷积层，中间还有BN和ReLU（见Figure 1(a))。如果h和f都是identity mapping的时候，<strong>信号可以直接从一个unit到另一个unit，无论是forward还是backward，这样可以使训练更加容易</strong>。</p>
+<p>Forward:</p>
+<script type="math/tex; mode=display">
+x_{l+1}=x_l+F(x_l,W_l)... \\ x_L = x_l + \sum_{i=l}^{L+1}F(x_i,W_i)</script><ul>
+<li>第L层的特征$x<em>L$可以表示成$x_l+\sum</em>{i=l}^{L-1}F(x_i,W_i)$</li>
+<li>$x<em>L=x_o+\sum</em>{i=0}^{L-1}F(x_i,W_i)$，可以由所有的残差函数相加得到，再加上$x_o$</li>
 </ul>
 <p>Backward:</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fo5tv0mjxdj30my03mjrs.jpg" alt=""></p>
-<p>从梯度计算来看，$x_l$的梯度与l+1到L的layer都有关，$\frac{\partial \epsilon}{\partial x_L}$保证梯度会从L穿回到l，而且梯度不会消失，因为$\frac{\partial}{\partial x_l}\sum_{i=l}^{L-1}F(x_i, W_i)$很少为-1。</p>
+<p>从梯度计算来看，$x<em>l$的梯度与l+1到L的layer都有关，$\frac{\partial \epsilon}{\partial x_L}$保证梯度会从L穿回到l，而且梯度不会消失，因为$\frac{\partial}{\partial x_l}\sum</em>{i=l}^{L-1}F(x_i, W_i)$很少为-1。</p>
 <p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fo5n89qljvj318e0v4tjb.jpg" alt=""></p>
 <p><strong>Identity Skip Connection</strong></p>
 <p>主要是印证当shortcut不取identity mapping时，效果为什么不好</p>
@@ -849,7 +854,11 @@
 <p>If the optimal function is closer to an identity mapping than to a zero mapping, it should be easier for the solver to find the perturbations with reference to an identity mapping, than to learn the function as a new one.</p>
 </blockquote>
 <p><img src="https://ws4.sinaimg.cn/large/006tNc79gy1fo2bil5j4xj30ts0foq6o.jpg" alt=""></p>
-<h5 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h5><p><strong>short connection</strong><br>$$<br>y = \mathbf{F}(x,{W_i})+x<br>$$<br>$\mathbf{F}(x,{W_i})$表示待学习的残差mapping。而后面+x这个运算可以通过shortcuts进行element-wise的加法。优点是不需要额外的参数，当维度不统一的时候，可以进行zero padding或者线性投影（虽然会引入少量的参数）使得两者的维度一致。<br>$$<br>y = \mathbf{F}(x,{W_i})+W_sx<br>$$<br><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo2br70niwj30za0g0gnk.jpg" alt=""></p>
+<h5 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h5><p><strong>short connection</strong></p>
+<script type="math/tex; mode=display">
+y = \mathbf{F}(x,\{W_i\})+x</script><p>$\mathbf{F}(x,{W_i})$表示待学习的残差mapping。而后面+x这个运算可以通过shortcuts进行element-wise的加法。优点是不需要额外的参数，当维度不统一的时候，可以进行zero padding或者线性投影（虽然会引入少量的参数）使得两者的维度一致。</p>
+<script type="math/tex; mode=display">
+y = \mathbf{F}(x,\{W_i\})+W_sx</script><p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo2br70niwj30za0g0gnk.jpg" alt=""></p>
 <p><strong>Bottleneck design</strong></p>
 <p>在3x3卷积前后加入1x1卷积来降低和提高feature map的深度，实现feature map之间的线性组合，提高模型的非线性能力，同时还可以使得输入输出的维度保持一致，具体见Figure 5。</p>
 <p>Bottleneck的结构也被应用到了50-layer,101-layer,152-layer的网络中。</p>
@@ -931,7 +940,9 @@
 <blockquote>
 <p>Another assumption one can make about the connection between the source and the target domains is that given the same observation$X=x$, the conditional distributions of Y are the same in the two domains. However, the marginal distributions of X may be different in the source and the target domains. Formally, we assume that $ P_s(Y \vert X = x) = P_t(Y \vert X = x)$ for all $ x \in \mathcal{X}$! but $ P_s(X) \ne P_t(X)$. This difference between the two domains is called <em>covariate shift</em></p>
 </blockquote>
-<p>covariates其实就是输入特征，记做X，假设对任意的$x\in \mathcal{X}$,$P_s(Y|X=x)=P_t(Y|X=x)$，表示Y关于X的条件分布在source domain（训练集）和target domain（测试集）是一样的，但是$P_s(X)\neq P_t(X) $，两者的边缘分布是不一样的！这个问题经常发生在transfer learning中。从表面上看，对于分类问题，只要两者的条件分布相同，即使边缘分布不同，也不会影响分类的结果，但是，当模型是有参数的时候，也就是$P(Y|X,\theta)$的时候，我们需要选择最优的参数$\theta^*$来使得loss($\theta$)最小。在这个时候，如果$P_s(X)\neq P_t(X) $，也就打破了传统机器学习中训练集和测试集的数据是i.i.d（独立同分布）的，那么在target domain的最优模型会和source domain的不一样，因为参数的求解依赖于X的分布（似然函数）！<br>$$<br>P(\theta|D)=\frac{P(D|\theta)\times P(\theta)}{P(D)}<br>$$<br>Internal Covariate Shift表示的是在神经网络发生的convariate shift，因为网络参数在更新，在神经网络的特定层的输出分布就发生了改变，这就导致它的后面层需要去适应它分布的变化，这就降低了训练速度，影响了模型的训练效果。</p>
+<p>covariates其实就是输入特征，记做X，假设对任意的$x\in \mathcal{X}$,$P_s(Y|X=x)=P_t(Y|X=x)$，表示Y关于X的条件分布在source domain（训练集）和target domain（测试集）是一样的，但是$P_s(X)\neq P_t(X) $，两者的边缘分布是不一样的！这个问题经常发生在transfer learning中。从表面上看，对于分类问题，只要两者的条件分布相同，即使边缘分布不同，也不会影响分类的结果，但是，当模型是有参数的时候，也就是$P(Y|X,\theta)$的时候，我们需要选择最优的参数$\theta^*$来使得loss($\theta$)最小。在这个时候，如果$P_s(X)\neq P_t(X) $，也就打破了传统机器学习中训练集和测试集的数据是i.i.d（独立同分布）的，那么在target domain的最优模型会和source domain的不一样，因为参数的求解依赖于X的分布（似然函数）！</p>
+<script type="math/tex; mode=display">
+P(\theta|D)=\frac{P(D|\theta)\times P(\theta)}{P(D)}</script><p>Internal Covariate Shift表示的是在神经网络发生的convariate shift，因为网络参数在更新，在神经网络的特定层的输出分布就发生了改变，这就导致它的后面层需要去适应它分布的变化，这就降低了训练速度，影响了模型的训练效果。</p>
 <p><strong>Vanishing Gradient</strong></p>
 <p>一些容易饱和的非线性激活函数(tanh, sigmoid等)当输入很大的时候，梯度容易饱和。这使得模型在加深的时候，梯度容易消失！以及，ReLU的使用使得部分神经元“死掉”后不再有梯度传回去，随着网络的不断迭代，越来越多的神经元会“死掉”！所以这需要我们：</p>
 <ul>

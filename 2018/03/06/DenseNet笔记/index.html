@@ -293,7 +293,9 @@
 <p>假设有L层网络，那么如果将网络视为DAG，那么如果实行全连接，并且保证网络前向传播，共有$\frac{L\times(L+1)}{2}$条边。</p>
 <h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fp33t32d1mj31kw0bt0xv.jpg" alt=""></p>
 <p><strong>Dense Block</strong></p>
-<p>首先，将其公式化，我们考虑第l层网络的输入和输出，$x_l$表示为第l层的输出，那么有:<br>$$<br>x_l = H_l([x_0,x_1,…,x_{l-1}])<br>$$<br>这里，$[x_0,x_1,…,x_{l-1}]$表示feature map的按通道拼接，形成新的tensor。</p>
+<p>首先，将其公式化，我们考虑第l层网络的输入和输出，$x_l$表示为第l层的输出，那么有:</p>
+<script type="math/tex; mode=display">
+x_l = H_l([x_0,x_1,...,x_{l-1}])</script><p>这里，$[x<em>0,x_1,…,x</em>{l-1}]$表示feature map的按通道拼接，形成新的tensor。</p>
 <p>$H_l$是一个组合函数，BN-ReLU-Conv(3x3)。</p>
 <p>为了将模型简化，将预想中的DenseNet分拆成若干个dense block，见Figure 2。</p>
 <p><strong>Growth Rate</strong></p>

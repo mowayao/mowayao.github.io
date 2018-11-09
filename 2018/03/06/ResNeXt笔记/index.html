@@ -296,7 +296,9 @@
 <li>如果空间维度减半，那么feature maps的数量要加倍。【each time when the spatial map is downsampled by a factor of 2, the width of the blocks is multiplied by a factor of 2】</li>
 </ol>
 <p>Figure 1是ResNet和ResNeXt的block结构比较，重点看ResNeXt，可以看到这里将256维的输入做32个不同的transformations，每个transformation先通过1x1的conv做降维(information embedding)，然后再经过几个conv，最后将这32个输出做aggregation。</p>
-<p>将其公式化:<br>$$<br>F(x) = \sum_{i=1}^C \tau_i(x)<br>$$<br>$\tau_i$的作用就是将x投影到低维空间（embeeding），然后做transform。C就是做transformation的数量，也就是cardinaty。aggregation后，再用short connection做identity mapping。</p>
+<p>将其公式化:</p>
+<script type="math/tex; mode=display">
+F(x) = \sum_{i=1}^C \tau_i(x)</script><p>$\tau_i$的作用就是将x投影到低维空间（embeeding），然后做transform。C就是做transformation的数量，也就是cardinaty。aggregation后，再用short connection做identity mapping。</p>
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79ly1fp3f3tppr3j30te0i0jur.jpg" alt=""></p>
 <p>Figure 3是异构的三种结构，（a）是初始版本，（b）concat，（c）group conv，这三者可以说是等价的。那么在实现上，可以利用group conv，更加方便！</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tKfTcly1fp4d6cqzx8j31cq0i2q8m.jpg" alt=""></p>
