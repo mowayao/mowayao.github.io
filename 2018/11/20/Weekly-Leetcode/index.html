@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><link rel="stylesheet" href="/style/style.css">
+<script>
+    var NlviConfig = {
+        title: "Mowayao's Blog",
+        author: "Mowayao",
+        theme: "banderole",
+        lightbox: true,
+        animate: true,
+        baseUrl: "/",
+        search: true,
+        friends: false
+    }
+</script>
+
+
+
+    <link rel="stylesheet" href="/script/lib/lightbox/css/lightbox.min.css">
+
+
+
+
+    <link rel="stylesheet" href="/syuanpi/syuanpi.min.css">
+
+
+
+
+
+
+
+
+
+    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="browsermode" content="application">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Mowayao's Blog">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="msapplication-navbutton-color" content="#666666">
+<meta name= "format-detection" content="telephone=no" />
+<meta name="keywords" content="nlvi, Nlvi" />
+
+
+  <meta name="subtitle" content="一往无前虎山行">
+
+
+
+
+  <meta name="keywords" content="leetcode, Nlvi" />
+
+  <title> Weekly Leetcode (2018-11-19) · Mowayao's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="progress">
+  <div class="progress-inner"></div>
+</div>
+  
+  
+    <div class="tagcloud-mask"></div>  
+<div class="tagcloud" id="tagcloud">
+  <div class="tagcloud-inner">
+    <a href="/tags/DP/" style="font-size: 14px;">DP</a> <a href="/tags/Deep-Learning/" style="font-size: 14px;">Deep Learning</a> <a href="/tags/GAN/" style="font-size: 14px;">GAN</a> <a href="/tags/Leetcode/" style="font-size: 14px;">Leetcode</a> <a href="/tags/RNN/" style="font-size: 14px;">RNN</a> <a href="/tags/algorithms/" style="font-size: 14px;">algorithms</a> <a href="/tags/classfication/" style="font-size: 14px;">classfication</a> <a href="/tags/classifcation/" style="font-size: 14px;">classifcation</a> <a href="/tags/classification/" style="font-size: 14px;">classification</a> <a href="/tags/computer-vision/" style="font-size: 14px;">computer vision</a> <a href="/tags/deep-learning/" style="font-size: 14px;">deep learning</a> <a href="/tags/detection/" style="font-size: 14px;">detection</a> <a href="/tags/face-detection/" style="font-size: 14px;">face detection</a> <a href="/tags/fine-grained-classification/" style="font-size: 14px;">fine-grained classification</a> <a href="/tags/leetcode/" style="font-size: 14px;">leetcode</a> <a href="/tags/machine-learning/" style="font-size: 14px;">machine learning</a> <a href="/tags/math/" style="font-size: 14px;">math</a> <a href="/tags/notes/" style="font-size: 14px;">notes</a> <a href="/tags/object-detection/" style="font-size: 14px;">object detection</a> <a href="/tags/paper/" style="font-size: 14px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 14px;">paper notes</a> <a href="/tags/segmentation/" style="font-size: 14px;">segmentation</a> <a href="/tags/speech/" style="font-size: 14px;">speech</a> <a href="/tags/summary/" style="font-size: 14px;">summary</a> <a href="/tags/杂/" style="font-size: 14px;">杂</a>
+  </div>
+</div>  
+  
+
+  <div class="container">
+
+    <header class="header" id="header">
+  <div class="header-wrapper">
+    <div class="logo">
+  <div class="logo-inner syuanpi tvIn">
+    <span><a href="/">Mowayao's Blog</a></span>
+    
+      <span id="subtitle">一往无前虎山行</span>
+    
+  </div>
+</div>
+    <nav class="main-nav">
+        
+  <ul class="main-nav-list syuanpi tvIn">
+  
+    <li class="menu-item">
+      <a href="javascript:;" id="search">
+        <span>Search</span>
+        
+          <span class="menu-item-label">search</span>
+        
+      </a>
+    </li>
+  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/" id="article">
+        <span class="base-name">Article</span>
+        
+          <span class="menu-item-label">article</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/archives" id="archives">
+        <span class="base-name">Archives</span>
+        
+          <span class="menu-item-label">archives</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="javascript:;" id="tags">
+        <span class="base-name">Tags</span>
+        
+          <span class="menu-item-label">tags</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/about" id="about">
+        <span class="base-name">About</span>
+        
+          <span class="menu-item-label">about</span>
+        
+      </a>
+    </li>  
+  
+    
+      
+    
+    <li class="menu-item">
+      <a href="/atom.xml" id="RSS">
+        <span class="base-name">RSS</span>
+        
+          <span class="menu-item-label">RSS</span>
+        
+      </a>
+    </li>  
+  
+  </ul>
+  
+</nav>
+    
+    
+  </div>
+</header>
+<div class="mobile-header">
+  <div class="mobile-header-body">
+    <div class="mobile-header-list">
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/">
+                    <span>Article</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/archives">
+                    <span>Archives</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+        
+          <div class="mobile-nav-item inner-cloud">
+            <div class="mobile-nav-tag">
+              <a href="javascript:;" id="mobile-tags">
+                <span>Tags</span>
+                
+                
+              </a>
+            </div>
+            <div class="mobile-nav-tagcloud">
+              <div class="mobile-tagcloud-inner">
+                <a href="/tags/DP/" style="font-size: 14px;">DP</a> <a href="/tags/Deep-Learning/" style="font-size: 14px;">Deep Learning</a> <a href="/tags/GAN/" style="font-size: 14px;">GAN</a> <a href="/tags/Leetcode/" style="font-size: 14px;">Leetcode</a> <a href="/tags/RNN/" style="font-size: 14px;">RNN</a> <a href="/tags/algorithms/" style="font-size: 14px;">algorithms</a> <a href="/tags/classfication/" style="font-size: 14px;">classfication</a> <a href="/tags/classifcation/" style="font-size: 14px;">classifcation</a> <a href="/tags/classification/" style="font-size: 14px;">classification</a> <a href="/tags/computer-vision/" style="font-size: 14px;">computer vision</a> <a href="/tags/deep-learning/" style="font-size: 14px;">deep learning</a> <a href="/tags/detection/" style="font-size: 14px;">detection</a> <a href="/tags/face-detection/" style="font-size: 14px;">face detection</a> <a href="/tags/fine-grained-classification/" style="font-size: 14px;">fine-grained classification</a> <a href="/tags/leetcode/" style="font-size: 14px;">leetcode</a> <a href="/tags/machine-learning/" style="font-size: 14px;">machine learning</a> <a href="/tags/math/" style="font-size: 14px;">math</a> <a href="/tags/notes/" style="font-size: 14px;">notes</a> <a href="/tags/object-detection/" style="font-size: 14px;">object detection</a> <a href="/tags/paper/" style="font-size: 14px;">paper</a> <a href="/tags/paper-notes/" style="font-size: 14px;">paper notes</a> <a href="/tags/segmentation/" style="font-size: 14px;">segmentation</a> <a href="/tags/speech/" style="font-size: 14px;">speech</a> <a href="/tags/summary/" style="font-size: 14px;">summary</a> <a href="/tags/杂/" style="font-size: 14px;">杂</a>
+              </div>
+            </div>
+          </div>
+        
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/about">
+                    <span>About</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+        
+            <div class="mobile-nav-item">
+                <a href="/atom.xml">
+                    <span>RSS</span>
+                    
+                    
+                </a>
+            </div>
+        
+      
+    </div>
+  </div>
+  <div class="mobile-header-nav">
+    <div class="mobile-header-item" id="mobile-left">
+      <div class="header-menu-item">
+        <span class="header-menu-line"></span>
+      </div>
+    </div>
+    <h1 class="mobile-header-title">
+      <a href="/">Mowayao's Blog</a>
+    </h1>
+    <div class="mobile-header-item"></div>
+  </div>
+</div>
+    <div class="container-inner">
+      <main class="main" id="main">
+        <div class="main-wrapper">
+          
+    
+  
+  <article class="
+  post
+   is_post 
+  ">
+    <header class="post-header">
+      <div class="post-time syuanpi riseIn-light back-1">
+        <div class="post-time-wrapper">
+          <span>2018-11-20</span>
+          
+            
+              <span class="post-category"><a href="/categories/algorithms/">algorithms</a></span>
+            
+          
+          
+            
+              <aside class="post-tags syuanpi riseIn-light back-3">
+              
+                <a href="/tags/leetcode/">leetcode</a>
+              
+              </aside>
+            
+          
+        </div>
+      </div>
+      <h1 class="post-title syuanpi riseIn-light back-2">
+        
+          Weekly Leetcode (2018-11-19)
+        
+      </h1>
+    </header>
+    <div class="post-content syuanpi riseIn-light back-3">
+      
+        <h2 id="937-重新排列日志文件"><a href="#937-重新排列日志文件" class="headerlink" title="937. 重新排列日志文件"></a>937. 重新排列日志文件</h2><p>你有一个日志数组 logs。每条日志都是以空格分隔的字串。</p>
+<p>对于每条日志，其第一个字为字母数字标识符。然后，要么：</p>
+<p>标识符后面的每个字将仅由小写字母组成，或；<br>标识符后面的每个字将仅由数字组成。<br>我们将这两种日志分别称为字母日志和数字日志。保证每个日志在其标识符后面至少有一个字。</p>
+<p>将日志重新排序，使得所有字母日志都排在数字日志之前。字母日志按字母顺序排序，忽略标识符，标识符仅用于表示关系。数字日志应该按原来的顺序排列。</p>
+<p>返回日志的最终顺序。</p>
+<p>示例 ：</p>
+<p>输入：[“a1 9 2 3 1”,”g1 act car”,”zo4 4 7”,”ab1 off key dog”,”a8 act zoo”]<br>输出：[“g1 act car”,”a8 act zoo”,”ab1 off key dog”,”a1 9 2 3 1”,”zo4 4 7”]</p>
+<p>提示：</p>
+<p>0 &lt;= logs.length &lt;= 100<br>3 &lt;= logs[i].length &lt;= 100<br>logs[i] 保证有一个标识符，并且标识符后面有一个字。</p>
+<p><strong>Solution</strong></p>
+<p>将logs分离，然后对字母的那部分排序，python搞定</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">reorderLogFiles</span><span class="params">(self, logs)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        :type logs: List[str]</span></div><div class="line"><span class="string">        :rtype: List[str]</span></div><div class="line"><span class="string">        """</span></div><div class="line">        logs = map(<span class="keyword">lambda</span> x: x.split(), logs)</div><div class="line">        num_logs = filter(<span class="keyword">lambda</span> x: x[<span class="number">1</span>].isdigit(), logs)</div><div class="line">        alpha_logs = filter(<span class="keyword">lambda</span> x: x[<span class="number">1</span>].isalpha(), logs)</div><div class="line">        <span class="keyword">return</span> map(<span class="keyword">lambda</span> x: <span class="string">" "</span>.join(x), sorted(alpha_logs, key=<span class="keyword">lambda</span> x: x[<span class="number">1</span>:]) + num_logs)</div></pre></td></tr></table></figure>
+<h2 id="938-二叉搜索树的范围和"><a href="#938-二叉搜索树的范围和" class="headerlink" title="938. 二叉搜索树的范围和"></a>938. 二叉搜索树的范围和</h2><p>给定二叉搜索树的根结点 root，返回 L 和 R（含）之间的所有结点的值的和。</p>
+<p>二叉搜索树保证具有唯一的值。</p>
+<p>示例 1：</p>
+<p>输入：root = [10,5,15,3,7,null,18], L = 7, R = 15<br>输出：32<br>示例 2：</p>
+<p>输入：root = [10,5,15,3,7,13,18,1,null,6], L = 6, R = 10<br>输出：23</p>
+<p>提示：</p>
+<p>树中的结点数量最多为 10000 个。<br>最终的答案保证小于 2^31。</p>
+<p><strong>Solution</strong></p>
+<p>DFS, 可以用BST的性质剪枝</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * Definition for a binary tree node.</span></div><div class="line"><span class="comment"> * struct TreeNode &#123;</span></div><div class="line"><span class="comment"> *     int val;</span></div><div class="line"><span class="comment"> *     TreeNode *left;</span></div><div class="line"><span class="comment"> *     TreeNode *right;</span></div><div class="line"><span class="comment"> *     TreeNode(int x) : val(x), left(NULL), right(NULL) &#123;&#125;</span></div><div class="line"><span class="comment"> * &#125;;</span></div><div class="line"><span class="comment">*/</span></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">rangeSumBST</span><span class="params">(TreeNode* root, <span class="keyword">int</span> L, <span class="keyword">int</span> R)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> dfs(root, L, R);</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">dfs</span><span class="params">(TreeNode* root, <span class="keyword">int</span> L, <span class="keyword">int</span> R)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (root == <span class="literal">NULL</span>) <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        <span class="keyword">int</span> cur = <span class="number">0</span>;</div><div class="line">        <span class="keyword">if</span> (root-&gt;val &lt;= R &amp;&amp; root-&gt;val &gt;= L) cur = root-&gt;val;</div><div class="line">        <span class="keyword">if</span> (root-&gt;left!=<span class="literal">NULL</span> &amp;&amp; root-&gt;right!=<span class="literal">NULL</span>) &#123;</div><div class="line">            <span class="keyword">return</span> cur + dfs(root-&gt;left, L, R) + dfs(root-&gt;right, L, R);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (root-&gt;left == <span class="literal">NULL</span> &amp;&amp; root-&gt;right != <span class="literal">NULL</span>) &#123;</div><div class="line">            <span class="keyword">if</span> (R &lt; root-&gt;right-&gt;val) </div><div class="line">                <span class="keyword">return</span> cur;</div><div class="line">            <span class="keyword">else</span> </div><div class="line">                <span class="keyword">return</span> cur + dfs(root-&gt;right, L, R);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (root-&gt;right == <span class="literal">NULL</span> &amp;&amp; root-&gt;left != <span class="literal">NULL</span>) &#123;</div><div class="line">            <span class="keyword">if</span> (L &gt; root-&gt;left-&gt;val)</div><div class="line">                <span class="keyword">return</span> cur;</div><div class="line">            <span class="keyword">else</span></div><div class="line">                <span class="keyword">return</span> cur+dfs(root-&gt;left, L, R);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> cur;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="939-最小面积矩形"><a href="#939-最小面积矩形" class="headerlink" title="939. 最小面积矩形"></a>939. 最小面积矩形</h2><p>给定在 xy 平面上的一组点，确定由这些点组成的矩形的最小面积，其中矩形的边平行于 x 轴和 y 轴。</p>
+<p>如果没有任何矩形，就返回 0。</p>
+<p>示例 1：</p>
+<p>输入：[[1,1],[1,3],[3,1],[3,3],[2,2]]<br>输出：4<br>示例 2：</p>
+<p>输入：[[1,1],[1,3],[3,1],[3,3],[4,1],[4,3]]<br>输出：2</p>
+<p>提示：</p>
+<p>1 &lt;= points.length &lt;= 500<br>0 &lt;= points[i][0] &lt;= 40000<br>0 &lt;= points[i][1] &lt;= 40000<br>所有的点都是不同的。</p>
+<p><strong>Solution</strong></p>
+<p>枚举右下角和左上角。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minAreaRect</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt;&amp; points)</span> </span>&#123;</div><div class="line">        <span class="built_in">unordered_map</span>&lt;<span class="keyword">int</span>, <span class="keyword">bool</span>&gt; flags;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> p: points) &#123;</div><div class="line">            flags[p[<span class="number">0</span>]*<span class="number">40001</span>+p[<span class="number">1</span>]] = <span class="literal">true</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">int</span> n = points.size();</div><div class="line">        <span class="keyword">int</span> ret = INT_MAX;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++) &#123;</div><div class="line">                <span class="keyword">if</span> (i == j) <span class="keyword">continue</span>;</div><div class="line">                <span class="keyword">int</span> x0 = points[i][<span class="number">0</span>], y0 = points[i][<span class="number">1</span>];</div><div class="line">                <span class="keyword">int</span> x1 = points[j][<span class="number">0</span>], y1 = points[j][<span class="number">1</span>];</div><div class="line">                <span class="keyword">if</span> (x0 == x1 || y0 == y1) <span class="keyword">continue</span>;</div><div class="line">                <span class="keyword">if</span> (flags[x0*<span class="number">40001</span>+y1] &amp;&amp; flags[x1*<span class="number">40001</span>+y0]) &#123;</div><div class="line">                    ret = min(ret, <span class="built_in">abs</span>(x1-x0)*<span class="built_in">abs</span>(y1-y0));</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span> (ret == INT_MAX) ret = <span class="number">0</span>;</div><div class="line">        <span class="keyword">return</span> ret;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<h2 id="940-不同的子序列-II"><a href="#940-不同的子序列-II" class="headerlink" title="940. 不同的子序列 II"></a>940. 不同的子序列 II</h2><p>给定一个字符串 S，计算 S 的不同非空子序列的个数。</p>
+<p>因为结果可能很大，所以返回答案模 10^9 + 7.</p>
+<p>示例 1：</p>
+<p>输入：”abc”<br>输出：7<br>解释：7 个不同的子序列分别是 “a”, “b”, “c”, “ab”, “ac”, “bc”, 以及 “abc”。<br>示例 2：</p>
+<p>输入：”aba”<br>输出：6<br>解释：6 个不同的子序列分别是 “a”, “b”, “ab”, “ba”, “aa” 以及 “aba”。<br>示例 3：</p>
+<p>输入：”aaa”<br>输出：3<br>解释：3 个不同的子序列分别是 “a”, “aa” 以及 “aaa”。</p>
+<p>提示：</p>
+<p>S 只包含小写字母。<br>1 &lt;= S.length &lt;= 2000</p>
+<p><strong>Solution</strong></p>
+<p>$$dp(i) = \sum dp(j)$$</p>
+<p>DP，dp(i)表示的是以i为结尾的方案数，遍历每个字符，迭代dp值，需要注意的是当i=j的时候，只需加1</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> MOD = <span class="number">1e9</span>+<span class="number">7</span>;</div><div class="line"><span class="keyword">typedef</span> <span class="keyword">long</span> <span class="keyword">long</span> ll;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">distinctSubseqII</span><span class="params">(<span class="built_in">string</span> S)</span> </span>&#123;</div><div class="line">        ll dp[<span class="number">30</span>], tmp[<span class="number">30</span>];</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; i++) </div><div class="line">            dp[i] = <span class="number">0</span>;</div><div class="line">        <span class="keyword">int</span> len = S.size();</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</div><div class="line">            <span class="keyword">int</span> cur = S[i] - <span class="string">'a'</span>;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">26</span>; j++) &#123;</div><div class="line">                tmp[j] = dp[j];</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">26</span>; j++) &#123;</div><div class="line">                <span class="keyword">if</span> (j == cur) &#123;</div><div class="line">                    dp[cur] = (dp[cur] + <span class="number">1</span>) % MOD;</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (tmp[j] != <span class="number">-1</span>) &#123;</div><div class="line">                     dp[cur] = (dp[cur] + tmp[j]) % MOD;</div><div class="line">                &#125;      </div><div class="line">            &#125;</div><div class="line">            </div><div class="line">        &#125;</div><div class="line">        ll ret = <span class="number">0</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; i++) &#123;</div><div class="line">            <span class="keyword">if</span> (dp[i] != <span class="number">-1</span>)</div><div class="line">                ret = (ret + dp[i]) % MOD;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> ret;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+      
+    
+    </div>
+    
+      
+      
+  <hr class="copy-line">
+  <div class="post-copyright">
+    <div class="copy-author">
+      <span>Author :</span>
+      <span>Mowayao</span>
+    </div>
+    <div class="copy-url">
+      <span>Url :</span>
+      <a href="http://wulimengmeng.top/2018/11/20/Weekly-Leetcode/">http://wulimengmeng.top/2018/11/20/Weekly-Leetcode/</a>
+    </div>
+    <div class="copy-origin">
+      <span>Origin :</span>
+      <a href="http://wulimengmeng.top">http://wulimengmeng.top</a>
+    </div>
+    <div class="copy-license">
+      
+      著作权归作者所有，转载请联系作者获得授权。
+    </div>
+  </div>
+
+    
+  </article>
+  
+    
+  <nav class="article-page">
+    
+      <a href="/2018/11/23/Weekly-Paper-Reading-2018-11-19/" id="art-left" class="art-left">
+        <span class="next-title">
+          <i class="iconfont icon-left"></i>Weekly Paper Reading(2018.11.19)
+        </span>
+      </a>
+    
+    
+      <a href="/2018/11/20/Weekly-Leetcode(2018-11-19)/" id="art-right" class="art-right">
+        <span class="prev-title"> 
+          Weekly Leetcode (2018-11-19)<i class="iconfont icon-right"></i>  
+        </span>
+      </a>
+    
+  </nav>
+
+    
+  <i id="com-switch" class="iconfont icon-more jumping-in long infinite" style="font-size:24px;display:block;text-align:center;transform:rotate(180deg);"></i>
+  <div class="post-comments" id="post-comments" style="display: block;margin: auto 16px;">
+    
+<!-- Gitment Comments -->
+<div id="gitment"></div>
+<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+<script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+<script>
+var gitment = new Gitment({
+  owner: "mowayao",
+  repo: 'mowayao.github.io',
+  oauth: {
+    client_id: '7855335a0336c8808ae8',
+    client_secret: '5de12a86e607d102099f0c51b6ad7af573d65fff',
+  },
+})
+gitment.render('gitment')
+</script>
+
+    
+    
+
+  </div>
+
+
+  
+   
+    
+  
+  <aside class="post-toc">
+    <span class="title" id="toc-switch"><span>Index</span></span>
+    <div class="toc-inner syuanpi back-1 fallIn-light">
+      <li class="title-link"><a href="javascript:;" class="toTop">Weekly Leetcode (2018-11-19)</a></li>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#937-重新排列日志文件"><span class="toc-text">937. 重新排列日志文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#938-二叉搜索树的范围和"><span class="toc-text">938. 二叉搜索树的范围和</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#939-最小面积矩形"><span class="toc-text">939. 最小面积矩形</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#940-不同的子序列-II"><span class="toc-text">940. 不同的子序列 II</span></a></li></ol>
+    </div>
+  </aside>
+
+
+  
+
+
+        </div>
+      </main>
+
+      <footer class="footer syuanpi fadeIn" id="footer">
+  <hr>
+  <div class="footer-wrapper">
+    <div class="left">
+      <div class="contact-icon">
+    
+    
+    
+    
+    
+    
+    
+    
+        
+        
+        
+        
+            <a href="https://www.zhihu.com/people/https://www.zhihu.com/people/yao-ze-ping" class="iconfont icon-zhihu" title="zhihu"></a>
+        
+        
+        
+        
+    
+        
+            <a href="https://github.com/https://github.com/mowayao" class="iconfont icon-github" title="github"></a>
+        
+        
+        
+        
+        
+        
+        
+    
+</div>
+    </div>
+    <div class="right">
+      <div class="copyright">
+    <div class="info">
+        <span>&copy;</span>
+        <span>2018 ~ 2018</span>
+        <span>❤</span>
+        <span>Mowayao</span>
+    </div>
+    <div class="theme">
+        <span>
+            Powered by
+            <a href="http://hexo.io/" target="_blank">Hexo </a>
+        </span>
+        <span>
+            Theme
+            <a href="https://github.com/ColMugX/hexo-theme-Nlvi"> Nlvi </a>
+        </span>
+    </div>
+    
+    <div class="visit_count">
+        <i class="iconfont icon-visit"></i>
+        <span id="busuanzi_value_site_uv"></span>
+        <i class="iconfont icon-people"></i>
+        <span id="busuanzi_value_site_pv"></span>
+    </div>
+    
+</div>
+    </div>
+  </div>
+</footer>
+    </div>
+  </div>
+  <script src="/script/lib/jquery/jquery-3.2.1.min.js"></script>
+
+
+    <script src="/script/lib/lightbox/js/lightbox.min.js"></script>
+
+
+
+    <script src="https://cdn.bootcss.com/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config;executed=true">MathJax.Hub.Config({tex2jax: {inlineMath: [["$","$"], ["\\(","\\)"]]}});</script>
+
+
+
+    
+        <script src="/h.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/x.js"></script>
+    
+        <script src="/o.js"></script>
+    
+        <script src="/-.js"></script>
+    
+        <script src="/g.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/n.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/r.js"></script>
+    
+        <script src="/a.js"></script>
+    
+        <script src="/t.js"></script>
+    
+        <script src="/o.js"></script>
+    
+        <script src="/r.js"></script>
+    
+        <script src="/-.js"></script>
+    
+        <script src="/f.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/e.js"></script>
+    
+        <script src="/d.js"></script>
+    
+
+
+<script src="/script/src/nlvi.js"></script>
+<script src="/script/src/utils.js"></script>
+<script src="/script/scheme/balance.js"></script>
+<script src="/script/src/plugins.js"></script>
+<script src="/script/bootstarp.js"></script>
+
+
+<div class="backtop syuanpi dead toTop" id="backtop">
+    <i class="iconfont icon-up"></i>
+    <span style="text-align:center;font-family:Georgia;"><span style="font-family:Georgia;" id="scrollpercent">1</span>%</span>
+</div>
+
+
+  <div class="search" id="search">
+    <div class="mask" id="mask"></div>
+    <div class="search-wrapper syuanpi">
+      <h2 id="search-header" class="syuanpi">搜索一下？</h2>
+      <div class="input">
+        <input type="text" id="local-search-input" results="0" name="">
+      </div>
+      <div id="local-search-result"></div>
+    </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("MathJax config");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+
+</body>
+</html>
