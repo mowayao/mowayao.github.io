@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://wulimengmeng.top/"/>
-  <updated>2018-11-23T03:25:30.439Z</updated>
+  <updated>2018-11-23T15:47:12.264Z</updated>
   <id>http://wulimengmeng.top/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://wulimengmeng.top/2018/11/23/Weekly-Paper-Reading-2018-11-19/"/>
     <id>http://wulimengmeng.top/2018/11/23/Weekly-Paper-Reading-2018-11-19/</id>
     <published>2018-11-23T02:55:36.000Z</published>
-    <updated>2018-11-23T03:25:30.439Z</updated>
+    <updated>2018-11-23T15:47:12.264Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="M2Det-A-Single-Shot-Object-Detector-based-on-Multi-Level-Feature-Pyramid-Network"><a href="#M2Det-A-Single-Shot-Object-Detector-based-on-Multi-Level-Feature-Pyramid-Network" class="headerlink" title="M2Det: A Single-Shot Object Detector based on Multi-Level Feature Pyramid Network"></a>M2Det: A Single-Shot Object Detector based on Multi-Level Feature Pyramid Network</h2><p><a href="https://arxiv.org/abs/1811.04533" target="_blank" rel="external">Ref</a></p><p><a href="https://github.com/qijiezhao/M2Det" target="_blank" rel="external">Code</a></p><p><img src="https://i.loli.net/2018/11/23/5bf76ef6caac7.png" alt="屏幕快照 2018-11-23 上午11.02.15.png"></p><p>提出了multi-level feature pyramid network，每个level都是一个小的U-shape module，将每个level中相同scale的feature map合并来做不同scale的预测，合并用到SE attention的思想。</p><h2 id="ScratchDet-Exploring-to-Train-Single-Shot-Object-Detectors-from-Scratch"><a href="#ScratchDet-Exploring-to-Train-Single-Shot-Object-Detectors-from-Scratch" class="headerlink" title="ScratchDet: Exploring to Train Single-Shot Object Detectors from Scratch"></a>ScratchDet: Exploring to Train Single-Shot Object Detectors from Scratch</h2><p><a href="https://arxiv.org/abs/1810.08425" target="_blank" rel="external">Ref</a></p><p><a href="https://github.com/KimSoybean/ScratchDet" target="_blank" rel="external">Code</a></p>]]></content>
+    <content type="html"><![CDATA[<h2 id="M2Det-A-Single-Shot-Object-Detector-based-on-Multi-Level-Feature-Pyramid-Network"><a href="#M2Det-A-Single-Shot-Object-Detector-based-on-Multi-Level-Feature-Pyramid-Network" class="headerlink" title="M2Det: A Single-Shot Object Detector based on Multi-Level Feature Pyramid Network"></a>M2Det: A Single-Shot Object Detector based on Multi-Level Feature Pyramid Network</h2><p><a href="https://arxiv.org/abs/1811.04533" target="_blank" rel="external">Ref</a></p><p><a href="https://github.com/qijiezhao/M2Det" target="_blank" rel="external">Code</a></p><p><img src="https://i.loli.net/2018/11/23/5bf76ef6caac7.png" alt="屏幕快照 2018-11-23 上午11.02.15.png"></p><p>提出了multi-level feature pyramid network，每个level都是一个小的U-shape module，将每个level中相同scale的feature map合并来做不同scale的预测，合并用到SE attention的思想。以及需要尽可能地调大learning rate。</p><h2 id="ScratchDet-Exploring-to-Train-Single-Shot-Object-Detectors-from-Scratch"><a href="#ScratchDet-Exploring-to-Train-Single-Shot-Object-Detectors-from-Scratch" class="headerlink" title="ScratchDet: Exploring to Train Single-Shot Object Detectors from Scratch"></a>ScratchDet: Exploring to Train Single-Shot Object Detectors from Scratch</h2><p><a href="https://arxiv.org/abs/1810.08425" target="_blank" rel="external">Ref</a></p><p><a href="https://github.com/KimSoybean/ScratchDet" target="_blank" rel="external">Code</a></p><p>文章探索了一些single shot object detectors train from scratch的一些技巧， 例如对于VGG来说，加入batch norm layer，对于ResNet取消第一层7x7的降采样，取而代之的是两个堆叠的3x3 conv。</p>]]></content>
     
     <summary type="html">
     
