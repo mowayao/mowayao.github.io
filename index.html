@@ -276,53 +276,30 @@
     <div class="post-content syuanpi riseIn-light back-3">
       
         
-          <h2>Feedforward Sequential Memory Networks: A New Structure to Learn Long-term Dependency (FSMN)</h2>
-<p><img src="https://i.loli.net/2018/11/28/5bfe346e3a2a7.png" alt="屏幕快照 2018-11-28 下午2.17.41.png"></p>
+          <h2 id="Feedforward-Sequential-Memory-Networks-A-New-Structure-to-Learn-Long-term-Dependency-FSMN"><a href="#Feedforward-Sequential-Memory-Networks-A-New-Structure-to-Learn-Long-term-Dependency-FSMN" class="headerlink" title="Feedforward Sequential Memory Networks: A New Structure to Learn Long-term Dependency (FSMN)"></a>Feedforward Sequential Memory Networks: A New Structure to Learn Long-term Dependency (FSMN)</h2><p><img src="https://i.loli.net/2018/11/28/5bfe346e3a2a7.png" alt="屏幕快照 2018-11-28 下午2.17.41.png"></p>
 <p>从figure 1(a)看，如果没有紫色的虚线部分，和普通的DNN没有区别，区别在于加入了memory block。</p>
-<p>memory block的结构件figure 1(b)。
-$$
-\tilde{\mathbf h}<em>t^l=\sum</em>{i=0}^{N}a_i^l\cdot \mathbf h_{t-i}^l
-$$
-N表示的是前N个历史，这里$a_i^l$是可以常数也可以是向量。如果是向量则表示为：
-$$
-\tilde{\mathbf h}<em>t^l=\sum</em>{i=0}^{N}\mathbf a_i^l\odot \mathbf h_{t-i}^l
-$$
-也可以表示成双向的：
-$$
-\tilde{\mathbf h}<em>t^l=\sum</em>{i=0}^{N_1}a_i^l\cdot \mathbf h_{t-i}^l+\sum_{j=1}^{N_2}c_j^l \cdot \mathbf h_{t+j}^l
-$$</p>
-<p>$$
-\tilde{\mathbf h}<em>t^l=\sum</em>{i=0}^{N_1}\mathbf a_i^l\odot \mathbf h_{t-i}^l+\sum_{j=1}^{N_2}\mathbf c_j^l \odot \mathbf h_{t+j}^l
-$$</p>
-<p>通过memory block的计算，下一层可以表示为：
-$$
-\mathbf h_t^{l+1}=f(\mathbf W^l\mathbf h_t^l+\tilde{\mathbf w}^l\tilde{\mathbf h}_t^l+\mathbf b^l)
-$$
-a可以用attention module计算得到</p>
-<h2>Compact Feedforward Sequential Memory Networks for Large Vocabulary Continuous Speech Recognition</h2>
-<p><img src="https://i.loli.net/2018/11/28/5bfe3aa4c8be2.png" alt="屏幕快照 2018-11-28 下午2.50.53.png"></p>
+<p>memory block的结构件figure 1(b)。</p>
+<script type="math/tex; mode=display">
+\tilde{\mathbf h}_t^l=\sum_{i=0}^{N}a_i^l\cdot \mathbf h_{t-i}^l</script><p>N表示的是前N个历史，这里$a_i^l$是可以常数也可以是向量。如果是向量则表示为：</p>
+<script type="math/tex; mode=display">
+\tilde{\mathbf h}_t^l=\sum_{i=0}^{N}\mathbf a_i^l\odot \mathbf h_{t-i}^l</script><p>也可以表示成双向的：</p>
+<script type="math/tex; mode=display">
+\tilde{\mathbf h}_t^l=\sum_{i=0}^{N_1}a_i^l\cdot \mathbf h_{t-i}^l+\sum_{j=1}^{N_2}c_j^l \cdot \mathbf h_{t+j}^l</script><script type="math/tex; mode=display">
+\tilde{\mathbf h}_t^l=\sum_{i=0}^{N_1}\mathbf a_i^l\odot \mathbf h_{t-i}^l+\sum_{j=1}^{N_2}\mathbf c_j^l \odot \mathbf h_{t+j}^l</script><p>通过memory block的计算，下一层可以表示为：</p>
+<script type="math/tex; mode=display">
+\mathbf h_t^{l+1}=f(\mathbf W^l\mathbf h_t^l+\tilde{\mathbf w}^l\tilde{\mathbf h}_t^l+\mathbf b^l)</script><p>a可以用attention module计算得到</p>
+<h2 id="Compact-Feedforward-Sequential-Memory-Networks-for-Large-Vocabulary-Continuous-Speech-Recognition"><a href="#Compact-Feedforward-Sequential-Memory-Networks-for-Large-Vocabulary-Continuous-Speech-Recognition" class="headerlink" title="Compact Feedforward Sequential Memory Networks for Large Vocabulary Continuous Speech Recognition"></a>Compact Feedforward Sequential Memory Networks for Large Vocabulary Continuous Speech Recognition</h2><p><img src="https://i.loli.net/2018/11/28/5bfe3aa4c8be2.png" alt="屏幕快照 2018-11-28 下午2.50.53.png"></p>
 <p>从figure 2看出，文章的思路就是将h映射到低维空间，然后再做memory block操作，再映射回去。</p>
-<p>映射到低维空间
-$$
-\mathbf p_t^l=\mathbf V^l\mathbf h_t^l+\mathbf b^l
-$$</p>
-<p>$$
-\mathbf{\tilde{p}}<em>t^l=\mathbf p_t^l + \sum</em>{i=0}^N\mathbf a_i^l \odot \mathbf p_{t-i}^l
-$$</p>
-<p>$$
-\mathbf{\tilde{p}}<em>t^l=\mathbf p_t^l + \sum</em>{i=0}^{N_1}\mathbf a_i^l \odot \mathbf p_{t-i}^l+\sum_{j=0}^{N_2}\mathbf c_j^l \odot \mathbf p_{t+j}^l
-$$</p>
-<p>映射回到原来的空间
-$$
-\mathbf h_t^{l+1}=f(\mathbf U^l\mathbf{\tilde{p}}_t^l+\mathbf b^{l+1})
-$$</p>
-<h2>DEEP FEED-FORWARD SEQUENTIAL MEMORY NETWORKS FOR SPEECH SYNTHESIS</h2>
-<p><img src="https://i.loli.net/2018/11/28/5bfe3d1f149ef.png" alt="屏幕快照 2018-11-28 下午3.01.26.png"></p>
-<p>加入步长和skip-connection
-$$
-\mathbf{\tilde{p}}<em>t^l=\mathcal{H}(\mathbf{\tilde{p}}<em>t^{l-1}) + \mathbf{p}<em>t^l + \sum</em>{i=0}^{N_1}\mathbf a_i^l \odot \mathbf p</em>{t-s_1*i}^l+\sum</em>{j=0}^{N_2}\mathbf c_j^l \odot \mathbf p_{t+s_2*j}^l
-$$</p>
-
+<p>映射到低维空间</p>
+<script type="math/tex; mode=display">
+\mathbf p_t^l=\mathbf V^l\mathbf h_t^l+\mathbf b^l</script><script type="math/tex; mode=display">
+\mathbf{\tilde{p}}_t^l=\mathbf p_t^l + \sum_{i=0}^N\mathbf a_i^l \odot \mathbf p_{t-i}^l</script><script type="math/tex; mode=display">
+\mathbf{\tilde{p}}_t^l=\mathbf p_t^l + \sum_{i=0}^{N_1}\mathbf a_i^l \odot \mathbf p_{t-i}^l+\sum_{j=0}^{N_2}\mathbf c_j^l \odot \mathbf p_{t+j}^l</script><p>映射回到原来的空间</p>
+<script type="math/tex; mode=display">
+\mathbf h_t^{l+1}=f(\mathbf U^l\mathbf{\tilde{p}}_t^l+\mathbf b^{l+1})</script><h2 id="DEEP-FEED-FORWARD-SEQUENTIAL-MEMORY-NETWORKS-FOR-SPEECH-SYNTHESIS"><a href="#DEEP-FEED-FORWARD-SEQUENTIAL-MEMORY-NETWORKS-FOR-SPEECH-SYNTHESIS" class="headerlink" title="DEEP FEED-FORWARD SEQUENTIAL MEMORY NETWORKS FOR SPEECH SYNTHESIS"></a>DEEP FEED-FORWARD SEQUENTIAL MEMORY NETWORKS FOR SPEECH SYNTHESIS</h2><p><img src="https://i.loli.net/2018/11/28/5bfe3d1f149ef.png" alt="屏幕快照 2018-11-28 下午3.01.26.png"></p>
+<p>加入步长和skip-connection</p>
+<script type="math/tex; mode=display">
+\mathbf{\tilde{p}}_t^l=\mathcal{H}(\mathbf{\tilde{p}}_t^{l-1}) + \mathbf{p}_t^l + \sum_{i=0}^{N_1}\mathbf a_i^l \odot \mathbf p_{t-s_1*i}^l+\sum_{j=0}^{N_2}\mathbf c_j^l \odot \mathbf p_{t+s_2*j}^l</script>
         
       
     
