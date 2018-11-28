@@ -88,7 +88,7 @@
   
     <li class="menu-item">
       <a href="javascript:;" id="search">
-        <span>サーチ</span>
+        <span>Search</span>
         
           <span class="menu-item-label">search</span>
         
@@ -101,7 +101,7 @@
     
     <li class="menu-item">
       <a href="/" id="article">
-        <span class="base-name">キジ</span>
+        <span class="base-name">Article</span>
         
           <span class="menu-item-label">article</span>
         
@@ -113,7 +113,7 @@
     
     <li class="menu-item">
       <a href="/archives" id="archives">
-        <span class="base-name">アーカイブ</span>
+        <span class="base-name">Archives</span>
         
           <span class="menu-item-label">archives</span>
         
@@ -125,7 +125,7 @@
     
     <li class="menu-item">
       <a href="javascript:;" id="tags">
-        <span class="base-name">タグ</span>
+        <span class="base-name">Tags</span>
         
           <span class="menu-item-label">tags</span>
         
@@ -137,7 +137,7 @@
     
     <li class="menu-item">
       <a href="/about" id="about">
-        <span class="base-name">ついて</span>
+        <span class="base-name">About</span>
         
           <span class="menu-item-label">about</span>
         
@@ -149,7 +149,7 @@
     
     <li class="menu-item">
       <a href="/atom.xml" id="RSS">
-        <span class="base-name">購読</span>
+        <span class="base-name">RSS</span>
         
           <span class="menu-item-label">RSS</span>
         
@@ -170,7 +170,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/">
-                    <span>キジ</span>
+                    <span>Article</span>
                     
                     
                 </a>
@@ -180,7 +180,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/archives">
-                    <span>アーカイブ</span>
+                    <span>Archives</span>
                     
                     
                 </a>
@@ -191,7 +191,7 @@
           <div class="mobile-nav-item inner-cloud">
             <div class="mobile-nav-tag">
               <a href="javascript:;" id="mobile-tags">
-                <span>タグ</span>
+                <span>Tags</span>
                 
                 
               </a>
@@ -207,7 +207,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/about">
-                    <span>ついて</span>
+                    <span>About</span>
                     
                     
                 </a>
@@ -217,7 +217,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/atom.xml">
-                    <span>購読</span>
+                    <span>RSS</span>
                     
                     
                 </a>
@@ -280,26 +280,31 @@
       
         <p>论文：Fast R-CNN，<strong>ICCV</strong> 2015</p>
 <p>作者：Ross Girshick</p>
-<p>链接：<a href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Girshick_Fast_R-CNN_ICCV_2015_paper.pdf" target="_blank" rel="external">https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Girshick_Fast_R-CNN_ICCV_2015_paper.pdf</a></p>
-<p>代码：<a href="https://github.com/rbgirshick/fast-rcnn" target="_blank" rel="external">https://github.com/rbgirshick/fast-rcnn</a></p>
+<p>链接：https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Girshick_Fast_R-CNN_ICCV_2015_paper.pdf</p>
+<p>代码：https://github.com/rbgirshick/fast-rcnn</p>
 <ul>
-<li><p>简化训练过程，实现end-to-end的训练方式</p>
+<li>
+<p>简化训练过程，实现end-to-end的训练方式</p>
 <ul>
 <li>将SVM分类器换成softmax，整合到网络中，鼓励类间竞争</li>
 <li>将bounding box regression整合到网络中</li>
 </ul>
 </li>
-<li><p>在Fast-RCNN中，region proposal的计算都是share的，避免重复计算</p>
+<li>
+<p>在Fast-RCNN中，region proposal的计算都是share的，避免重复计算</p>
 </li>
-<li><p>提出ROI pooling layer使得每个region proposal可以得到确定长度的特征向量</p>
+<li>
+<p>提出ROI pooling layer使得每个region proposal可以得到确定长度的特征向量</p>
 </li>
-<li><p>探索了一些训练的tricks，可以参考！</p>
+<li>
+<p>探索了一些训练的tricks，可以参考！</p>
 <p>​</p>
 <p>Figure 1是Fast R-CNN的图示</p>
 </li>
 </ul>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/FuPCSWv0EUA2laIjMRDcJTU9oA0F" alt=""></p>
-<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p>下图是R-CNN和Fast R-CNN的比较</p>
+<h5>Architecture</h5>
+<p>下图是R-CNN和Fast R-CNN的比较</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/FurXilgjM6ixsxoU1HRAgilULtUt" alt=""></p>
 <p>回顾一下R-CNN：</p>
 <ol>
@@ -327,15 +332,21 @@
 <li>使用图像金字塔</li>
 </ol>
 <p><strong>Truncated SVD</strong></p>
-<p>在训练的时候，因为ROIs数量不多，所以大部分的时间花在卷积运算上，而在测试的时候，需要计算每个ROIs的后验概率，有一半的时间花在全连接上，所以文章提出truncated SVD优化计算，将两个全连接取代一个全连接。<br>$$<br>W \approx U\Sigma_tV^T<br>$$<br>U是一个$u\times t$的矩阵，$\Sigma_t$是$t\times t$的矩阵，V是$v\times t$的矩阵，所以参数从$uv$减少到了$t(v+u)$，如果t要远小于$\min(u,v)$。</p>
+<p>在训练的时候，因为ROIs数量不多，所以大部分的时间花在卷积运算上，而在测试的时候，需要计算每个ROIs的后验概率，有一半的时间花在全连接上，所以文章提出truncated SVD优化计算，将两个全连接取代一个全连接。
+$$
+W \approx U\Sigma_tV^T
+$$
+U是一个$u\times t$的矩阵，$\Sigma_t$是$t\times t$的矩阵，V是$v\times t$的矩阵，所以参数从$uv$减少到了$t(v+u)$，如果t要远小于$\min(u,v)$。</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/Frc5IQiqhfIQW8Z39bNmc8BF3-vM" alt=""></p>
 <p><strong>Mini-batch sampling</strong></p>
 <p>在训练的时候，每次mini-batch中，从中采样两张图像，每张图像采样64个ROIs，这样每个batch的大小就是128，正负样本比例为1：3。</p>
-<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 1-3是Fast R-CNN在VOC 2007, 2010, 2012三个数据集上的表现，都是SOAT。</p>
+<h5>Experiments</h5>
+<p>Table 1-3是Fast R-CNN在VOC 2007, 2010, 2012三个数据集上的表现，都是SOAT。</p>
 <p>Table 4是Fast-RCNN,RCNN以及SPPnet在training和testing效率上的比较，可以发现效率提升非常明显。</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/FozRMPEXdJimmQmIloMArAEK4bjz" alt=""></p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/FkHrR24XRqVg4etaxtFh-t2IF5G3" alt=""></p>
-<h5 id="Design-evaluation"><a href="#Design-evaluation" class="headerlink" title="Design evaluation"></a>Design evaluation</h5><ul>
+<h5>Design evaluation</h5>
+<ul>
 <li>Multi-task训练可以提高分类结果</li>
 <li>Multi-scale detection可以帮助提高结果，但是提升不大，折中之下，选了single scale</li>
 <li>training data越多越好，数据增强，将VOC2012的数据加到VOC2007中，提升明显！</li>
@@ -352,11 +363,11 @@
   <hr class="copy-line">
   <div class="post-copyright">
     <div class="copy-author">
-      <span>著者 :</span>
+      <span>Author :</span>
       <span>Mowayao</span>
     </div>
     <div class="copy-url">
-      <span>URL :</span>
+      <span>Url :</span>
       <a href="http://wulimengmeng.top/2018/03/22/Fast-R-CNN笔记/">http://wulimengmeng.top/2018/03/22/Fast-R-CNN笔记/</a>
     </div>
     <div class="copy-origin">
@@ -421,10 +432,10 @@ gitment.render('gitment')
     
   
   <aside class="post-toc">
-    <span class="title" id="toc-switch"><span>書目</span></span>
+    <span class="title" id="toc-switch"><span>Index</span></span>
     <div class="toc-inner syuanpi back-1 fallIn-light">
       <li class="title-link"><a href="javascript:;" class="toTop">Fast R-CNN笔记</a></li>
-      <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#Architecture"><span class="toc-text">Architecture</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Experiments"><span class="toc-text">Experiments</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Design-evaluation"><span class="toc-text">Design evaluation</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">Architecture</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">Experiments</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">Design evaluation</span></a></li></ol>
     </div>
   </aside>
 

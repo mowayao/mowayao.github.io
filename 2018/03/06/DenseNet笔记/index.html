@@ -88,7 +88,7 @@
   
     <li class="menu-item">
       <a href="javascript:;" id="search">
-        <span>サーチ</span>
+        <span>Search</span>
         
           <span class="menu-item-label">search</span>
         
@@ -101,7 +101,7 @@
     
     <li class="menu-item">
       <a href="/" id="article">
-        <span class="base-name">キジ</span>
+        <span class="base-name">Article</span>
         
           <span class="menu-item-label">article</span>
         
@@ -113,7 +113,7 @@
     
     <li class="menu-item">
       <a href="/archives" id="archives">
-        <span class="base-name">アーカイブ</span>
+        <span class="base-name">Archives</span>
         
           <span class="menu-item-label">archives</span>
         
@@ -125,7 +125,7 @@
     
     <li class="menu-item">
       <a href="javascript:;" id="tags">
-        <span class="base-name">タグ</span>
+        <span class="base-name">Tags</span>
         
           <span class="menu-item-label">tags</span>
         
@@ -137,7 +137,7 @@
     
     <li class="menu-item">
       <a href="/about" id="about">
-        <span class="base-name">ついて</span>
+        <span class="base-name">About</span>
         
           <span class="menu-item-label">about</span>
         
@@ -149,7 +149,7 @@
     
     <li class="menu-item">
       <a href="/atom.xml" id="RSS">
-        <span class="base-name">購読</span>
+        <span class="base-name">RSS</span>
         
           <span class="menu-item-label">RSS</span>
         
@@ -170,7 +170,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/">
-                    <span>キジ</span>
+                    <span>Article</span>
                     
                     
                 </a>
@@ -180,7 +180,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/archives">
-                    <span>アーカイブ</span>
+                    <span>Archives</span>
                     
                     
                 </a>
@@ -191,7 +191,7 @@
           <div class="mobile-nav-item inner-cloud">
             <div class="mobile-nav-tag">
               <a href="javascript:;" id="mobile-tags">
-                <span>タグ</span>
+                <span>Tags</span>
                 
                 
               </a>
@@ -207,7 +207,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/about">
-                    <span>ついて</span>
+                    <span>About</span>
                     
                     
                 </a>
@@ -217,7 +217,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/atom.xml">
-                    <span>購読</span>
+                    <span>RSS</span>
                     
                     
                 </a>
@@ -279,10 +279,11 @@
     <div class="post-content syuanpi riseIn-light back-3">
       
         <p>论文 ：Densely Connected Convolutional Networks, CVPR 2017</p>
-<p>链接：<a href="http://openaccess.thecvf.com/content_cvpr_2017/papers/Huang_Densely_Connected_Convolutional_CVPR_2017_paper.pdf" target="_blank" rel="external">http://openaccess.thecvf.com/content_cvpr_2017/papers/Huang_Densely_Connected_Convolutional_CVPR_2017_paper.pdf</a></p>
-<p>作者: Huang Gao, Liu Zhuang, Weinberger, K. Q., &amp; van der Maaten, L. </p>
-<p>源码：<a href="https://github.com/liuzhuang13/DenseNet" target="_blank" rel="external">https://github.com/liuzhuang13/DenseNet</a>.</p>
-<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>DenseNet的idea和ResNet有点相近，既然ResNet可以通过一个skip connection就提高模型的性能，那为什么不多几个呢？</p>
+<p>链接：http://openaccess.thecvf.com/content_cvpr_2017/papers/Huang_Densely_Connected_Convolutional_CVPR_2017_paper.pdf</p>
+<p>作者: Huang Gao, Liu Zhuang, Weinberger, K. Q., &amp; van der Maaten, L.</p>
+<p>源码：https://github.com/liuzhuang13/DenseNet.</p>
+<h5>Idea</h5>
+<p>DenseNet的idea和ResNet有点相近，既然ResNet可以通过一个skip connection就提高模型的性能，那为什么不多几个呢？</p>
 <p>这样的话就可以使得梯度信息的回传更加有效（ResNet通过identity mapping进行另一条路径的梯度回传,而DenseNet的每一层梯度都可以直接回传回它前面的层），可以充分利用各个level的特征，也可以减少参数等。</p>
 <ul>
 <li>alleviate the vanishing-gradient problem，利用dense connection有效回传梯度</li>
@@ -291,9 +292,14 @@
 <li>substantially reduce the number of parameters，通过控制growth rate减少参数量</li>
 </ul>
 <p>假设有L层网络，那么如果将网络视为DAG，那么如果实行全连接，并且保证网络前向传播，共有$\frac{L\times(L+1)}{2}$条边。</p>
-<h5 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h5><p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fp33t32d1mj31kw0bt0xv.jpg" alt=""></p>
+<h5>Architecture</h5>
+<p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fp33t32d1mj31kw0bt0xv.jpg" alt=""></p>
 <p><strong>Dense Block</strong></p>
-<p>首先，将其公式化，我们考虑第l层网络的输入和输出，$x_l$表示为第l层的输出，那么有:<br>$$<br>x_l = H_l([x_0,x_1,…,x_{l-1}])<br>$$<br>这里，$[x_0,x_1,…,x_{l-1}]$表示feature map的按通道拼接，形成新的tensor。</p>
+<p>首先，将其公式化，我们考虑第l层网络的输入和输出，$x_l$表示为第l层的输出，那么有:
+$$
+x_l = H_l([x_0,x_1,...,x_{l-1}])
+$$
+这里，$[x_0,x_1,...,x_{l-1}]$表示feature map的按通道拼接，形成新的tensor。</p>
 <p>$H_l$是一个组合函数，BN-ReLU-Conv(3x3)。</p>
 <p>为了将模型简化，将预想中的DenseNet分拆成若干个dense block，见Figure 2。</p>
 <p><strong>Growth Rate</strong></p>
@@ -305,7 +311,8 @@
 <p>因为每个block的输出都是k，但是它的输入往往比k更大，所以引入bottleneck layer起到降维的作用，同时保留尽可能多的信息。这样$H_l$就变成了BN-ReLU-Conv(1x1)-BN-ReLU-Conv(3x3)，我们将使用bottleneck layer的版本记作DenseNet-B。</p>
 <p>Table 1是模型的参数结构。</p>
 <p><img src="https://ws4.sinaimg.cn/large/006tNc79ly1fp3b35pbwqj31kw0qqair.jpg" alt=""></p>
-<h5 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h5><p><strong>训练细节</strong></p>
+<h5>实验结果</h5>
+<p><strong>训练细节</strong></p>
 <p>对于CIFAR和SVHN,初始lr设为0.1，在训练50%和75%的epochs时，除以10。</p>
 <p>对于IMAGENET,初始lr设为0.1，在30和60个epochs后，除以10。</p>
 <p>SGD，weight decay $10^{-4}$</p>
@@ -329,11 +336,11 @@
   <hr class="copy-line">
   <div class="post-copyright">
     <div class="copy-author">
-      <span>著者 :</span>
+      <span>Author :</span>
       <span>Mowayao</span>
     </div>
     <div class="copy-url">
-      <span>URL :</span>
+      <span>Url :</span>
       <a href="http://wulimengmeng.top/2018/03/06/DenseNet笔记/">http://wulimengmeng.top/2018/03/06/DenseNet笔记/</a>
     </div>
     <div class="copy-origin">
@@ -398,10 +405,10 @@ gitment.render('gitment')
     
   
   <aside class="post-toc">
-    <span class="title" id="toc-switch"><span>書目</span></span>
+    <span class="title" id="toc-switch"><span>Index</span></span>
     <div class="toc-inner syuanpi back-1 fallIn-light">
       <li class="title-link"><a href="javascript:;" class="toTop">DenseNet笔记</a></li>
-      <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#Idea"><span class="toc-text">Idea</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Architecture"><span class="toc-text">Architecture</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#实验结果"><span class="toc-text">实验结果</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">Idea</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">Architecture</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">实验结果</span></a></li></ol>
     </div>
   </aside>
 

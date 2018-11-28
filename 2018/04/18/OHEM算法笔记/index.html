@@ -88,7 +88,7 @@
   
     <li class="menu-item">
       <a href="javascript:;" id="search">
-        <span>サーチ</span>
+        <span>Search</span>
         
           <span class="menu-item-label">search</span>
         
@@ -101,7 +101,7 @@
     
     <li class="menu-item">
       <a href="/" id="article">
-        <span class="base-name">キジ</span>
+        <span class="base-name">Article</span>
         
           <span class="menu-item-label">article</span>
         
@@ -113,7 +113,7 @@
     
     <li class="menu-item">
       <a href="/archives" id="archives">
-        <span class="base-name">アーカイブ</span>
+        <span class="base-name">Archives</span>
         
           <span class="menu-item-label">archives</span>
         
@@ -125,7 +125,7 @@
     
     <li class="menu-item">
       <a href="javascript:;" id="tags">
-        <span class="base-name">タグ</span>
+        <span class="base-name">Tags</span>
         
           <span class="menu-item-label">tags</span>
         
@@ -137,7 +137,7 @@
     
     <li class="menu-item">
       <a href="/about" id="about">
-        <span class="base-name">ついて</span>
+        <span class="base-name">About</span>
         
           <span class="menu-item-label">about</span>
         
@@ -149,7 +149,7 @@
     
     <li class="menu-item">
       <a href="/atom.xml" id="RSS">
-        <span class="base-name">購読</span>
+        <span class="base-name">RSS</span>
         
           <span class="menu-item-label">RSS</span>
         
@@ -170,7 +170,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/">
-                    <span>キジ</span>
+                    <span>Article</span>
                     
                     
                 </a>
@@ -180,7 +180,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/archives">
-                    <span>アーカイブ</span>
+                    <span>Archives</span>
                     
                     
                 </a>
@@ -191,7 +191,7 @@
           <div class="mobile-nav-item inner-cloud">
             <div class="mobile-nav-tag">
               <a href="javascript:;" id="mobile-tags">
-                <span>タグ</span>
+                <span>Tags</span>
                 
                 
               </a>
@@ -207,7 +207,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/about">
-                    <span>ついて</span>
+                    <span>About</span>
                     
                     
                 </a>
@@ -217,7 +217,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/atom.xml">
-                    <span>購読</span>
+                    <span>RSS</span>
                     
                     
                 </a>
@@ -280,14 +280,17 @@
       
         <p>论文：Training Region-based Object Detectors with Online Hard Example Mining，<strong>CVPR</strong> 2016</p>
 <p>作者：Abhinav Shrivastava, Abhinav Gupta, Ross Girshick</p>
-<p>链接：<a href="https://arxiv.org/pdf/1604.03540.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1604.03540.pdf</a></p>
-<p>代码：<a href="https://github.com/abhi2610/ohem" target="_blank" rel="external">https://github.com/abhi2610/ohem</a></p>
+<p>链接：https://arxiv.org/pdf/1604.03540.pdf</p>
+<p>代码：https://github.com/abhi2610/ohem</p>
 <p>Hard example mining是机器学习模型训练经常会用的trick，顾名思义，就是sample目前对于模型比较难的example进行“强化”学习。在CNN中对于patch选择根据策略的不同，主要有sliding window和proposal。大部分的情况是根据loss来判断是否是hard，只是作为训练的一个trick。文章针对Fast R-CNN，提出online hard example mining的算法对其进行优化。在VOC2007, 2012都取得了SOTA，mAP分别是78.9%，76.3%。</p>
-<h5 id="Fast-R-CNN"><a href="#Fast-R-CNN" class="headerlink" title="Fast R-CNN"></a>Fast R-CNN</h5><p>FRCNN中，proposal的选择由它与gt的overlap决定，确定一个proposal为背景的阈值范围是：$[bg_{lo},0.5]$，这个范围的假设是这样的proposal是hard的可能性较大。作者认为这样得到的结果很可能是次优的，因为在其他位置可能存在更hard但是infrequent的样本，OHEM算法中移除了这个阈值</p>
-<h5 id="OHEM"><a href="#OHEM" class="headerlink" title="OHEM"></a>OHEM</h5><p>idea很简单，就是在forward的时候根据loss排序，然后选择loss最大的，也就是最worst的样本进行backward更新模型的参数。但是这样会存在一个问题，就是当两个ROI位置相近的时候，在feature map上对应的是同一个位置，loss是相近的，所以作者提出了对hard examples做NMS，选择B/N个ROI最backward，这里NMS的阈值为0.7。</p>
+<h5>Fast R-CNN</h5>
+<p>FRCNN中，proposal的选择由它与gt的overlap决定，确定一个proposal为背景的阈值范围是：$[bg_{lo},0.5]$，这个范围的假设是这样的proposal是hard的可能性较大。作者认为这样得到的结果很可能是次优的，因为在其他位置可能存在更hard但是infrequent的样本，OHEM算法中移除了这个阈值</p>
+<h5>OHEM</h5>
+<p>idea很简单，就是在forward的时候根据loss排序，然后选择loss最大的，也就是最worst的样本进行backward更新模型的参数。但是这样会存在一个问题，就是当两个ROI位置相近的时候，在feature map上对应的是同一个位置，loss是相近的，所以作者提出了对hard examples做NMS，选择B/N个ROI最backward，这里NMS的阈值为0.7。</p>
 <p>接下来就是工程上的优化，ROI进行backward的时候，空间和时间的消耗较大，如果直接做backward，那些没有选中的ROI还是会做backward，所以作者提出了Figure 2的网络结构，包含两个一样的的ROI network，其中一个是immutable的，用于计算forward的loss，只有在forward的时候分配内存，然后hard RoI sampling module使用刚才所说的方法进行采样，作为输入传到第二个ROI network，进行forward和backward，然后累积gradient，再backward。</p>
 <p><img src="https://ws3.sinaimg.cn/large/006tNc79ly1fqgutzexflj31kw0v41kx.jpg" alt=""></p>
-<h5 id="Experiments"><a href="#Experiments" class="headerlink" title="Experiments"></a>Experiments</h5><p>Table 3和Table 4是模型在VOC 2007和VOC 2012的表现，都是SOTA，对FRCN提升明显。</p>
+<h5>Experiments</h5>
+<p>Table 3和Table 4是模型在VOC 2007和VOC 2012的表现，都是SOTA，对FRCN提升明显。</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tNc79ly1fqh3cawf16j31600radsm.jpg" alt=""></p>
 
       
@@ -299,11 +302,11 @@
   <hr class="copy-line">
   <div class="post-copyright">
     <div class="copy-author">
-      <span>著者 :</span>
+      <span>Author :</span>
       <span>Mowayao</span>
     </div>
     <div class="copy-url">
-      <span>URL :</span>
+      <span>Url :</span>
       <a href="http://wulimengmeng.top/2018/04/18/OHEM算法笔记/">http://wulimengmeng.top/2018/04/18/OHEM算法笔记/</a>
     </div>
     <div class="copy-origin">
@@ -368,10 +371,10 @@ gitment.render('gitment')
     
   
   <aside class="post-toc">
-    <span class="title" id="toc-switch"><span>書目</span></span>
+    <span class="title" id="toc-switch"><span>Index</span></span>
     <div class="toc-inner syuanpi back-1 fallIn-light">
       <li class="title-link"><a href="javascript:;" class="toTop">OHEM算法笔记</a></li>
-      <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#Fast-R-CNN"><span class="toc-text">Fast R-CNN</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#OHEM"><span class="toc-text">OHEM</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Experiments"><span class="toc-text">Experiments</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">Fast R-CNN</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">OHEM</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">Experiments</span></a></li></ol>
     </div>
   </aside>
 

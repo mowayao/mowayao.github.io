@@ -88,7 +88,7 @@
   
     <li class="menu-item">
       <a href="javascript:;" id="search">
-        <span>サーチ</span>
+        <span>Search</span>
         
           <span class="menu-item-label">search</span>
         
@@ -101,7 +101,7 @@
     
     <li class="menu-item">
       <a href="/" id="article">
-        <span class="base-name">キジ</span>
+        <span class="base-name">Article</span>
         
           <span class="menu-item-label">article</span>
         
@@ -113,7 +113,7 @@
     
     <li class="menu-item">
       <a href="/archives" id="archives">
-        <span class="base-name">アーカイブ</span>
+        <span class="base-name">Archives</span>
         
           <span class="menu-item-label">archives</span>
         
@@ -125,7 +125,7 @@
     
     <li class="menu-item">
       <a href="javascript:;" id="tags">
-        <span class="base-name">タグ</span>
+        <span class="base-name">Tags</span>
         
           <span class="menu-item-label">tags</span>
         
@@ -137,7 +137,7 @@
     
     <li class="menu-item">
       <a href="/about" id="about">
-        <span class="base-name">ついて</span>
+        <span class="base-name">About</span>
         
           <span class="menu-item-label">about</span>
         
@@ -149,7 +149,7 @@
     
     <li class="menu-item">
       <a href="/atom.xml" id="RSS">
-        <span class="base-name">購読</span>
+        <span class="base-name">RSS</span>
         
           <span class="menu-item-label">RSS</span>
         
@@ -170,7 +170,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/">
-                    <span>キジ</span>
+                    <span>Article</span>
                     
                     
                 </a>
@@ -180,7 +180,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/archives">
-                    <span>アーカイブ</span>
+                    <span>Archives</span>
                     
                     
                 </a>
@@ -191,7 +191,7 @@
           <div class="mobile-nav-item inner-cloud">
             <div class="mobile-nav-tag">
               <a href="javascript:;" id="mobile-tags">
-                <span>タグ</span>
+                <span>Tags</span>
                 
                 
               </a>
@@ -207,7 +207,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/about">
-                    <span>ついて</span>
+                    <span>About</span>
                     
                     
                 </a>
@@ -217,7 +217,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/atom.xml">
-                    <span>購読</span>
+                    <span>RSS</span>
                     
                     
                 </a>
@@ -281,13 +281,27 @@
 <p>后来想到说可以先采样角度，每个角度确定一个半径，再在半径上均匀采样，面试官有提示说在半径上是均匀的吗？ 明显在半径上采样是不均匀的，因为在半径上的每一个点对应的周长是不一样的！！</p>
 <p>正确的姿势是这样的：</p>
 <p>我们计算长度为$r(0\le r\le1)$的概率为$p(r)$:</p>
-<p>首先我们需要计算落在$r\sim r+\Delta r$的概率，很直观，就是除以面积$\pi$，然后因为均匀采样所以需要除以$\Delta r$求得$p(r)$也就是：<br>$$<br>p(r\sim r+\Delta r) = \lim_{\Delta r\rightarrow0}\frac{\pi(r+\Delta r)^2-\pi r^2}{\pi}<br>$$</p>
-<p>$$<br>p(r) = \lim_{\Delta r\rightarrow0}\frac{\pi(r+\Delta r)^2-\pi r^2}{\pi \Delta r}=2r<br>$$</p>
-<p>接下来就是求$p(r)$的CDF,$P(r)$，积分即可：<br>$$<br>P(r) = \int_0^r p(x) dx=r^2<br>$$<br>然后求得它的逆函数$P^{-1}(r)$:</p>
+<p>首先我们需要计算落在$r\sim r+\Delta r$的概率，很直观，就是除以面积$\pi$，然后因为均匀采样所以需要除以$\Delta r$求得$p(r)$也就是：
+$$
+p(r\sim r+\Delta r) = \lim_{\Delta r\rightarrow0}\frac{\pi(r+\Delta r)^2-\pi r^2}{\pi}
+$$</p>
+<p>$$
+p(r) = \lim_{\Delta r\rightarrow0}\frac{\pi(r+\Delta r)^2-\pi r^2}{\pi \Delta r}=2r
+$$</p>
+<p>接下来就是求$p(r)$的CDF,$P(r)$，积分即可：
+$$
+P(r) = \int_0^r p(x) dx=r^2
+$$
+然后求得它的逆函数$P^{-1}(r)$:</p>
 <p>$$P^{-1}(r) = \sqrt r$$</p>
 <p>算到这里，答案呼之欲出，我们用一个随机变量$\zeta$ 在$[0,1]$均匀采样，然后在通过$r = \sqrt \zeta$求得r,为什么是均匀的呢，只要把$\sqrt \zeta$带入$P(r)$就可以发现$P(r)=\zeta$。</p>
-<p>如果面积变成3维，也就是单位球呢？做法还是一样的，首先还是对方向进行采样，这个自然是均匀的，然后就是在半径上采样，同样地，计算p(r)：<br>$$<br>p(r\sim r+\Delta r) = \lim_{\Delta r\rightarrow0}\frac{\frac{4}{3}\pi(r+\Delta r)^3-\frac{4}{3}\pi r^3}{\frac{4}{3}\pi}<br>$$</p>
-<p>$$<br>p(r) = \lim_{\Delta r\rightarrow0}\frac{\frac{4}{3}\pi(r+\Delta r)^3-\frac{4}{3}\pi r^3}{\frac{4}{3}\pi\Delta r}=3r^2<br>$$</p>
+<p>如果面积变成3维，也就是单位球呢？做法还是一样的，首先还是对方向进行采样，这个自然是均匀的，然后就是在半径上采样，同样地，计算p(r)：
+$$
+p(r\sim r+\Delta r) = \lim_{\Delta r\rightarrow0}\frac{\frac{4}{3}\pi(r+\Delta r)^3-\frac{4}{3}\pi r^3}{\frac{4}{3}\pi}
+$$</p>
+<p>$$
+p(r) = \lim_{\Delta r\rightarrow0}\frac{\frac{4}{3}\pi(r+\Delta r)^3-\frac{4}{3}\pi r^3}{\frac{4}{3}\pi\Delta r}=3r^2
+$$</p>
 <p>还是求CDF，后面就不继续了。。。依葫芦画瓢</p>
 
       
@@ -299,11 +313,11 @@
   <hr class="copy-line">
   <div class="post-copyright">
     <div class="copy-author">
-      <span>著者 :</span>
+      <span>Author :</span>
       <span>Mowayao</span>
     </div>
     <div class="copy-url">
-      <span>URL :</span>
+      <span>Url :</span>
       <a href="http://wulimengmeng.top/2017/05/18/如何在圆内均匀采样/">http://wulimengmeng.top/2017/05/18/如何在圆内均匀采样/</a>
     </div>
     <div class="copy-origin">
@@ -368,7 +382,7 @@ gitment.render('gitment')
     
   
   <aside class="post-toc">
-    <span class="title" id="toc-switch"><span>書目</span></span>
+    <span class="title" id="toc-switch"><span>Index</span></span>
     <div class="toc-inner syuanpi back-1 fallIn-light">
       <li class="title-link"><a href="javascript:;" class="toTop">如何在圆内均匀采样</a></li>
       

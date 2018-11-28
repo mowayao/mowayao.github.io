@@ -88,7 +88,7 @@
   
     <li class="menu-item">
       <a href="javascript:;" id="search">
-        <span>サーチ</span>
+        <span>Search</span>
         
           <span class="menu-item-label">search</span>
         
@@ -101,7 +101,7 @@
     
     <li class="menu-item">
       <a href="/" id="article">
-        <span class="base-name">キジ</span>
+        <span class="base-name">Article</span>
         
           <span class="menu-item-label">article</span>
         
@@ -113,7 +113,7 @@
     
     <li class="menu-item">
       <a href="/archives" id="archives">
-        <span class="base-name">アーカイブ</span>
+        <span class="base-name">Archives</span>
         
           <span class="menu-item-label">archives</span>
         
@@ -125,7 +125,7 @@
     
     <li class="menu-item">
       <a href="javascript:;" id="tags">
-        <span class="base-name">タグ</span>
+        <span class="base-name">Tags</span>
         
           <span class="menu-item-label">tags</span>
         
@@ -137,7 +137,7 @@
     
     <li class="menu-item">
       <a href="/about" id="about">
-        <span class="base-name">ついて</span>
+        <span class="base-name">About</span>
         
           <span class="menu-item-label">about</span>
         
@@ -149,7 +149,7 @@
     
     <li class="menu-item">
       <a href="/atom.xml" id="RSS">
-        <span class="base-name">購読</span>
+        <span class="base-name">RSS</span>
         
           <span class="menu-item-label">RSS</span>
         
@@ -170,7 +170,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/">
-                    <span>キジ</span>
+                    <span>Article</span>
                     
                     
                 </a>
@@ -180,7 +180,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/archives">
-                    <span>アーカイブ</span>
+                    <span>Archives</span>
                     
                     
                 </a>
@@ -191,7 +191,7 @@
           <div class="mobile-nav-item inner-cloud">
             <div class="mobile-nav-tag">
               <a href="javascript:;" id="mobile-tags">
-                <span>タグ</span>
+                <span>Tags</span>
                 
                 
               </a>
@@ -207,7 +207,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/about">
-                    <span>ついて</span>
+                    <span>About</span>
                     
                     
                 </a>
@@ -217,7 +217,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/atom.xml">
-                    <span>購読</span>
+                    <span>RSS</span>
                     
                     
                 </a>
@@ -279,10 +279,18 @@
     <div class="post-content syuanpi riseIn-light back-3">
       
         <p>论文 ：Identity Mappings in Deep Residual Networks, ECCV 2016</p>
-<p>链接：<a href="https://arxiv.org/pdf/1603.05027.pdf" target="_blank" rel="external">https://arxiv.org/pdf/1603.05027.pdf</a></p>
+<p>链接：https://arxiv.org/pdf/1603.05027.pdf</p>
 <p>作者: Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun</p>
-<h5 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h5><p>ResNet的每个unit可以表示为：<br>$$<br>y_l = h(x_l)+F(x_l,W_l) \ x_{l+1} = f(y_l)<br>$$<br>$x_l$是第l个unit的输入，$x_{l+1}$是l个单元的输出。在ResNet v1中，$h(x_l)=x_l$，表示identity mapping(做了3种尝试，选择了这种)，f是ReLU函数，F包含2-3个卷积层，中间还有BN和ReLU（见Figure 1(a))。如果h和f都是identity mapping的时候，<strong>信号可以直接从一个unit到另一个unit，无论是forward还是backward，这样可以使训练更加容易</strong>。</p>
-<p>Forward:<br>$$<br>x_{l+1}=x_l+F(x_l,W_l)… \ x_L = x_l + \sum_{i=l}^{L+1}F(x_i,W_i)<br>$$</p>
+<h5>Idea</h5>
+<p>ResNet的每个unit可以表示为：
+$$
+y_l = h(x_l)+F(x_l,W_l) \ x_{l+1} = f(y_l)
+$$
+$x_l$是第l个unit的输入，$x_{l+1}$是l个单元的输出。在ResNet v1中，$h(x_l)=x_l$，表示identity mapping(做了3种尝试，选择了这种)，f是ReLU函数，F包含2-3个卷积层，中间还有BN和ReLU（见Figure 1(a))。如果h和f都是identity mapping的时候，<strong>信号可以直接从一个unit到另一个unit，无论是forward还是backward，这样可以使训练更加容易</strong>。</p>
+<p>Forward:
+$$
+x_{l+1}=x_l+F(x_l,W_l)... \ x_L = x_l + \sum_{i=l}^{L+1}F(x_i,W_i)
+$$</p>
 <ul>
 <li>第L层的特征$x_L$可以表示成$x_l+\sum_{i=l}^{L-1}F(x_i,W_i)$</li>
 <li>$x_L=x_o+\sum_{i=0}^{L-1}F(x_i,W_i)$，可以由所有的残差函数相加得到，再加上$x_o$</li>
@@ -300,7 +308,8 @@
 <p><img src="https://ws3.sinaimg.cn/large/006tNc79gy1fo5ynmkwmyj30k803uwev.jpg" alt=""></p>
 <p>和原来的梯度相比，从1变成了$\prod_{i=l}^{L-1}\lambda_i$，分类讨论，如果$\lambda_i$都大于1，那么如果层数深，梯度爆炸！如果$\lambda_i$都小于1，那么那项就会很小，梯度弥散！堵塞了shortcut。结果见Table 1，容易发现，结果反而变差了！</p>
 <ul>
-<li><p>Exclusive gating</p>
+<li>
+<p>Exclusive gating</p>
 <p>gating函数， $g(x)=\sigma(W_gx+b_g)$, $(1-g(x)) \times x + g(x)\times F(x)$,在卷积网络中，g(x)是1x1的卷积。</p>
 <p>结果依然不如baseline，结果见Table 1。当g(x)=0的时候，近似于identity，但是又抑制了F(x)</p>
 </li>
@@ -332,7 +341,8 @@
 <p><img src="https://ws1.sinaimg.cn/large/006tNc79gy1fo76e6t07mj30ys0kawic.jpg" alt=""></p>
 <p><img src="https://ws1.sinaimg.cn/large/006tKfTcgy1fo76u1vr05j30yi0i20yf.jpg" alt=""></p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fo776l9s7hj31kw0hytdr.jpg" alt=""></p>
-<h5 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h5><p>在ImageNet,CIFAR-10,CIFAR-100这3个数据集上做了对比试验，都取得了state-of-the-art的结果，见Table 4,5。</p>
+<h5>实验</h5>
+<p>在ImageNet,CIFAR-10,CIFAR-100这3个数据集上做了对比试验，都取得了state-of-the-art的结果，见Table 4,5。</p>
 <p>在深层网络中，体现出了pre-act的作用！</p>
 <p><img src="https://ws2.sinaimg.cn/large/006tKfTcgy1fo77epwjbgj31900ss10h.jpg" alt=""></p>
 <p><img src="https://ws4.sinaimg.cn/large/006tKfTcgy1fo76t0q108j30ym0gagqg.jpg" alt=""></p>
@@ -346,11 +356,11 @@
   <hr class="copy-line">
   <div class="post-copyright">
     <div class="copy-author">
-      <span>著者 :</span>
+      <span>Author :</span>
       <span>Mowayao</span>
     </div>
     <div class="copy-url">
-      <span>URL :</span>
+      <span>Url :</span>
       <a href="http://wulimengmeng.top/2018/02/01/Identity-Mappings-in-Deep-Residual-Networks笔记/">http://wulimengmeng.top/2018/02/01/Identity-Mappings-in-Deep-Residual-Networks笔记/</a>
     </div>
     <div class="copy-origin">
@@ -415,10 +425,10 @@ gitment.render('gitment')
     
   
   <aside class="post-toc">
-    <span class="title" id="toc-switch"><span>書目</span></span>
+    <span class="title" id="toc-switch"><span>Index</span></span>
     <div class="toc-inner syuanpi back-1 fallIn-light">
       <li class="title-link"><a href="javascript:;" class="toTop">Identity Mappings in Deep Residual Networks笔记</a></li>
-      <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#Idea"><span class="toc-text">Idea</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#实验"><span class="toc-text">实验</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">Idea</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#undefined"><span class="toc-text">实验</span></a></li></ol>
     </div>
   </aside>
 

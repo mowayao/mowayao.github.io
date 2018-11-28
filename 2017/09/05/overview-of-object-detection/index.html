@@ -88,7 +88,7 @@
   
     <li class="menu-item">
       <a href="javascript:;" id="search">
-        <span>サーチ</span>
+        <span>Search</span>
         
           <span class="menu-item-label">search</span>
         
@@ -101,7 +101,7 @@
     
     <li class="menu-item">
       <a href="/" id="article">
-        <span class="base-name">キジ</span>
+        <span class="base-name">Article</span>
         
           <span class="menu-item-label">article</span>
         
@@ -113,7 +113,7 @@
     
     <li class="menu-item">
       <a href="/archives" id="archives">
-        <span class="base-name">アーカイブ</span>
+        <span class="base-name">Archives</span>
         
           <span class="menu-item-label">archives</span>
         
@@ -125,7 +125,7 @@
     
     <li class="menu-item">
       <a href="javascript:;" id="tags">
-        <span class="base-name">タグ</span>
+        <span class="base-name">Tags</span>
         
           <span class="menu-item-label">tags</span>
         
@@ -137,7 +137,7 @@
     
     <li class="menu-item">
       <a href="/about" id="about">
-        <span class="base-name">ついて</span>
+        <span class="base-name">About</span>
         
           <span class="menu-item-label">about</span>
         
@@ -149,7 +149,7 @@
     
     <li class="menu-item">
       <a href="/atom.xml" id="RSS">
-        <span class="base-name">購読</span>
+        <span class="base-name">RSS</span>
         
           <span class="menu-item-label">RSS</span>
         
@@ -170,7 +170,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/">
-                    <span>キジ</span>
+                    <span>Article</span>
                     
                     
                 </a>
@@ -180,7 +180,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/archives">
-                    <span>アーカイブ</span>
+                    <span>Archives</span>
                     
                     
                 </a>
@@ -191,7 +191,7 @@
           <div class="mobile-nav-item inner-cloud">
             <div class="mobile-nav-tag">
               <a href="javascript:;" id="mobile-tags">
-                <span>タグ</span>
+                <span>Tags</span>
                 
                 
               </a>
@@ -207,7 +207,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/about">
-                    <span>ついて</span>
+                    <span>About</span>
                     
                     
                 </a>
@@ -217,7 +217,7 @@
         
             <div class="mobile-nav-item">
                 <a href="/atom.xml">
-                    <span>購読</span>
+                    <span>RSS</span>
                     
                     
                 </a>
@@ -277,9 +277,11 @@
     </header>
     <div class="post-content syuanpi riseIn-light back-3">
       
-        <h2 id="R-CNN"><a href="#R-CNN" class="headerlink" title="R-CNN"></a>R-CNN</h2><p>主要有三个步骤：</p>
+        <h2>R-CNN</h2>
+<p>主要有三个步骤：</p>
 <ol>
-<li>用selective search提取可能的objects<ol>
+<li>用selective search提取可能的objects
+<ol>
 <li>使用<a href="http://cs.brown.edu/~pff/segment/" target="_blank" rel="external">Efficient Graph Based Image Segmentation</a>中的方法来得到region</li>
 <li>得到所有region之间两两的相似度</li>
 <li>合并最像的两个region</li>
@@ -291,12 +293,14 @@
 <li>用CNN提取特征</li>
 <li>用SVM对区域进行分类</li>
 </ol>
-<p><img src="https://tryolabs.com/images/blog/post-images/2017-08-30-object-detection/rcnn.jpg" alt="[Girshick, Ross, et al. &quot;Rich feature hierarchies for accurate object detection and semantic segmentation.&quot; 2014.](https://arxiv.org/abs/1311.2524)"></p>
-<h2 id="Fast-R-CNN"><a href="#Fast-R-CNN" class="headerlink" title="Fast R-CNN"></a>Fast R-CNN</h2><p>在feature map加入RoI Pooling,然今后做分类和回归（位置），这样可以end-to-end的训练了，缺点是依然依赖于selective search</p>
-<p>每一个RoI都有一个四元组$（r,c,h,w）$表示，其中$（r，c）$表示左上角，而$（h，w）$则代表高度和宽度。这一层使用最大池化（max pooling）来将RoI区域转化成固定大小的$H<em>W$的特征图。假设一个RoI的窗口大小为$h</em>w$,则转换成$H<em>W$之后，每一个网格都是一个$h/H </em> w/W$大小的子网，利用最大池化将这个子网中的值映射到$H*W$窗口即可。Pooling对每一个特征图通道都是独立的</p>
+<p><img src="https://tryolabs.com/images/blog/post-images/2017-08-30-object-detection/rcnn.jpg" alt="Girshick, Ross, et al. &amp;quot;Rich feature hierarchies for accurate object detection and semantic segmentation.&amp;quot; 2014."></p>
+<h2>Fast R-CNN</h2>
+<p>在feature map加入RoI Pooling,然今后做分类和回归（位置），这样可以end-to-end的训练了，缺点是依然依赖于selective search</p>
+<p>每一个RoI都有一个四元组$（r,c,h,w）$表示，其中$（r，c）$表示左上角，而$（h，w）$则代表高度和宽度。这一层使用最大池化（max pooling）来将RoI区域转化成固定大小的$H<em>W$的特征图。假设一个RoI的窗口大小为$h</em>w$,则转换成$H<em>W$之后，每一个网格都是一个$h/H * w/W$大小的子网，利用最大池化将这个子网中的值映射到$H</em>W$窗口即可。Pooling对每一个特征图通道都是独立的</p>
 <p><img src="http://7xkgro.com1.z0.glb.clouddn.com/ROI.png" alt=""></p>
 <p><img src="https://tryolabs.com/images/blog/post-images/2017-08-30-object-detection/fastrcnn.jpg" alt=""></p>
-<h2 id="Faster-R-CNN"><a href="#Faster-R-CNN" class="headerlink" title="Faster R-CNN"></a>Faster R-CNN</h2><p>加入region proposal network，为了代替selective search使得模型能够完全的end-to-end的训练。</p>
+<h2>Faster R-CNN</h2>
+<p>加入region proposal network，为了代替selective search使得模型能够完全的end-to-end的训练。</p>
 <p>这样的话就存在４个loss:</p>
 <ol>
 <li>RPN分类：是否是object</li>
@@ -308,20 +312,26 @@
 <p>Anchor:</p>
 <p>Anchors是一组大小固定的参考窗口：三种尺度{ $128^2，256^2，512^2$ }×三种长宽比{1:1，1:2，2:1}，如下图所示，<strong>表示RPN网络中对特征图滑窗时每个滑窗位置所对应的原图区域中9种可能的大小</strong>，相当于模板，对任意图像任意滑窗位置都是这9种模板。<strong>继而根据图像大小计算滑窗中心点对应原图区域的中心点</strong>，通过中心点和size就可以得到滑窗位置和原图位置的映射关系，由此原图位置并根据与Ground Truth重复率贴上正负标签，让RPN学习该Anchors是否有物体即可。对于每个滑窗位置，产生<strong>k=9</strong>个anchor对于一个大小为$W*H$的卷积feature map，总共会产生$WHk$个anchor。</p>
 <p><img src="http://shartoo.github.io/images/blog/rcnn12.png" alt=""></p>
-<p><img src="https://tryolabs.com/images/blog/post-images/2017-08-30-object-detection/fasterrcnn.jpg" alt="[Ren, Shaoqing, et al. &quot;Faster R-CNN: Towards real-time object detection with region proposal networks.&quot; 2015.](https://arxiv.org/abs/1506.01497)"></p>
+<p><img src="https://tryolabs.com/images/blog/post-images/2017-08-30-object-detection/fasterrcnn.jpg" alt="Ren, Shaoqing, et al. &amp;quot;Faster R-CNN: Towards real-time object detection with region proposal networks.&amp;quot; 2015."></p>
 <p><img src="http://img.blog.csdn.net/20160414164536029" alt=""></p>
-<h2 id="SSD"><a href="#SSD" class="headerlink" title="SSD"></a>SSD</h2><p><strong>同时采用lower和upper的feature map做检测</strong></p>
-<p>假设每个feature map cell有k个default box，那么对于每个default box都需要预测c个类别score和4个offset，那么如果一个feature map的大小是$m\times n$，也就是有<strong>$m\times n$</strong>个feature map cell，那么这个feature map就一共有$（c+4)\times k\times m\times n$ 个输出。这些输出个数的含义是：采用$3\times3$的卷积核对该层的feature map卷积时卷积核的个数，包含两部分：数量$c\times k\times m\times n$是confidence输出，表示每个default box的confidence，也就是类别的概率；数量$4\times k\times m\times n$是localization输出，表示每个default box回归后的坐标）。训练中还有一个东西：<strong>prior box</strong>，是指实际中选择的default box（每一个feature map cell 不是k个default box都取）。</p>
+<h2>SSD</h2>
+<p><strong>同时采用lower和upper的feature map做检测</strong></p>
+<p>假设每个feature map cell有k个default box，那么对于每个default box都需要预测c个类别score和4个offset，那么如果一个feature map的大小是$m\times n$，也就是有**$m\times n$**个feature map cell，那么这个feature map就一共有$（c+4)\times k\times m\times n$ 个输出。这些输出个数的含义是：采用$3\times3$的卷积核对该层的feature map卷积时卷积核的个数，包含两部分：数量$c\times k\times m\times n$是confidence输出，表示每个default box的confidence，也就是类别的概率；数量$4\times k\times m\times n$是localization输出，表示每个default box回归后的坐标）。训练中还有一个东西：<strong>prior box</strong>，是指实际中选择的default box（每一个feature map cell 不是k个default box都取）。</p>
 <ul>
 <li>feature map cell 就是将 feature map 切分成 8×8 或者 4×4 之后的一个个格子；</li>
 <li>而 default box 就是每一个格子上，一系列固定大小的 box，即图中虚线所形成的一系列 boxes。</li>
 </ul>
 <p><img src="http://img.blog.csdn.net/20160918092529925" alt=""></p>
 <p><img src="http://img.blog.csdn.net/20160918092701558" alt=""></p>
-<h2 id="YOLO"><a href="#YOLO" class="headerlink" title="YOLO"></a>YOLO</h2><p><img src="http://upload-images.jianshu.io/upload_images/75110-91ee171b49f3ea20.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<h2>YOLO</h2>
+<p><img src="http://upload-images.jianshu.io/upload_images/75110-91ee171b49f3ea20.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
 <p>YOLO首先将图像分为S×S的格子（grid cell）。如果一个目标的中心落入格子，该格子就负责检测该目标。每一个格子（grid cell）预测bounding boxes和该boxes的置信值（confidence score）。置信值代表box包含一个目标的置信度。然后，我们定义置信值为。如果没有目标，置信值为零。另外，我们希望预测的置信值和ground truth的intersection over union (IOU)相同。</p>
 <p>每一个bounding box包含5个值：$x，y，w，h$和confidence。$（x，y）$代表与格子相关的box的中心。$（w，h）$为与全图信息相关的box的宽和高。confidence代表预测boxes的IOU和gound truth。</p>
-<p>每个格子（grid cell）预测条件概率值C($Pr(Class_i|Object) $)。概率值C代表了格子包含一个目标的概率，每一格子只预测一类概率。在测试时，每个box通过类别概率和box置信度相乘来得到特定类别置信分数：<br>$$<br>Pr(Class_i|Object) \cdot Pr(Object)\cdot IOU_{pred}^{truth} = Pr(Class_i)\cdot IOU_{pred}^{truth}<br>$$<br>它将图片划分为S×S的网格，对于每个网格单元预测边界框(B)、边界框的置信度以及类别概率(C)，因此这些预测值可以表示为S×S×(B∗5+C)的张量。</p>
+<p>每个格子（grid cell）预测条件概率值C($Pr(Class_i|Object) $)。概率值C代表了格子包含一个目标的概率，每一格子只预测一类概率。在测试时，每个box通过类别概率和box置信度相乘来得到特定类别置信分数：
+$$
+Pr(Class_i|Object) \cdot Pr(Object)\cdot IOU_{pred}^{truth} = Pr(Class_i)\cdot IOU_{pred}^{truth}
+$$
+它将图片划分为S×S的网格，对于每个网格单元预测边界框(B)、边界框的置信度以及类别概率(C)，因此这些预测值可以表示为S×S×(B∗5+C)的张量。</p>
 
       
     
@@ -332,11 +342,11 @@
   <hr class="copy-line">
   <div class="post-copyright">
     <div class="copy-author">
-      <span>著者 :</span>
+      <span>Author :</span>
       <span>Mowayao</span>
     </div>
     <div class="copy-url">
-      <span>URL :</span>
+      <span>Url :</span>
       <a href="http://wulimengmeng.top/2017/09/05/overview-of-object-detection/">http://wulimengmeng.top/2017/09/05/overview-of-object-detection/</a>
     </div>
     <div class="copy-origin">
@@ -401,10 +411,10 @@ gitment.render('gitment')
     
   
   <aside class="post-toc">
-    <span class="title" id="toc-switch"><span>書目</span></span>
+    <span class="title" id="toc-switch"><span>Index</span></span>
     <div class="toc-inner syuanpi back-1 fallIn-light">
       <li class="title-link"><a href="javascript:;" class="toTop">Overview of Object Detection</a></li>
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#R-CNN"><span class="toc-text">R-CNN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Fast-R-CNN"><span class="toc-text">Fast R-CNN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Faster-R-CNN"><span class="toc-text">Faster R-CNN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SSD"><span class="toc-text">SSD</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#YOLO"><span class="toc-text">YOLO</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">R-CNN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">Fast R-CNN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">Faster R-CNN</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">SSD</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#undefined"><span class="toc-text">YOLO</span></a></li></ol>
     </div>
   </aside>
 
