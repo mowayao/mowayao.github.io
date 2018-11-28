@@ -9,7 +9,7 @@
 <p>从figure 1(a)看，如果没有紫色的虚线部分，和普通的DNN没有区别，区别在于加入了memory block。</p>
 <p>memory block的结构件figure 1(b)。</p>
 <script type="math/tex; mode=display">
-\tilde{\mathbf h}_t^l=\sum_{i=0}^{N}a_i^l\cdot \mathbf h_{t-i}^l</script><p>N表示的是前N个历史，这里$a_i^l$是可以常数也可以是向量。如果是向量则表示为：</p>
+\tilde{\mathbf h}_t^l=\sum_{i=0}^{N}a_i^l\cdot \mathbf h_{t-i}^l</script><p>N表示的是前N个历史，这里<script type="math/tex">a_i^l</script>是可以常数也可以是向量。如果是向量则表示为：</p>
 <script type="math/tex; mode=display">
 \tilde{\mathbf h}_t^l=\sum_{i=0}^{N}\mathbf a_i^l\odot \mathbf h_{t-i}^l</script><p>也可以表示成双向的：</p>
 <script type="math/tex; mode=display">
@@ -26,9 +26,8 @@
 \mathbf{\tilde{p}}_t^l=\mathbf p_t^l + \sum_{i=0}^{N_1}\mathbf a_i^l \odot \mathbf p_{t-i}^l+\sum_{j=0}^{N_2}\mathbf c_j^l \odot \mathbf p_{t+j}^l</script><p>映射回到原来的空间</p>
 <script type="math/tex; mode=display">
 \mathbf h_t^{l+1}=f(\mathbf U^l\mathbf{\tilde{p}}_t^l+\mathbf b^{l+1})</script><h2 id="DEEP-FEED-FORWARD-SEQUENTIAL-MEMORY-NETWORKS-FOR-SPEECH-SYNTHESIS"><a href="#DEEP-FEED-FORWARD-SEQUENTIAL-MEMORY-NETWORKS-FOR-SPEECH-SYNTHESIS" class="headerlink" title="DEEP FEED-FORWARD SEQUENTIAL MEMORY NETWORKS FOR SPEECH SYNTHESIS"></a>DEEP FEED-FORWARD SEQUENTIAL MEMORY NETWORKS FOR SPEECH SYNTHESIS</h2><p><img src="https://i.loli.net/2018/11/28/5bfe3d1f149ef.png" alt="屏幕快照 2018-11-28 下午3.01.26.png"></p>
-<p>加入步长和skip-connection</p>
 <script type="math/tex; mode=display">
-\mathbf{\tilde{p}}_t^l=\mathcal{H}(\mathbf{\tilde{p}}_t^{l-1}) + \mathbf{p}_t^l + \sum_{i=0}^{N_1}\mathbf a_i^l \odot \mathbf p_{t-s_1*i}^l+\sum_{j=0}^{N_2}\mathbf c_j^l \odot \mathbf p_{t+s_2*j}^l</script>]]></content>
+\mathbf{\tilde{p}}_t^l=\mathcal{H}(\mathbf{\tilde{p}}_t^{l-1}) + \mathbf{p}_t^l + \sum_{i=0}^{N_1}\mathbf a_i^l \odot \mathbf p_{t-si}^l+\sum_{j=0}^{N_2}\mathbf c_j^l \odot \mathbf p_{t+j}^l</script>]]></content>
       
         <categories>
             
